@@ -19,7 +19,7 @@ import UserInfo         from 'page/user/userInfo.jsx';
 import ErrorPage        from 'page/error/index.jsx';
 
 // import { Button } from 'antd-mobile';
-import { List } from 'antd-mobile';
+//import { List } from 'antd-mobile';
 
 
 
@@ -40,15 +40,15 @@ class App extends React.Component{
             </Layout>
         );
         return (
-            // <Router>
-            //     <Switch>
-            //         <Route path="/login" component={Login}/>
-            //         <Route path="/" render={ props => LayoutRouter}/>
-            //     </Switch>
-            // </Router>
+            <Router>
+                <Switch>
+                    <Route path="/login" component={Login}/>
+                    <Route path="/" render={ props => LayoutRouter}/>
+                </Switch>
+            </Router>
        
        
-        <Home/>
+        // <Home/>
             
 
         )
