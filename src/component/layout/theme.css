@@ -79,7 +79,7 @@ p {
     top: 60px;
     bottom: 0;
     overflow-y : auto;
-    background: #ECECEC;
+    background: rgba(0, 0, 0, 0.85);
 }
 
 #page-wrapper {
@@ -389,7 +389,7 @@ footer p {
     width: 260px;
     text-align: left;
     height: 60px;
-    font-size: 30px;
+    font-size: 24px;
     font-weight: 700;
     text-transform: uppercase;
     line-height: 30px;
