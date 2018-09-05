@@ -7,7 +7,7 @@
 
 import React            from 'react';
 import ReactDOM         from 'react-dom';
-import { BrowserRouter as Router, Switch, Redirect, Route, Link } from 'react-router-dom'
+import { HashRouter as Router, Switch, Redirect, Route, Link } from 'react-router-dom'
 
 import Layout           from 'component/layout/index.jsx';
 // 页面
@@ -17,10 +17,6 @@ import Login            from 'page/login/index.jsx';
 import UserList         from 'page/user/index.jsx';
 import UserInfo         from 'page/user/userInfo.jsx';
 import ErrorPage        from 'page/error/index.jsx';
-
-// import { Button } from 'antd-mobile';
-//import { List } from 'antd-mobile';
-
 
 
 class App extends React.Component{
@@ -46,11 +42,6 @@ class App extends React.Component{
                     <Route path="/" render={ props => LayoutRouter}/>
                 </Switch>
             </Router>
-       
-       
-        // <Home/>
-            
-
         )
     }
 }

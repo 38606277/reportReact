@@ -10,7 +10,7 @@ class MUtil {
         return new Promise((resolve, reject) => {
             $.ajax({
                 type        : param.type        || 'get',
-                url         : param.url         || '',
+                url         : 'http://localhost:8080'+param.url         || '',
                 dataType    : param.dataType    || 'json',
                 data        : param.data        || null,
                 contentType: "application/json;text/plain",
@@ -24,7 +24,7 @@ class MUtil {
                     }
                    //  没有登录状态，强制登录
                     else if(10 === res.status){
-                        //this.doLogin();
+                      //  this.doLogin();
                         res.msg='查询错误'
                         typeof reject === 'function' && reject(res.msg || res.data);
                    }

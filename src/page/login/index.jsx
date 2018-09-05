@@ -42,21 +42,27 @@ class Login extends React.Component{
     onSubmit(){
         let loginInfo = {
             UserCode : this.state.UserCode,
-            Pwd : "KfTaJa3vfLE=",
+            Pwd :this.state.Pwd,// "KfTaJa3vfLE=",
            //password : "admin",
-            import:"local",
-            isAdmin:"1"
+            import:"",
+            isAdmin:""
             },
             checkResult = _user.checkLoginInfo(loginInfo);
             checkResult.states=true;
         // 验证通过
         if(checkResult.status){
-            _user.login(loginInfo).then((res) => {
-                _mm.setStorage('userInfo', res);
-                this.props.history.push(this.state.redirect);
+            _user.encodePwd(loginInfo.Pwd).then((res) => {
+                loginInfo.Pwd=res;
+                _user.login(loginInfo).then((res) => {
+                    _mm.setStorage('userInfo', res);
+                    this.props.history.push(this.state.redirect);
+                }, (errMsg) => {
+                    _mm.errorTips(errMsg);
+                });
             }, (errMsg) => {
                 _mm.errorTips(errMsg);
             });
+            
         }
         // 验证不通过
         else{

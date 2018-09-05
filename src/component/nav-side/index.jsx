@@ -23,17 +23,17 @@ class NavSide extends React.Component{
                             </NavLink>
                         </li>
                         <li className="active">
-                            <Link to="/product">
+                            <Link to="/product/index">
                                 <i className="fa fa-list"></i>
                                 <span>任务</span>
                                 <span className="fa arrow"></span>
                             </Link>
                             <ul className="nav nav-second-level collapse in">
                                 <li>
-                                    <NavLink to="/product" activeClassName="active-menu">我的代办</NavLink>
+                                    <NavLink to="/product/index" activeClassName="active-menu">我的代办</NavLink>
                                 </li>
                                 <li>
-                                    <NavLink to="/product-category" activeClassName="active-menu">我的已办</NavLink>
+                                    <NavLink to="/product/taskList" activeClassName="active-menu">我的已办</NavLink>
                                 </li>
                             </ul>
                         </li>

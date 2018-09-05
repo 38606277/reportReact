@@ -15,7 +15,7 @@ class User{
             type: 'post',
             // url: '/manage/user/login.do',
            // data: loginInfo
-           url:'http://localhost:8080/reportServer/user/Reactlogin',
+           url:'/reportServer/user/Reactlogin',
            data: JSON.stringify(loginInfo)
         });
     }
@@ -42,6 +42,13 @@ class User{
             msg : '验证通过'
         }
     }
+    encodePwd(pwd){
+        return _mm.request({
+            type    : 'post',
+            url     : '/reportServer/user/encodePwdReact',
+            data    :JSON.stringify({Pwd:pwd})
+        });
+    }
     // 退出登录
     logout(){
         return _mm.request({
@@ -52,7 +59,7 @@ class User{
     getUserList(pageNum){
         return _mm.request({
             type    : 'post',
-            url     : 'http://localhost:8080/reportServer/formUser/getUserListReact', //'/manage/user/list.do',
+            url     : '/reportServer/formUser/getUserListReact', //'/manage/user/list.do',
             data    : JSON.stringify({perPage: '10',startIndex: '0', currentPage: '0'})
            
         });
@@ -60,7 +67,7 @@ class User{
     getUserInfo(userId){
         return _mm.request({
             type    : 'post',
-            url     : 'http://localhost:8080/reportServer/formUser/getUserInfoByUserId', //'/manage/user/list.do',
+            url     : '/reportServer/formUser/getUserInfoByUserId', //'/manage/user/list.do',
             data    : JSON.stringify({id:userId})
            
         });

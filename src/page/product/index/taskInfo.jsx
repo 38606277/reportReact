@@ -2,9 +2,9 @@ import React        from 'react';
 import { Link }     from 'react-router-dom';
 import MUtil        from 'util/mm.jsx'
 import PageTitle    from 'component/page-title/index.jsx';
-import Product      from 'service/product-service.jsx'
+import Task     from 'service/task-service.jsx'
 const _mm   = new MUtil();
-const _product      = new Product();
+const _product      = new Task();
 
 
 class TaskInfo extends React.Component{
@@ -12,10 +12,10 @@ class TaskInfo extends React.Component{
         super(props);
         this.state = {
             taskId:this.props.match.params.taskId,
-            taskobj:'',
-            '项目经理':''
+            taskInfo:'',
+            userId:_mm.getStorage('userInfo').userId
         };
-       
+        
     }
   
    
@@ -48,6 +48,9 @@ class TaskInfo extends React.Component{
                     
                    
                     <form id="addtable">
+                    <input type='hidden'  id='delId'/>
+                    <input type='hidden' value={this.state.taskId} id='taskId'/>
+                    <input type='hidden' value={this.state.userId} id='userId'/>
                         <div dangerouslySetInnerHTML={{__html: this.state.taskInfo}} />
                     </form>    
 

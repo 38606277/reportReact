@@ -11,21 +11,22 @@ import Task     from 'service/task-service.jsx'
 
 import PageTitle    from 'component/page-title/index.jsx';
 import ListSearch   from './index-list-search.jsx';
-import Table        from 'antd/lib/table';
 import Pagination   from 'antd/lib/pagination';
+import Table        from 'antd/lib/table';
+
 import './index.scss';
 
 const _mm           = new MUtil();
 const _product      = new Task();
 
-class ProductList extends React.Component{
+class TaskList extends React.Component{
     constructor(props){
         super(props);
         this.state = {
             list            : [],
-            currentPage     : 1,
+            currentPage     : 1 ,
             perPage         : 10,
-            listType        :'list'
+            listType:'list'
         };
     }
     
@@ -42,10 +43,8 @@ class ProductList extends React.Component{
         if(this.state.listType === 'search'){
             listParam.keyword    = this.state.searchKeyword;
         }
-         
-        
         // 请求接口
-        _product.getAgencyList(listParam).then(res => {
+        _product.getTaskList(listParam).then(res => {
                 this.setState(res);
         }, errMsg => {
             this.setState({
@@ -56,9 +55,8 @@ class ProductList extends React.Component{
     }
     // 搜索
     onSearch(searchKeyword){
-        let listType = searchKeyword === '' ? 'list' : 'search';
+       
         this.setState({
-            listType:listType,
             currentPage         : 1,
             searchKeyword   : searchKeyword
         }, () => {
@@ -82,7 +80,7 @@ class ProductList extends React.Component{
             dataIndex: 'taskname',
             key: 'taskname',
             render: function(text, record, index) {
-                return <Link to={ `/product/taskInfo/${record.taskid}` }>{text}</Link>;
+                return <Link to={ `/product/taskInfoView/${record.taskid}` }>{text}</Link>;
               } 
           }, {
             title: '填报开始时间',
@@ -95,23 +93,16 @@ class ProductList extends React.Component{
           }];
         return (
             <div id="page-wrapper">
-                <PageTitle title="代办任务列表">
-                    {/* <div className="page-header-right">
-                        <Link to="/product/save" className="btn btn-primary">
-                            <i className="fa fa-plus"></i>
-                            <span>添加商品</span>
-                        </Link>
-                    </div> */}
-                </PageTitle>
+                <PageTitle title="代办任务列表"> </PageTitle>
                 <ListSearch onSearch={(searchKeyword) => {this.onSearch(searchKeyword)}}/>
-                <Table dataSource={dataSource} columns={columns}  pagination={false}/>
+                <Table dataSource={dataSource} columns={columns} pagination={false} />
                 
-                 <Pagination current={this.state.currentPage} 
+                <Pagination current={this.state.currentPage} 
                     total={this.state.total} 
-                    onChange={(currentPage) => this.onPageNumChange(currentPage)}/> 
+                    onChange={(currentPage) => this.onPageNumChange(currentPage)}/>
             </div>
         );
     }
 }
 
-export default ProductList;
+export default TaskList;

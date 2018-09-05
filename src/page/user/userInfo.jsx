@@ -2,12 +2,14 @@ import React        from 'react';
 import { Link }     from 'react-router-dom';
 import MUtil        from 'util/mm.jsx'
 import User         from 'service/user-service.jsx'
-import { Form, Icon, Input, Button } from 'antd';
+
 import './../../App.css';
 import PageTitle    from 'component/page-title/index.jsx';
+
+import update from 'immutability-helper';
 const _mm   = new MUtil();
 const _user = new User();
-const FormItem = Form.Item;
+
 function hasErrors(fieldsError) {
     return Object.keys(fieldsError).some(field => fieldsError[field]);
   }
@@ -18,45 +20,46 @@ class UserInfo extends React.Component{
         super(props);
         this.state = {
             userId:this.props.match.params.userId,
-            userInfo:''
+            userInfo:{
+                userName:'',
+                isAdmin:'',
+                regisType:'',
+                encryptPwd:'',
+                userId:'',
+                startDate:'',
+                endDate:'',
+                description:''
+            }
         };
-        this.tade = this.tade.bind(this);
+        this.selectOption = this.selectOption.bind(this);
     }
-    tade(e){
-        let value = e.target.value;
-        this.setState({isAdmin: value})
- 
-   };
+    
+   selectOption(e){
+        let name = e.target.name,
+            value = e.target.value.trim();
+        //this.state.userInfo.regisType= value;
+        this.state.userInfo = update(this.state.userInfo, {[name]: {$apply: function(x) {return value;}}});
+        this.setState(this.state.userInfo)           
+    };
+//初始化加载调用方法
     componentDidMount(){
         this.loadUserInfo();
     }
-    // 加载商品详情
-    // loadProduct(){
-    //     // 有id的时候，表示是编辑功能，需要表单回填
-    //     if(this.state.id){
-    //         _product.getProduct(this.state.id).then((res) => {
-    //             let images = res.subImages.split(',');
-    //             res.subImages = images.map((imgUri) => {
-    //                 return {
-    //                     uri: imgUri,
-    //                     url: res.imageHost + imgUri
-    //                 }
-    //             });
-    //             res.defaultDetail = res.detail;
-    //             this.setState(res);
-    //         }, (errMsg) => {
-    //             _mm.errorTips(errMsg);
-    //         });
-    //     }
-    // }
-    // 简单字段的改变，比如商品名称，描述，价格，库存
+
+    //保存数据
+    onSubmit(){
+        console.log(this.state.userInfo);
+    }
+    
+    //编辑字段对应值
     onValueChange(e){
         let name = e.target.name,
             value = e.target.value.trim();
-        this.setState({
-            [name] : value
-        });
+            this.state.userInfo = update(this.state.userInfo, {[name]: {$apply: function(x) {return value;}}});
+            this.setState(this.state.userInfo);
+      
     }
+    //加载数据
     loadUserInfo(){
         _user.getUserInfo(this.state.userId).then(res => {
             this.setState(res);
@@ -71,67 +74,97 @@ class UserInfo extends React.Component{
        
         return (
         <div id="page-wrapper">
-        <PageTitle title={this.state.id ? '编辑用户' : '添加用户'} />
+        <PageTitle title='编辑用户' />
                 <div className="form-horizontal">
                     <div className="form-group">
                         <label className="col-md-2 control-label">用户姓名</label>
                         <div className="col-md-5">
                             <input type="text" className="form-control" 
-                                placeholder="请输入商品名称"
+                                placeholder="请输入用户名称"
                                 name="userName"
-                                value={this.state.userInfo.userName}
+                                value={this.state.userInfo.userName}  onChange={(e) => this.onValueChange(e)}
                                 />
                         </div>
                     </div>
                     <div className="form-group">
                         <label className="col-md-2 control-label">用户角色</label>
                         <div className="col-md-5">
-                            <select type="text" className="form-control"  name="isAdmin" value={this.state.userInfo.isAdmin} onChange={this.tade}>
-                               
+                            <select type="text" className="form-control"  name="isAdmin" onChange={this.selectOption} value={this.state.userInfo.isAdmin} >
                                 <option value='0' > 普通用户</option>
                                 <option value='1'> 管理员</option>
                             </select>
                         </div>
                     </div>
                     <div className="form-group">
+                        <label className="col-md-2 control-label">用户归属</label>
+                        <div className="col-md-5">
+                            <select type="text" className="form-control"  name="regisType"  onChange={this.selectOption}
+                                 value={this.state.userInfo.regisType} >
+                                <option value="erp" >ERP用户</option>
+                                <option value="local"> 本地用户</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div className="form-group">
                         <label className="col-md-2 control-label">用户密码</label>
                         <div className="col-md-5">
-                            <input type="text" className="form-control" 
-                                placeholder="请输入商品描述" 
-                                name="isAdmin"
-                                value={this.state.userInfo.isAdmin}
+                            <input type="password" className="form-control" 
+                                placeholder="请输入密码" 
+                                name="encryptPwd"
+                                value={this.state.userInfo.encryptPwd}  onChange={(e) => this.onValueChange(e)}
                                />
                         </div>
                     </div>
                     <div className="form-group">
-                        <label className="col-md-2 control-label">商品价格</label>
-                        <div className="col-md-3">
-                            <div className="input-group">
-                                <input type="number" className="form-control" 
-                                    placeholder="价格" 
-                                    name="price"
-                                    value={this.state.price}
-                                    onChange={(e) => this.onValueChange(e)}/>
-                                <span className="input-group-addon">元</span>
-                            </div>
+                        <label className="col-md-2 control-label">确认密码</label>
+                        <div className="col-md-5">
+                            <input type="password" className="form-control" 
+                                placeholder="请输入确认密码" 
+                                name="ensurePwd"
+                                value={this.state.userInfo.ensurePwd}  onChange={(e) => this.onValueChange(e)}
+                               />
                         </div>
                     </div>
                     <div className="form-group">
-                        <label className="col-md-2 control-label">商品库存</label>
-                        <div className="col-md-3">
-                            <div className="input-group">
-                                <input type="number" className="form-control" 
-                                    placeholder="库存" 
-                                    name="stock"
-                                    value={this.state.stock}
-                                    onChange={(e) => this.onValueChange(e)}/>
-                                <span className="input-group-addon">件</span>
-                            </div>
-                            
+                        <label className="col-md-2 control-label">用户编号</label>
+                        <div className="col-md-5">
+                            <input type="text" className="form-control" 
+                                placeholder="请输入密码" 
+                                name="userId"
+                                value={this.state.userInfo.userId}  onChange={(e) => this.onValueChange(e)}
+                               />
                         </div>
                     </div>
-                    
-                   
+
+                     
+                    <div className="form-group">
+                        <label className="col-md-2 control-label">生效时间</label>
+                        <div className="col-md-5">
+                            <input type="text" className="form-control" 
+                                placeholder="请输入密码" 
+                                name="startDate"
+                                value={this.state.userInfo.startDate}  onChange={(e) => this.onValueChange(e)}
+                               />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label className="col-md-2 control-label">失效时间</label>
+                        <div className="col-md-5">
+                            <input type="text" className="form-control" 
+                                placeholder="请输入密码" 
+                                name="endDate"
+                                value={this.state.userInfo.endDate}  onChange={(e) => this.onValueChange(e)}
+                               />
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <label className="col-md-2 control-label">备注</label>
+                        <div className="col-md-3">
+                       
+                               <textarea className="form-control" 
+                                name="description" value={this.state.userInfo.description}  onChange={(e) => this.onValueChange(e)}></textarea>
+                        </div>
+                    </div>
                     <div className="form-group">
                         <div className="col-md-offset-2 col-md-10">
                             <button type="submit" className="btn btn-primary" 
@@ -142,7 +175,7 @@ class UserInfo extends React.Component{
             
         </div>
         
-        );
+        )
   }
 }
 
