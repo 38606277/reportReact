@@ -1,0 +1,14 @@
+#查询所有的数据库链接
+POST http://localhost:8080/reportServer/DBConnection/ListAll HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+body: {}
+
+###登录请求示例
+POST http://localhost:8080/reportServer/user/login HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{ UserCode: "system", Pwd: "KfTaJa3vfLE=" }
