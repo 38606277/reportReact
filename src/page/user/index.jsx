@@ -64,7 +64,7 @@ class UserList extends React.Component{
             pageNum         : 1,
             searchKeyword   : searchKeyword
         }, () => {
-            this.loadProductList();
+            this.loadUserList();
         });
     }
      //展示当前行信息
