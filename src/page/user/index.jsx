@@ -12,6 +12,7 @@ import User         from 'service/user-service.jsx'
 import PageTitle    from 'component/page-title/index.jsx';
 import Pagination   from 'antd/lib/pagination';
 import Table        from 'antd/lib/table';
+import ListSearch   from  './index-list-search.jsx';
 import './../../App.css';
 const _mm   = new MUtil();
 const _user = new User();
@@ -21,14 +22,24 @@ class UserList extends React.Component{
         super(props);
         this.state = {
             list            : [],
-            pageNum         : 1
+            pageNum         : 1,
+            perPage         : 10,
+            listType        :'list'
         };
     }
     componentDidMount(){
         this.loadUserList();
     }
     loadUserList(){
-        _user.getUserList(this.state.pageNum).then(res => {
+        let listParam = {};
+        listParam.userId = _mm.getStorage('userInfo').userId;
+        listParam.pageNum  = this.state.pageNum;
+        listParam.perPage  = this.state.perPage;
+        // 如果是搜索的话，需要传入搜索类型和搜索关键字
+        if(this.state.listType === 'search'){
+            listParam.keyword    = this.state.searchKeyword;
+        }
+        _user.getUserList(listParam).then(res => {
             this.setState(res);
         }, errMsg => {
             this.setState({
@@ -43,6 +54,17 @@ class UserList extends React.Component{
             pageNum : pageNum
         }, () => {
             this.loadUserList();
+        });
+    }
+     // 搜索
+     onSearch(searchKeyword){
+        let listType = searchKeyword === '' ? 'list' : 'search';
+        this.setState({
+            listType:listType,
+            pageNum         : 1,
+            searchKeyword   : searchKeyword
+        }, () => {
+            this.loadProductList();
         });
     }
      //展示当前行信息
@@ -89,10 +111,11 @@ class UserList extends React.Component{
                         </Link>
                     </div>
                 </PageTitle>  
-                <Table dataSource={dataSource} columns={columns} pagination={false} />
-                <Pagination current={this.state.pageNum} 
+                <ListSearch onSearch={(searchKeyword) => {this.onSearch(searchKeyword)}}/>
+                <Table dataSource={dataSource} columns={columns}  pagination={false}/>
+                 <Pagination current={this.state.pageNum} 
                     total={this.state.total} 
-                    onChange={(pageNum) => this.onPageNumChange(pageNum)}/>
+                    onChange={(pageNum) => this.onPageNumChange(pageNum)}/> 
             </div>
         )
     }
