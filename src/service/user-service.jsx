@@ -56,11 +56,11 @@ class User{
             url     : '/user/logout.do'
         });
     }
-    getUserList(pageNum){
+    getUserList(listParam){
         return _mm.request({
             type    : 'post',
             url     : '/reportServer/formUser/getUserListReact', //'/manage/user/list.do',
-            data    : JSON.stringify({perPage: '10',startIndex: '0', currentPage: '0'})
+            data    : JSON.stringify(listParam)
            
         });
     }
