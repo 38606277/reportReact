@@ -29,7 +29,7 @@ class MUtil {
                         typeof reject === 'function' && reject(res.msg || res.data);
                    }
                     else{
-                        typeof reject === 'function' && reject(res.msg || res.data);
+                        typeof reject === 'function' && reject(res);
                     }
                 },
                 error       : err => {

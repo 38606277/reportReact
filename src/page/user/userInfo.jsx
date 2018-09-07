@@ -5,7 +5,8 @@ import './../../App.css';
 import PageTitle    from 'component/page-title/index.jsx';
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import moment from 'moment';
-import { Form, Input, Select,  Checkbox, Button, DatePicker } from 'antd';
+import { Form, Input, Select,Button, DatePicker } from 'antd';
+import TextArea from 'antd/lib/input/TextArea';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -21,43 +22,33 @@ class UserInfo extends React.Component{
             confirmDirty: false,
             userId:this.props.match.params.userId,
             userName:'',
-            isAdmin:'',
-            regisType:'',
+            isAdmin:'0',
+            regisType:'erp',
             encryptPwd:'',
             startDate:'',
             endDate:'',
             description:''
             
         };
-        this.selectOption = this.selectOption.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleConfirmBlur  = this.handleConfirmBlur.bind(this);
         this.compareToFirstPassword  = this.compareToFirstPassword.bind(this);
         this.validateToNextPassword   = this.validateToNextPassword.bind(this);
     }
     
-   selectOption(e){
-        let name = e.target.name,
-            value = e.target.value.trim();
-        //this.state.userInfo.regisType= value;
-       // this.state.userInfo = update(this.state.userInfo, {[name]: {$apply: function(x) {return value;}}});
-        //this.setState(this.state.userInfo)    
-        this.setState({[name]:value});       
-    };
-//初始化加载调用方法
+ //初始化加载调用方法
     componentDidMount(){
        
         _user.getUserInfo(this.state.userId).then(res => {
             this.setState(res.userInfo);
             this.props.form.setFieldsValue({
                   userName:res.userInfo.userName,
-                  regisType:res.userInfo.regisType,
-                  isAdmin:res.userInfo.isAdmin,
                   encryptPwd:res.userInfo.encryptPwd,
                   startDate:moment(res.userInfo.startDate,dateFormat),
                   endDate:moment(res.userInfo.endDate,dateFormat),
                   description:res.userInfo.description,
-                  userId:res.userInfo.userId
+                  userId:res.userInfo.userId,
+                  confirm:''
             });
         }, errMsg => {
             this.setState({
@@ -68,10 +59,6 @@ class UserInfo extends React.Component{
         
     }
 
-    //保存数据
-    onSubmit(){
-        console.log(this.state);
-    }
     
     //编辑字段对应值
     onValueChange(e){
@@ -94,12 +81,19 @@ class UserInfo extends React.Component{
        this.props.form.setFieldsValue({[name]:dateString});
     }
 
-   
+   //提交
 handleSubmit (e) {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', this.state);
+          _user.saveUserInfo(this.state).then(res => {
+            console.log("success");
+          }, errMsg => {
+              this.setState({
+              });
+              _mm.errorTips(errMsg);
+          });
+        //console.log('Received values of form: ', this.state);
       }
     });
   }
@@ -130,7 +124,6 @@ handleSubmit (e) {
 
   render() {
     const { getFieldDecorator } = this.props.form;
-
     const formItemLayout = {
       labelCol: {
         xs: { span: 24 },
@@ -164,49 +157,51 @@ handleSubmit (e) {
               <Input type='text' name='userName' />
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label='用户归属' >
-            {getFieldDecorator('regisType', {
-              rules: [{ required: true, message: 'Please input your nickname!'}],
+          <FormItem {...formItemLayout} label='用户编号' >
+            {getFieldDecorator('userId', {
+              rules: [{ required: true, message: '请输入用户编号!', whitespace: true }],
             })(
-              <Input  type='text' name='regisType'/>
+              <Input  type='text' name='userId' />
             )}
           </FormItem>
+          <FormItem {...formItemLayout} label='用户归属' >
+             <Select  name='regisType' value={this.state.regisType.toString()}  style={{ width: 120 }} onChange={(value) =>this.onSelectChange('regisType',value)}>
+                <Option value='erp' >ERP用户</Option>
+                <Option value='local' >本地用户</Option>
+                
+              </Select>
+          
+          </FormItem>
 
-          {/* <FormItem  {...formItemLayout}  label="密码" >
-            {getFieldDecorator('password', {
+           <FormItem  {...formItemLayout}  label="密码" hideRequiredMark='true'>
+            {getFieldDecorator('encryptPwd', {
               rules: [{
-                required: false, message: 'Please input your password!',
+                required: false, message: '请输入密码!',
               }, {
                 validator: this.validateToNextPassword,
               }],
             })(
-              <Input type="text" name='password'/>
+              <Input type="password" name='encryptPwd'/>
             )}
           </FormItem>
           <FormItem {...formItemLayout}  label="确认密码" >
             {getFieldDecorator('confirm', {
               rules: [{
-                required: false, message: 'Please confirm your password!',
+                required: false, message: '请再次输入密码!',
               }, {
                 validator: this.compareToFirstPassword,
               }],
             })(
               <Input type="password" onBlur={this.handleConfirmBlur} />
             )}
-          </FormItem> */}
-          <FormItem {...formItemLayout} label='用户编号' >
-            {getFieldDecorator('userId', {
-              rules: [{ required: true, message: '请输入用户编号!', whitespace: true }],
-            })(
-              <Input  type='text' name='userId' value={this.state.userId}/>
-            )}
-          </FormItem>
+          </FormItem> 
+         
          <FormItem {...formItemLayout} label='用户角色'>
-              <Select   key={1} name="isAdmin"  style={{ width: 120 }} onChange={(value) =>this.onSelectChange('isAdmin',value)}>
-                <Option key='0' value='0' >本地用户</Option>
-                <Option key='1' value='1' >管理员</Option>
+              <Select  name='isAdmin' value={this.state.isAdmin.toString()}  style={{ width: 120 }} onChange={(value) =>this.onSelectChange('isAdmin',value)}>
+                <Option value='0' >普通员工</Option>
+                <Option value='1' >管理员</Option>
               </Select>
-           
+          
          </FormItem>
           <FormItem {...formItemLayout} label='开始时间'>
               {getFieldDecorator('startDate',{
@@ -224,7 +219,13 @@ handleSubmit (e) {
                  <DatePicker name='endDate' onChange={(date,dateString) => this.onValueChangeDate('endDate',date,dateString)} locale={locale}  placeholder="请选择失效时间" />
               )}
           </FormItem> 
-          
+          <FormItem {...formItemLayout} label='备注'>
+            {getFieldDecorator('description', {
+                   rules: [{ required: true, message: '请输入备注!'}],
+            })(
+                <TextArea  type='text' name='description'   onChange={(e) => this.onValueChange(e)}></TextArea>
+            )} 
+            </FormItem>
           <FormItem {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">保存</Button>
           </FormItem>
@@ -233,10 +234,6 @@ handleSubmit (e) {
     );
   }
 }
-
-
-
-//export default UserInfo;
 const WrappedUserInfo = Form.create()(UserInfo);
 
 export default WrappedUserInfo;

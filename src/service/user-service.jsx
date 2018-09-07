@@ -72,6 +72,14 @@ class User{
            
         });
     }
+    saveUserInfo(userInfo){
+        return _mm.request({
+            type    : 'post',
+            url     : '/reportServer/formUser/updateUser', //'/manage/user/list.do',
+            data    : JSON.stringify(userInfo)
+           
+        });
+    }
 }
 
 export default User;
