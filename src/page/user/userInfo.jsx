@@ -20,14 +20,15 @@ class UserInfo extends React.Component{
         super(props);
         this.state = {
             confirmDirty: false,
-            userId:this.props.match.params.userId,
+            _id:this.props.match.params.userId,
             userName:'',
             isAdmin:'0',
             regisType:'local',
             encryptPwd:'',
             startDate:'',
             endDate:'',
-            description:''
+            description:'',
+            userId:''
             
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -38,8 +39,8 @@ class UserInfo extends React.Component{
     
  //初始化加载调用方法
     componentDidMount(){
-       if(null!=this.state.userId && ''!=this.state.userId  && 'null'!=this.state.userId){
-            _user.getUserInfo(this.state.userId).then(res => {
+       if(null!=this.state._id && ''!=this.state._id  && 'null'!=this.state._id){
+            _user.getUserInfo(this.state._id).then(res => {
                 this.setState(res.userInfo);
                 this.props.form.setFieldsValue({
                       userName:res.userInfo.userName,
@@ -86,6 +87,8 @@ handleSubmit (e) {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        console.log(this.state);
+        console.log(values);
           _user.saveUserInfo(this.state).then(res => {
             console.log("success");
           }, errMsg => {
@@ -148,20 +151,20 @@ handleSubmit (e) {
     };
     return (
         <div id="page-wrapper">
-        <PageTitle title={this.state.userId=='null' ?'新建用户':'编辑用户'} />
+        <PageTitle title={this.state._id=='null' ?'新建用户':'编辑用户'} />
         <Form onSubmit={this.handleSubmit}>
           <FormItem {...formItemLayout} label="用户名">
             {getFieldDecorator('userName', {
               rules: [{required: true, message: '请输入用户名!'}],
             })(
-              <Input type='text' name='userName' />
+              <Input type='text' name='userName'  onChange={(e) => this.onValueChange(e)}/>
             )}
           </FormItem>
           <FormItem {...formItemLayout} label='用户编号' >
             {getFieldDecorator('userId', {
               rules: [{ required: true, message: '请输入用户编号!', whitespace: true }],
             })(
-              <Input  type='text' name='userId' />
+              <Input  type='text' name='userId' onChange={(e) => this.onValueChange(e)} />
             )}
           </FormItem>
           <FormItem {...formItemLayout} label='用户归属' >
