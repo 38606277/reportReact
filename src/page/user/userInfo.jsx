@@ -1,68 +1,100 @@
 import React        from 'react';
-import { Link }     from 'react-router-dom';
 import MUtil        from 'util/mm.jsx'
 import User         from 'service/user-service.jsx'
-
 import './../../App.css';
 import PageTitle    from 'component/page-title/index.jsx';
+import locale from 'antd/lib/date-picker/locale/zh_CN';
+import moment from 'moment';
+import { Form, Input, Select,  Checkbox, Button, DatePicker } from 'antd';
 
-import update from 'immutability-helper';
+const FormItem = Form.Item;
 const _mm   = new MUtil();
 const _user = new User();
-
-function hasErrors(fieldsError) {
-    return Object.keys(fieldsError).some(field => fieldsError[field]);
-  }
-
+const dateFormat = 'YYYY-MM-DD';
+const RangePicker = DatePicker.RangePicker;
 
 class UserInfo extends React.Component{
     constructor(props){
         super(props);
         this.state = {
+            confirmDirty: false,
             userId:this.props.match.params.userId,
-            userInfo:{
-                userName:'',
-                isAdmin:'',
-                regisType:'',
-                encryptPwd:'',
-                userId:'',
-                startDate:'',
-                endDate:'',
-                description:''
-            }
+            userName:'',
+            isAdmin:'',
+            regisType:'',
+            encryptPwd:'',
+            startDate:'',
+            endDate:'',
+            description:''
+            
         };
         this.selectOption = this.selectOption.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleConfirmBlur  = this.handleConfirmBlur.bind(this);
+        this.compareToFirstPassword  = this.compareToFirstPassword.bind(this);
+        this.validateToNextPassword   = this.validateToNextPassword.bind(this);
     }
     
    selectOption(e){
         let name = e.target.name,
             value = e.target.value.trim();
         //this.state.userInfo.regisType= value;
-        this.state.userInfo = update(this.state.userInfo, {[name]: {$apply: function(x) {return value;}}});
-        this.setState(this.state.userInfo)           
+       // this.state.userInfo = update(this.state.userInfo, {[name]: {$apply: function(x) {return value;}}});
+        //this.setState(this.state.userInfo)    
+        this.setState({[name]:value});       
     };
 //初始化加载调用方法
     componentDidMount(){
-        this.loadUserInfo();
+       
+        _user.getUserInfo(this.state.userId).then(res => {
+            this.setState(res.userInfo);
+            this.props.form.setFieldsValue({
+                  userName:res.userInfo.userName,
+                  regisType:res.userInfo.regisType,
+                  isAdmin:res.userInfo.isAdmin,
+                  encryptPwd:res.userInfo.encryptPwd,
+                  startDate:moment(res.userInfo.startDate,dateFormat),
+                  endDate:moment(res.userInfo.endDate,dateFormat),
+                  description:res.userInfo.description,
+                  userId:res.userInfo.userId
+            });
+        }, errMsg => {
+            this.setState({
+            });
+            _mm.errorTips(errMsg);
+        });
+       
+        
     }
 
     //保存数据
     onSubmit(){
-        console.log(this.state.userInfo);
+        console.log(this.state);
     }
     
     //编辑字段对应值
     onValueChange(e){
         let name = e.target.name,
             value = e.target.value.trim();
-            this.state.userInfo = update(this.state.userInfo, {[name]: {$apply: function(x) {return value;}}});
-            this.setState(this.state.userInfo);
+           // this.state.userInfo = update(this.state.userInfo, {[name]: {$apply: function(x) {return value;}}});
+           // this.setState(this.state.userInfo);
+           this.setState({[name]:value});  
       
     }
+    onValueChangeDate(name,date,dateString){
+      console.log(name);
+      console.log(dateString)
+     
+       this.setState({[name]:dateString});  
+  
+    }
+
     //加载数据
     loadUserInfo(){
         _user.getUserInfo(this.state.userId).then(res => {
-            this.setState(res);
+            this.setState(res.userInfo);
+            console.log(this.state);
+
         }, errMsg => {
             this.setState({
                 
@@ -70,114 +102,150 @@ class UserInfo extends React.Component{
             _mm.errorTips(errMsg);
         });
     }
-    render() {
-       
-        return (
+   
+handleSubmit (e) {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+      }
+    });
+  }
+
+  handleConfirmBlur(e) {
+    const value = e.target.value;
+    this.setState({ confirmDirty: this.state.confirmDirty || !!value });
+  }
+
+  compareToFirstPassword(rule, value, callback){
+    const form = this.props.form;
+    if (value && value !== form.getFieldValue('password')) {
+      callback('Two passwords that you enter is inconsistent!');
+    } else {
+      callback();
+    }
+  }
+
+  validateToNextPassword(rule, value, callback) {
+    const form = this.props.form;
+    if (value && this.state.confirmDirty) {
+      form.validateFields(['confirm'], { force: true });
+    }
+    callback();
+  }
+
+ 
+
+  render() {
+    const { getFieldDecorator } = this.props.form;
+
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 8 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
+    };
+    const tailFormItemLayout = {
+      wrapperCol: {
+        xs: {
+          span: 24,
+          offset: 0,
+        },
+        sm: {
+          span: 16,
+          offset: 8,
+        },
+      },
+    };
+    return (
         <div id="page-wrapper">
         <PageTitle title='编辑用户' />
-                <div className="form-horizontal">
-                    <div className="form-group">
-                        <label className="col-md-2 control-label">用户姓名</label>
-                        <div className="col-md-5">
-                            <input type="text" className="form-control" 
-                                placeholder="请输入用户名称"
-                                name="userName"
-                                value={this.state.userInfo.userName}  onChange={(e) => this.onValueChange(e)}
-                                />
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label className="col-md-2 control-label">用户角色</label>
-                        <div className="col-md-5">
-                            <select type="text" className="form-control"  name="isAdmin" onChange={this.selectOption} value={this.state.userInfo.isAdmin} >
-                                <option value='0' > 普通用户</option>
-                                <option value='1'> 管理员</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label className="col-md-2 control-label">用户归属</label>
-                        <div className="col-md-5">
-                            <select type="text" className="form-control"  name="regisType"  onChange={this.selectOption}
-                                 value={this.state.userInfo.regisType} >
-                                <option value="erp" >ERP用户</option>
-                                <option value="local"> 本地用户</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label className="col-md-2 control-label">用户密码</label>
-                        <div className="col-md-5">
-                            <input type="password" className="form-control" 
-                                placeholder="请输入密码" 
-                                name="encryptPwd"
-                                value={this.state.userInfo.encryptPwd}  onChange={(e) => this.onValueChange(e)}
-                               />
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label className="col-md-2 control-label">确认密码</label>
-                        <div className="col-md-5">
-                            <input type="password" className="form-control" 
-                                placeholder="请输入确认密码" 
-                                name="ensurePwd"
-                                value={this.state.userInfo.ensurePwd}  onChange={(e) => this.onValueChange(e)}
-                               />
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label className="col-md-2 control-label">用户编号</label>
-                        <div className="col-md-5">
-                            <input type="text" className="form-control" 
-                                placeholder="请输入密码" 
-                                name="userId"
-                                value={this.state.userInfo.userId}  onChange={(e) => this.onValueChange(e)}
-                               />
-                        </div>
-                    </div>
+        <Form onSubmit={this.handleSubmit}>
+          <FormItem {...formItemLayout} label="用户名">
+            {getFieldDecorator('userName', {
+              rules: [{required: true, message: '请输入用户名!'}],
+            })(
+              <Input type='text' name='userName' />
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label='用户归属' >
+            {getFieldDecorator('regisType', {
+              rules: [{ required: true, message: 'Please input your nickname!'}],
+            })(
+              <Input  type='text' name='regisType'/>
+            )}
+          </FormItem>
 
-                     
-                    <div className="form-group">
-                        <label className="col-md-2 control-label">生效时间</label>
-                        <div className="col-md-5">
-                            <input type="text" className="form-control" 
-                                placeholder="请输入密码" 
-                                name="startDate"
-                                value={this.state.userInfo.startDate}  onChange={(e) => this.onValueChange(e)}
-                               />
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label className="col-md-2 control-label">失效时间</label>
-                        <div className="col-md-5">
-                            <input type="text" className="form-control" 
-                                placeholder="请输入密码" 
-                                name="endDate"
-                                value={this.state.userInfo.endDate}  onChange={(e) => this.onValueChange(e)}
-                               />
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label className="col-md-2 control-label">备注</label>
-                        <div className="col-md-3">
-                       
-                               <textarea className="form-control" 
-                                name="description" value={this.state.userInfo.description}  onChange={(e) => this.onValueChange(e)}></textarea>
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <div className="col-md-offset-2 col-md-10">
-                            <button type="submit" className="btn btn-primary" 
-                                onClick={(e) => {this.onSubmit(e)}}>提交</button>
-                        </div>
-                    </div>
-                </div>
+          <FormItem  {...formItemLayout}  label="密码" >
+            {getFieldDecorator('password', {
+              rules: [{
+                required: true, message: 'Please input your password!',
+              }, {
+                validator: this.validateToNextPassword,
+              }],
+            })(
+              <Input type="text" name='password'/>
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout}  label="确认密码" >
+            {getFieldDecorator('confirm', {
+              rules: [{
+                required: true, message: 'Please confirm your password!',
+              }, {
+                validator: this.compareToFirstPassword,
+              }],
+            })(
+              <Input type="password" onBlur={this.handleConfirmBlur} />
+            )}
+          </FormItem>
+          <FormItem {...formItemLayout} label='用户编号' >
+            {getFieldDecorator('userId', {
+              rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
+            })(
+              <Input  type='text' name='userId' value={this.state.userId}/>
+            )}
+          </FormItem>
+         <FormItem {...formItemLayout} label='角色'>
             
-        </div>
+            <Select defaultValue="0" style={{ width: 120 }} onChange={handleChange}>
+              <Option value="0">本地用户</Option>
+              <Option value="1">管理员</Option>
+            </Select>
+           
+         </FormItem>
+          <FormItem {...formItemLayout} label='开始时间'>
+              {getFieldDecorator('startDate',{
+                rules:[{required: true, message: '请选择开始时间!'}],
+              })(
+                 <DatePicker name='startDate' onChange={(date,dateString) => this.onValueChangeDate('startDate',date,dateString)}  locale={locale}  placeholder="请选择开始时间" />
+              )}
+          </FormItem>
+
         
-        )
+           <FormItem {...formItemLayout} label='失效时间'>
+              {getFieldDecorator('endDate',{
+                rules:[{required: true, message: '请选择失效时间!'}],
+              })(
+                 <DatePicker name='endDate' onChange={(date,dateString) => this.onValueChangeDate('endDate',date,dateString)} locale={locale}  placeholder="请选择失效时间" />
+              )}
+          </FormItem> 
+          
+          <FormItem {...tailFormItemLayout}>
+            <Button type="primary" htmlType="submit">保存</Button>
+          </FormItem>
+      </Form>
+      </div>
+    );
   }
 }
 
 
-export default UserInfo;
+
+//export default UserInfo;
+const WrappedUserInfo = Form.create()(UserInfo);
+
+export default WrappedUserInfo;
