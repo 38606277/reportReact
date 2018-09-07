@@ -23,7 +23,7 @@ class UserInfo extends React.Component{
             userId:this.props.match.params.userId,
             userName:'',
             isAdmin:'0',
-            regisType:'erp',
+            regisType:'local',
             encryptPwd:'',
             startDate:'',
             endDate:'',
@@ -38,24 +38,24 @@ class UserInfo extends React.Component{
     
  //初始化加载调用方法
     componentDidMount(){
-       
-        _user.getUserInfo(this.state.userId).then(res => {
-            this.setState(res.userInfo);
-            this.props.form.setFieldsValue({
-                  userName:res.userInfo.userName,
-                  encryptPwd:res.userInfo.encryptPwd,
-                  startDate:moment(res.userInfo.startDate,dateFormat),
-                  endDate:moment(res.userInfo.endDate,dateFormat),
-                  description:res.userInfo.description,
-                  userId:res.userInfo.userId,
-                  confirm:''
+       if(null!=this.state.userId && ''!=this.state.userId  && 'null'!=this.state.userId){
+            _user.getUserInfo(this.state.userId).then(res => {
+                this.setState(res.userInfo);
+                this.props.form.setFieldsValue({
+                      userName:res.userInfo.userName,
+                      encryptPwd:res.userInfo.encryptPwd,
+                      startDate:moment(res.userInfo.startDate,dateFormat),
+                      endDate:moment(res.userInfo.endDate,dateFormat),
+                      description:res.userInfo.description,
+                      userId:res.userInfo.userId,
+                      confirm:''
+                });
+            }, errMsg => {
+                this.setState({
+                });
+                _mm.errorTips(errMsg);
             });
-        }, errMsg => {
-            this.setState({
-            });
-            _mm.errorTips(errMsg);
-        });
-       
+        }
         
     }
 
@@ -148,7 +148,7 @@ handleSubmit (e) {
     };
     return (
         <div id="page-wrapper">
-        <PageTitle title='编辑用户' />
+        <PageTitle title={this.state.userId=='null' ?'新建用户':'编辑用户'} />
         <Form onSubmit={this.handleSubmit}>
           <FormItem {...formItemLayout} label="用户名">
             {getFieldDecorator('userName', {

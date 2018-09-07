@@ -81,7 +81,14 @@ class UserList extends React.Component{
        
         return (
             <div id="page-wrapper">
-                <PageTitle title="用户列表"/>
+                <PageTitle title="用户列表">
+                <div className="page-header-right">
+                        <Link to="/user/userInfo/null" className="btn btn-primary">
+                            <i className="fa fa-plus"></i>
+                            <span>新建用户</span>
+                        </Link>
+                    </div>
+                </PageTitle>  
                 <Table dataSource={dataSource} columns={columns} pagination={false} />
                 <Pagination current={this.state.pageNum} 
                     total={this.state.total} 
