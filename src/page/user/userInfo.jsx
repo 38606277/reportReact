@@ -8,6 +8,7 @@ import moment from 'moment';
 import { Form, Input, Select,  Checkbox, Button, DatePicker } from 'antd';
 
 const FormItem = Form.Item;
+const Option = Select.Option;
 const _mm   = new MUtil();
 const _user = new User();
 const dateFormat = 'YYYY-MM-DD';
@@ -79,35 +80,26 @@ class UserInfo extends React.Component{
            // this.state.userInfo = update(this.state.userInfo, {[name]: {$apply: function(x) {return value;}}});
            // this.setState(this.state.userInfo);
            this.setState({[name]:value});  
+           this.props.form.setFieldsValue({[name]:value});
       
     }
+    //编辑字段对应值
+    onSelectChange(name,value){
+         this.setState({[name]:value});  
+         this.props.form.setFieldsValue({[name]:value});
+    
+  }
     onValueChangeDate(name,date,dateString){
-      console.log(name);
-      console.log(dateString)
-     
-       this.setState({[name]:dateString});  
-  
+       this.setState({[name]:dateString});
+       this.props.form.setFieldsValue({[name]:dateString});
     }
 
-    //加载数据
-    loadUserInfo(){
-        _user.getUserInfo(this.state.userId).then(res => {
-            this.setState(res.userInfo);
-            console.log(this.state);
-
-        }, errMsg => {
-            this.setState({
-                
-            });
-            _mm.errorTips(errMsg);
-        });
-    }
    
 handleSubmit (e) {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        console.log('Received values of form: ', this.state);
       }
     });
   }
@@ -180,10 +172,10 @@ handleSubmit (e) {
             )}
           </FormItem>
 
-          <FormItem  {...formItemLayout}  label="密码" >
+          {/* <FormItem  {...formItemLayout}  label="密码" >
             {getFieldDecorator('password', {
               rules: [{
-                required: true, message: 'Please input your password!',
+                required: false, message: 'Please input your password!',
               }, {
                 validator: this.validateToNextPassword,
               }],
@@ -194,27 +186,26 @@ handleSubmit (e) {
           <FormItem {...formItemLayout}  label="确认密码" >
             {getFieldDecorator('confirm', {
               rules: [{
-                required: true, message: 'Please confirm your password!',
+                required: false, message: 'Please confirm your password!',
               }, {
                 validator: this.compareToFirstPassword,
               }],
             })(
               <Input type="password" onBlur={this.handleConfirmBlur} />
             )}
-          </FormItem>
+          </FormItem> */}
           <FormItem {...formItemLayout} label='用户编号' >
             {getFieldDecorator('userId', {
-              rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
+              rules: [{ required: true, message: '请输入用户编号!', whitespace: true }],
             })(
               <Input  type='text' name='userId' value={this.state.userId}/>
             )}
           </FormItem>
-         <FormItem {...formItemLayout} label='角色'>
-            
-            <Select defaultValue="0" style={{ width: 120 }} onChange={handleChange}>
-              <Option value="0">本地用户</Option>
-              <Option value="1">管理员</Option>
-            </Select>
+         <FormItem {...formItemLayout} label='用户角色'>
+              <Select   key={1} name="isAdmin"  style={{ width: 120 }} onChange={(value) =>this.onSelectChange('isAdmin',value)}>
+                <Option key='0' value='0' >本地用户</Option>
+                <Option key='1' value='1' >管理员</Option>
+              </Select>
            
          </FormItem>
           <FormItem {...formItemLayout} label='开始时间'>
