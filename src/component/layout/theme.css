@@ -79,12 +79,12 @@ p {
     top: 60px;
     bottom: 0;
     overflow-y : auto;
-    background: rgba(0, 0, 0, 0.85);
+    /* background: rgba(0, 0, 0, 0.85); */
 }
 
 #page-wrapper {
     position: relative;
-    top: 55px;
+     top: 55px; 
 }
 
 .top-navbar .nav > li > a:hover, .top-navbar .nav > li > a:focus {

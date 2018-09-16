@@ -20,7 +20,7 @@ class UserInfo extends React.Component{
         super(props);
         this.state = {
             confirmDirty: false,
-            _id:this.props.match.params.userId,
+            _id:this.props.params.userId,
             userName:'',
             isAdmin:'0',
             regisType:'local',

@@ -4,20 +4,19 @@
 * @Last Modified by:   Rosen
 * @Last Modified time: 2018-01-31 13:33:42
 */
-import MUtil        from 'util/mm.jsx'
+import   HttpService  from '../util/HttpService.jsx';
+// import MUtil        from '../util/mm.jsx'
 
-const _mm   = new MUtil();
+// const _mm   = new MUtil();
+const httpService =new HttpService();
 
 class User{
     // 用户登录
     login(loginInfo){
-        return _mm.request({
-            type: 'post',
-            // url: '/manage/user/login.do',
-           // data: loginInfo
-           url:'/reportServer/user/Reactlogin',
-           data: JSON.stringify(loginInfo)
-        });
+        return httpService.post(
+           '/reportServer/user/Reactlogin',
+           JSON.stringify(loginInfo))
+        
     }
     // 检查登录接口的数据是不是合法
     checkLoginInfo(loginInfo){

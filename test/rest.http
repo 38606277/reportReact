@@ -12,3 +12,20 @@ method: POST
 credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
 
 { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+###查询所有的函数
+POST http://localhost:8080/reportServer/function/getAllFunctionName HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+body: {}
+
+###查询函数用ID
+POST http://localhost:8080/reportServer/function/getFunctionByID/37 HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    func_id:"37"
+}

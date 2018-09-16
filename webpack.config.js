@@ -12,6 +12,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 let WEBPACK_ENV = process.env.WEBPACK_ENV || 'dev';
 console.log(WEBPACK_ENV); 
 module.exports = {
+    devtool: 'source-map',
     entry: './src/app.jsx',
     output: {
         path: path.resolve(__dirname, 'dist'),
@@ -19,27 +20,44 @@ module.exports = {
             ? '/dist/' : '//s.jianliwu.com/admin-v2-fe/dist/',
         filename: 'js/app.js'
     },
-    resolve: {
-        alias : {
-            page        : path.resolve(__dirname, 'src/page'),
-            component   : path.resolve(__dirname, 'src/component'),
-            util        : path.resolve(__dirname, 'src/util'),
-            service     : path.resolve(__dirname, 'src/service')
-        }
-    },
+    // resolve: {
+    //     // alias : {
+    //     //     page        : path.resolve(__dirname, 'src/page'),
+    //     //     component   : path.resolve(__dirname, 'src/component'),
+    //     //     util        : path.resolve(__dirname, 'src/util'),
+    //     //     service     : path.resolve(__dirname, 'src/service')
+    //     // }
+    // },
     module: {
         rules: [
             // react(jsx)语法的处理
+            // react(jsx)语法的处理
             {
-                test: /\.jsx$/,
+                test: /\.(js|jsx)$/,
                 exclude: /(node_modules)/,
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        presets: ['env', 'react']
+                        babelrc:false,
+                        presets: ['env', 'react','es2015','stage-0'],
+                        plugins: [
+                            'syntax-dynamic-import',
+                            ["import", { libraryName: "antd-mobile", style: "css" }]
+                        ]
+
                     }
                 }
             },
+            // {
+            //     test: /\.jsx$/,
+            //     exclude: /(node_modules)/,
+            //     use: {
+            //         loader: 'babel-loader',
+            //         options: {
+            //             presets: ['env', 'react']
+            //         }
+            //     }
+            // },
             // css文件的处理
             {
                 test: /\.css$/,
@@ -99,7 +117,7 @@ module.exports = {
         })
     ],
     devServer: {
-        port: 8090,
+        port: 8086,
         historyApiFallback: {
             index: '/dist/index.html'
         },

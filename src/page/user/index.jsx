@@ -14,7 +14,7 @@ import Pagination   from 'antd/lib/pagination';
 import Table        from 'antd/lib/table';
 import ListSearch   from  './index-list-search.jsx';
 import './../../App.css';
-const _mm   = new MUtil();
+//const _mm   = new MUtil();
 const _user = new User();
 
 class UserList extends React.Component{
@@ -45,7 +45,7 @@ class UserList extends React.Component{
             this.setState({
                 list : []
             });
-            _mm.errorTips(errMsg);
+            // _mm.errorTips(errMsg);
         });
     }
     // 页数发生变化的时候

@@ -6,7 +6,7 @@
 */
 import React                from 'react';
 import { Link }    from 'react-router-dom';
-import { Menu, Icon } from 'antd';
+import { Menu, Icon, Row } from 'antd';
 
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -42,6 +42,11 @@ class NavSide extends React.Component{
                     <Menu.Item key="10">权限管理</Menu.Item>
                     <Menu.Item key="11">连接管理</Menu.Item>
                     <Menu.Item key="12">权限类型管理</Menu.Item>
+                </SubMenu>
+                <SubMenu key="sub5" title={<span><Icon type="setting" /><span>基础信息</span></span>}>
+                    <Menu.Item key="/function/functionList"><Link to='/function/functionList'>函数管理</Link></Menu.Item>
+                    <Menu.Item key="11">查询管理</Menu.Item>
+                    <Menu.Item key="12">数据字典</Menu.Item>
                 </SubMenu>
                 {/* <SubMenu key="sub2" title={<span><Icon type="mail" /><span>我的任务</span></span>}>
                         <MenuItemGroup key="g1" title="Item 1">
