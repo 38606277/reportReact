@@ -9,6 +9,7 @@ import 'codemirror/mode/sql/sql';
 import 'codemirror/theme/ambiance.css';
 import EditableTable from './EditTable.jsx';
 import FunctionService from '../../service/FunctionService.jsx'
+import DbService from '../../service/DbService.jsx'
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -16,6 +17,7 @@ const RadioGroup = Radio.Group;
 const TextArea = Input.TextArea;
 
 const functionService = new FunctionService();
+const dbService = new DbService();
 const options = {
 
     lineNumbers: true,                //显示行号  
@@ -67,7 +69,7 @@ var data1 = [
 // moment.locales('zh-cn');
 class functionCreator extends React.Component {
 
-    // state = {};
+     state = {};
     constructor(props) {
         super(props);
         // alert(this.props.match.params.funcid);
@@ -76,6 +78,7 @@ class functionCreator extends React.Component {
             inData:[],
             outData:data1,
             list:[],
+            dblist:[],
             funcid:this.props.match.params.funcid,
             userInfo: {
                 userName: "wwww",
@@ -109,17 +112,25 @@ class functionCreator extends React.Component {
                 this.setState({inData:res.in});
                 this.setState({outData:res.out});
                 this.props.form.setFieldsValue(res);
+                //this.refs.editorsql.codeMirror.setValue=JSON.stringify(res.program);
+                var a = this.refs.editorsql;
+                a.codeMirror.setSize('450px', '500px');
+                a.codeMirror.border = "solid  1px";
+                a.codeMirror.setValue(res.program);
                 //  alert(JSON.stringify(res.out));
                 //  alert(JSON.stringify(this.state.outData));
                 //this.setState({data:this.res});
 
-                console.log(this.state.data);
+              //  console.log(this.state.data);
             });
 
-        this.props.form.setFieldsValue(this.state.userInfo);
-        var a = this.refs.editorsql;
-        a.codeMirror.setSize('380px', '480px');
-        a.codeMirror.border = "solid  1px";
+        dbService.getDbList()
+        .then(res => {
+            this.setState({dblist:res});
+        } );
+
+        //this.props.form.setFieldsValue(this.state.userInfo);
+       
     }
     handleSubmit1() {
         //    alert("ss")
@@ -141,17 +152,24 @@ class functionCreator extends React.Component {
         console.log(JSON.stringify(userInfo))
         message.success(`${userInfo.userName} 保存成功!：${userInfo.userPwd}`)
     }
-    onButtonClick(){
-       this.setState({inData:outData});
-        // functionService.getFunctionByID()
-        //     .then(res => {
-        //         //this.setState({ list: res })
-        //         //console.log(this.state.list);
-        //         this.inData=data;
-        //         this.props.form.setFieldsValue(res);
-        //         this.setState({data:res});
-        //         console.log(this.state.data);
-        //     });
+    onGenerateClick(){
+        let aSQL=this.refs.editorsql.codeMirror.getValue();
+        
+        functionService.getSqlInOut(aSQL)
+        .then(res => {
+           if(res.resultCode=1000)
+           {
+             alert(JSON.stringify(res.data));
+             message.success('生成成功!')
+             this.setState({inData:res.data});
+           }else
+           {
+              message.error(res.message);
+           }
+        } );
+        
+       
+        
     }
 
     render() {
@@ -223,9 +241,9 @@ class functionCreator extends React.Component {
             <Card title="创建函数" bodyStyle={{ padding: "3px" }}>
                 <Row gutter={1}>
 
-                    <Col span={8}>
+                    <Col span={10}>
                         <Card bodyStyle={{ padding: "3px" }}>
-                            <Button icon="plus" onClick={()=>this.onButtonClick()} size="small" style={{ marginRight: "10px" }} >生成函数</Button>
+                            <Button icon="plus" onClick={()=>this.onGenerateClick()} size="small" style={{ marginRight: "10px" }} >生成函数</Button>
                             <Button icon="edit" style={{ marginRight: "10px" }} size="small" >保存</Button>
                             <Button icon="delete" style={{ marginRight: "10px" }} size="small"  >退出</Button>
                             {/* <Divider orientation="left">选择数据库</Divider> */}
@@ -236,24 +254,28 @@ class functionCreator extends React.Component {
                                             initialValue: '0'
                                         })(
                                             <Select>
-                                                <Option value="0">ERP</Option>
+                                            {this.state.dblist.map(d => <Option key={d.name}>{d.name}</Option>)}
+                                                {/* <Option value="0">ERP</Option>
                                                 <Option value="1">预算</Option>
                                                 <Option value="2">BI</Option>
-                                                <Option value="3">Form</Option>
+                                                <Option value="3">Form</Option> */}
                                             </Select>
                                         )
                                     }
                                 </FormItem>
                                 <Divider orientation="left">输入SQL</Divider>
                                 <div style={{ height: '600px', border: "1px" }}>
-                                    <CodeMirror ref="editorsql" value='select * from AAA' style={{ height: '600px', border: "1px" }} options={options} />
+                              <CodeMirror ref="editorsql" value='select * from AAA' style={{ height: '600px', border: "1px" }} options={options} />
+                              
+                          
+                                   
                                 </div>
 
                             </Form>
                         </Card>
                     </Col>
 
-                    <Col span={16}>
+                    <Col span={14}>
                         <Card bodyStyle={{ padding: '1px' }}>
                             <FormItem label="函数名称" style={{ marginBottom: "1px" }} {...formItemLayout1}>
                                 {

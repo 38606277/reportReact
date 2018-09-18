@@ -24,10 +24,22 @@ export default class FunctionService {
 
         let url = "reportServer/function/getFunctionByID/"+funcid;
         let param = {
-            func_id: funcid
+            
         };
   
         return HttpService.post(url,param);
+    }
+
+      // 获取SQL的输入输出参数
+      getSqlInOut(aSQL) {
+
+        let url = "reportServer/sql/getInputOutputParas";
+        let param = {
+            sqlType: "sql",
+            sql:aSQL
+        };
+  
+        return HttpService.post(url, JSON.stringify(param));
     }
 
 }

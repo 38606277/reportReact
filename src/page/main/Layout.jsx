@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Layout, Menu, Breadcrumb, Icon, Row, Col, Button, Dropdown, Card } from 'antd';
+import { Layout, Menu, Breadcrumb, Icon, Tooltip,Row, Col, Button, Dropdown, Card } from 'antd';
 import './Layout.scss';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -34,12 +34,12 @@ export default class MainLoyout extends React.Component {
         );
         return (
             <Layout style={{ minHeight: '100vh' }}>
-                <Header style={{ background: '#4b9adf', color: '#FFFF', padding: 0, height: "50px",lineHeight:"50px" }} >
-                    <div style={{ float: "left",textAlign:"center",verticalAlign: "middle",width:"200px" }}>
-                      
-                       <span><Icon type="appstore" /><span style={{ marginLeft:"15px", color: "#ffffff", fontSize: "18px",fontWeight: "600" }}>财务报表平台</span></span>
-                           {/* <span><h1 style={{ color: "#ffffff", fontSize: "16px",fontWeight: "700" }}>报表平台</h1></span> */}
-                  
+                <Header style={{ background: '#4b9adf', color: '#FFFF', padding: 0, height: "50px", lineHeight: "50px" }} >
+                    <div style={{ float: "left", textAlign: "center", verticalAlign: "middle", width: "200px" }}>
+
+                        <span><Icon type="appstore" /><span style={{ marginLeft: "15px", color: "#ffffff", fontSize: "18px", fontWeight: "600" }}>财务报表平台</span></span>
+                        {/* <span><h1 style={{ color: "#ffffff", fontSize: "16px",fontWeight: "700" }}>报表平台</h1></span> */}
+
                         {/* <span >
                            
                             <h1 style={{ color: "#ffffff", fontSize: "20px",fontWeight: "700" }}>报表平台</h1>
@@ -49,14 +49,50 @@ export default class MainLoyout extends React.Component {
                         </Button> */}
                     </div>
                     <div style={{ float: "right", marginRight: "30px" }}>
-                        
-                        <span><Icon type="appstore" /><Icon type="home" /><Icon type="search" /></span>
+
+
+                        <Tooltip title="使用文档">
+                            <a
+                                target="_blank"
+                                href="https://pro.ant.design/docs/getting-started"
+                                rel="noopener noreferrer"
+                                style={{color:"#ECECEC"}} 
+                                title="使用文档"
+                            >
+                                <Icon type="question-circle-o" style={{ fontSize: '18px', color: '#ffffff' }}/>
+                            </a>
+                        </Tooltip>
+
+                        <Tooltip title="使用文档">
+                            <a
+                                target="_blank"
+                                href="https://pro.ant.design/docs/getting-started"
+                                rel="noopener noreferrer"
+                                style={{color:"#ECECEC"}} 
+                                title="使用文档"
+                            >
+                                <Icon type="question-circle-o" style={{ fontSize: '18px', color: '#ffffff' }}/>
+                            </a>
+                        </Tooltip>
+                        <Tooltip title="使用文档">
+                            <a
+                                target="_blank"
+                                href="https://pro.ant.design/docs/getting-started"
+                                rel="noopener noreferrer"
+                                style={{color:"#ECECEC"}} 
+                                title="使用文档"
+                            >
+                                <Icon type="question-circle-o" style={{ fontSize: '18px', color: '#ffffff' }}/>
+                            </a>
+                        </Tooltip>
+
+                        {/* <span><Icon type="appstore" /><Icon type="home" /><Icon type="search" /></span>
                         <Dropdown overlay={menu}>
                             <a className="ant-dropdown-link" href="#">
                                 我的 <Icon type="down" />
                             </a>
-                        </Dropdown>,
-                              {/* <a href="#">退出</a> */}
+                        </Dropdown>, */}
+                        {/* <a href="#">退出</a> */}
                     </div>
                     {/* <Row>
                             <Col span={3}>
@@ -84,11 +120,11 @@ export default class MainLoyout extends React.Component {
                         collapsible
                         collapsed={this.state.collapsed}
                         onCollapse={() => this.onCollapse(this.state.collapsed)}
-                        theme="light"
+                        theme="dark"
                     >
 
 
-                        <Menu theme="light" defaultSelectedKeys={['1']} mode="inline"  >
+                        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline"  >
 
                             <Menu.Item key="sub"><Link to='/'><Icon type="home" />首页</Link></Menu.Item>
                             <SubMenu key="sub1" title={<span><Icon type="appstore" /><span>我的任务</span></span>}>
@@ -113,7 +149,7 @@ export default class MainLoyout extends React.Component {
               <Breadcrumb.Item>User</Breadcrumb.Item>
               <Breadcrumb.Item>Bill</Breadcrumb.Item>
             </Breadcrumb> */}
-                        <Card bodyStyle={{ padding:"1px", marginLeft: 2, background: '#fff', minHeight: 900 }}>
+                        <Card bodyStyle={{ padding: "1px", marginLeft: 2, background: '#fff', minHeight: 900 }}>
                             {this.props.children}
                         </Card>
                     </Content>
