@@ -54,12 +54,11 @@ class User{
          );
     }
     saveUserInfo(userInfo){
-        return HttpService.post('/reportServer/formUser/addUser',
-            JSON.stringify(userInfo)
-          );
-    }
-    updateUserInfo(userInfo){
-        return HttpService.post('/reportServer/formUser/updateUser',JSON.stringify(userInfo));
+        if(userInfo._id=='null'){
+             return HttpService.post('/reportServer/formUser/addUser',JSON.stringify(userInfo));
+        }else{
+            return HttpService.post('/reportServer/formUser/updateUser',JSON.stringify(userInfo));
+        }
     }
 }
 
