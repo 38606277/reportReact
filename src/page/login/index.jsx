@@ -7,6 +7,8 @@
 import React        from 'react';
 import User         from '../../service/user-service.jsx'
 import LocalStorge  from '../../util/LogcalStorge.jsx';
+import {Card,Form}       from 'antd';
+
 const localStorge = new LocalStorge();
 const _user = new User();
 
@@ -71,34 +73,62 @@ class Login extends React.Component{
     }
     render(){
         return (
-            <div className="col-md-4 col-md-offset-4">
-                <div className="panel panel-default login-panel">
-                    <div className="panel-heading">欢迎登录 - 报表平台</div>
-                    <div className="panel-body">
-                        <div>
-                            <div className="form-group">
-                                <input type="text"
+            <div className="wrapper-page">
+                <div className="panel panel-color panel-primary panel-pages">
+                <div className="panel-heading bg-img"> 
+                    <div className="bg-overlay"></div>
+                    <h3 className="text-center m-t-10 text-white">登录报表平台<strong></strong> </h3>
+                </div> 
+
+
+                <div className="panel-body panel_border">
+                <div className="form-horizontal m-t-20 ng-dirty ng-touched ng-valid">
+                    <div style={{color:'#e51e30'}}></div>
+                    <div className="form-group ">
+                        
+                        <input type="text"
                                     name="UserCode"
-                                    className="form-control"
+                                    className="form-control input-lg panel_border"
                                     placeholder="请输入用户名" 
                                     onKeyUp={e => this.onInputKeyUp(e)}
                                     onChange={e => this.onInputChange(e)}/>
-                            </div>
-                            <div className="form-group">
-                                <input type="password" 
+                        
+                    </div>
+
+                    <div className="form-group">
+                       
+                        <input type="password" 
                                     name="Pwd"
-                                    className="form-control" 
+                                    className="form-control input-lg panel_border" 
                                     placeholder="请输入密码" 
                                     onKeyUp={e => this.onInputKeyUp(e)}
                                     onChange={e => this.onInputChange(e)}/>
-                            </div>
-                            <button className="btn btn-lg btn-primary btn-block"
-                                onClick={e => {this.onSubmit(e)}}>登录</button>
-                        </div>
+                       
                     </div>
-                </div>
-            </div>
+
+                    {/* <div className="form-group ">
+                       
+                            <div className="checkbox checkbox-primary">
+                                <input className="panel_border ng-untouched ng-pristine ng-valid" id="checkbox-signup" name="isRemenberUserInfo" type="checkbox"/>
+                                <label htmlFor="checkbox-signup">
+                                    	三天之内免登陆
+                                </label>
+                            </div>
+                    </div> */}
                     
+                    <div className="form-group text-center m-t-40">
+                       
+                        <button className="btn btn-primary btn-lg w-lg waves-effect waves-light"
+                                onClick={e => {this.onSubmit(e)}}>登录</button>
+                        
+                    </div>
+                    
+					
+                </div> 
+                </div>  
+            </div>
+            </div>
+            
         );
     }
 }
