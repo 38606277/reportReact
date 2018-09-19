@@ -13,10 +13,10 @@ import { HashRouter as Router, Switch, Redirect, Route, Link } from 'react-route
 import Layout from './page/main/Layout.jsx';
 // // 页面
 import Home from './page/home/index.jsx';
-//import ProductRouter from './page/product/router.jsx';
+import ProductRouter from './page/product/router.jsx';
 import Login from './page/login/index.jsx';
-// import UserList from './page/user/index.jsx';
-// import UserInfo from './page/user/userInfo.jsx';
+import UserList from './page/user/index.jsx';
+import UserInfo from './page/user/userInfo.jsx';
 import User1 from './page/user/User1.jsx';
 // import ErrorPage from './page/error/index.jsx';
 import functionCreator from './page/function/functionCreator.jsx';
@@ -33,10 +33,10 @@ class App extends React.Component {
             <Layout>
                 <Switch>
                     <Route exact path="/" component={Home} />
-                    {/* <Route path="/product" component={ProductRouter}/>
-                    <Route path="/product-category" component={ProductRouter}/>                     */}
-                    {/* <Route path="/user/index" component={UserList} />
-                    <Route path="/user/userInfo/:userId" component={UserInfo} /> */}
+                     <Route path="/product" component={ProductRouter}/>
+                    {/* <Route path="/product-category" component={ProductRouter}/>           */}
+                     <Route path="/user/index" component={UserList} />
+                    <Route path="/user/userInfo/:userId" component={UserInfo} />
                     <Route path="/user/User1" component={User1} />
                     <Route path="/function/EditableTable" component={EditableTable} />
                     <Route path="/function/functionCreator/:funcid" component={functionCreator} />

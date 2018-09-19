@@ -1,5 +1,6 @@
 import 'whatwg-fetch';
-
+import  LocalStorge  from './LogcalStorge.jsx';
+const localStorge = new LocalStorge();
 export default class HttpService {
     
     static getBaseUrl(){
@@ -15,7 +16,7 @@ export default class HttpService {
         let opts = {
             method: 'POST',
             headers: {
-                credentials: JSON.stringify({ UserCode: "system", Pwd: "KfTaJa3vfLE=" })
+                credentials: JSON.stringify(localStorge.getStorage('userInfo') || '')
             },
             body: param
         };

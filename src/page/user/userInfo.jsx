@@ -1,16 +1,14 @@
 import React        from 'react';
-import MUtil        from 'util/mm.jsx'
-import User         from 'service/user-service.jsx'
-import './../../App.css';
-import PageTitle    from 'component/page-title/index.jsx';
+import User         from '../../service/user-service.jsx'
+import PageTitle    from '../../component/page-title/index.jsx';
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import moment from 'moment';
 import { Form, Input, Select,Button, DatePicker } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
-
+import LocalStorge  from '../../util/LogcalStorge.jsx';
+const localStorge = new LocalStorge();
 const FormItem = Form.Item;
 const Option = Select.Option;
-const _mm   = new MUtil();
 const _user = new User();
 const dateFormat = 'YYYY-MM-DD';
 const RangePicker = DatePicker.RangePicker;
@@ -20,7 +18,7 @@ class UserInfo extends React.Component{
         super(props);
         this.state = {
             confirmDirty: false,
-            _id:this.props.params.userId,
+            _id:this.props.match.params.userId,
             userName:'',
             isAdmin:'0',
             regisType:'local',
@@ -40,21 +38,22 @@ class UserInfo extends React.Component{
  //初始化加载调用方法
     componentDidMount(){
        if(null!=this.state._id && ''!=this.state._id  && 'null'!=this.state._id){
-            _user.getUserInfo(this.state._id).then(res => {
-                this.setState(res.userInfo);
+            _user.getUserInfo(this.state._id).then(response => {
+                this.setState(response.data.userInfo);
+               // this.props.form.setFieldsValue(response.data.userInfo);
                 this.props.form.setFieldsValue({
-                      userName:res.userInfo.userName,
-                      encryptPwd:res.userInfo.encryptPwd,
-                      startDate:moment(res.userInfo.startDate,dateFormat),
-                      endDate:moment(res.userInfo.endDate,dateFormat),
-                      description:res.userInfo.description,
-                      userId:res.userInfo.userId,
+                      userName:response.data.userInfo.userName,
+                      encryptPwd:response.data.userInfo.encryptPwd,
+                      startDate:moment(response.data.userInfo.startDate,dateFormat),
+                      endDate:moment(response.data.userInfo.endDate,dateFormat),
+                      description:response.data.userInfo.description,
+                      userId:response.data.userInfo.userId,
                       confirm:''
                 });
             }, errMsg => {
                 this.setState({
                 });
-                _mm.errorTips(errMsg);
+                localStorge.errorTips(errMsg);
             });
         }
         
@@ -87,14 +86,15 @@ handleSubmit (e) {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
+        //let  users=this.props.form.getFieldsValue();
         console.log(this.state);
         console.log(values);
-          _user.saveUserInfo(this.state).then(res => {
+          _user.saveUserInfo(this.state).then(response => {
             console.log("success");
           }, errMsg => {
               this.setState({
               });
-              _mm.errorTips(errMsg);
+              localStorge.errorTips(errMsg);
           });
         //console.log('Received values of form: ', this.state);
       }
@@ -195,7 +195,7 @@ handleSubmit (e) {
                 validator: this.compareToFirstPassword,
               }],
             })(
-              <Input type="password" onBlur={this.handleConfirmBlur} />
+              <Input type="password" onBlur={()=>this.handleConfirmBlur} />
             )}
           </FormItem> 
          
@@ -237,6 +237,4 @@ handleSubmit (e) {
     );
   }
 }
-const WrappedUserInfo = Form.create()(UserInfo);
-
-export default WrappedUserInfo;
+export default Form.create()(UserInfo);

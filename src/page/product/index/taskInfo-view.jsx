@@ -1,10 +1,9 @@
 import React        from 'react';
-import { Link }     from 'react-router-dom';
-import MUtil        from 'util/mm.jsx'
-import PageTitle    from 'component/page-title/index.jsx';
-import Task     from 'service/task-service.jsx'
+import PageTitle    from '../../../component/page-title/index.jsx';
+import Task     from '../../../service/task-service.jsx'
 import './../../../App.css';
-const _mm   = new MUtil();
+import  LocalStorge  from '../../../util/LogcalStorge.jsx';
+const localStorge = new LocalStorge();
 const _product      = new Task();
 const showHeader = false;
 
@@ -17,7 +16,7 @@ class TaskInfoView extends React.Component{
             dataList:[],
             fieldList:[],
             showHeader:true,
-            userId:_mm.getStorage('userInfo').userId
+            userId:localStorge.getStorage('userInfo').userId
         };
     }
    
@@ -26,13 +25,13 @@ class TaskInfoView extends React.Component{
     }
    
     loadtaksInfo(){
-        _product.viewTaskTemplate(this.state.taskId).then(res => {
-            this.setState(res);
+        _product.viewTaskTemplate(this.state.taskId).then(response => {
+            this.setState(response);
         }, errMsg => {
             this.setState({
                 
             });
-            _mm.errorTips(errMsg);
+            localStorge.errorTips(errMsg);
         });
     }
    

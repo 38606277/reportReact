@@ -5,10 +5,9 @@
 * @Last Modified time: 2018-01-26 12:29:31
 */
 import React        from 'react';
-import MUtil        from '../../util/mm.jsx'
 import User         from '../../service/user-service.jsx'
-
-const _mm   = new MUtil();
+import LocalStorge  from '../../util/LogcalStorge.jsx';
+const localStorge = new LocalStorge();
 const _user = new User();
 
 import './index.scss';
@@ -19,7 +18,7 @@ class Login extends React.Component{
         this.state = {
             userCode: '',
             Pwd: '',
-            redirect: _mm.getUrlParam('redirect') || '/'
+            redirect: localStorge.getUrlParam('redirect') || '/'
         }
     }
     componentWillMount(){
@@ -54,19 +53,19 @@ class Login extends React.Component{
             _user.encodePwd(loginInfo.Pwd).then((res) => {
                 loginInfo.Pwd=res;
                 _user.login(loginInfo).then((res) => {
-                    _mm.setStorage('userInfo', res);
+                    localStorge.setStorage('userInfo', res);
                     this.props.history.push(this.state.redirect);
                 }, (errMsg) => {
-                    _mm.errorTips(errMsg);
+                    localStorge.errorTips(errMsg);
                 });
             }, (errMsg) => {
-                _mm.errorTips(errMsg);
+                localStorge.errorTips(errMsg);
             });
             
         }
         // 验证不通过
         else{
-            _mm.errorTips(checkResult.msg);
+            localStorge.errorTips(checkResult.msg);
         }
             
     }

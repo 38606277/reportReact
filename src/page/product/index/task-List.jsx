@@ -6,17 +6,16 @@
 */
 import React        from 'react';
 import { Link }     from 'react-router-dom';
-import MUtil        from 'util/mm.jsx'
-import Task     from 'service/task-service.jsx'
+import Task     from '../../../service/task-service.jsx';
 
-import PageTitle    from 'component/page-title/index.jsx';
+import PageTitle    from '../../../component/page-title/index.jsx';
 import ListSearch   from './index-list-search.jsx';
 import Pagination   from 'antd/lib/pagination';
 import Table        from 'antd/lib/table';
 
 import './index.scss';
-
-const _mm           = new MUtil();
+import  LocalStorge  from '../../../util/LogcalStorge.jsx';
+const localStorge = new LocalStorge();
 const _product      = new Task();
 
 class TaskList extends React.Component{
@@ -36,7 +35,7 @@ class TaskList extends React.Component{
     // 加载商品列表
     loadProductList(){
         let listParam = {};
-        listParam.userId = _mm.getStorage('userInfo').userId;
+        listParam.userId = localStorge.getStorage('userInfo').userId;
         listParam.currentPage  = this.state.currentPage;
         listParam.perPage  = this.state.perPage;
         // 如果是搜索的话，需要传入搜索类型和搜索关键字
@@ -44,13 +43,13 @@ class TaskList extends React.Component{
             listParam.keyword    = this.state.searchKeyword;
         }
         // 请求接口
-        _product.getTaskList(listParam).then(res => {
-                this.setState(res);
+        _product.getTaskList(listParam).then(response => {
+                this.setState(response.data);
         }, errMsg => {
             this.setState({
                 list : []
             });
-            _mm.errorTips(errMsg);
+            localStorge.errorTips(errMsg);
         });
     }
     // 搜索

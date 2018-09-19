@@ -4,17 +4,13 @@
 * @Last Modified by:   Rosen
 * @Last Modified time: 2018-01-31 14:34:10
 */
-import React        from 'react';
-import { Link }     from 'react-router-dom';
-import MUtil        from 'util/mm.jsx'
-import User         from 'service/user-service.jsx'
-
-import PageTitle    from 'component/page-title/index.jsx';
-import Pagination   from 'antd/lib/pagination';
-import Table        from 'antd/lib/table';
-import ListSearch   from  './index-list-search.jsx';
-import './../../App.css';
-//const _mm   = new MUtil();
+import React                from 'react';
+import { Link }             from 'react-router-dom';
+import User                 from '../../service/user-service.jsx';
+import PageTitle            from '../../component/page-title/index.jsx';
+import Pagination           from 'antd/lib/pagination';
+import {Table,Divider,Tag,Card}  from 'antd';
+import ListSearch           from  './index-list-search.jsx';
 const _user = new User();
 
 class UserList extends React.Component{
@@ -32,15 +28,14 @@ class UserList extends React.Component{
     }
     loadUserList(){
         let listParam = {};
-        listParam.userId = _mm.getStorage('userInfo').userId;
         listParam.pageNum  = this.state.pageNum;
         listParam.perPage  = this.state.perPage;
         // 如果是搜索的话，需要传入搜索类型和搜索关键字
         if(this.state.listType === 'search'){
             listParam.keyword    = this.state.searchKeyword;
         }
-        _user.getUserList(listParam).then(res => {
-            this.setState(res);
+        _user.getUserList(listParam).then(response => {
+            this.setState(response.data);
         }, errMsg => {
             this.setState({
                 list : []
@@ -73,6 +68,9 @@ class UserList extends React.Component{
   }
 
     render(){
+        this.state.list.map((item,index)=>{
+            item.key=index;
+        })
         const dataSource = this.state.list;
         let self = this;
           const columns = [{
@@ -99,23 +97,30 @@ class UserList extends React.Component{
             title: '入职时间',
             dataIndex: 'creationDate',
             key: 'creationDate'
+          },{
+            title: '操作',
+            dataIndex: '操作',
+            render: (text, record) => (
+                <span>
+                  <Link to={ `/user/userInfo/${record.id}` }>编辑</Link>
+                  <Divider type="vertical" />
+                  <a href="javascript:;">Delete</a>
+                </span>
+              ),
           }];
        
         return (
             <div id="page-wrapper">
-                <PageTitle title="用户列表">
-                <div className="page-header-right">
-                        <Link to="/user/userInfo/null" className="btn btn-primary">
-                            <i className="fa fa-plus"></i>
-                            <span>新建用户</span>
-                        </Link>
-                    </div>
-                </PageTitle>  
+            <Card title="用户列表"
+            extra={<a href="#/user/userInfo/null">新建用户</a>}
+            >
                 <ListSearch onSearch={(searchKeyword) => {this.onSearch(searchKeyword)}}/>
                 <Table dataSource={dataSource} columns={columns}  pagination={false}/>
                  <Pagination current={this.state.pageNum} 
                     total={this.state.total} 
                     onChange={(pageNum) => this.onPageNumChange(pageNum)}/> 
+            </Card>
+                
             </div>
         )
     }

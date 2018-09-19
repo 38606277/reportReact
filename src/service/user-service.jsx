@@ -1,27 +1,17 @@
-/*
-* @Author: Rosen
-* @Date:   2018-01-25 21:21:46
-* @Last Modified by:   Rosen
-* @Last Modified time: 2018-01-31 13:33:42
-*/
+
 import   HttpService  from '../util/HttpService.jsx';
-// import MUtil        from '../util/mm.jsx'
-
-// const _mm   = new MUtil();
 const httpService =new HttpService();
-
 class User{
     // 用户登录
     login(loginInfo){
-        return httpService.post(
+        return HttpService.post(
            '/reportServer/user/Reactlogin',
-           JSON.stringify(loginInfo))
-        
+           JSON.stringify(loginInfo));
     }
     // 检查登录接口的数据是不是合法
     checkLoginInfo(loginInfo){
-        let userCode= $.trim(loginInfo.UserCode),
-            Pwd = $.trim(loginInfo.Pwd);
+        let userCode= loginInfo.UserCode,
+            Pwd = loginInfo.Pwd;
         // 判断用户名为空
         if(typeof userCode !== 'string' || userCode.length ===0){
             return {
@@ -42,44 +32,35 @@ class User{
         }
     }
     encodePwd(pwd){
-        return _mm.request({
-            type    : 'post',
-            url     : '/reportServer/user/encodePwdReact',
-            data    :JSON.stringify({Pwd:pwd})
-        });
+        return HttpService.post(
+            '/reportServer/user/encodePwdReact',
+            JSON.stringify({Pwd:pwd})
+        );
     }
     // 退出登录
     logout(){
-        return _mm.request({
-            type    : 'post',
-            url     : '/user/logout.do'
-        });
+        return HttpService.post('/user/logout.do',null);
     }
     getUserList(listParam){
-        return _mm.request({
-            type    : 'post',
-            url     : '/reportServer/formUser/getUserListReact', //'/manage/user/list.do',
-            data    : JSON.stringify(listParam)
-           
-        });
+        return HttpService.post(
+            '/reportServer/formUser/getUserListReact',
+            JSON.stringify(listParam)
+         );
     }
     getUserInfo(userId){
-        return _mm.request({
-            type    : 'post',
-            url     : '/reportServer/formUser/getUserInfoByUserId', //'/manage/user/list.do',
-            data    : JSON.stringify({id:userId})
-           
-        });
+        return HttpService.post(
+            '/reportServer/formUser/getUserInfoByUserId',
+            JSON.stringify({id:userId})
+         );
     }
     saveUserInfo(userInfo){
-        return _mm.request({
-            type    : 'post',
-            url     : userInfo._id=='null'?'/reportServer/formUser/addUser':'/reportServer/formUser/updateUser', //'/manage/user/list.do',
-            data    : JSON.stringify(userInfo)
-           
-        });
+        return HttpService.post('/reportServer/formUser/addUser',
+            JSON.stringify(userInfo)
+          );
     }
-
+    updateUserInfo(userInfo){
+        return HttpService.post('/reportServer/formUser/updateUser',JSON.stringify(userInfo));
+    }
 }
 
 export default User;

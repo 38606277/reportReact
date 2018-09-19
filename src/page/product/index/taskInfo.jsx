@@ -1,9 +1,7 @@
 import React        from 'react';
-import { Link }     from 'react-router-dom';
-import MUtil        from 'util/mm.jsx'
-import PageTitle    from 'component/page-title/index.jsx';
-import Task     from 'service/task-service.jsx'
-const _mm   = new MUtil();
+import Task     from '../../../service/task-service.jsx';
+import  LocalStorge  from '../../../util/LogcalStorge.jsx';
+const localStorge = new LocalStorge();
 const _product      = new Task();
 
 
@@ -13,7 +11,7 @@ class TaskInfo extends React.Component{
         this.state = {
             taskId:this.props.match.params.taskId,
             taskInfo:'',
-            userId:_mm.getStorage('userInfo').userId
+            userId:localStorge.getStorage('userInfo').userId
         };
         
     }
@@ -24,15 +22,15 @@ class TaskInfo extends React.Component{
     }
    
     loadtaksInfo(){
-        _product.getTaskTemplate(this.state.taskId).then(res => {
+        _product.getTaskTemplate(this.state.taskId).then(response => {
           
-            this.setState(res);
+            this.setState(response.data);
             
         }, errMsg => {
             this.setState({
                 
             });
-            _mm.errorTips(errMsg);
+            localStorge.errorTips(errMsg);
         });
     }
     onSubmit(){
