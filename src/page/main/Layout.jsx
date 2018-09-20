@@ -14,7 +14,7 @@ export default class MainLoyout extends React.Component {
             collapsed: false,
             visible: false,
             ishow:'0',
-            userCode: localStorge.getStorage('userInfo').userCode || ''
+            userCode: localStorge.getStorage('userInfo')==''? '':localStorge.getStorage('userInfo').userCode
         };
 
     }
