@@ -9,9 +9,9 @@ import { Link }             from 'react-router-dom';
 import User                 from '../../service/user-service.jsx';
 import PageTitle            from '../../component/page-title/index.jsx';
 import Pagination           from 'antd/lib/pagination';
-import {Table,Divider,Tag,Card}  from 'antd';
-import ListSearch           from  './index-list-search.jsx';
+import {Table,Divider,Button,Card, Tooltip,Input}  from 'antd';
 const _user = new User();
+const Search = Input.Search;
 
 class UserList extends React.Component{
     constructor(props){
@@ -20,7 +20,8 @@ class UserList extends React.Component{
             list            : [],
             pageNum         : 1,
             perPage         : 10,
-            listType        :'list'
+            listType        :'list',
+            searchKeyword:''
         };
     }
     componentDidMount(){
@@ -49,6 +50,14 @@ class UserList extends React.Component{
             pageNum : pageNum
         }, () => {
             this.loadUserList();
+        });
+    }
+    // 数据变化的时候
+    onValueChange(e){
+        let name    = e.target.name,
+            value   = e.target.value.trim();
+        this.setState({
+            [name] : value
         });
     }
      // 搜索
@@ -111,10 +120,19 @@ class UserList extends React.Component{
        
         return (
             <div id="page-wrapper">
-            <Card title="用户列表"
-            extra={<a href="#/user/userInfo/null">新建用户</a>}
-            >
-                <ListSearch onSearch={(searchKeyword) => {this.onSearch(searchKeyword)}}/>
+            <Card title="用户列表">
+                <Tooltip>
+                     <Search
+                        style={{ width: 300,marginBottom:'10px' }}
+                        placeholder="请输入..."
+                        enterButton="查询"
+                        onSearch={value => this.onSearch(value)}
+                        />
+                </Tooltip>
+                <Tooltip>
+                    <Button href="#/user/userInfo/null" style={{ float: "right", marginRight: "30px" }} type="primary">新建用户</Button>
+                </Tooltip>
+                
                 <Table dataSource={dataSource} columns={columns}  pagination={false}/>
                  <Pagination current={this.state.pageNum} 
                     total={this.state.total} 
