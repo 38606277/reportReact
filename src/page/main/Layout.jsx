@@ -4,12 +4,9 @@ import { Layout, Menu, Avatar, Icon, Tooltip,Row, Col, Button, Dropdown, Card,Po
 import './Layout.scss';
 import LocalStorge  from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
-
-import logo from '../../asset/logo.png'
-
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
-
+import logo from '../../asset/logo.png'
 export default class MainLoyout extends React.Component {
     constructor(props) {
         super(props)
@@ -149,12 +146,15 @@ export default class MainLoyout extends React.Component {
         return (
             <Layout style={{ minHeight: '100vh' }}>
                 <Header style={{ background: '#4b9adf', color: '#FFFF', padding: 0, height: "50px", lineHeight: "50px" }} >
-                    <div style={{ float: "left", paddingLeft:"10px", verticalAlign: "middle", width: "50%" }}>
+                     <div style={{ float: "left", paddingLeft:"10px", verticalAlign: "middle", width: "50%" }}>
 
                          <a href="javascript:;">
                             <img alt="logo" style={{ width: '30px', height: '30px' }} src={logo} />
                             <span style={{ marginLeft: "15px", color: "#ffffff", fontSize: "18px", fontWeight: "600" }}>财务报表平台</span>
                         </a>
+                        <Button type="primary" onClick={this.toggleCollapsed} style={{ marginBottom: 16, marginLeft: 20 }}>
+                            <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} />
+                        </Button> */}
                         <Tooltip title='缩回'>
                             <Icon
                                 className="trigger"
