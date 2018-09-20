@@ -3,7 +3,7 @@ import User         from '../../service/user-service.jsx'
 import PageTitle    from '../../component/page-title/index.jsx';
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import moment from 'moment';
-import { Form, Input, Select,Button, DatePicker } from 'antd';
+import { Form, Input, Select,Button, DatePicker,Card,Row, Col } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import LocalStorge  from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
@@ -151,61 +151,83 @@ handleSubmit (e) {
     };
     return (
         <div id="page-wrapper">
-        <PageTitle title={this.state._id=='null' ?'新建用户':'编辑用户'} />
+        <Card title={this.state._id=='null' ?'新建用户':'编辑用户'}>
+        {/* <PageTitle title={this.state._id=='null' ?'新建用户':'编辑用户'} /> */}
         <Form onSubmit={this.handleSubmit}>
-          <FormItem {...formItemLayout} label="用户名">
-            {getFieldDecorator('userName', {
-              rules: [{required: true, message: '请输入用户名!'}],
-            })(
-              <Input type='text' name='userName'  onChange={(e) => this.onValueChange(e)}/>
-            )}
-          </FormItem>
-          <FormItem {...formItemLayout} label='用户编号' >
-            {getFieldDecorator('userId', {
-              rules: [{ required: true, message: '请输入用户编号!', whitespace: true }],
-            })(
-              <Input  type='text' name='userId' onChange={(e) => this.onValueChange(e)} />
-            )}
-          </FormItem>
-          <FormItem {...formItemLayout} label='用户归属' >
-             <Select  name='regisType' value={this.state.regisType.toString()}  style={{ width: 120 }} onChange={(value) =>this.onSelectChange('regisType',value)}>
-                <Option value='erp' >ERP用户</Option>
-                <Option value='local' >本地用户</Option>
-                
-              </Select>
-          
-          </FormItem>
-
-           <FormItem  {...formItemLayout}  label="密码" hideRequiredMark='true'>
-            {getFieldDecorator('encryptPwd', {
-              rules: [{
-                required: false, message: '请输入密码!',
-              }, {
-                validator: this.validateToNextPassword,
-              }],
-            })(
-              <Input type="password" name='encryptPwd'/>
-            )}
-          </FormItem>
-          <FormItem {...formItemLayout}  label="确认密码" >
-            {getFieldDecorator('confirm', {
-              rules: [{
-                required: false, message: '请再次输入密码!',
-              }, {
-                validator: this.compareToFirstPassword,
-              }],
-            })(
-              <Input type="password" onBlur={()=>this.handleConfirmBlur} />
-            )}
-          </FormItem> 
+        <Row>
+             <Col span={12}>
+                  <FormItem {...formItemLayout} label="用户名">
+                    {getFieldDecorator('userName', {
+                      rules: [{required: true, message: '请输入用户名!'}],
+                    })(
+                      <Input type='text' name='userName'  onChange={(e) => this.onValueChange(e)}/>
+                    )}
+                  </FormItem>
+              </Col>
+              <Col span={12}>
+                  <FormItem {...formItemLayout} label='用户编号' >
+                    {getFieldDecorator('userId', {
+                      rules: [{ required: true, message: '请输入用户编号!', whitespace: true }],
+                    })(
+                      <Input  type='text' name='userId' onChange={(e) => this.onValueChange(e)} />
+                    )}
+                  </FormItem>
+              </Col>
+          </Row> 
+          <Row>
+              
+              <Col span={12}>
+                  <FormItem  {...formItemLayout}  label="密码" hideRequiredMark='true'>
+                    {getFieldDecorator('encryptPwd', {
+                      rules: [{
+                        required: false, message: '请输入密码!',
+                      }, {
+                        validator: this.validateToNextPassword,
+                      }],
+                    })(
+                      <Input type="password" name='encryptPwd'/>
+                    )}
+                  </FormItem>
+              </Col>
          
-         <FormItem {...formItemLayout} label='用户角色'>
-              <Select  name='isAdmin' value={this.state.isAdmin.toString()}  style={{ width: 120 }} onChange={(value) =>this.onSelectChange('isAdmin',value)}>
-                <Option value='0' >普通员工</Option>
-                <Option value='1' >管理员</Option>
-              </Select>
-          
-         </FormItem>
+              <Col span={12}> 
+                  <FormItem {...formItemLayout}  label="确认密码" >
+                    {getFieldDecorator('confirm', {
+                      rules: [{
+                        required: false, message: '请再次输入密码!',
+                      }, {
+                        validator: this.compareToFirstPassword,
+                      }],
+                    })(
+                      <Input type="password" onBlur={()=>this.handleConfirmBlur} />
+                    )}
+                  </FormItem> 
+              </Col>
+              </Row>
+          <Row>
+              <Col span={12}>
+                  <FormItem {...formItemLayout} label='用户归属' >
+                    <Select  name='regisType' value={this.state.regisType.toString()}  style={{ width: 120 }} onChange={(value) =>this.onSelectChange('regisType',value)}>
+                        <Option value='erp' >ERP用户</Option>
+                        <Option value='local' >本地用户</Option>
+                        
+                      </Select>
+                  
+                  </FormItem>
+              </Col>
+
+              <Col span={12}> 
+                  <FormItem {...formItemLayout} label='用户角色'>
+                        <Select  name='isAdmin' value={this.state.isAdmin.toString()}  style={{ width: 120 }} onChange={(value) =>this.onSelectChange('isAdmin',value)}>
+                          <Option value='0' >普通员工</Option>
+                          <Option value='1' >管理员</Option>
+                        </Select>
+                    
+                  </FormItem>
+              </Col>
+          </Row>
+          <Row>
+              <Col span={12}> 
           <FormItem {...formItemLayout} label='开始时间'>
               {getFieldDecorator('startDate',{
                 rules:[{required: true, message: '请选择开始时间!'}],
@@ -213,7 +235,8 @@ handleSubmit (e) {
                  <DatePicker name='startDate' onChange={(date,dateString) => this.onValueChangeDate('startDate',date,dateString)}  locale={locale}  placeholder="请选择开始时间" />
               )}
           </FormItem>
-
+        </Col>
+        <Col span={12}> 
         
            <FormItem {...formItemLayout} label='失效时间'>
               {getFieldDecorator('endDate',{
@@ -222,17 +245,25 @@ handleSubmit (e) {
                  <DatePicker name='endDate' onChange={(date,dateString) => this.onValueChangeDate('endDate',date,dateString)} locale={locale}  placeholder="请选择失效时间" />
               )}
           </FormItem> 
-          <FormItem {...formItemLayout} label='备注'>
-            {getFieldDecorator('description', {
-                   rules: [{ required: true, message: '请输入备注!'}],
-            })(
-                <TextArea  type='text' name='description'   onChange={(e) => this.onValueChange(e)}></TextArea>
-            )} 
+          </Col>
+          </Row>
+          <Row>
+              <Col span={12}>  
+                <FormItem {...formItemLayout} label='备注'>
+                  {getFieldDecorator('description', {
+                        rules: [{ required: true, message: '请输入备注!'}],
+                  })(
+                      <TextArea  type='text' name='description'   onChange={(e) => this.onValueChange(e)}></TextArea>
+                  )} 
             </FormItem>
+            </Col>
+            <Col span={12}> </Col>
+          </Row>
           <FormItem {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">保存</Button>
           </FormItem>
       </Form>
+      </Card>
       </div>
     );
   }
