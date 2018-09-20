@@ -80,10 +80,9 @@ class functionCreator extends React.Component {
         // alert(this.props.match.params.funcid);
         this.state = {
 
-            //create 新增,update 编辑,view 查看
-            action: "create",
+            action: this.props.match.params.action,
             //定义函数状态
-            func_id: this.props.match.params.funcid,
+            func_id: this.props.match.params.id,
             func_name: "",
             func_desc: "",
             func_url: "",
@@ -92,38 +91,38 @@ class functionCreator extends React.Component {
             inData: [],
             outData: [],
             //定义下拉查找的数据
-            list: [],
             dbList: [],
             dictList: [],
             authList: [],
 
 
         };
-
-
+      
     }
     componentDidMount() {
 
-        //查询函数定义
-        functionService.getFunctionByID(this.state.func_id)
-            .then(res => {
-                this.setState({ inData: res.in });
-                this.setState({ outData: res.out });
-                this.props.form.setFieldsValue(res);
-                this.refs.editorsql.codeMirror.setValue(res.program);
-                let editorsql = this.refs.editorsql;
-                editorsql.codeMirror.setSize('100%', '500px');
-                editorsql.codeMirror.border = "solid  1px";
+        if (this.state.action == 'update') {
+            //查询函数定义
+            functionService.getFunctionByID(this.state.func_id)
+                .then(res => {
+                    this.setState({ inData: res.in });
+                    this.setState({ outData: res.out });
+                    this.props.form.setFieldsValue(res);
+                    this.refs.editorsql.codeMirror.setValue(res.program);
+                    let editorsql = this.refs.editorsql;
+                    editorsql.codeMirror.setSize('100%', '500px');
+                    editorsql.codeMirror.border = "solid  1px";
 
-            });
+                });
+        }
 
         //查询DB定义
         dbService.getDbList()
             .then(res => {
-                this.setState({ dblist: res });
+                this.setState({ dbList: res });
             });
 
-       
+
     }
     handleSubmit1() {
         //    alert("ss")
@@ -139,11 +138,21 @@ class functionCreator extends React.Component {
             }
         );
     }
-    handleSubmit() {
+    onSaveClick() {
         //alert("hello");
+        //校验参数合法性
+
+        //调用服务保存
         let userInfo = this.props.form.getFieldsValue();
+        let sql=this.refs.editorsql.codeMirror.getValue();
+
         console.log(JSON.stringify(userInfo))
-        message.success(`${userInfo.userName} 保存成功!：${userInfo.userPwd}`)
+        //
+        functionService.CreateFunction(userInfo)
+        .then(res=>{
+
+        })
+        //message.success(`${userInfo.userName} 保存成功!：${userInfo.userPwd}`)
     }
     onGenerateClick() {
         let aSQL = this.refs.editorsql.codeMirror.getValue();
@@ -231,22 +240,22 @@ class functionCreator extends React.Component {
                 <Card title="创建函数" bodyStyle={{ padding: "5px" }}>
                     <Row gutter={0}>
 
-                        <Col span={12}>
+                        <Col span={10}>
                             <Card bodyStyle={{ padding: '8px' }}>
                                 <div>
-                                    <Button type="primary" icon="plus" onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成函数</Button>
-                                    <Button type="primary" icon="edit" style={{ marginRight: "10px" }} >保存</Button>
-                                    <Button type="primary" icon="delete" style={{ marginRight: "10px" }}   >退出</Button>
+                                    <Button type="primary" icon="tool" onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成函数</Button>
+                                    <Button  icon="save"               onClick={() => this.onSaveClick()} style={{ marginRight: "10px" }} >保存</Button>
+                                    <Button  icon="close" onClick={()=>window.location='#/function/functionList'} style={{ marginRight: "10px" }}   >退出</Button>
                                 </div>
                                 <Divider style={{ margin: "8px 0 8px 0" }} />
                                 <Form>
                                     <FormItem label="选择数据库" labelCol={{ span: 4 }} wrapperCol={{ span: 12 }} style={{ marginBottom: "10px" }}>
                                         {
-                                            getFieldDecorator('db', {
-                                                initialValue: '0'
+                                            getFieldDecorator('url', {
+                                                initialValue: ''
                                             })(
                                                 <Select>
-                                                    {this.state.dbList.map(d => <Option key={d.name}>{d.name}</Option>)}
+                                                    {this.state.dbList.map(d => <Option key={d.name} value={d.name}>{d.name}</Option>)}
                                                     {/* <Option value="0">ERP</Option>
                                                 <Option value="1">预算</Option>
                                                 <Option value="2">BI</Option>
@@ -269,7 +278,7 @@ class functionCreator extends React.Component {
                             </Card>
                         </Col>
 
-                        <Col span={12}>
+                        <Col span={14}>
                             <Card bodyStyle={{ padding: '5px' }}>
                                 <Form layout="inline">
                                     <Row>

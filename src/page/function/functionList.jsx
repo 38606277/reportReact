@@ -91,7 +91,7 @@ class functionList extends React.Component {
                         <Col span={6}> <Input prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="输入函数名称" /></Col>
                         <Col span={4}></Col>
                         <Col span={10}></Col>
-                        <Col span={4}> <Button type="primary" style={{width:"100px"}}>新建</Button></Col>
+                        <Col span={4}> <Button type="primary" style={{width:"100px"}} onClick={()=>window.location='#/function/functionCreator/creat/0'} >新建</Button></Col>
                     </Row>
                     <Table dataSource={this.state.list}>
                         <Column
@@ -124,7 +124,7 @@ class functionList extends React.Component {
                             key="action"
                             render={(text, record) => (
                                 <span>
-                                    <a href={`#/function/functionCreator/${record.func_id}`}>编辑</a>
+                                    <a href={`#/function/functionCreator/update/${record.func_id}`}>编辑</a>
                                     <Divider type="vertical" />
                                     <a href="javascript:;">删除{record.name}</a>
                                 </span>
