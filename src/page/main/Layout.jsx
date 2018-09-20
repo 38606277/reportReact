@@ -4,6 +4,9 @@ import { Layout, Menu, Avatar, Icon, Tooltip,Row, Col, Button, Dropdown, Card,Po
 import './Layout.scss';
 import LocalStorge  from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
+
+import logo from '../../asset/logo.png'
+
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
@@ -146,18 +149,12 @@ export default class MainLoyout extends React.Component {
         return (
             <Layout style={{ minHeight: '100vh' }}>
                 <Header style={{ background: '#4b9adf', color: '#FFFF', padding: 0, height: "50px", lineHeight: "50px" }} >
-                    <div style={{ float: "left", paddingLeft:"50px", verticalAlign: "middle", width: "50%" }}>
+                    <div style={{ float: "left", paddingLeft:"10px", verticalAlign: "middle", width: "50%" }}>
 
-                        <span><Icon type="appstore" /><span style={{ marginLeft: "15px", color: "#ffffff", fontSize: "18px", fontWeight: "600" }}>财务报表平台</span></span>
-                        {/* <span><h1 style={{ color: "#ffffff", fontSize: "16px",fontWeight: "700" }}>报表平台</h1></span> */}
-
-                        {/* <span >
-                           
-                            <h1 style={{ color: "#ffffff", fontSize: "20px",fontWeight: "700" }}>报表平台</h1>
-                        </span>
-                        <Button type="primary" onClick={this.toggleCollapsed} style={{ marginBottom: 16, marginLeft: 20 }}>
-                            <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} />
-                        </Button> */}
+                         <a href="javascript:;">
+                            <img alt="logo" style={{ width: '30px', height: '30px' }} src={logo} />
+                            <span style={{ marginLeft: "15px", color: "#ffffff", fontSize: "18px", fontWeight: "600" }}>财务报表平台</span>
+                        </a>
                         <Tooltip title='缩回'>
                             <Icon
                                 className="trigger"

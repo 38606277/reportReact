@@ -76,25 +76,25 @@ export default class EditableTable extends React.Component {
             {
                 title: '参数ID',
                 dataIndex: 'in_id',
-                width: '15%',
+                width: '20%',
                 editable: true,
             },
             {
                 title: '参数名字',
                 dataIndex: 'in_name',
-                width: '15%',
+                width: '20%',
                 editable: true,
             },
             {
                 title: '参数类型',
                 dataIndex: 'datatype',
-                width: '15%',
+                width: '13%',
                 editable: true,
             },
             {
                 title: '数据字典',
                 dataIndex: 'dict',
-                width: '15%',
+                width: '20%',
                 editable: true,
             },
             {
@@ -104,7 +104,7 @@ export default class EditableTable extends React.Component {
                 editable: true,
             },
             {
-                title: 'operation',
+                title: '操作',
                 dataIndex: 'operation',
                 render: (text, record) => {
                     const editable = this.isEditing(record);
@@ -210,7 +210,7 @@ export default class EditableTable extends React.Component {
           
                 <Table
                     components={components}
-                    bordered
+                  
                     dataSource={this.state.data}
                     columns={columns}
                     rowClassName="editable-row"
