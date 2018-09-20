@@ -76,7 +76,7 @@ module.exports = {
             },
             // 图片的配置
             {
-                test: /\.(png|jpg|gif)$/,
+                test: /\.(png|jpg|gif|ico)$/,
                 use: [
                     {
                         loader: 'url-loader',
