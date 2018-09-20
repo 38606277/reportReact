@@ -1,8 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link,Redirect } from 'react-router-dom';
 import { Layout, Menu, Avatar, Icon, Tooltip,Row, Col, Button, Dropdown, Card,Popover } from 'antd';
 import './Layout.scss';
-
+import LocalStorge  from '../../util/LogcalStorge.jsx';
+const localStorge = new LocalStorge();
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
@@ -13,7 +14,7 @@ export default class MainLoyout extends React.Component {
             collapsed: false,
             visible: false,
             ishow:'0',
-           
+            userCode: localStorge.getStorage('userInfo').userCode || ''
         };
 
     }
@@ -35,10 +36,20 @@ export default class MainLoyout extends React.Component {
         this.setState({ collapsed });
     }
     onselect(e) {
-
         this.setState({ ishow:e});
     }
+    // 退出登录
+    onLogout(){
+       
+        localStorge.removeStorage('userInfo');
+        this.setState({redirect: true});
+       
+    }
+     
     render() {
+        if (this.state.redirect) {
+            return <Redirect push to="/login" />; //or <Redirect push to="/sample?a=xxx&b=yyy" /> 传递更多参数
+        }  
         const menu = (
             <Menu>
                 <Menu.Item>
@@ -49,34 +60,27 @@ export default class MainLoyout extends React.Component {
                 </Menu.Item>
             </Menu>
         );
-        const contentsone = (
-            <div>
-                <ul  className="nav navbar-nav navbar-right pull-right">
-                        <li  className="dropdown">
-                            <a  aria-expanded="true" className="dropdown-toggle profile waves-effect waves-light" data-toggle="dropdown" href="javascript:void(0)"><i  className="md md-settings"></i></a>
-                            <ul  className="dropdown-menu">
-                                <li ><a  href=""><i  className="md md-file-download">插件下载</i></a></li>
-                            </ul>
-                        </li>
-                        </ul>
-            </div>
-        );
+        
         const ss=this.state.ishow;
         let contsss=null;
+        let showwei='bottom';
         if(ss=='1'){
-            contsss=<ul  className="nav navbar-nav navbar-right pull-right">
-                <li  className="dropdown hidden-xs">
-                                <a  aria-expanded="true" className="dropdown-toggle waves-effect waves-light" data-toggle="dropdown" href="javascript:void(0)">
-                                    <i  className="md md-notifications"></i> <span  className="badge badge-xs badge-danger">3</span>
-                                </a>
+            contsss= <li  className="dropdown">
+                        <ul  className="dropdown-menu">
+                            <li ><a  href=""><i  className="md md-file-download">插件下载</i></a></li>
+                        </ul>
+                    </li>;
+               showwei='bottomLeft';
+         }else if(ss=='2'){
+            contsss=<li className="dropdown hidden-xs">
                                 <ul  className="dropdown-menu dropdown-menu-lg">
                                     <li  className="text-center notifi-title">通知</li>
                                     <li  className="list-group">
                                         
-                                        <a  className="list-group-item" href="javascript:void(0)">
+                                        <a  className="list-group-item" href="javascript:void(0)" style={{cursor: 'pointer'}}>
                                             <div  className="media">
                                                 <div  className="pull-left">
-                                                <em  className="fa fa-user-plus fa-2x text-info"></em>
+                                                    <Icon type='user-add'  style={{ fontSize: '30px', color: '#29b6f6' }}/>
                                                 </div>
                                                 <div  className="media-body clearfix">
                                                 <div  className="media-heading">新用户注册</div>
@@ -87,10 +91,10 @@ export default class MainLoyout extends React.Component {
                                             </div>
                                         </a>
                                         
-                                        <a  className="list-group-item" href="javascript:void(0)">
+                                        <a  className="list-group-item" href="javascript:void(0)" style={{cursor: 'pointer'}}>
                                             <div  className="media">
                                                 <div  className="pull-left">
-                                                <em  className="fa fa-diamond fa-2x text-primary"></em>
+                                                    <Icon type="mail" theme="outlined" style={{ fontSize: '30px', color: '#1e88e5' }}/>
                                                 </div>
                                                 <div  className="media-body clearfix">
                                                 <div  className="media-heading">新闻设置</div>
@@ -101,10 +105,10 @@ export default class MainLoyout extends React.Component {
                                             </div>
                                         </a>
                                         
-                                        <a  className="list-group-item" href="javascript:void(0)">
+                                        <a  className="list-group-item" href="javascript:void(0)" style={{cursor: 'pointer'}}>
                                             <div  className="media">
                                                 <div  className="pull-left">
-                                                <em  className="fa fa-bell-o fa-2x text-danger"></em>
+                                                    <Icon type="bell"  style={{ fontSize: '30px', color: '#ef5350' }}/>
                                                 </div>
                                                 <div  className="media-body clearfix">
                                                 <div  className="media-heading">更新</div>
@@ -116,46 +120,28 @@ export default class MainLoyout extends React.Component {
                                             </div>
                                         </a>
                                         
-                                        <a  className="list-group-item" href="javascript:void(0)">
+                                        <a  className="list-group-item" href="javascript:void(0)" style={{cursor: 'pointer'}}>
                                             <small >看所有的通知</small>
                                         </a>
                                     </li>
                                 </ul>
-                            </li>
-                    </ul>;
-        }else if(ss=='2'){
-            contsss= <ul  className="nav navbar-nav navbar-right pull-right">
-                        <li  className="dropdown">
-                            <a  aria-expanded="true" className="dropdown-toggle profile waves-effect waves-light" data-toggle="dropdown" href="javascript:void(0)"><i  className="md md-settings"></i></a>
-                            <ul  className="dropdown-menu">
-                                <li ><a  href=""><i  className="md md-file-download">插件下载</i></a></li>
-                            </ul>
-                        </li>
-                    </ul>;
-        }else if(ss=='3'){
-            contsss=<ul>
-                        <li  className="hidden-xs">
+                            </li>;
+                    showwei='bottom';
+         }else if(ss=='3'){
+             contsss=<li  className="hidden-xs">
                             <a  className="waves-effect waves-light" href="javascript:void(0)" id="btn-fullscreen"><i  className="md md-crop-free"></i></a>
-                        </li>
-                    </ul>;
+                     </li>;
          }else if(ss=='4'){
-            contsss=
-                 <ul>
-                 <li  className="dropdown">
-                             <a  aria-expanded="true" className="dropdown-toggle profile" data-toggle="dropdown" href=""><img  alt="user-img" className="img-circle" src="../images/users/avatar-3.jpg"/> </a>
+                 contsss= <li  className="dropdown">
                              <ul  className="dropdown-menu">
-                                 <li ><a  href="javascript:void(0)"><i  className="md md-face-unlock"></i> 个人信息</a></li>
-                                 <li ><a  href="javascript:void(0)"><i  className="md md-settings"></i> 设置</a></li>
-                                 <li ><a  href="javascript:void(0)"><i  className="md md-lock"></i> 锁屏</a></li>
-                                 <li ><a  href="javascript:void(0)"><i  className="md md-settings-power"></i> 退出</a></li>
+                                 <li style={{margin:'10px'}}><a  href="javascript:void(0)"><Icon type="user" theme="outlined" style={{fontSize:'18px',color:'#0a0a0a'}}/> <span  style={{fontSize: '16px',marginLeft: '5px',color:'#0a0a0a'}}>个人信息</span></a></li>
+                                 <li style={{margin:'10px'}} ><a  href="javascript:void(0)"><Icon type="setting" theme="outlined" style={{fontSize:'18px',color:'#0a0a0a'}}/><span  style={{fontSize: '16px',marginLeft: '5px',color:'#0a0a0a'}}>设置</span></a></li>
+                                 <li style={{margin:'10px'}} ><a onClick={() => {this.onLogout()}}><Icon type="logout" theme="outlined" style={{fontSize:'18px',color:'#0a0a0a'}} /><span  style={{fontSize: '16px',marginLeft: '5px',color:'#0a0a0a'}}>退出</span> </a></li>
                              </ul>
-                         </li>
-                </ul>;
+                         </li> ;
+                showwei='bottomRight';
         }
-        const contenttwo = (
-            <div>{contsss}
-            </div>);
-   
+        const contenttwo = (<div ><ul  className="nav navbar-nav navbar-right pull-right">{contsss}</ul></div>);
         
         return (
             <Layout style={{ minHeight: '100vh' }}>
@@ -178,32 +164,37 @@ export default class MainLoyout extends React.Component {
                                 type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
                                 onClick={this.toggle}
                             />
-                           
-                                
-                            
                         </Tooltip>
                         <Tooltip>
-                        <input type='text'className='search-bar' placeholder='查找...'/>
-                        <button  className="btn-search" type="submit"><i  className="fa fa-search"></i></button>
+                            <input type='text'className='search-bar' placeholder='查找...'/>
+                            <button  className="btn-search" type="submit"><i  className="fa fa-search"></i></button>
                         </Tooltip>
                     </div>
                     <div style={{ float: "right", marginRight: "30px" }}>
-
-
+                             {
+                                this.state.userCode
+                                ? <span>欢迎，{this.state.userCode}</span>
+                                : <span>欢迎您</span>
+                            }
                         <Tooltip>
-                        <Popover
-                            placement="bottom"
-                            content={contenttwo}
-                            trigger="click"
-                            visible={this.state.visible}
-                            onVisibleChange={this.handleVisibleChange}
-                        >
-                        <Button type="primary" onClick={()=>this.onselect('1')}><Icon type="setting" style={{ fontSize: '18px', color: '#ffffff' }}/></Button>
-                        <Button type="primary" onClick={()=>this.onselect('2')}><Icon type="bell" style={{ fontSize: '18px', color: '#ffffff' }}/></Button>
-                        {/* <Button type="primary" onClick={()=>this.onselect('3')}><Icon type="gateway" style={{ fontSize: '18px', color: '#ffffff' }}/></Button> */}
-                        <Button type="primary" onClick={()=>this.onselect('4')}><Avatar size="large" icon="user" /></Button>
-                        </Popover>         
-                        
+                            <Popover
+                                placement={showwei}
+                                content={contenttwo}
+                                trigger="click"
+                                visible={this.state.visible}
+                                onVisibleChange={this.handleVisibleChange}
+                            >
+                                    <Button type="primary" style={{ color: '#ffffff',background:'transparent',borderColor:'transparent'}} onClick={()=>this.onselect('1')}>
+                                        <Icon type="setting" style={{ fontSize: '18px', color: '#ffffff',background:'transparent',borderColor:'transparent'}}/>
+                                    </Button>
+                                    <Button type="primary" style={{background:'transparent',borderColor:'transparent'}} onClick={()=>this.onselect('2')}>
+                                        <Icon type="bell" style={{ fontSize: '18px', color: '#ffffff' ,background:'transparent'}}/>
+                                    </Button>
+                                    {/* <Button type="primary" onClick={()=>this.onselect('3')}><Icon type="fullscreen" style={{ fontSize: '18px', color: '#ffffff' }}/></Button> */}
+                                    <Button type="primary" onClick={()=>this.onselect('4')} style={{background:'transparent',borderColor:'transparent'}}>
+                                        <Avatar size="{32}" icon="user" />
+                                    </Button>
+                            </Popover>         
                         </Tooltip>
 
                         {/* <Tooltip>
@@ -216,7 +207,6 @@ export default class MainLoyout extends React.Component {
                         >
                         <Button type="primary" onClick={()=>this.onselect('2')}><Icon type="bell" style={{ fontSize: '18px', color: '#ffffff' }}/></Button>
                         </Popover>
-                                
                             
                         </Tooltip> 
                         <Tooltip title="使用文档">
@@ -230,9 +220,7 @@ export default class MainLoyout extends React.Component {
                                 <Icon type="question-circle-o" style={{ fontSize: '18px', color: '#ffffff' }}/>
                             </a>
                         </Tooltip>*/}
-
                     </div>
-                   
                 </Header>
 
                 <Layout>
@@ -243,11 +231,8 @@ export default class MainLoyout extends React.Component {
                         onCollapse={() => this.onCollapse(this.state.collapsed)}
                         theme="dark"
                     >
-
-
                         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline"  >
-
-                            <Menu.Item key="sub"><Link to='/'><Icon type="home" />首页</Link></Menu.Item>
+                            <Menu.Item key="sub" ><Link to='/'><Icon type="home" /><span>首页</span></Link></Menu.Item>
                             <SubMenu key="sub1" title={<span><Icon type="appstore" /><span>我的任务</span></span>}>
                                 <Menu.Item key="/product/index"><Link to='/product/index'>代办任务</Link></Menu.Item>
                                 <Menu.Item key="/product/taskList"><Link to='/product/taskList'>已办任务</Link></Menu.Item>

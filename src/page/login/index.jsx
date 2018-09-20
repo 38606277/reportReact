@@ -52,10 +52,10 @@ class Login extends React.Component{
             checkResult.states=true;
         // 验证通过
         if(checkResult.status){
-            _user.encodePwd(loginInfo.Pwd).then((res) => {
-                loginInfo.Pwd=res;
-                _user.login(loginInfo).then((res) => {
-                    localStorge.setStorage('userInfo', res);
+            _user.encodePwd(loginInfo.Pwd).then((response) => {
+                loginInfo.Pwd=response.encodePwd;
+                _user.login(loginInfo).then((response) => {
+                    localStorge.setStorage('userInfo', response.data);
                     this.props.history.push(this.state.redirect);
                 }, (errMsg) => {
                     localStorge.errorTips(errMsg);

@@ -11,21 +11,25 @@ export default class HttpService {
     
     //
     static post(url,param){
-        const fullUrl = HttpService.getBaseUrl() + url;
-       // alert(fullUrl);
-        let opts = {
-            method: 'POST',
-            headers: {
-                credentials: JSON.stringify(localStorge.getStorage('userInfo') || '')
-            },
-            body: param
-        };
+        if(undefined==localStorge.getStorage('userInfo').id && url!='/reportServer/user/encodePwd' && url!='/reportServer/user/Reactlogin'){
+            window.location.href='#login';
+            return ;
+        }else{
+            const fullUrl = HttpService.getBaseUrl() + url;
+        // alert(fullUrl);
+            let opts = {
+                method: 'POST',
+                headers: {
+                    credentials: JSON.stringify(localStorge.getStorage('userInfo') || '')
+                },
+                body: param
+            };
 
-        return fetch(fullUrl, opts).then((response) => {
-            //console.log(response.json())
-            return response.json();
-        });
-
+            return fetch(fullUrl, opts).then((response) => {
+                //console.log(response.json())
+                return response.json();
+            });
+        }
     }
 
     get(){

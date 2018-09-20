@@ -33,7 +33,7 @@ class User{
     }
     encodePwd(pwd){
         return HttpService.post(
-            '/reportServer/user/encodePwdReact',
+            '/reportServer/user/encodePwd',
             JSON.stringify({Pwd:pwd})
         );
     }
