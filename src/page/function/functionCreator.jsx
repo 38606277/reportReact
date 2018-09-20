@@ -27,7 +27,7 @@ const options = {
     lineNumbers: true,                //显示行号  
     mode: { name: "text/x-mysql" },          //定义mode  
     extraKeys: { "Ctrl": "autocomplete" },//自动提示配置  
-    theme:"default"
+    theme: "default"
 
 
 };
@@ -80,63 +80,50 @@ class functionCreator extends React.Component {
         // alert(this.props.match.params.funcid);
         this.state = {
 
+            //create 新增,update 编辑,view 查看
+            action: "create",
+            //定义函数状态
+            func_id: this.props.match.params.funcid,
+            func_name: "",
+            func_desc: "",
+            func_url: "",
+            program: "",
+            func_type: "",
             inData: [],
-            outData: data1,
+            outData: [],
+            //定义下拉查找的数据
             list: [],
-            dblist: [],
-            funcid: this.props.match.params.funcid,
-            userInfo: {
-                userName: "wwww",
-                userPwd: "12345",
-                birthday: moment('2018-05-01', 'YYYY-MM-DD')
-            }
+            dbList: [],
+            dictList: [],
+            authList: [],
+
 
         };
 
 
-
     }
     componentDidMount() {
-        //this.loadUserList();
 
-        functionService.getFunctionByID(this.state.funcid)
+        //查询函数定义
+        functionService.getFunctionByID(this.state.func_id)
             .then(res => {
-                //this.setState({ list: res })
-                //console.log(this.state.list);
-                // this.inData=JSON.stringify(data);
-                const ddd = [
-                    {
-                        "in_name": "b",
-                        "isformula": "false",
-                        "datatype": "varchar",
-                        "func_id": 36,
-                        "dict": "数据字典/会计科目",
-                        "in_id": "period_num"
-                    }
-                ];
                 this.setState({ inData: res.in });
                 this.setState({ outData: res.out });
                 this.props.form.setFieldsValue(res);
-               
-                //this.refs.editorsql.codeMirror.setValue=JSON.stringify(res.program);
-                var a = this.refs.editorsql;
-                a.codeMirror.setSize('100%', '500px');
-                a.codeMirror.border = "solid  1px";
-                a.codeMirror.setValue(res.program);
-                //  alert(JSON.stringify(res.out));
-                //  alert(JSON.stringify(this.state.outData));
-                //this.setState({data:this.res});
+                this.refs.editorsql.codeMirror.setValue(res.program);
+                let editorsql = this.refs.editorsql;
+                editorsql.codeMirror.setSize('100%', '500px');
+                editorsql.codeMirror.border = "solid  1px";
 
-                //  console.log(this.state.data);
             });
 
+        //查询DB定义
         dbService.getDbList()
             .then(res => {
                 this.setState({ dblist: res });
             });
 
-        //this.props.form.setFieldsValue(this.state.userInfo);
-
+       
     }
     handleSubmit1() {
         //    alert("ss")
@@ -244,7 +231,7 @@ class functionCreator extends React.Component {
                 <Card title="创建函数" bodyStyle={{ padding: "5px" }}>
                     <Row gutter={0}>
 
-                        <Col span={10}>
+                        <Col span={12}>
                             <Card bodyStyle={{ padding: '8px' }}>
                                 <div>
                                     <Button type="primary" icon="plus" onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成函数</Button>
@@ -259,7 +246,7 @@ class functionCreator extends React.Component {
                                                 initialValue: '0'
                                             })(
                                                 <Select>
-                                                    {this.state.dblist.map(d => <Option key={d.name}>{d.name}</Option>)}
+                                                    {this.state.dbList.map(d => <Option key={d.name}>{d.name}</Option>)}
                                                     {/* <Option value="0">ERP</Option>
                                                 <Option value="1">预算</Option>
                                                 <Option value="2">BI</Option>
@@ -269,7 +256,7 @@ class functionCreator extends React.Component {
                                         }
                                     </FormItem>
 
-                                    <Tabs type="card" tabBarExtraContent={<Button icon="profile" style={{color:"blue"}}></Button>}>
+                                    <Tabs type="card" tabBarExtraContent={<Button icon="profile" style={{ color: "blue" }}></Button>}>
                                         <TabPane tab="输入SQL" key="1">
                                             <CodeMirror ref="editorsql" value='select * from AAA' style={{ height: '600px', width: '450px', border: "1px" }} options={options} />
                                         </TabPane>
@@ -282,61 +269,61 @@ class functionCreator extends React.Component {
                             </Card>
                         </Col>
 
-                        <Col span={14}>
+                        <Col span={12}>
                             <Card bodyStyle={{ padding: '5px' }}>
-                            <Form layout="inline">
-                                <Row>
-                                    <Col span={12}>
-                                   
-                                        <FormItem label=" 函数编号" style={{ marginBottom: "1px" }} >
-                                            {
-                                                getFieldDecorator('func_id', {
-                                                    initialValue: ''
-                                                })(
+                                <Form layout="inline">
+                                    <Row>
+                                        <Col span={12}>
 
-                                                    <Input disabled/>
-                                                )
-                                            }
-                                        </FormItem>
-                                    </Col>
-                                    <Col span={12}>
-                                        <FormItem label="函数名称" style={{ marginBottom: "1px" }} >
-                                            {
-                                                getFieldDecorator('func_name', {
-                                                    initialValue: ''
-                                                })(
+                                            <FormItem label=" 函数编号" style={{ marginBottom: "1px" }} >
+                                                {
+                                                    getFieldDecorator('func_id', {
+                                                        initialValue: ''
+                                                    })(
 
-                                                    <Input />
-                                                )
-                                            }
-                                        </FormItem>
-                                    </Col>
-                                   
-                                </Row>
-                                <Row>
-                                    <Col span={24}>
-                                    <FormItem label="函数说明"  >
-                                        {
-                                            getFieldDecorator('func_desc', {
-                                                initialValue: ''
-                                            })(
-                                                <TextArea placeholder="此函数主要完成什么功能..."  autosize={{ minRows: 1, maxRows: 6 }}  style={{width:"490px"}}/>
+                                                        <Input disabled />
+                                                    )
+                                                }
+                                            </FormItem>
+                                        </Col>
+                                        <Col span={12}>
+                                            <FormItem label="函数名称" style={{ marginBottom: "1px" }} >
+                                                {
+                                                    getFieldDecorator('func_name', {
+                                                        initialValue: ''
+                                                    })(
 
-                                            )
-                                        }
-                                    </FormItem>
-                                    </Col>
+                                                        <Input />
+                                                    )
+                                                }
+                                            </FormItem>
+                                        </Col>
 
-                                </Row>
+                                    </Row>
+                                    <Row>
+                                        <Col span={24}>
+                                            <FormItem label="函数说明"  >
+                                                {
+                                                    getFieldDecorator('func_desc', {
+                                                        initialValue: ''
+                                                    })(
+                                                        <TextArea placeholder="此函数主要完成什么功能..." autosize={{ minRows: 1, maxRows: 6 }} style={{ width: "490px" }} />
 
+                                                    )
+                                                }
+                                            </FormItem>
+                                        </Col>
 
+                                    </Row>
 
 
 
-                                <Tabs type="card" style={{marginTop:'15px'}}>
-                                    <TabPane tab="输入参数" key="1"> <EditableTable data={this.state.inData} /></TabPane>
-                                    <TabPane tab="输出参数" key="2"> <EditableTable data={this.state.outData} /></TabPane>
-                                </Tabs>
+
+
+                                    <Tabs type="card" style={{ marginTop: '15px' }}>
+                                        <TabPane tab="输入参数" key="1"> <EditableTable data={this.state.inData} /></TabPane>
+                                        <TabPane tab="输出参数" key="2"> <EditableTable data={this.state.outData} /></TabPane>
+                                    </Tabs>
                                 </Form>
                             </Card>
                         </Col>
