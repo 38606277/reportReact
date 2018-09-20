@@ -152,9 +152,9 @@ export default class MainLoyout extends React.Component {
                             <img alt="logo" style={{ width: '30px', height: '30px' }} src={logo} />
                             <span style={{ marginLeft: "15px", color: "#ffffff", fontSize: "18px", fontWeight: "600" }}>财务报表平台</span>
                         </a>
-                        <Button type="primary" onClick={this.toggleCollapsed} style={{ marginBottom: 16, marginLeft: 20 }}>
+                        {/* <Button type="primary" onClick={this.toggleCollapsed} style={{ marginBottom: 16, marginLeft: 20 }}>
                             <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} />
-                        </Button> */}
+                        </Button>  */}
                         <Tooltip title='缩回'>
                             <Icon
                                 className="trigger"
