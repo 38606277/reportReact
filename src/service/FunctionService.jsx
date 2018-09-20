@@ -41,5 +41,16 @@ export default class FunctionService {
   
         return HttpService.post(url, JSON.stringify(param));
     }
+    // 保存一个函数定义
+    CreateFunction(jFunc) {
+
+        let url = "reportServer/function/saveUserSql";
+        // let param = {
+        //     sqlType: "sql",
+        //     sql:aSQL
+        // };
+  
+        return HttpService.post(url, JSON.stringify(jFunc));
+    }
 
 }
