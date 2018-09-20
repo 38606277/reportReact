@@ -13,10 +13,9 @@ export default class HttpService {
     static post(url,param){
         if(undefined==localStorge.getStorage('userInfo').id && url!='/reportServer/user/encodePwd' && url!='/reportServer/user/Reactlogin'){
             window.location.href='#login';
-            return ;
+            return  new Promise((resolve, reject) => {});
         }else{
             const fullUrl = HttpService.getBaseUrl() + url;
-        // alert(fullUrl);
             let opts = {
                 method: 'POST',
                 headers: {
