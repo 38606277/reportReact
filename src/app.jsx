@@ -53,6 +53,18 @@ const functionCreator = Loadable({
     delay:3000
 });
 
+const UserList = Loadable({
+    loader: () => import('./page/user/index.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const UserInfo = Loadable({
+    loader: () => import('./page/user/userInfo.jsx'),
+    loading: loading,
+    delay:3000
+});
+
 class App extends React.Component {
 
     render() {
@@ -61,8 +73,8 @@ class App extends React.Component {
                 <Switch>
                     <Route exact path="/" component={Home} />
                      {/* <Route path="/product" component={ProductRouter}/> */}
-                     {/* <Route path="/user/index" component={UserList} />
-                    <Route path="/user/userInfo/:userId" component={UserInfo} /> */}
+                    <Route path="/user/index" component={UserList} /> 
+                    <Route path="/user/userInfo/:userId" component={UserInfo} />
                     {/* <Route path="/user/User1" component={User1} /> */}
                     {/* <Route path="/function/EditableTable" component={EditableTable} /> */}
                     <Route path="/function/functionCreator/:action/:id" component={functionCreator} />
