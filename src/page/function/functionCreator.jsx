@@ -32,6 +32,17 @@ const options = {
 
 };
 
+const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 },
+    },
+  };
+
 var data = [
     {
         "in_name": "b",
@@ -86,12 +97,14 @@ class functionCreator extends React.Component {
             func_name: "",
             func_desc: "",
             func_url: "",
+            class_id:'0',
             program: "",
             func_type: "",
             inData: [],
             outData: [],
             //定义下拉查找的数据
             dbList: [],
+            funcClassList:[],
             dictList: [],
             authList: [],
 
@@ -105,8 +118,13 @@ class functionCreator extends React.Component {
             //查询函数定义
             functionService.getFunctionByID(this.state.func_id)
                 .then(res => {
-                    this.setState({ inData: res.in });
-                    this.setState({ outData: res.out });
+                    this.setState({ 
+                        func_id:res.func_id,
+                        class_id:res.class_id,
+                        class_name:res.class_name,
+                        inData: res.in,
+                        outData: res.out 
+                     });
                     this.props.form.setFieldsValue(res);
                     this.refs.editorsql.codeMirror.setValue(res.program);
                     let editorsql = this.refs.editorsql;
@@ -121,6 +139,17 @@ class functionCreator extends React.Component {
             .then(res => {
                 this.setState({ dbList: res });
             });
+        
+            //查询DB定义
+        functionService.getAllFunctionClass()
+        .then(res => {
+            if(res.resultCode=='1000')
+            {
+              this.setState({ funcClassList:JSON.parse(res.data)});
+            }
+            else
+              message.error(res.message);
+        });
 
 
     }
@@ -175,8 +204,8 @@ class functionCreator extends React.Component {
     render() {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
-            labelCol: { span: 3 },
-            wrapperCol: { span: 8 }
+            labelCol: { span: 10 },
+            wrapperCol: { span: 14 }
         };
         const formItemLayout1 = {
             labelCol: { span: 3 },
@@ -254,8 +283,8 @@ class functionCreator extends React.Component {
                                             getFieldDecorator('url', {
                                                 initialValue: ''
                                             })(
-                                                <Select>
-                                                    {this.state.dbList.map(d => <Option key={d.name} value={d.name}>{d.name}</Option>)}
+                                                <Select setValue={this.form} >
+                                                    {this.state.dbList.map(item => <Option key={item.name} value={item.name}>{item.name}</Option>)}
                                                     {/* <Option value="0">ERP</Option>
                                                 <Option value="1">预算</Option>
                                                 <Option value="2">BI</Option>
@@ -284,9 +313,25 @@ class functionCreator extends React.Component {
                                     <Row>
                                         <Col span={12}>
 
-                                            <FormItem label=" 函数编号" style={{ marginBottom: "1px" }} >
+                                            <FormItem label=" 函数类别"   style={{ marginBottom: "1px" }} >
                                                 {
-                                                    getFieldDecorator('func_id', {
+                                                    getFieldDecorator('class_id', {
+                                                        initialValue:{value:this.state.class_name}
+                                                    })(
+
+                                                        <Select   style={{width:'160px'}}>
+                                                         {this.state.funcClassList.map(item => 
+                                                            <Option key={item.class_id} value={item.class_id}>{item.class_name}</Option>
+                                                        )}
+                                                    </Select>
+                                                    )
+                                                }
+                                            </FormItem>
+                                        </Col>
+                                        <Col span={12}>
+                                            <FormItem label="函数ID" style={{ marginBottom: "1px" }} >
+                                                {
+                                                    getFieldDecorator('func_name', {
                                                         initialValue: ''
                                                     })(
 
@@ -295,18 +340,23 @@ class functionCreator extends React.Component {
                                                 }
                                             </FormItem>
                                         </Col>
-                                        <Col span={12}>
-                                            <FormItem label="函数名称" style={{ marginBottom: "1px" }} >
+
+                                    </Row>
+                                    <Row>
+                                        <Col span={24}>
+
+                                            <FormItem label=" 函数名称"  style={{ marginBottom: "1px" }} >
                                                 {
-                                                    getFieldDecorator('func_name', {
+                                                    getFieldDecorator('func_id', {
                                                         initialValue: ''
                                                     })(
 
-                                                        <Input />
+                                                        <Input  />
                                                     )
                                                 }
                                             </FormItem>
                                         </Col>
+                                        
 
                                     </Row>
                                     <Row>
