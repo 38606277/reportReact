@@ -1,13 +1,7 @@
-/*
-* @Author: Rosen
-* @Date:   2018-01-26 16:48:16
-* @Last Modified by:   Rosen
-* @Last Modified time: 2018-01-31 14:34:10
-*/
+
 import React                from 'react';
 import { Link }             from 'react-router-dom';
 import User                 from '../../service/user-service.jsx';
-import PageTitle            from '../../component/page-title/index.jsx';
 import Pagination           from 'antd/lib/pagination';
 import {Table,Divider,Button,Card, Tooltip,Input}  from 'antd';
 const _user = new User();
@@ -91,7 +85,7 @@ class UserList extends React.Component{
             dataIndex: 'userName',
             key: 'userName',
             render: function(text, record, index) {
-               return <Link to={ `/user/userInfo/${record.id}` }>{text}</Link>;
+               return <Link to={ `/user/UserView/${record.id}` }>{text}</Link>;
              } 
           }, {
             title: '描述',
