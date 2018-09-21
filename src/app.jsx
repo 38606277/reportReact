@@ -24,9 +24,10 @@ import { HashRouter as Router, Switch, Redirect, Route} from 'react-router-dom'
 // import QueryList from './page/query/QueryList.jsx';
 // import EditableTable from './page/function/EditTable.jsx'
 // import NavSide from './component/nav-side/NavSide.jsx';
-// import './App.css'
+ import './App.css'
 import Loadable from 'react-loadable';
 import loading from './util/loading.jsx'
+import { userInfo } from 'os';
 
 
 const Login = Loadable({
@@ -65,8 +66,21 @@ const UserInfo = Loadable({
     delay:3000
 });
 
-class App extends React.Component {
+function LoadPage(url){
+//    console.log(Loadable({
+//         loader: () => import(url),
+//         loading: loading,
+//         delay:3000
+//     }));
+            
+console.log(UserInfo);
+}
 
+class App extends React.Component {
+     
+   
+    
+    
     render() {
         let LayoutRouter = (
             <Layout>

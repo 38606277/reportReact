@@ -19,6 +19,8 @@ export default class FunctionService {
   
         return HttpService.post(url,param);
     }
+
+
     // 获取函数列表
     getFunctionByID(funcid) {
 
@@ -40,6 +42,13 @@ export default class FunctionService {
         };
   
         return HttpService.post(url, JSON.stringify(param));
+    }
+
+    getAllFunctionClass(){
+        let url = "reportServer/function1/getAllFunctionClass";
+        
+  
+        return HttpService.post(url, '');
     }
     // 保存一个函数定义
     CreateFunction(jFunc) {

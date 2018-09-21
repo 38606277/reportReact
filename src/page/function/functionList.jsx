@@ -5,23 +5,15 @@
 * @Last Modified time: 2018-01-31 14:34:10
 */
 import React from 'react';
-import { Link } from 'react-router-dom';
-// import MUtil        from 'util/mm.jsx'
-// import User         from 'service/user-service.jsx'
-
-// import PageTitle    from 'component/page-title/index.jsx';
-import Pagination from 'antd/lib/pagination';
 import Table from 'antd/lib/table';
 import { Card, Button, Divider, Input, Form, FormItem, Icon, Row, Col } from 'antd';
 
 import FunctionService from '../../service/FunctionService.jsx'
-// import ListSearch   from  '../../servcie/user/index-list-search.jsx';
-import './../../App.css';
-import { InputItem } from 'antd-mobile';
 
 
 const functionService = new FunctionService();
 const { Column, ColumnGroup } = Table;
+const Search = Input.Search;
 
 class functionList extends React.Component {
     constructor(props) {
@@ -86,13 +78,21 @@ class functionList extends React.Component {
 
         return (
             <div>
-                <Card title="函数列表" bodyStyle={{padding:"10px"}}>
-                    <Row style={{marginBottom:"10px"}}>
+                <Card title="函数列表" bodyStyle={{ padding: "10px" }}>
+                    {/* <Row style={{marginBottom:"10px"}}>
                         <Col span={6}> <Input prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="输入函数名称" /></Col>
                         <Col span={4}></Col>
                         <Col span={10}></Col>
                         <Col span={4}> <Button type="primary" style={{width:"100px"}} onClick={()=>window.location='#/function/functionCreator/creat/0'} >新建</Button></Col>
-                    </Row>
+                    </Row> */}
+
+                    <Search
+                        style={{ width: 300, marginBottom: '10px' }}
+                        placeholder="请输入..."
+                        enterButton="查询"
+                        onSearch={value => this.onSearch(value)}
+                    />
+                    <Button href="#/function/functionCreator/creat/0" style={{ float: "right", marginRight: "30px" }} type="primary">新建函数</Button>
                     <Table dataSource={this.state.list}>
                         <Column
                             title="函数ID"
@@ -104,7 +104,7 @@ class functionList extends React.Component {
                             dataIndex="func_name"
                             key="func_desc"
                         />
-                         <Column
+                        <Column
                             title="函数描述"
                             dataIndex="func_desc"
                             key="func_desc"

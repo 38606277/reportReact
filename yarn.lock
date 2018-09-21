@@ -106,8 +106,8 @@ ansi-styles@^3.1.0:
     color-convert "^1.9.0"
 
 antd-mobile@^2.2.3:
-  version "2.2.3"
-  resolved "https://registry.yarnpkg.com/antd-mobile/-/antd-mobile-2.2.3.tgz#aeeacbb294686930ede93fe817fa21c03102f42d"
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/antd-mobile/-/antd-mobile-2.2.5.tgz#f9a57e30df3799df9f2b58769633552633570874"
   dependencies:
     array-tree-filter "~2.1.0"
     babel-runtime "6.x"
@@ -2836,8 +2836,8 @@ ieee754@^1.1.4:
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.1.8.tgz#be33d40ac10ef1926701f6f08a2d86fbfd1ad3e4"
 
 immutability-helper@^2.7.1:
-  version "2.7.1"
-  resolved "https://registry.yarnpkg.com/immutability-helper/-/immutability-helper-2.7.1.tgz#5636dbb593e3deb5e572766d42249ea06bae7640"
+  version "2.8.1"
+  resolved "https://registry.yarnpkg.com/immutability-helper/-/immutability-helper-2.8.1.tgz#3c5ec05fcd83676bfae7146f319595243ad904f4"
   dependencies:
     invariant "^2.2.0"
 
@@ -4456,7 +4456,7 @@ rc-align@^2.4.0, rc-align@^2.4.1:
     prop-types "^15.5.8"
     rc-util "^4.0.4"
 
-rc-animate@2.x, rc-animate@^2.3.0, rc-animate@^2.4.1, rc-animate@^2.4.4:
+rc-animate@2.x, rc-animate@^2.3.0, rc-animate@^2.4.1:
   version "2.4.4"
   resolved "http://registry.npm.taobao.org/rc-animate/download/rc-animate-2.4.4.tgz#a05a784c747beef140d99ff52b6117711bef4b1e"
   dependencies:
@@ -4475,6 +4475,17 @@ rc-animate@3.0.0-rc.1:
     prop-types "15.x"
     raf "^3.4.0"
     rc-util "^4.5.0"
+    react-lifecycles-compat "^3.0.4"
+
+rc-animate@^2.4.4:
+  version "2.5.3"
+  resolved "https://registry.yarnpkg.com/rc-animate/-/rc-animate-2.5.3.tgz#a84636b50d4198184c34efa325824f14a2218d0d"
+  dependencies:
+    babel-runtime "6.x"
+    classnames "^2.2.6"
+    css-animation "^1.3.2"
+    prop-types "15.x"
+    raf "^3.4.0"
     react-lifecycles-compat "^3.0.4"
 
 rc-animate@^3.0.0-rc.1:
@@ -4797,7 +4808,15 @@ rc-time-picker@~3.3.0:
     prop-types "^15.5.8"
     rc-trigger "^2.2.0"
 
-rc-tooltip@^3.4.2, rc-tooltip@^3.7.0, rc-tooltip@~3.7.0:
+rc-tooltip@^3.4.2:
+  version "3.7.3"
+  resolved "https://registry.yarnpkg.com/rc-tooltip/-/rc-tooltip-3.7.3.tgz#280aec6afcaa44e8dff0480fbaff9e87fc00aecc"
+  dependencies:
+    babel-runtime "6.x"
+    prop-types "^15.5.8"
+    rc-trigger "^2.2.2"
+
+rc-tooltip@^3.7.0, rc-tooltip@~3.7.0:
   version "3.7.2"
   resolved "http://registry.npm.taobao.org/rc-tooltip/download/rc-tooltip-3.7.2.tgz#3698656d4bacd51b72d9e327bed15d1d5a9f1b27"
   dependencies:
