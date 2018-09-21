@@ -12,13 +12,14 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 let WEBPACK_ENV = process.env.WEBPACK_ENV || 'dev';
 console.log(WEBPACK_ENV); 
 module.exports = {
-    devtool: 'source-map',
+    // devtool: 'source-map',
     entry: './src/app.jsx',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        publicPath: WEBPACK_ENV === 'dev' 
-            ? '/dist/' : '//s.jianliwu.com/admin-v2-fe/dist/',
-        filename: 'js/app.js'
+        // publicPath: WEBPACK_ENV === 'dev' 
+        //     ? '/dist/' : '//s.jianliwu.com/admin-v2-fe/dist/',
+        filename: 'js/app.js',
+        chunkFilename: 'js/[name].js'
     },
     // resolve: {
     //     // alias : {
@@ -42,7 +43,7 @@ module.exports = {
                         presets: ['env', 'react','es2015','stage-0'],
                         plugins: [
                             'syntax-dynamic-import',
-                            ["import", { libraryName: "antd-mobile", style: "css" }]
+                            ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": "css" }] // `style: true` 会加载 less 
                         ]
 
                     }

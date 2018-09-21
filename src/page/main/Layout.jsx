@@ -1,12 +1,15 @@
 import React from 'react';
 import { Link,Redirect } from 'react-router-dom';
-import { Layout, Menu, Avatar, Icon, Tooltip,Row, Col, Button, Dropdown, Card,Popover } from 'antd';
+import { Layout, Menu, Avatar, Icon, Tooltip, Button, Card,Popover } from 'antd';
 import './Layout.scss';
 import LocalStorge  from '../../util/LogcalStorge.jsx';
+
 const localStorge = new LocalStorge();
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content,  Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 import logo from '../../asset/logo.png'
+
+
 export default class MainLoyout extends React.Component {
     constructor(props) {
         super(props)

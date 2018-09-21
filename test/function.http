@@ -93,5 +93,5 @@ credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
   },
   "cdata": "SELECT\r\n    ifnull(\r\n        sum(\r\n            gb.PERIOD_NET_DR-gb.PERIOD_NET_CR\r\n        ) ,\r\n        0\r\n    ) net_bal\r\nFROM\r\n    gl_bal_${period_year} gb\r\nWHERE 1=1\r\n     <if test=\"period_num!='' \">\r\n   and gb.PERIOD_NUM=${period_num}\r\n</if>\r\n   AND gb.SEGMENT1 like '${segment1}%'\r\n   and gb.segment3 LIKE '${segment3}%'\r\n     <if test=\"segment5!='' \">\r\n   and gb.segment5 LIKE '${segment5}%'\r\n</if>",
   "namespace": "总账",
-  "id": "tttt"
+  "id": "a987"
 }
