@@ -14,7 +14,7 @@ import { HashRouter as Router, Switch, Redirect, Route} from 'react-router-dom'
 // // 页面
 
 // import Home from './page/home/index.jsx';
-import ProductRouter from './page/product/router.jsx';
+import TaskRouter from './page/task/taskrouter.jsx';
 import UserRouter from './page/user/router.jsx';
 // import Login from './page/login/index.jsx';
 
@@ -86,7 +86,7 @@ class App extends React.Component {
                 <Switch>
                     <Route exact path="/" component={Home} />
 
-                     <Route path="/product" component={ProductRouter}/>
+                     <Route path="/task" component={TaskRouter}/>
                      <Route path="/user" component={UserRouter}/>
                     {/* <Route path="/function/EditableTable" component={EditableTable} /> */}
                     <Route path="/function/functionCreator/:action/:id" component={functionCreator} />

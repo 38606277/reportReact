@@ -1,6 +1,7 @@
 import React        from 'react';
-import Task     from '../../../service/task-service.jsx';
-import  LocalStorge  from '../../../util/LogcalStorge.jsx';
+import Task     from '../../service/task-service.jsx';
+import  LocalStorge  from '../../util/LogcalStorge.jsx';
+import {Card}   from 'antd';
 const localStorge = new LocalStorge();
 const _product      = new Task();
 
@@ -41,7 +42,7 @@ class TaskInfo extends React.Component{
        
         return (
         <div id="page-wrapper">
-        <PageTitle title='报表' />
+        <Card title='报表' >
                 <div className="form-horizontal">
                     
                    
@@ -54,7 +55,7 @@ class TaskInfo extends React.Component{
 
 
                 </div>
-                
+           </Card>     
         </div>
         
         );
