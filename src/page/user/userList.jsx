@@ -65,6 +65,17 @@ class UserList extends React.Component{
             this.loadUserList();
         });
     }
+    deleteUser(id){
+        if(confirm('确认删除吗？')){
+            _user.delUser(id).then(response => {
+                alert("删除成功");
+                this.loadUserList();
+            }, errMsg => {
+                alert("删除失败");
+                // _mm.errorTips(errMsg);
+            });
+        }
+    }
      //展示当前行信息
   showCurRowMessage(record){
     alert("key:"+record.userId + " name:"+record.userName + " description:" + record.description);
@@ -107,7 +118,7 @@ class UserList extends React.Component{
                 <span>
                   <Link to={ `/user/userInfo/${record.id}` }>编辑</Link>
                   <Divider type="vertical" />
-                  <a href="javascript:;">Delete</a>
+                  <a onClick={()=>this.deleteUser(`${record.id}`)} href="javascript:;">删除</a>
                 </span>
               ),
           }];

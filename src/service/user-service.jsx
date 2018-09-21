@@ -59,6 +59,9 @@ class User{
             return HttpService.post('/reportServer/formUser/updateUser',JSON.stringify(userInfo));
         }
     }
+    delUser(id){
+        return HttpService.post('/reportServer/formUser/deleteUser',id);
+    }
 }
 
 export default User;
