@@ -26,7 +26,8 @@ class UserInfo extends React.Component{
             startDate:'',
             endDate:'',
             description:'',
-            userId:''
+            userId:'',
+            isw:false
             
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -66,7 +67,12 @@ class UserInfo extends React.Component{
             value = e.target.value.trim();
            // this.state.userInfo = update(this.state.userInfo, {[name]: {$apply: function(x) {return value;}}});
            // this.setState(this.state.userInfo);
-           this.setState({[name]:value});  
+          
+           if(name=="encryptPwd"){
+                this.setState({[name]:value,isw:true});
+            }else{
+                this.setState({[name]:value});  
+            }
            this.props.form.setFieldsValue({[name]:value});
       
     }
@@ -87,10 +93,11 @@ handleSubmit (e) {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         //let  users=this.props.form.getFieldsValue();
-        console.log(this.state);
-        console.log(values);
+        //  console.log(this.state);
+        // console.log(values);
           _user.saveUserInfo(this.state).then(response => {
-            console.log("success");
+            alert("修改成功");
+            window.location.href="#user/userList";
           }, errMsg => {
               this.setState({
               });
@@ -108,8 +115,8 @@ handleSubmit (e) {
 
   compareToFirstPassword(rule, value, callback){
     const form = this.props.form;
-    if (value && value !== form.getFieldValue('password')) {
-      callback('Two passwords that you enter is inconsistent!');
+    if (value && value !== form.getFieldValue('encryptPwd')) {
+      callback('两次输入密码不一致!');
     } else {
       callback();
     }
@@ -149,10 +156,14 @@ handleSubmit (e) {
         },
       },
     };
+    const isss=this.state.isw;
+    let nones='0';
+    if(isss){
+      nones='12';
+    }
     return (
         <div id="page-wrapper">
         <Card title={this.state._id=='null' ?'新建用户':'编辑用户'}>
-        {/* <PageTitle title={this.state._id=='null' ?'新建用户':'编辑用户'} /> */}
         <Form onSubmit={this.handleSubmit}>
         <Row>
              <Col span={12}>
@@ -180,17 +191,17 @@ handleSubmit (e) {
                   <FormItem  {...formItemLayout}  label="密码" hideRequiredMark='true'>
                     {getFieldDecorator('encryptPwd', {
                       rules: [{
-                        required: false, message: '请输入密码!',
+                        required: true, message: '请输入密码!',
                       }, {
                         validator: this.validateToNextPassword,
                       }],
                     })(
-                      <Input type="password" name='encryptPwd'/>
+                      <Input type="password" name='encryptPwd' onChange={(e) => this.onValueChange(e)} />
                     )}
                   </FormItem>
               </Col>
          
-              <Col span={12}> 
+              <Col span={nones}> 
                   <FormItem {...formItemLayout}  label="确认密码" >
                     {getFieldDecorator('confirm', {
                       rules: [{
@@ -199,11 +210,11 @@ handleSubmit (e) {
                         validator: this.compareToFirstPassword,
                       }],
                     })(
-                      <Input type="password" onBlur={()=>this.handleConfirmBlur} />
+                      <Input type="password"  onBlur={()=>this.handleConfirmBlur} />
                     )}
                   </FormItem> 
               </Col>
-              </Row>
+               </Row>
           <Row>
               <Col span={12}>
                   <FormItem {...formItemLayout} label='用户归属' >
@@ -236,7 +247,7 @@ handleSubmit (e) {
               )}
           </FormItem>
         </Col>
-        <Col span={12}> 
+        <Col span={12} > 
         
            <FormItem {...formItemLayout} label='失效时间'>
               {getFieldDecorator('endDate',{
@@ -261,6 +272,7 @@ handleSubmit (e) {
           </Row>
           <FormItem {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">保存</Button>
+            <Button href="#/user/userList"  type="primary" style={{marginLeft:'30px'}}>返回</Button>
           </FormItem>
       </Form>
       </Card>

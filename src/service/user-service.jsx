@@ -1,6 +1,5 @@
 
 import   HttpService  from '../util/HttpService.jsx';
-const httpService =new HttpService();
 class User{
     // 用户登录
     login(loginInfo){
@@ -55,10 +54,13 @@ class User{
     }
     saveUserInfo(userInfo){
         if(userInfo._id=='null'){
-             return HttpService.post('/reportServer/formUser/addUser',JSON.stringify(userInfo));
+            return HttpService.post('/reportServer/formUser/addUser',JSON.stringify(userInfo));
         }else{
             return HttpService.post('/reportServer/formUser/updateUser',JSON.stringify(userInfo));
         }
+    }
+    delUser(id){
+        return HttpService.post('/reportServer/formUser/deleteUser',id);
     }
 }
 

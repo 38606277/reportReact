@@ -6,25 +6,20 @@
 */
 import React        from 'react';
 import { Link }     from 'react-router-dom';
-import Task         from '../../../service/task-service.jsx'
-
-import PageTitle    from '../../../component/page-title/index.jsx';
-import ListSearch   from './index-list-search.jsx';
-import Table        from 'antd/lib/table';
-import Pagination   from 'antd/lib/pagination';
-import './index.scss';
-import  LocalStorge  from '../../../util/LogcalStorge.jsx';
+import TaskService         from '../../service/task-service.jsx';
+import {Pagination,Card,Table,Input,Tooltip}   from 'antd';
+import  LocalStorge  from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
-const _product      = new Task();
-
-class ProductList extends React.Component{
+const _product      = new TaskService();
+const Search = Input.Search;
+class TaskList extends React.Component{
     constructor(props){
         super(props);
         this.state = {
             list            : [],
-            currentPage     : 1,
+            currentPage     : 1 ,
             perPage         : 10,
-            listType        :'list'
+            listType:'list'
         };
     }
     
@@ -33,7 +28,6 @@ class ProductList extends React.Component{
     }
     // 加载商品列表
     loadProductList(){
-        console.log(localStorge.getStorage('userInfo'));
         let listParam = {};
         listParam.userId = localStorge.getStorage('userInfo').userId;
         listParam.currentPage  = this.state.currentPage;
@@ -42,11 +36,8 @@ class ProductList extends React.Component{
         if(this.state.listType === 'search'){
             listParam.keyword    = this.state.searchKeyword;
         }
-         
-        
         // 请求接口
-        _product.getAgencyList(listParam).then(response => {
-            console.log(response);
+        _product.getTaskList(listParam).then(response => {
                 this.setState(response.data);
         }, errMsg => {
             this.setState({
@@ -57,9 +48,8 @@ class ProductList extends React.Component{
     }
     // 搜索
     onSearch(searchKeyword){
-        let listType = searchKeyword === '' ? 'list' : 'search';
+       
         this.setState({
-            listType:listType,
             currentPage         : 1,
             searchKeyword   : searchKeyword
         }, () => {
@@ -76,6 +66,9 @@ class ProductList extends React.Component{
     }
     
     render(){
+        this.state.list.map((item,index)=>{
+            item.key=index;
+        })
         const dataSource = this.state.list;
           
           const columns = [{
@@ -83,7 +76,7 @@ class ProductList extends React.Component{
             dataIndex: 'taskname',
             key: 'taskname',
             render: function(text, record, index) {
-                return <Link to={ `/product/taskInfo/${record.taskid}` }>{text}</Link>;
+                return <Link to={ `/task/taskInfoView/${record.taskid}` }>{text}</Link>;
               } 
           }, {
             title: '填报开始时间',
@@ -96,23 +89,24 @@ class ProductList extends React.Component{
           }];
         return (
             <div id="page-wrapper">
-                <PageTitle title="代办任务列表">
-                    {/* <div className="page-header-right">
-                        <Link to="/product/save" className="btn btn-primary">
-                            <i className="fa fa-plus"></i>
-                            <span>添加商品</span>
-                        </Link>
-                    </div> */}
-                </PageTitle>
-                <ListSearch onSearch={(searchKeyword) => {this.onSearch(searchKeyword)}}/>
-                <Table dataSource={dataSource} columns={columns}  pagination={false}/>
-                
-                 <Pagination current={this.state.currentPage} 
-                    total={this.state.total} 
-                    onChange={(currentPage) => this.onPageNumChange(currentPage)}/> 
+                <Card title="已办任务列表" >
+                        <Tooltip>
+                            <Search
+                                style={{ width: 300,marginBottom:'10px' }}
+                                placeholder="请输入..."
+                                enterButton="查询"
+                                onSearch={value => this.onSearch(value)}
+                                />
+                        </Tooltip>   
+                        <Table dataSource={dataSource} columns={columns} pagination={false} />
+                        
+                        <Pagination current={this.state.currentPage} 
+                        total={this.state.total} 
+                         onChange={(currentPage) => this.onPageNumChange(currentPage)}/>
+                 </Card>
             </div>
         );
     }
 }
 
-export default ProductList;
+export default TaskList;
