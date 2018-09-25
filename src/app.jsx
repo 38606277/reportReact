@@ -17,6 +17,7 @@ import { HashRouter as Router, Switch, Redirect, Route} from 'react-router-dom'
 import TaskRouter from './page/task/taskrouter.jsx';
 import UserRouter from './page/user/router.jsx';
 import DbsRouter  from './page/system/dbs/dbsrouter.jsx';
+import RuleRouter  from './page/system/rule/rulerouter.jsx';
 // import Login from './page/login/index.jsx';
 
 // import ErrorPage from './page/error/index.jsx';
@@ -90,6 +91,7 @@ class App extends React.Component {
                      <Route path="/task" component={TaskRouter}/>
                      <Route path="/user" component={UserRouter}/>
                      <Route path="/dbs" component={DbsRouter}/>
+                     <Route path="/rule" component={RuleRouter}/>
                     {/* <Route path="/function/EditableTable" component={EditableTable} /> */}
                     <Route path="/function/functionCreator/:action/:id" component={functionCreator} />
 
