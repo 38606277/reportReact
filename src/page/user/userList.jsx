@@ -4,6 +4,8 @@ import { Link }             from 'react-router-dom';
 import User                 from '../../service/user-service.jsx';
 import Pagination           from 'antd/lib/pagination';
 import {Table,Divider,Button,Card, Tooltip,Input}  from 'antd';
+import  LocalStorge         from '../../util/LogcalStorge.jsx';
+const localStorge = new LocalStorge();
 const _user = new User();
 const Search = Input.Search;
 
@@ -85,6 +87,7 @@ class UserList extends React.Component{
         this.state.list.map((item,index)=>{
             item.key=index;
         })
+        const userinfos=localStorge.getStorage('userInfo');
         const dataSource = this.state.list;
         let self = this;
           const columns = [{
@@ -118,7 +121,7 @@ class UserList extends React.Component{
                 <span>
                   <Link to={ `/user/userInfo/${record.id}` }>编辑</Link>
                   <Divider type="vertical" />
-                  <a onClick={()=>this.deleteUser(`${record.id}`)} href="javascript:;">删除</a>
+                  {record.id!=userinfos.id? <a onClick={()=>this.deleteUser(`${record.id}`)} href="javascript:;">删除</a>:""}
                 </span>
               ),
           }];
