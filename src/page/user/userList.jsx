@@ -121,7 +121,7 @@ class UserList extends React.Component{
                 <span>
                   <Link to={ `/user/userInfo/${record.id}` }>编辑</Link>
                   <Divider type="vertical" />
-                  {record.id!=userinfos.id? <a onClick={()=>this.deleteUser(`${record.id}`)} href="javascript:;">删除</a>:""}
+                  {record.userName!='system' &&record.id!=userinfos.id? <a onClick={()=>this.deleteUser(`${record.id}`)} href="javascript:;">删除</a>:""}
                 </span>
               ),
           }];
