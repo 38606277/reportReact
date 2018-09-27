@@ -389,8 +389,7 @@ class RuleInfo extends React.Component{
                                         expandedKeys={this.state.expandedKeys}
                                         autoExpandParent={this.state.autoExpandParent}
                                         onCheck={this.onCheck}
-                                        checkedKeys={this.state.checkedKeys}
-                                       
+                                        checkedKeys={this.state.checkedKeys}                                       
                                         selectedKeys={this.state.selectedKeys}
                                     >
                                     {this.renderTreeNodes(this.state.treeData)}
@@ -414,8 +413,6 @@ class RuleInfo extends React.Component{
        
       }
     saveSelectObject(){
-        console.log(this.state.checkedKeys);
-            
             let param=[this.state.searchKeyword,this.state.activeKey,this.state.checkedKeys];
             ruleSevie.saveAuthRules(param).then(response=>{
                 message.success("保存成功");
@@ -439,7 +436,6 @@ class RuleInfo extends React.Component{
                     <Button type="primary" onClick={()=>this.saveSelectObject()}>保存</Button>
                     <Tree
                         checkable
-                        checkStrictly
                         onExpand={this.onExpand}
                         expandedKeys={this.state.expandedKeys}
                         autoExpandParent={this.state.autoExpandParent}
