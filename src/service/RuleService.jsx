@@ -55,4 +55,11 @@ export default class RuleService{
          let url='/reportServer/authType/getAuthTypeListByType';
         return HttpService.post(url,JSON.stringify({authType:param}));
     }
+    //保存select
+    saveAuthRules(param){
+        console.log(param);
+        let url='/reportServer//rule/saveAuthRules';
+        return HttpService.post(url,JSON.stringify(param));
+    }
+    
 }
