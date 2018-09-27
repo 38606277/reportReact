@@ -4,8 +4,9 @@ import { Link }             from 'react-router-dom';
 import User                 from '../../../service/user-service.jsx';
 import RuleService          from '../../../service/RuleService.jsx';
 
-import {Table,Button,Card, Tooltip,Input,message,Tree,Tabs, Select}  from 'antd';
+import {Table,Button,Card, Tooltip,Input,message,Tree,Tabs, Select,Icon}  from 'antd';
 import Pagination           from 'antd/lib/pagination';
+import { removeFileItem } from 'antd/lib/upload/utils';
 
 const TreeNode = Tree.TreeNode;
 const user = new User();
@@ -55,11 +56,10 @@ class RuleInfo extends React.Component{
         });
     }
     // 搜索
-    onSearch(searchKeyword){
-       
+    onSearch(){
+        console.log(this.state.searchKeyword);
         this.setState({
             pageNum         : 1,
-            searchKeyword   : searchKeyword,
             listType :'search'
         }, () => {
             this.loadUserList();
@@ -75,7 +75,7 @@ class RuleInfo extends React.Component{
     }
     //tree
     onExpand = (expandedKeys) => {
-        //console.log('onExpand', expandedKeys);
+       // console.log('onExpand', expandedKeys);
         // if not set autoExpandParent to false, if children expanded, parent can not collapse.
         // or, you can remove all expanded children keys.
         this.setState({
@@ -84,14 +84,38 @@ class RuleInfo extends React.Component{
         });
       }
     
-      onCheck = (checkedKeys) => {
-        console.log('onCheck', checkedKeys);
-        this.setState({ checkedKeys });
+      showExcelRuleTreeNodeReact(isChecked,childrenData,checkedKeys){
+        if(!isChecked){
+            childrenData.map((item,index)=>{
+                checkedKeys.push(item.key);
+                if(undefined!=item.props.children && 'undefined'!=item.props.children){
+                    let childrenData=item.props.children;
+                    this.showExcelRuleTreeNodeReact(isChecked,childrenData,checkedKeys);
+                }
+            });
+        }else{
+            childrenData.map((item,index)=>{
+                checkedKeys.splice(checkedKeys[item.key],1);// 删除有问题
+                if(undefined!=item.props.children && 'undefined'!=item.props.children){
+                    let childrenData=item.props.children;
+                    this.showExcelRuleTreeNodeReact(isChecked,childrenData,checkedKeys);
+                }
+            });
+        }
+        this.setState({ checkedKeys:checkedKeys });
       }
-    
-      onSelect = (selectedKeys, info) => {
-        console.log('onSelect', info);
-        this.setState({ selectedKeys });
+      onCheck = (checkedKeys,info) => {
+        // console.log(info.node.props);
+            if(undefined!=info.node.props.children && 'undefined'!=info.node.props.children){
+                let childrenData=info.node.props.children;
+                let isChecked=info.node.props.checked;
+                this.showExcelRuleTreeNodeReact(isChecked,childrenData,checkedKeys.checked);
+            }else{
+                this.setState({ checkedKeys:checkedKeys.checked });
+            }
+        // let checkedKey=[...checkedKeys,...info.halfCheckedKeys];
+        // console.log('onCheck', checkedKeys.checked);
+        //this.setState({ checkedKeys:checkedKeys.checked });
       }
     
       renderTreeNodes = (data) => {
@@ -442,18 +466,22 @@ class RuleInfo extends React.Component{
                         onCheck={this.onCheck}
                         checkedKeys={this.state.checkedKeys}
                         selectedKeys={this.state.selectedKeys}
+                        checkStrictly
+                        multiple
                     >
                     {this.renderTreeNodes(this.state.treeData)}
                      </Tree>
                   </div>   
         );
+       
         return (
             <div id="page-wrapper">
             <Card title="用户列表"  style={{float:"left",width:"20%"}}>
                 <Tooltip>
+                {/* <Input addonAfter={<Icon type="search" onClick={() => this.onSearch()}/>} name="searchKeyword"  /> */}
                     <Search
                         style={{ width: 190,marginBottom:'10px' ,marginLeft: '-20px', marginRight: '-30px', border: '0'}}
-                        placeholder="请输入..."
+                        placeholder={this.state.searchKeyword==''?'请输入...':this.state.searchKeyword}
                         enterButton="查询"
                         onSearch={value => this.onSearch(value)}
                         />
