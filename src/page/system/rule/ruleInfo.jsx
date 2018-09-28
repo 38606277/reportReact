@@ -55,9 +55,14 @@ class RuleInfo extends React.Component{
             });
         });
     }
+    onValueChange(e){
+        let name = e.target.name,
+        value = e.target.value.trim();
+           
+        this.setState({searchKeyword:value});
+    }
     // 搜索
     onSearch(){
-        console.log(this.state.searchKeyword);
         this.setState({
             pageNum         : 1,
             listType :'search'
@@ -444,7 +449,6 @@ class RuleInfo extends React.Component{
                 message.success("保存成功");
             });
     }
-    
     render(){
         this.state.list.map((item,index)=>{
             item.key=index;
@@ -479,12 +483,13 @@ class RuleInfo extends React.Component{
             <div id="page-wrapper">
             <Card title="用户列表"  style={{float:"left",width:"20%"}}>
                 <Tooltip>
-                {/* <Input addonAfter={<Icon type="search" onClick={() => this.onSearch()}/>} name="searchKeyword"  /> */}
                     <Search
                         style={{ width: 190,marginBottom:'10px' ,marginLeft: '-20px', marginRight: '-30px', border: '0'}}
                         placeholder={this.state.searchKeyword==''?'请输入...':this.state.searchKeyword}
                         enterButton="查询"
                         onSearch={value => this.onSearch(value)}
+                        onChange={(e) => this.onValueChange(e)}
+                        value={this.state.searchKeyword}
                         />
                 </Tooltip>
                 <Table dataSource={dataSource} columns={columns}  pagination={false} 
