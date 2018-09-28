@@ -1,42 +1,59 @@
-[
-    {
-        "in_name": "b",
-        "isformula": "false",
-        "datatype": "varchar",
-        "func_id": 36,
-        "dict": "数据字典/会计科目",
-        "in_id": "period_num"
-    },
-    {
-        "in_name": "a",
-        "isformula": "false",
-        "datatype": "varchar",
-        "func_id": 36,
-        "dict": "数据字典/查询公司信息",
-        "in_id": "period_year"
-    },
-    {
-        "in_name": "c",
-        "isformula": "false",
-        "datatype": "varchar",
-        "func_id": 36,
-        "dict": "",
-        "in_id": "segment1"
-    },
-    {
-        "in_name": "d",
-        "isformula": "false",
-        "datatype": "varchar",
-        "func_id": 36,
-        "dict": "数据字典/会计科目",
-        "in_id": "segment3"
-    },
-    {
-        "in_name": "e",
-        "isformula": "false",
-        "datatype": "varchar",
-        "func_id": 36,
-        "dict": "数据字典/部门字典",
-        "in_id": "segment5"
-    }
-]
+{
+    "func_url": "jlerp",
+    "in": [
+        {
+            "in_name": "b",
+            "isformula": "false",
+            "datatype": "varchar",
+            "func_id": 36,
+            "dict": "数据字典/会计科目",
+            "in_id": "period_num"
+        },
+        {
+            "in_name": "a",
+            "isformula": "false",
+            "datatype": "varchar",
+            "func_id": 36,
+            "dict": "数据字典/查询公司信息",
+            "in_id": "period_year"
+        },
+        {
+            "in_name": "c",
+            "isformula": "false",
+            "datatype": "varchar",
+            "func_id": 36,
+            "dict": "",
+            "in_id": "segment1"
+        },
+        {
+            "in_name": "d",
+            "isformula": "false",
+            "datatype": "varchar",
+            "func_id": 36,
+            "dict": "数据字典/会计科目",
+            "in_id": "segment3"
+        },
+        {
+            "in_name": "e",
+            "isformula": "false",
+            "datatype": "varchar",
+            "func_id": 36,
+            "dict": "数据字典/部门字典",
+            "in_id": "segment5"
+        }
+    ],
+    "func_desc": "查询科目余额表中会计科目余额",
+    "func_id": 36,
+    "func_type": "sql",
+    "program": "select nvl(sum(gb.period_net_dr),0)   period_net_dr\n  from gl_balances gb, \n       gl_code_combinations gcc\n where gb.code_combination_id = gcc.code_combination_id\n   and gcc.summary_flag = 'N'\n      and gb.set_of_books_id = 2\n   and gb.period_name = #{period}\n   and gcc.segment1 like '${segment1}%'\n<if test=\"segment2!=''\">\n   and gcc.segment2=#{segment2}\n</if>\n   and gcc.segment3 like '${segment3}%'",
+    "class_name": "总账",
+    "func_name": "查询会计科目余额",
+    "out": [
+        {
+            "out_name": "net_bal",
+            "link": "{}",
+            "func_id": 36,
+            "out_id": "net_bal"
+        }
+    ]
+}

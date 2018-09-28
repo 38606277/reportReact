@@ -166,7 +166,7 @@ export default class MainLoyout extends React.Component {
                             />
                         </Tooltip>
                         <Tooltip>
-                            <input type='text'className='search-bar' placeholder='查找...'/>
+                            <input type='text'className='search-bar'  placeholder='查找...'/>
                             <button  className="btn-search" type="submit"><i  className="fa fa-search"></i></button>
                         </Tooltip>
                     </div>
@@ -229,9 +229,9 @@ export default class MainLoyout extends React.Component {
                         collapsible
                         collapsed={this.state.collapsed}
                         onCollapse={() => this.onCollapse(this.state.collapsed)}
-                        theme="dark"
+                        theme="light"
                     >
-                        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline"  >
+                        <Menu theme="light" defaultSelectedKeys={['1']} mode="inline"  >
                             <Menu.Item key="sub" ><Link to='/'><Icon type="home" /><span>首页</span></Link></Menu.Item>
                             <SubMenu key="sub1" title={<span><Icon type="appstore" /><span>我的任务</span></span>}>
                                 <Menu.Item key="/task/AgencyTaskList"><Link to='/task/AgencyTaskList'>代办任务</Link></Menu.Item>
@@ -239,6 +239,7 @@ export default class MainLoyout extends React.Component {
                             </SubMenu>
                             <SubMenu key="sub4" title={<span><Icon type="setting" /><span>系统管理</span></span>}>
                                 <Menu.Item key="/user/userList"><Link to='/user/userList'>用户管理</Link></Menu.Item>
+                                <Menu.Item key="/RoleList"><Link to='/RoleList'>角色管理</Link></Menu.Item>
                                 <Menu.Item key="10">权限管理</Menu.Item>
                                 <Menu.Item key="11">连接管理</Menu.Item>
                                 <Menu.Item key="12">权限类型管理</Menu.Item>
@@ -255,7 +256,7 @@ export default class MainLoyout extends React.Component {
               <Breadcrumb.Item>User</Breadcrumb.Item>
               <Breadcrumb.Item>Bill</Breadcrumb.Item>
             </Breadcrumb> */}
-                        <Card bodyStyle={{ padding: "1px", marginLeft: 2, background: '#fff', minHeight: 900 }}>
+                        <Card bodyStyle={{ padding: "6px", marginLeft: 2, background: '#ececec', minHeight: 900 }}>
                             {this.props.children}
                         </Card>
                     </Content>

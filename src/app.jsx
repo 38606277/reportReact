@@ -48,6 +48,12 @@ const Login = Loadable({
     loading: loading,
     delay:3000
 });
+const RoleList = Loadable({
+    loader: () => import('./page/user/RoleList.jsx'),
+    loading: loading,
+    delay:3000
+});
+
 
 const Home = Loadable({
     loader: () => import('./page/home/index.jsx'),
@@ -102,6 +108,7 @@ class App extends React.Component {
 
                      <Route path="/task" component={TaskRouter}/>
                      <Route path="/user" component={UserRouter}/>
+                     <Route path="/RoleList" component={RoleList}/>
                     {/* <Route path="/function/EditableTable" component={EditableTable} /> */}
                     <Route path="/function/functionCreator/:action/:id" component={functionCreator} />
 

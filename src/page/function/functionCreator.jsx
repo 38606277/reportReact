@@ -98,6 +98,7 @@ class functionCreator extends React.Component {
             func_desc: "",
             func_url: "",
             class_id:'0',
+            class_name:'',
             program: "",
             func_type: "",
             inData: [],
@@ -118,14 +119,17 @@ class functionCreator extends React.Component {
             //查询函数定义
             functionService.getFunctionByID(this.state.func_id)
                 .then(res => {
+                    console.log(JSON.stringify(res));
                     this.setState({ 
-                        func_id:res.func_id,
-                        class_id:res.class_id,
-                        class_name:res.class_name,
+                        // func_id:res.func_id,
+                        // class_id:res.class_id,
+                        // class_name:res.class_name,
+                        // func_url:res.func_url,
                         inData: res.in,
                         outData: res.out 
                      });
                     this.props.form.setFieldsValue(res);
+                    
                     this.refs.editorsql.codeMirror.setValue(res.program);
                     let editorsql = this.refs.editorsql;
                     editorsql.codeMirror.setSize('100%', '500px');
@@ -140,9 +144,10 @@ class functionCreator extends React.Component {
                 this.setState({ dbList: res });
             });
         
-            //查询DB定义
+            //
         functionService.getAllFunctionClass()
         .then(res => {
+            console.log(JSON.stringify(res));
             if(res.resultCode=='1000')
             {
               this.setState({ funcClassList:JSON.parse(res.data)});
@@ -170,17 +175,37 @@ class functionCreator extends React.Component {
     onSaveClick() {
         //alert("hello");
         //校验参数合法性
+        // e.preventDefault();
+        // this.props.form.validateFieldsAndScroll((err, values) => {
+        //   if (!err) {
+            // //let  users=this.props.form.getFieldsValue();
+            // //  console.log(this.state);
+            // // console.log(values);
+            //   _user.saveUserInfo(this.state).then(response => {
+            //     alert("修改成功");
+            //     window.location.href="#user/userList";
+            //   }, errMsg => {
+            //       this.setState({
+            //       });
+            //       localStorge.errorTips(errMsg);
+            //   });
+            //console.log('Received values of form: ', this.state);
+        //   }
+        // });
+
+
 
         //调用服务保存
-        let userInfo = this.props.form.getFieldsValue();
+        let formInfo = this.props.form.getFieldsValue();
         let sql=this.refs.editorsql.codeMirror.getValue();
 
-        console.log(JSON.stringify(userInfo))
+        console.log(JSON.stringify(formInfo));
+        console.log(this.state);
         //
-        functionService.CreateFunction(userInfo)
-        .then(res=>{
+        // functionService.CreateFunction(userInfo)
+        // .then(res=>{
 
-        })
+        // })
         //message.success(`${userInfo.userName} 保存成功!：${userInfo.userPwd}`)
     }
     onGenerateClick() {
@@ -267,6 +292,7 @@ class functionCreator extends React.Component {
             <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px' }}>
 
                 <Card title="创建函数" bodyStyle={{ padding: "5px" }}>
+                <Form layout="inline">
                     <Row gutter={0}>
 
                         <Col span={10}>
@@ -277,13 +303,14 @@ class functionCreator extends React.Component {
                                     <Button  icon="close" onClick={()=>window.location='#/function/functionList'} style={{ marginRight: "10px" }}   >退出</Button>
                                 </div>
                                 <Divider style={{ margin: "8px 0 8px 0" }} />
-                                <Form>
-                                    <FormItem label="选择数据库" labelCol={{ span: 4 }} wrapperCol={{ span: 12 }} style={{ marginBottom: "10px" }}>
+                              
+                                    <FormItem label="选择数据库"  style={{ marginBottom: "10px" }}>
                                         {
-                                            getFieldDecorator('url', {
-                                                initialValue: ''
+                                          
+                                            getFieldDecorator('func_url', {
+                                                rules:[{required :'true',message:"必须选择数据库"}]
                                             })(
-                                                <Select setValue={this.form} >
+                                                <Select setValue={this.form} style={{width:'160px'}}>
                                                     {this.state.dbList.map(item => <Option key={item.name} value={item.name}>{item.name}</Option>)}
                                                     {/* <Option value="0">ERP</Option>
                                                 <Option value="1">预算</Option>
@@ -303,23 +330,24 @@ class functionCreator extends React.Component {
 
 
 
-                                </Form>
+                              
                             </Card>
                         </Col>
 
                         <Col span={14}>
                             <Card bodyStyle={{ padding: '5px' }}>
-                                <Form layout="inline">
+                               
                                     <Row>
                                         <Col span={12}>
 
-                                            <FormItem label=" 函数类别"   style={{ marginBottom: "1px" }} >
+                                            <FormItem label=" 函数类别"    >
                                                 {
                                                     getFieldDecorator('class_id', {
-                                                        initialValue:{value:this.state.class_name}
+                                                        rules:[{required:true,message:'函数名称是必须的'}],
+                                                       
                                                     })(
 
-                                                        <Select   style={{width:'160px'}}>
+                                                        <Select   style={{minWidth:'170px'}}  >
                                                          {this.state.funcClassList.map(item => 
                                                             <Option key={item.class_id} value={item.class_id}>{item.class_name}</Option>
                                                         )}
@@ -329,9 +357,9 @@ class functionCreator extends React.Component {
                                             </FormItem>
                                         </Col>
                                         <Col span={12}>
-                                            <FormItem label="函数ID" style={{ marginBottom: "1px" }} >
+                                            <FormItem label="函数ID"  >
                                                 {
-                                                    getFieldDecorator('func_name', {
+                                                    getFieldDecorator('func_id', {
                                                         initialValue: ''
                                                     })(
 
@@ -345,13 +373,13 @@ class functionCreator extends React.Component {
                                     <Row>
                                         <Col span={24}>
 
-                                            <FormItem label=" 函数名称"  style={{ marginBottom: "1px" }} >
+                                            <FormItem label=" 函数名称"   >
                                                 {
-                                                    getFieldDecorator('func_id', {
-                                                        initialValue: ''
+                                                    getFieldDecorator('func_name', {
+                                                        rules:[{required:true,message:'函数名称是必须的'}],
                                                     })(
 
-                                                        <Input  />
+                                                        <Input style={{minWidth:'300px'}}/>
                                                     )
                                                 }
                                             </FormItem>
@@ -361,7 +389,7 @@ class functionCreator extends React.Component {
                                     </Row>
                                     <Row>
                                         <Col span={24}>
-                                            <FormItem label="函数说明"  >
+                                            <FormItem label="函数说明" style={{marginLeft:'14px'}}  >
                                                 {
                                                     getFieldDecorator('func_desc', {
                                                         initialValue: ''
@@ -383,11 +411,11 @@ class functionCreator extends React.Component {
                                         <TabPane tab="输入参数" key="1"> <EditableTable data={this.state.inData} /></TabPane>
                                         <TabPane tab="输出参数" key="2"> <EditableTable data={this.state.outData} /></TabPane>
                                     </Tabs>
-                                </Form>
+                              
                             </Card>
                         </Col>
                     </Row>
-
+                    </Form>
                 </Card>
 
             </div >
