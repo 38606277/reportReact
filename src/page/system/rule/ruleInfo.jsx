@@ -83,7 +83,7 @@ class RuleInfo extends React.Component{
           autoExpandParent: false,
         });
       }
-    
+      //循环增加或删除选中项
       showExcelRuleTreeNodeReact(isChecked,childrenData,checkedKeys){
         if(!isChecked){
             childrenData.map((item,index)=>{
@@ -95,7 +95,12 @@ class RuleInfo extends React.Component{
             });
         }else{
             childrenData.map((item,index)=>{
-                checkedKeys.splice(checkedKeys[item.key],1);// 删除有问题
+                for(var i=0;i<checkedKeys.length;i++){
+                    if(checkedKeys[i] == item.key){
+                        checkedKeys.splice(i,1);
+                        i--;
+                    }
+                }
                 if(undefined!=item.props.children && 'undefined'!=item.props.children){
                     let childrenData=item.props.children;
                     this.showExcelRuleTreeNodeReact(isChecked,childrenData,checkedKeys);
@@ -104,8 +109,8 @@ class RuleInfo extends React.Component{
         }
         this.setState({ checkedKeys:checkedKeys });
       }
+      //check事件
       onCheck = (checkedKeys,info) => {
-        // console.log(info.node.props);
             if(undefined!=info.node.props.children && 'undefined'!=info.node.props.children){
                 let childrenData=info.node.props.children;
                 let isChecked=info.node.props.checked;
@@ -113,11 +118,8 @@ class RuleInfo extends React.Component{
             }else{
                 this.setState({ checkedKeys:checkedKeys.checked });
             }
-        // let checkedKey=[...checkedKeys,...info.halfCheckedKeys];
-        // console.log('onCheck', checkedKeys.checked);
-        //this.setState({ checkedKeys:checkedKeys.checked });
       }
-    
+      
       renderTreeNodes = (data) => {
         return data.map((item) => {
           if (item.children) {
@@ -467,7 +469,6 @@ class RuleInfo extends React.Component{
                         checkedKeys={this.state.checkedKeys}
                         selectedKeys={this.state.selectedKeys}
                         checkStrictly
-                        multiple
                     >
                     {this.renderTreeNodes(this.state.treeData)}
                      </Tree>
