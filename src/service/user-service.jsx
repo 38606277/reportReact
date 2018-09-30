@@ -62,6 +62,10 @@ class User{
     delUser(id){
         return HttpService.post('/reportServer/formUser/deleteUser',id);
     }
+    getRoleList(){
+        let url='/reportServer/rule/getRoleList';
+        return HttpService.post(url,{});
+    }
 }
 
 export default User;

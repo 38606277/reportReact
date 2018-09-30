@@ -20,14 +20,15 @@ class UserInfo extends React.Component{
             confirmDirty: false,
             _id:this.props.match.params.userId,
             userName:'',
-            isAdmin:'0',
+            isAdmin:'',
             regisType:'local',
             encryptPwd:'',
             startDate:'',
             endDate:'',
             description:'',
             userId:'',
-            isw:false
+            isw:false,
+            roleList:[]
             
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -38,6 +39,13 @@ class UserInfo extends React.Component{
     
  //初始化加载调用方法
     componentDidMount(){
+      _user.getRoleList().then(response=>{
+      const children=[];
+        for (let i = 0; i < response.length; i++) {
+          children.push(<Option key={response[i].roleId}>{response[i].roleName}</Option>);
+        }
+        this.setState({roleList:children});
+      });
        if(null!=this.state._id && ''!=this.state._id  && 'null'!=this.state._id){
             _user.getUserInfo(this.state._id).then(response => {
                 this.setState(response.data.userInfo);
@@ -49,6 +57,7 @@ class UserInfo extends React.Component{
                       endDate:moment(response.data.userInfo.endDate,dateFormat),
                       description:response.data.userInfo.description,
                       userId:response.data.userInfo.userId,
+                      isAdmin:response.data.userInfo.isAdmin.toString(),
                       confirm:''
                 });
             }, errMsg => {
@@ -229,11 +238,23 @@ handleSubmit (e) {
 
               <Col span={12}> 
                   <FormItem {...formItemLayout} label='用户角色'>
-                        <Select  name='isAdmin' value={this.state.isAdmin.toString()}  style={{ width: 120 }} onChange={(value) =>this.onSelectChange('isAdmin',value)}>
+                        {/* <Select  name='isAdmin' value={this.state.isAdmin.toString()}  style={{ width: 120 }} onChange={(value) =>this.onSelectChange('isAdmin',value)}>
                           <Option value='0' >普通员工</Option>
                           <Option value='1' >管理员</Option>
-                        </Select>
-                    
+                        </Select> */}
+                      {getFieldDecorator('isAdmin',{
+                          rules:[{required: true, message: '请选择角色!'}],
+                        })(
+                        <Select
+                                    style={{ width: '120px' }}
+                                    placeholder="请选择"
+                                    name='isAdmin' 
+                                    value={this.state.isAdmin.toString()}
+                                    onChange={(value) =>this.onSelectChange('isAdmin',value)}
+                                  >
+                                    {this.state.roleList}
+                                  </Select>
+                        )}
                   </FormItem>
               </Col>
           </Row>
