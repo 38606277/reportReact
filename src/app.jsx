@@ -18,6 +18,7 @@ import TaskRouter from './page/task/taskrouter.jsx';
 import UserRouter from './page/user/router.jsx';
 import DbsRouter  from './page/system/dbs/dbsrouter.jsx';
 import RuleRouter  from './page/system/rule/rulerouter.jsx';
+import RoleRouter  from './page/system/role/rolerouter.jsx';
 // import Login from './page/login/index.jsx';
 
 // import ErrorPage from './page/error/index.jsx';
@@ -68,17 +69,6 @@ const functionCreator = Loadable({
     delay:3000
 });
 
-// const UserList = Loadable({
-//     loader: () => import('./page/user/index.jsx'),
-//     loading: loading,
-//     delay:3000
-// });
-
-// const UserInfo = Loadable({
-//     loader: () => import('./page/user/userInfo.jsx'),
-//     loading: loading,
-//     delay:3000
-// });
 
 class App extends React.Component {
 
@@ -86,19 +76,14 @@ class App extends React.Component {
         let LayoutRouter = (
             <Layout>
                 <Switch>
-                    <Route exact path="/" component={Home} />
-
+                     <Route exact path="/" component={Home} />
                      <Route path="/task" component={TaskRouter}/>
                      <Route path="/user" component={UserRouter}/>
                      <Route path="/dbs" component={DbsRouter}/>
                      <Route path="/rule" component={RuleRouter}/>
+                     <Route path="/role" component={RoleRouter}/>
                     {/* <Route path="/function/EditableTable" component={EditableTable} /> */}
                     <Route path="/function/functionCreator/:action/:id" component={functionCreator} />
-
-                     {/* <Route path="/product" component={ProductRouter}/>
-                     <Route path="/user/index" component={UserList} /> 
-                     <Route path="/user/userInfo/:userId" component={UserInfo} /> */}
-                    
                     <Route path="/function/functionList" component={functionList} />
                     {/* <Route path="/query/QueryList" component={QueryList} /> */} 
                    
@@ -110,9 +95,6 @@ class App extends React.Component {
             <Router>
                 <Switch>
                     <Route path="/login" component={Login} />
-                    {/* <Route path="/NavSide" component={NavSide} /> */}
-                    {/* <Route path="/functionCreator" component={functionCreator}/> */}
-                    {/* <Route path="/user/User1" component={User1}/> */}
                     <Route path="/" render={props => LayoutRouter} />
                 </Switch>
             </Router>

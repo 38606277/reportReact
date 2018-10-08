@@ -1,7 +1,7 @@
 
 import React                from 'react';
 import { Link }             from 'react-router-dom';
-import User                 from '../../../service/user-service.jsx';
+import Role                 from '../../../service/RoleService.jsx';
 import RuleService          from '../../../service/RuleService.jsx';
 
 import {Table,Button,Card, Tooltip,Input,message,Tree,Tabs, Select,Icon}  from 'antd';
@@ -9,7 +9,7 @@ import Pagination           from 'antd/lib/pagination';
 import { removeFileItem } from 'antd/lib/upload/utils';
 
 const TreeNode = Tree.TreeNode;
-const user = new User();
+const _role = new Role();
 const ruleSevie =new RuleService();
 const Search=Input.Search;
 const TabPane = Tabs.TabPane;
@@ -31,7 +31,7 @@ class RuleInfo extends React.Component{
             tabPosition: 'top',
             treeData:[],
             activeKey:"select",
-            searchKeyword:'',
+            roleName:'',
             panes,
         };
     }
@@ -45,10 +45,10 @@ class RuleInfo extends React.Component{
         listParam.perPage  = this.state.perPage;
         // 如果是搜索的话，需要传入搜索类型和搜索关键字
         if(this.state.listType === 'search'){
-            listParam.keyword    = this.state.searchKeyword;
+            listParam.roleName    = this.state.roleName;
         }
-        user.getUserList(listParam).then(response => {
-            this.setState(response.data);
+        _role.getRoleList(listParam).then(response => {
+            this.setState(response);
         }, errMsg => {
             this.setState({
                 list : []
@@ -59,7 +59,7 @@ class RuleInfo extends React.Component{
         let name = e.target.name,
         value = e.target.value.trim();
            
-        this.setState({searchKeyword:value});
+        this.setState({roleName:value});
     }
     // 搜索
     onSearch(){
@@ -139,7 +139,7 @@ class RuleInfo extends React.Component{
       }
      
      selectedOnchage(name,types,isChange){
-        this.setState({searchKeyword:name,expandedKeys:[],checkedKeys: []});
+        this.setState({roleName:name,expandedKeys:[],checkedKeys: []});
          let type='select';
             if(''!=types){
                  type=types;
@@ -437,14 +437,14 @@ class RuleInfo extends React.Component{
      }
      onChangeTab = (activeKey) => {
         this.setState({ activeKey:activeKey,treeData:[] });
-        let name=this.state.searchKeyword;
+        let name=this.state.roleName;
         if(''!=name){
             this.selectedOnchage(name,activeKey,'true');
          }
        
       }
     saveSelectObject(){
-            let param=[this.state.searchKeyword,this.state.activeKey,this.state.checkedKeys];
+            let param=[this.state.roleName,this.state.activeKey,this.state.checkedKeys];
             ruleSevie.saveAuthRules(param).then(response=>{
                 message.success("保存成功");
             });
@@ -455,10 +455,10 @@ class RuleInfo extends React.Component{
         })
         const dataSource = this.state.list;
           const columns = [{
-            dataIndex: 'userName',
-            key: 'userName',
+            dataIndex: 'roleName',
+            key: 'roleName',
             render: (text, record)=> {
-                return <a href="javascript:;" onClick={()=>this.selectedOnchage(record.userName,'','')} >{text}</a>;
+                return <a href="javascript:;" onClick={()=>this.selectedOnchage(record.roleName,'','')} >{text}</a>;
             }
           }];
         const contents=(
@@ -481,15 +481,15 @@ class RuleInfo extends React.Component{
        
         return (
             <div id="page-wrapper">
-            <Card title="用户列表"  style={{float:"left",width:"20%"}}>
+            <Card title="角色列表"  style={{float:"left",width:"20%"}}>
                 <Tooltip>
                     <Search
                         style={{ width: 190,marginBottom:'10px' ,marginLeft: '-20px', marginRight: '-30px', border: '0'}}
-                        placeholder={this.state.searchKeyword==''?'请输入...':this.state.searchKeyword}
+                        placeholder={this.state.roleName==''?'请输入...':this.state.roleName}
                         enterButton="查询"
                         onSearch={value => this.onSearch(value)}
                         onChange={(e) => this.onValueChange(e)}
-                        value={this.state.searchKeyword}
+                        value={this.state.roleName}
                         />
                 </Tooltip>
                 <Table dataSource={dataSource} columns={columns}  pagination={false} 

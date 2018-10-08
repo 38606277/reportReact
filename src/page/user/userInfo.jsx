@@ -105,7 +105,11 @@ handleSubmit (e) {
         //  console.log(this.state);
         // console.log(values);
           _user.saveUserInfo(this.state).then(response => {
-            alert("修改成功");
+            if(null!=this.state._id && ''!=this.state._id  && 'null'!=this.state._id){
+              alert("修改成功");
+          }else{
+              alert("保存成功");
+          }
             window.location.href="#user/userList";
           }, errMsg => {
               this.setState({
