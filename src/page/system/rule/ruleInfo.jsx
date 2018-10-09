@@ -1,12 +1,10 @@
 
 import React                from 'react';
-import { Link }             from 'react-router-dom';
 import Role                 from '../../../service/RoleService.jsx';
 import RuleService          from '../../../service/RuleService.jsx';
 
 import {Table,Button,Card, Tooltip,Input,message,Tree,Tabs, Select,Icon}  from 'antd';
 import Pagination           from 'antd/lib/pagination';
-import { removeFileItem } from 'antd/lib/upload/utils';
 
 const TreeNode = Tree.TreeNode;
 const _role = new Role();
@@ -20,6 +18,7 @@ class RuleInfo extends React.Component{
         const panes = [];
         this.newTabIndex = 0;
         this.state = {
+            roleId:this.props.match.params.roleId,
             list : [],
             pageNum         : 1,
             perPage         : 10,
@@ -38,6 +37,10 @@ class RuleInfo extends React.Component{
     
     componentDidMount(){
         this.loadRoleList();
+        if(null!=this.state.roleId && ''!=this.state.roleId){
+            this.selectedOnchage(this.state.roleId,'','','');
+        }
+        
     }
     loadRoleList(){
         let listParam = {};
@@ -49,11 +52,13 @@ class RuleInfo extends React.Component{
         }
         _role.getRoleList(listParam).then(response => {
             this.setState(response);
+           
         }, errMsg => {
             this.setState({
                 list : []
             });
         });
+        
     }
     onValueChange(e){
         let name = e.target.name,
@@ -135,8 +140,8 @@ class RuleInfo extends React.Component{
         });
       }
      
-     selectedOnchage(name,types,isChange){
-        this.setState({roleName:name,expandedKeys:[],checkedKeys: []});
+     selectedOnchage(roleId,name,types,isChange){
+        this.setState({roleId:roleId,roleName:name,expandedKeys:[],checkedKeys: []});
          let type='select';
             if(''!=types){
                  type=types;
@@ -146,7 +151,7 @@ class RuleInfo extends React.Component{
              if(type=='select'){
                  //如果treeData不为空，根据人名称查人员选中事项
                  if(this.state.treeData.length>0 && ''==isChange){
-                    ruleSevie.getAuthListByConditions(name,type).then(response=>{
+                    ruleSevie.getAuthListByConditions(roleId,type).then(response=>{
                         let  selectedKeys=[];
                         if(response.resultCode!='3000'){
                             response.map((item,index)=>{
@@ -183,7 +188,7 @@ class RuleInfo extends React.Component{
              if(type=='template'){
                   //如果treeData不为空，根据人名称查人员选中事项
                   if(this.state.treeData.length>0 && ''==isChange){
-                    ruleSevie.getAuthByConditions(name,type).then(response=>{
+                    ruleSevie.getAuthByConditions(roleId,type).then(response=>{
                         let  selectedKeys=[];
                         if(response.resultCode!='3000'){
                             response.map((item,index)=>{
@@ -201,7 +206,7 @@ class RuleInfo extends React.Component{
                     ruleSevie.getDirectory().then(response=>{
                         if(response.status!=500){
                                 this.setState({treeData:response});
-                                ruleSevie.getAuthByConditions(name,type).then(response=>{
+                                ruleSevie.getAuthByConditions(roleId,type).then(response=>{
                                     let  selectedKeys=[];
                                     if(response.resultCode!='3000'){
                                         response.map((item,index)=>{
@@ -220,7 +225,7 @@ class RuleInfo extends React.Component{
              if(type=='function'){
                     //如果treeData不为空，根据人名称查人员选中事项
                     if(this.state.treeData.length>0 && ''==isChange){
-                        ruleSevie.getAuthByConditions(name,type).then(response=>{
+                        ruleSevie.getAuthByConditions(roleId,type).then(response=>{
                             let  selectedKeys=[];
                             if(response.resultCode!='3000'){
                                 response.map((item,index)=>{
@@ -238,7 +243,7 @@ class RuleInfo extends React.Component{
                         ruleSevie.getFunctionClass().then(response=>{
                             if(response.status!=500){
                                 this.setState({treeData:response});
-                                ruleSevie.getAuthByConditions(name,type).then(response=>{
+                                ruleSevie.getAuthByConditions(roleId,type).then(response=>{
                                     let  selectedKeys=[];
                                     if(response.resultCode!='3000'){
                                         response.map((item,index)=>{
@@ -257,7 +262,7 @@ class RuleInfo extends React.Component{
              if(type=='func'){
                  //如果treeData不为空，根据人名称查人员选中事项
                  if(this.state.treeData.length>0 && ''==isChange){
-                        ruleSevie.getAuthByConditions(name,type).then(response=>{
+                        ruleSevie.getAuthByConditions(roleId,type).then(response=>{
                             let  selectedKeys=[];
                             if(response.resultCode!='3000'){
                                 response.map((item,index)=>{
@@ -275,7 +280,7 @@ class RuleInfo extends React.Component{
                     ruleSevie.getFunRuleList('excel').then(response=>{
                         if(response.status!=500){
                                 this.setState({treeData:response});
-                                ruleSevie.getAuthByConditions(name,type).then(response=>{
+                                ruleSevie.getAuthByConditions(roleId,type).then(response=>{
                                     let  selectedKeys=[];
                                     if(response.resultCode!='3000'){
                                         response.map((item,index)=>{
@@ -294,7 +299,7 @@ class RuleInfo extends React.Component{
              if(type=='webFunc'){
                  //如果treeData不为空，根据人名称查人员选中事项
                  if(this.state.treeData.length>0 && ''==isChange){
-                    ruleSevie.getAuthByConditions(name,type).then(response=>{
+                    ruleSevie.getAuthByConditions(roleId,type).then(response=>{
                         let  selectedKeys=[];
                         if(response.resultCode!='3000'){
                             response.map((item,index)=>{
@@ -312,7 +317,7 @@ class RuleInfo extends React.Component{
                     ruleSevie.getFunRuleList('web').then(response=>{
                         if(response.status!=500){
                             this.setState({treeData:response});
-                            ruleSevie.getAuthByConditions(name,type).then(response=>{
+                            ruleSevie.getAuthByConditions(roleId,type).then(response=>{
                                 let  selectedKeys=[];
                                 if(response.resultCode!='3000'){
                                     response.map((item,index)=>{
@@ -331,7 +336,7 @@ class RuleInfo extends React.Component{
              if(type=='ou'){
                  //如果treeData不为空，根据人名称查人员选中事项
                  if(this.state.treeData.length>0 && ''==isChange){
-                    ruleSevie.getAuthByConditions(name,type).then(response=>{
+                    ruleSevie.getAuthByConditions(roleId,type).then(response=>{
                         let  selectedKeys=[];
                         if(response.resultCode!='3000'){
                             response.map((item,index)=>{
@@ -349,7 +354,7 @@ class RuleInfo extends React.Component{
                         ruleSevie.getAuthTypeListByType().then(response=>{
                             if(response.resultCode!='3000'){
                                 this.setState({treeData:response});
-                                ruleSevie.getAuthByConditions(name,type).then(response=>{
+                                ruleSevie.getAuthByConditions(roleId,type).then(response=>{
                                     let  selectedKeys=[];
                                     if(response.resultCode!='3000'){
                                         response.map((item,index)=>{
@@ -368,7 +373,7 @@ class RuleInfo extends React.Component{
              if(type=='dept'){
                  //如果treeData不为空，根据人名称查人员选中事项
                  if(this.state.treeData.length>0 && ''==isChange){
-                    ruleSevie.getAuthListByConditions(name,type).then(response=>{
+                    ruleSevie.getAuthListByConditions(roleId,type).then(response=>{
                         let  selectedKeys=[];
                         if(response.resultCode!='3000'){
                             response.map((item,index)=>{
@@ -386,7 +391,7 @@ class RuleInfo extends React.Component{
                         ruleSevie.getAuthTypeListByType().then(response=>{
                             if(response.resultCode!='3000'){
                                 this.setState({treeData:response});
-                                ruleSevie.getAuthListByConditions(name,type).then(response=>{
+                                ruleSevie.getAuthListByConditions(roleId,type).then(response=>{
                                     let  selectedKeys=[];
                                     if(response.resultCode!='3000'){
                                         response.map((item,index)=>{
@@ -435,13 +440,14 @@ class RuleInfo extends React.Component{
      onChangeTab = (activeKey) => {
         this.setState({ activeKey:activeKey,treeData:[] });
         let name=this.state.roleName;
-        if(''!=name){
-            this.selectedOnchage(name,activeKey,'true');
+        let roleId=this.state.roleId;
+        if(''!=roleId){
+            this.selectedOnchage(roleId,name,activeKey,'true');
          }
        
       }
     saveSelectObject(){
-            let param=[this.state.roleName,this.state.activeKey,this.state.checkedKeys];
+            let param=[this.state.roleId,this.state.activeKey,this.state.checkedKeys];
             ruleSevie.saveAuthRules(param).then(response=>{
                 message.success("保存成功");
             });
@@ -455,7 +461,7 @@ class RuleInfo extends React.Component{
             dataIndex: 'roleName',
             key: 'roleName',
             render: (text, record)=> {
-                return <a href="javascript:;" onClick={()=>this.selectedOnchage(record.roleName,'','')} >{text}</a>;
+                return <a href="javascript:;" onClick={()=>this.selectedOnchage(record.roleId,record.roleName,'','')} >{text}</a>;
             }
           }];
         const contents=(

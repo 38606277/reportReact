@@ -119,7 +119,7 @@ class RoleList extends React.Component{
                   <Divider type="vertical" />
                   <Link to={ `/role/roleUser/${record.roleId}` }>分配用户</Link>
                    <Divider type="vertical" />
-                   <Link to={ `/rule` }>分配权限</Link>
+                   <Link to={ `/rule/ruleInfo/${record.roleId}` }>分配权限</Link>
                 </span>
               ),
           }];

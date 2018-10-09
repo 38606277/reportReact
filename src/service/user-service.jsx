@@ -46,6 +46,12 @@ class User{
             JSON.stringify(listParam)
          );
     }
+    getUserListRole(listParam){
+        return HttpService.post(
+            '/reportServer/formUser/getUserListRole',
+            JSON.stringify(listParam)
+         );
+    }
     getUserInfo(userId){
         return HttpService.post(
             '/reportServer/formUser/getUserInfoByUserId',

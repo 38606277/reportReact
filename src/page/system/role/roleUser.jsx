@@ -102,7 +102,7 @@ class RoleUser extends React.Component{
         // if(this.state.listType === 'search'){
         //     listParam.userName    = this.state.userName;
         // }
-        _user.getUserList(listParamUser).then(response => {
+        _user.getUserListRole(listParamUser).then(response => {
             this.setState({userList:response.data.list,userTotal:response.data.total});
         }, errMsg => {
             this.setState({
@@ -149,7 +149,7 @@ class RoleUser extends React.Component{
             dataIndex: 'roleName',
             key: 'roleName',
             render: (text, record)=> {
-                return <a href="javascript:;" onClick={()=>this.selectedOnchage(record.roleId,record.roleName)} >{text}</a>;
+                return <a href="javascript:;" onClick={()=>this.selectedOnchage(record.roleId,record.roleName)} >{record.roleName}</a>;
             }
           }];
           const dataSourceUser = this.state.userList;
