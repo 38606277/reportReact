@@ -9,7 +9,7 @@ const FormItem = Form.Item;
 const localStorge = new LocalStorge();
 const _role = new Role();
 const Search = Input.Search;
-
+import './role.scss';
 class RoleList extends React.Component{
     constructor(props){
         super(props);
@@ -91,42 +91,33 @@ class RoleList extends React.Component{
             title: 'ID',
             dataIndex: 'roleId',
             key: 'roleId',
-            // render:(record,row)=>{
-            //     return (
-            //         <Form>
-            //             <FormItem style={{margin:0}}>
-            //             {getFieldDecorator('userId'+record._id, {
-            //                 rules: [{required: true, message: '请输入用户名!'}],
-            //                 initialValue:record.userId,
-            //             })(
-            //             <Input type='text'  onChange={this.changeInput.bind(this,record)}/>
-            //             )}
-            //             </FormItem>
-            //         </Form>
-            //     )
-            // }
+            className:'headerRow',
           },{
             title: '角色名称',
             dataIndex: 'roleName',
-            key: 'roleName'
+            key: 'roleName',
+            className:'headerRow',
           }, {
             title: '是否启用',
             dataIndex: 'enabledText',
-            key: 'enabledText'
+            key: 'enabledText',
+            className:'headerRow',
           },{
             title: '创建时间',
             dataIndex: 'createdDate',
-            key: 'createdDate'
+            key: 'createdDate',
+            className:'headerRow',
           },{
             title: '操作',
             dataIndex: '操作',
+            className:'headerRow',
             render: (text, record) => (
                 <span>
                   <Link to={ `/role/roleInfo/${record.roleId}` }>编辑</Link>
                   <Divider type="vertical" />
                    <a onClick={()=>this.deleteRole(`${record.roleId}`)} href="javascript:;">删除</a>
                   <Divider type="vertical" />
-                  <Link to={ `/user/userInfo/${record.id}` }>分配用户</Link>
+                  <Link to={ `/role/roleUser/${record.roleId}` }>分配用户</Link>
                    <Divider type="vertical" />
                    <Link to={ `/rule` }>分配权限</Link>
                 </span>

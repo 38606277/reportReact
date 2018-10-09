@@ -20,7 +20,12 @@ class Role{
     delRole(id){
         return HttpService.post('/reportServer/role/deleteRole',id);
     }
-   
+    getUserListByRoleId(roleId){
+        return HttpService.post('/reportServer/role/getUserListByRoleId',roleId);
+    }
+    saveUserId(params){
+        return HttpService.post('/reportServer/role/saveOrupdateUserId',JSON.stringify(params));
+    }
 }
 
 export default Role;

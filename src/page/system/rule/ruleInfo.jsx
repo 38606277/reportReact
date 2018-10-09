@@ -37,9 +37,9 @@ class RuleInfo extends React.Component{
     }
     
     componentDidMount(){
-        this.loadUserList();
+        this.loadRoleList();
     }
-    loadUserList(){
+    loadRoleList(){
         let listParam = {};
         listParam.pageNum  = this.state.pageNum;
         listParam.perPage  = this.state.perPage;
@@ -67,7 +67,7 @@ class RuleInfo extends React.Component{
             pageNum         : 1,
             listType :'search'
         }, () => {
-            this.loadUserList();
+            this.loadRoleList();
         });
     }
     // 页数发生变化的时候
@@ -75,14 +75,11 @@ class RuleInfo extends React.Component{
         this.setState({
             pageNum : pageNum
         }, () => {
-            this.loadUserList();
+            this.loadRoleList();
         });
     }
     //tree
     onExpand = (expandedKeys) => {
-       // console.log('onExpand', expandedKeys);
-        // if not set autoExpandParent to false, if children expanded, parent can not collapse.
-        // or, you can remove all expanded children keys.
         this.setState({
           expandedKeys,
           autoExpandParent: false,
