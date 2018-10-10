@@ -37,7 +37,7 @@ class RuleInfo extends React.Component{
     
     componentDidMount(){
         this.loadRoleList();
-        if(null!=this.state.roleId && ''!=this.state.roleId){
+        if(null!=this.state.roleId && ''!=this.state.roleId && 'null'!=this.state.roleId){
             this.selectedOnchage(this.state.roleId,'','','');
         }
         
@@ -169,7 +169,7 @@ class RuleInfo extends React.Component{
                      ruleSevie.getSelectClassTree().then(response=>{
                         if(response.status!=500){
                             this.setState({treeData:response});
-                            ruleSevie.getAuthListByConditions(name,type).then(response=>{
+                            ruleSevie.getAuthListByConditions(roleId,type).then(response=>{
                                 let  selectedKeys=[];
                                 if(response.resultCode!='3000'){
                                     response.map((item,index)=>{
