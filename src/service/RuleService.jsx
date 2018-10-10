@@ -37,7 +37,7 @@ export default class RuleService{
     }
     //数据菜单
     getAllAuthTypeList(){
-        let url='/reportServer/authType/getAllAuthTypeList';
+        let url='/reportServer/auth/getAllAuthTypeList';
         return HttpService.post(url,{});
     }
 
