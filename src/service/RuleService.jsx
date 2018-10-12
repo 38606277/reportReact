@@ -57,7 +57,6 @@ export default class RuleService{
     }
     //保存select
     saveAuthRules(param){
-        console.log(param);
         let url='/reportServer/auth/saveAuthRules';
         return HttpService.post(url,JSON.stringify(param));
     }

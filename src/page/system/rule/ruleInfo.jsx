@@ -12,10 +12,14 @@ const ruleSevie =new RuleService();
 const Search=Input.Search;
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
+
+
 class RuleInfo extends React.Component{
     constructor(props){
         super(props);
         const panes = [];
+        this.parentNodes = [];
+        this.node = null;
         this.newTabIndex = 0;
         this.state = {
             roleId:this.props.match.params.roleId,
@@ -114,19 +118,71 @@ class RuleInfo extends React.Component{
                 }
             });
         }
-        this.setState({ checkedKeys:checkedKeys });
+        this.setState({ checkedKeys:checkedKeys },function(){});
       }
       //check事件
       onCheck = (checkedKeys,info) => {
+        let checkedKeyVal= checkedKeys.checked;
+        let treedatas=this.state.treeData;
+        this.node=null;
+        this.parentNodes=[];
+        //获取父节点key
+        let arr2 =  this.getNode(treedatas,info.node.props.eventKey);
+        //var arr = [...checkedKeyVal,...arr2];
+        let array = Array.from(new Set([...checkedKeyVal,...arr2]));
+
             if(undefined!=info.node.props.children && 'undefined'!=info.node.props.children){
                 let childrenData=info.node.props.children;
                 let isChecked=info.node.props.checked;
-                this.showExcelRuleTreeNodeReact(isChecked,childrenData,checkedKeys.checked);
+                this.showExcelRuleTreeNodeReact(isChecked,childrenData,array);
             }else{
-                this.setState({ checkedKeys:checkedKeys.checked });
+                this.setState({ checkedKeys:array },function(){});
             }
+            
       }
       
+      getNode(json, nodeId) {
+        //1.第一层 root 深度遍历整个JSON
+        var i = 0;
+        for (i; i < json.length; i++) {
+            if (this.node) {
+                break;
+            }
+            var obj = json[i];
+            //没有就下一个
+            if (!obj || !obj.key) {
+                continue;
+            }
+
+            //2.有节点就开始找，一直递归下去
+            if (obj.key == nodeId) {
+                //找到了与nodeId匹配的节点，结束递归
+                this.node = obj;
+                break;
+            } else {
+                //3.如果有子节点就开始找
+                if (obj.children) {
+                    this.parentNodes.push(obj.key);
+                    //递归往下找
+                    this.getNode(obj.children, nodeId);
+                } else {
+                    //跳出当前递归，返回上层递归
+                    continue;
+                }
+            }
+        }
+        //如果这个循环都没有，则删除父节点
+        if(i==json.length){
+            this.parentNodes.splice(this.parentNodes.length-1,1);
+        }
+        //6.返回结果obj
+        // return {
+        //     parentNode: this.parentNodes,
+        //     node: this.node
+        // };
+        return  this.parentNodes;
+    }
+
       renderTreeNodes = (data) => {
         return data.map((item) => {
           if (item.children) {
