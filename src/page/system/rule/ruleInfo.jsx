@@ -404,7 +404,7 @@ class RuleInfo extends React.Component{
                        this.setState({treeData:[]});
                        ruleSevie.getAllAuthTypeList().then(response=>{
                            if(response.resultCode!='3000'){
-                               this.setState({treeData:response});
+                               this.setState({treeData:response.data});
                                ruleSevie.getAuthByConditions(roleId,type).then(response=>{
                                    let  selectedKeys=[];
                                    if(response.resultCode!='3000'){
