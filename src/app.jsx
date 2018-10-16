@@ -16,6 +16,8 @@ import { HashRouter as Router, Switch, Redirect, Route} from 'react-router-dom'
 // import Home from './page/home/index.jsx';
 import TaskRouter from './page/task/taskrouter.jsx';
 import UserRouter from './page/user/router.jsx';
+import DbsRouter  from './page/system/dbs/dbsrouter.jsx';
+import RuleRouter  from './page/system/rule/rulerouter.jsx';
 // import Login from './page/login/index.jsx';
 
 // import ErrorPage from './page/error/index.jsx';
@@ -42,6 +44,14 @@ import Loadable from 'react-loadable';
 import loading from './util/loading.jsx'
 import { userInfo } from 'os';
 
+
+// function Load(component){
+//     return Loadable({
+//         loader: () => import(component),
+//         loading: loading,
+//         delay:3000
+//     })
+// }
 
 const Login = Loadable({
     loader: () => import('./page/login/index.jsx'),
@@ -73,6 +83,53 @@ const functionCreator = Loadable({
     delay:3000
 });
 
+const Auth = Loadable({
+    loader: () => import('./page/user/Auth.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const QueryData = Loadable({
+    loader: () => import('./page/query/QueryList.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+
+const QueryList = Loadable({
+    loader: () => import('./page/query/QueryList.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const QueryCreator = Loadable({
+    loader: () => import('./page/query/QueryCreator.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const DictList = Loadable({
+    loader: () => import('./page/dict/DictList.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const DictCreator = Loadable({
+    loader: () => import('./page/dict/DictCreator.jsx'),
+    loading: loading,
+    delay:3000
+});
+const EditIn = Loadable({
+    loader: () => import('./page/function/EditIn.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const cor = Loadable({
+    loader: () => import('./page/function/cor.jsx'),
+    loading: loading,
+    delay:3000
+});
 // const UserList = Loadable({
 //     loader: () => import('./page/user/index.jsx'),
 //     loading: loading,
@@ -109,8 +166,19 @@ class App extends React.Component {
                      <Route path="/task" component={TaskRouter}/>
                      <Route path="/user" component={UserRouter}/>
                      <Route path="/RoleList" component={RoleList}/>
+                     <Route path="/dbs" component={DbsRouter}/>
+                     <Route path="/rule" component={RuleRouter}/>
+                     <Route path="/Auth" component={Auth}/>
                     {/* <Route path="/function/EditableTable" component={EditableTable} /> */}
                     <Route path="/function/functionCreator/:action/:id" component={functionCreator} />
+                    
+                    <Route path="/query/QueryData" component={QueryData} />
+                    <Route path="/query/QueryList" component={QueryList} />
+                    <Route path="/query/QueryCreator/:action/:id" component={QueryCreator} />
+
+                     <Route path="/dict/DictList" component={DictList} />
+                    <Route path="/dict/DictCreator/:action/:id" component={DictCreator} />
+
 
                      {/* <Route path="/product" component={ProductRouter}/>
                      <Route path="/user/index" component={UserList} /> 
@@ -127,6 +195,8 @@ class App extends React.Component {
             <Router>
                 <Switch>
                     <Route path="/login" component={Login} />
+                    <Route path="/EditIn" component={EditIn} />
+                    <Route path="/cor" component={cor} />
                     {/* <Route path="/NavSide" component={NavSide} /> */}
                     {/* <Route path="/functionCreator" component={functionCreator}/> */}
                     {/* <Route path="/user/User1" component={User1}/> */}

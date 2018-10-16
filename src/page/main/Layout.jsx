@@ -237,17 +237,22 @@ export default class MainLoyout extends React.Component {
                                 <Menu.Item key="/task/AgencyTaskList"><Link to='/task/AgencyTaskList'>代办任务</Link></Menu.Item>
                                 <Menu.Item key="/task/taskList"><Link to='/task/taskList'>已办任务</Link></Menu.Item>
                             </SubMenu>
+                            <SubMenu key="sub1" title={<span><Icon type="table" /><span>数据查询</span></span>}>
+                                <Menu.Item key=""><Link to='/query/QueryData'>查询报表</Link></Menu.Item>
+                            </SubMenu>
                             <SubMenu key="sub4" title={<span><Icon type="setting" /><span>系统管理</span></span>}>
                                 <Menu.Item key="/user/userList"><Link to='/user/userList'>用户管理</Link></Menu.Item>
                                 <Menu.Item key="/RoleList"><Link to='/RoleList'>角色管理</Link></Menu.Item>
-                                <Menu.Item key="10">权限管理</Menu.Item>
-                                <Menu.Item key="11">连接管理</Menu.Item>
+                                <Menu.Item key="/rule"><Link to='/rule'>权限管理</Link></Menu.Item>
+                                <Menu.Item key="/Auth"><Link to='/Auth'>授权管理</Link></Menu.Item>
+                              
                                 <Menu.Item key="12">权限类型管理</Menu.Item>
                             </SubMenu>
-                            <SubMenu key="sub5" title={<span><Icon type="solution" /><span>基础信息</span></span>}>
+                            <SubMenu key="sub5" title={<span><Icon type="profile" /><span>函数管理</span></span>}>
+                                <Menu.Item key="/dbs"><Link to='/dbs'>数据源管理</Link></Menu.Item>
                                 <Menu.Item key="/function/functionList"><Link to='/function/functionList'>函数管理</Link></Menu.Item>
                                 <Menu.Item key="/query/QueryList"><Link to='/query/QueryList'>查询管理</Link></Menu.Item>
-                                <Menu.Item key="14">数据字典</Menu.Item>
+                                <Menu.Item key="/dict/DictList"><Link to='/dict/DictList'>数据字典</Link></Menu.Item>
                             </SubMenu>
                         </Menu>
                     </Sider>
