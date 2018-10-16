@@ -166,7 +166,7 @@ export default class MainLoyout extends React.Component {
                             />
                         </Tooltip>
                         <Tooltip>
-                            <input type='text'className='search-bar' placeholder='查找...'/>
+                            <input type='text'className='search-bar'  placeholder='查找...'/>
                             <button  className="btn-search" type="submit"><i  className="fa fa-search"></i></button>
                         </Tooltip>
                     </div>
@@ -229,25 +229,30 @@ export default class MainLoyout extends React.Component {
                         collapsible
                         collapsed={this.state.collapsed}
                         onCollapse={() => this.onCollapse(this.state.collapsed)}
-                        theme="dark"
+                        theme="light"
                     >
-                        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline"  >
+                        <Menu theme="light" defaultSelectedKeys={['1']} mode="inline"  >
                             <Menu.Item key="sub" ><Link to='/'><Icon type="home" /><span>首页</span></Link></Menu.Item>
                             <SubMenu key="sub1" title={<span><Icon type="appstore" /><span>我的任务</span></span>}>
                                 <Menu.Item key="/task/AgencyTaskList"><Link to='/task/AgencyTaskList'>代办任务</Link></Menu.Item>
                                 <Menu.Item key="/task/taskList"><Link to='/task/taskList'>已办任务</Link></Menu.Item>
                             </SubMenu>
+                            <SubMenu key="sub1" title={<span><Icon type="table" /><span>数据查询</span></span>}>
+                                <Menu.Item key=""><Link to='/query/QueryData'>查询报表</Link></Menu.Item>
+                            </SubMenu>
                             <SubMenu key="sub4" title={<span><Icon type="setting" /><span>系统管理</span></span>}>
-                                <Menu.Item key="/user"><Link to='/user'>用户管理</Link></Menu.Item>
+                                <Menu.Item key="/user/userList"><Link to='/user/userList'>用户管理</Link></Menu.Item>
+                                <Menu.Item key="/RoleList"><Link to='/RoleList'>角色管理</Link></Menu.Item>
                                 <Menu.Item key="/rule"><Link to='/rule'>权限管理</Link></Menu.Item>
                                 <Menu.Item key="/dbs"><Link to='/dbs'>连接管理</Link></Menu.Item>
                                 <Menu.Item key="/role"><Link to='/role'>角色管理</Link></Menu.Item>
                                 <Menu.Item key="12">权限类型管理</Menu.Item>
                             </SubMenu>
-                            <SubMenu key="sub5" title={<span><Icon type="solution" /><span>基础信息</span></span>}>
+                            <SubMenu key="sub5" title={<span><Icon type="profile" /><span>函数管理</span></span>}>
+                                <Menu.Item key="/dbs"><Link to='/dbs'>数据源管理</Link></Menu.Item>
                                 <Menu.Item key="/function/functionList"><Link to='/function/functionList'>函数管理</Link></Menu.Item>
                                 <Menu.Item key="/query/QueryList"><Link to='/query/QueryList'>查询管理</Link></Menu.Item>
-                                <Menu.Item key="14">数据字典</Menu.Item>
+                                <Menu.Item key="/dict/DictList"><Link to='/dict/DictList'>数据字典</Link></Menu.Item>
                             </SubMenu>
                         </Menu>
                     </Sider>
@@ -256,7 +261,7 @@ export default class MainLoyout extends React.Component {
               <Breadcrumb.Item>User</Breadcrumb.Item>
               <Breadcrumb.Item>Bill</Breadcrumb.Item>
             </Breadcrumb> */}
-                        <Card bodyStyle={{ padding: "1px", marginLeft: 2, background: '#fff', minHeight: 900 }}>
+                        <Card bodyStyle={{ padding: "6px", marginLeft: 2, background: '#ececec', minHeight: 900 }}>
                             {this.props.children}
                         </Card>
                     </Content>

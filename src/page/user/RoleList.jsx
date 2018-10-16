@@ -3,14 +3,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import User from '../../service/user-service.jsx';
 import Pagination from 'antd/lib/pagination';
-import { Table, Divider, Button, Card, Tooltip, Input, Form } from 'antd';
-import LocalStorge from '../../util/LogcalStorge.jsx';
-const localStorge = new LocalStorge();
+import { Table, Divider, Button, Card, Tooltip, Input } from 'antd';
 const _user = new User();
 const Search = Input.Search;
-const FormItem = Form.Item;
 
-class UserList extends React.Component {
+export default class RoleList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -88,16 +85,14 @@ class UserList extends React.Component {
         this.state.list.map((item, index) => {
             item.key = index;
         })
-        const userinfos = localStorge.getStorage('userInfo');
         const dataSource = this.state.list;
-      
         let self = this;
         const columns = [{
             title: 'ID',
             dataIndex: 'userId',
             key: 'userId'
         }, {
-            title: '姓名',
+            title: '角色名称',
             dataIndex: 'userName',
             key: 'userName',
             render: function (text, record, index) {
@@ -107,28 +102,9 @@ class UserList extends React.Component {
             title: '描述',
             dataIndex: 'description',
             key: 'description',
-            width: '200px',
-            editable: true,
-            render: (text, record) => {
-                return (
-                    <Form>
-                        <FormItem >
-                            {this.props.form.getFieldDecorator('userId' + record.key, {
-                                rules: [{ required: true, message: '请输入用户编号!', whitespace: true }],
-                                initialValue:record.userId,
-                            })(
-                                <Input />
-                            )}
-                        </FormItem>
-                    </Form>
-                );
-            }
+            width: '200px'
         }, {
-            title: '角色',
-            dataIndex: 'isAdminText',
-            key: 'isAdminText'
-        }, {
-            title: '入职时间',
+            title: '创建时间',
             dataIndex: 'creationDate',
             key: 'creationDate'
         }, {
@@ -138,25 +114,30 @@ class UserList extends React.Component {
                 <span>
                     <Link to={`/user/userInfo/${record.id}`}>编辑</Link>
                     <Divider type="vertical" />
-                    {record.userName != 'system' && record.id != userinfos.id ? <a onClick={() => this.deleteUser(`${record.id}`)} href="javascript:;">删除</a> : ""}
+                    <a onClick={() => this.deleteUser(`${record.id}`)} href="javascript:;">删除</a>
+                    <Divider type="vertical" />
+                    <a onClick={() => this.deleteUser(`${record.id}`)} href="javascript:;">分配用户</a>
+                    <Divider type="vertical" />
+                    <a onClick={() => this.deleteUser(`${record.id}`)} href="javascript:;">分配权限</a>
                 </span>
             ),
         }];
 
         return (
             <div id="page-wrapper">
-                <Card title="用户列表">
-                    <Tooltip>
-                        <Search
-                            style={{ width: 300, marginBottom: '10px' }}
-                            placeholder="请输入..."
-                            enterButton="查询"
-                            onSearch={value => this.onSearch(value)}
-                        />
-                    </Tooltip>
-                    <Tooltip>
-                        <Button href="#/user/userInfo/null" style={{ float: "right", marginRight: "30px" }} type="primary">新建用户</Button>
-                    </Tooltip>
+                <Card title="角色列表">
+
+                    <Button href="#/user/userInfo/null" type="primary" style={{ marginBottom: '10px' }}>新建角色</Button>
+                    <Button href="#/user/userInfo/null" type="primary" style={{ marginLeft: '10px' }}>关联用户</Button>
+                    <div   style={{float: "right", textAlign:"right"}}>
+                        <Input/>
+                       
+                    </div>
+                    <div   style={{float: "right", textAlign:"right"}}>
+                    <Button href="#/user/userInfo/null" type="primary" style={{ marginLeft: '10px' }}>关联用户</Button>
+                       
+                    </div>
+
 
                     <Table dataSource={dataSource} columns={columns} pagination={false} />
                     <Pagination current={this.state.pageNum}
@@ -168,5 +149,3 @@ class UserList extends React.Component {
         )
     }
 }
-
-export default UserList;

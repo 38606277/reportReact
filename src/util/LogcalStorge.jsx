@@ -48,7 +48,7 @@ export default class LocalStorage {
     getStorage(name) {
         let data = window.localStorage.getItem(name);
         if (data) {
-            let exp=1000*60*1*60;
+            let exp=1000*60*5*60;
             let dataObj = JSON.parse(data);
             let t=new Date().getTime() - dataObj.time;
             if (t>exp) {
