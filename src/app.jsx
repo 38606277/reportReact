@@ -19,6 +19,7 @@ import UserRouter from './page/user/router.jsx';
 import DbsRouter  from './page/system/dbs/dbsrouter.jsx';
 import RuleRouter  from './page/system/rule/rulerouter.jsx';
 import RoleRouter  from './page/system/role/rolerouter.jsx';
+import AuthTypeRouter  from './page/system/authType/authTypeRouter.jsx';
 // import Login from './page/login/index.jsx';
 
 // import ErrorPage from './page/error/index.jsx';
@@ -59,12 +60,6 @@ const Login = Loadable({
     loading: loading,
     delay:3000
 });
-const RoleList = Loadable({
-    loader: () => import('./page/user/RoleList.jsx'),
-    loading: loading,
-    delay:3000
-});
-
 
 const Home = Loadable({
     loader: () => import('./page/home/index.jsx'),
@@ -154,10 +149,6 @@ console.log(UserInfo);
 }
 
 class App extends React.Component {
-     
-   
-    
-    
     render() {
         let LayoutRouter = (
             <Layout>
@@ -165,10 +156,11 @@ class App extends React.Component {
                      <Route exact path="/" component={Home} />
                      <Route path="/task" component={TaskRouter}/>
                      <Route path="/user" component={UserRouter}/>
-                     <Route path="/RoleList" component={RoleList}/>
                      <Route path="/dbs" component={DbsRouter}/>
                      <Route path="/rule" component={RuleRouter}/>
                      <Route path="/Auth" component={Auth}/>
+                     <Route path="/role" component={RoleRouter}/>
+                     <Route path="/authType" component={AuthTypeRouter}/>
                     {/* <Route path="/function/EditableTable" component={EditableTable} /> */}
                     <Route path="/function/functionCreator/:action/:id" component={functionCreator} />
                     
@@ -178,16 +170,8 @@ class App extends React.Component {
 
                      <Route path="/dict/DictList" component={DictList} />
                     <Route path="/dict/DictCreator/:action/:id" component={DictCreator} />
-
-
-                     {/* <Route path="/product" component={ProductRouter}/>
-                     <Route path="/user/index" component={UserList} /> 
-                     <Route path="/user/userInfo/:userId" component={UserInfo} /> */}
                     
                     <Route path="/function/functionList" component={functionList} />
-                    {/* <Route path="/query/QueryList" component={QueryList} /> */} 
-                   
-                    {/* <Route component={ErrorPage} /> */}
                 </Switch>
             </Layout>
         );
