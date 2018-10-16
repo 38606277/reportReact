@@ -9,6 +9,7 @@ import Table from 'antd/lib/table';
 import { Card, Button, Divider, Input, Form, FormItem, Icon, Row, Col } from 'antd';
 
 import FunctionService from '../../service/FunctionService.jsx'
+import HttpService from '../../util/HttpService.jsx';
 
 
 const functionService = new FunctionService();
@@ -23,30 +24,17 @@ class functionList extends React.Component {
         };
     }
     componentDidMount() {
-        //this.loadUserList();
-        functionService.getFunctionList()
+        let param = {};
+        HttpService.post('reportServer/function1/getAllFunctionName', null)
             .then(res => {
-                this.setState({ list: res })
+                if (res.resultCode == "1000")
+                    this.setState({ list: res.data })
+                else
+                    message.error(res.message);
+
             });
     }
-    loadUserList() {
-        let listParam = {};
-        listParam.userId = _mm.getStorage('userInfo').userId;
-        listParam.pageNum = this.state.pageNum;
-        listParam.perPage = this.state.perPage;
-        // 如果是搜索的话，需要传入搜索类型和搜索关键字
-        if (this.state.listType === 'search') {
-            listParam.keyword = this.state.searchKeyword;
-        }
-        _user.getUserList(listParam).then(res => {
-            this.setState(res);
-        }, errMsg => {
-            this.setState({
-                list: []
-            });
-            _mm.errorTips(errMsg);
-        });
-    }
+
     // 页数发生变化的时候
     onPageNumChange(pageNum) {
         this.setState({
@@ -85,14 +73,15 @@ class functionList extends React.Component {
                         <Col span={10}></Col>
                         <Col span={4}> <Button type="primary" style={{width:"100px"}} onClick={()=>window.location='#/function/functionCreator/creat/0'} >新建</Button></Col>
                     </Row> */}
-
+                    <Button href="#/function/functionCreator/create/0" style={{ marginRight: "10px" }} type="primary">新建函数</Button>
+                    <Button href="" style={{ marginRight: "15px" }} type="primary">函数类别管理</Button>
                     <Search
-                        style={{ width: 300, marginBottom: '10px' }}
+                        style={{ maxWidth: 300, marginBottom: '10px', float: "right" }}
                         placeholder="请输入..."
                         enterButton="查询"
                         onSearch={value => this.onSearch(value)}
                     />
-                    <Button href="#/function/functionCreator/creat/0" style={{ float: "right", marginRight: "30px" }} type="primary">新建函数</Button>
+
                     <Table dataSource={this.state.list}>
                         <Column
                             title="函数ID"

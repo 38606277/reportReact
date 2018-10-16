@@ -11,20 +11,20 @@ export default class FunctionService {
     // 获取函数列表
     getFunctionList() {
 
-        let url = "reportServer/function/getAllFunctionName";
+        let url = "reportServer/function1/getAllFunctionName";
         let param = {
             name: 'Hubot',
             login: 'hubot'
         };
   
-        return HttpService.post(url,param);
+        return HttpService.post(url,null);
     }
 
 
     // 获取函数列表
     getFunctionByID(funcid) {
 
-        let url = "reportServer/function/getFunctionByID/"+funcid;
+        let url = "reportServer/function1/getFunctionByID/"+funcid;
         let param = {
             
         };
@@ -53,7 +53,7 @@ export default class FunctionService {
     // 保存一个函数定义
     CreateFunction(jFunc) {
 
-        let url = "reportServer/function/saveUserSql";
+        let url = "reportServer/function1/saveUserSql";
         // let param = {
         //     sqlType: "sql",
         //     sql:aSQL

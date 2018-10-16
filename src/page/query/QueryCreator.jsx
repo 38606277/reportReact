@@ -7,14 +7,13 @@ import CodeMirror from 'react-codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/sql/sql';
 import 'codemirror/theme/ambiance.css';
-import EditableTable from './EditTable.jsx';
 import EditIn from './EditIn.jsx';
 import EditOut from './EditOut.jsx';
 import FunctionService from '../../service/FunctionService.jsx'
 import HttpService from '../../util/HttpService.jsx';
 
 import DbService from '../../service/DbService.jsx'
-import './function.scss';
+import './query.scss';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -118,6 +117,10 @@ class functionCreator extends React.Component {
             });
     }
    
+    onRef = (ref) => {
+        this.child = ref
+    }
+
     onSaveClick() {
         //alert("hello");
         //校验参数合法性
@@ -139,6 +142,8 @@ class functionCreator extends React.Component {
         //   }
         // });
 
+
+
         //调用服务保存
 
         //this.child.setFormValue(res.data.in);
@@ -147,41 +152,28 @@ class functionCreator extends React.Component {
             inData:this.inParam.getFormValue(),
             outData:this.outParam.getFormValue(),
         });
-        formInfo.type='sql';
         formInfo.func_sql=this.refs.editorsql.codeMirror.getValue();
         formInfo.in=this.state.inData;
         formInfo.out=this.state.outData;
         console.log(formInfo);
-        if(this.state.action=='create')
-        {
-            HttpService.post("reportServer/function1/createFunction", JSON.stringify(formInfo))
-            .then(res => {
-                if (res.resultCode == "1000") {
-                    message.success('创建成功！')
-                }
-                else
-                    message.error(res.message);
+        // let sql = this.refs.editorsql.codeMirror.getValue();
+        // this.func_data = formInfo;
+        // this.func_data.in = this.child.getFormValue();
+        // //this.func_data.in = this.state.inData;
+        // this.func_data.out = this.state.outData;
+        // this.func_data.program = sql;
 
-            });
+        // console.log(JSON.stringify(this.func_data));
+        // console.log(this.state);
+        //
+        // functionService.CreateFunction(userInfo)
+        // .then(res=>{
 
-        }else if(this.state.action=='update')
-        {
-            HttpService.post("reportServer/function1/updateFunction", JSON.stringify(formInfo))
-            .then(res => {
-                if (res.resultCode == "1000") {
-                    message.success(`更新成功！`)
-                }
-                else
-                    message.error(res.message);
-
-            });
-
-
-        }
-
+        // })
         //message.success(`${userInfo.userName} 保存成功!：${userInfo.userPwd}`)
     }
 
+  
     onGenerateClick() {
         let aSQL = this.refs.editorsql.codeMirror.getValue();
 
@@ -197,10 +189,10 @@ class functionCreator extends React.Component {
                         if(item.type=='in')
                         {
                            let aIn={
-                                "dict_id": undefined,
+                                "dict_id": "",
                                 "authtype_id": "",
                                 "in_name": item.name,
-                                "dict_name": undefined,
+                                "dict_name": "",
                                 "isformula": 0,
                                 "authtype_desc": "",
                                 "datatype": item.datatype,
@@ -231,24 +223,10 @@ class functionCreator extends React.Component {
                     message.error(res.message);
                 }
             });
+
+
+
     }
-    formatClick(){
-        let param={
-            sql:this.refs.editorsql.codeMirror.getValue(),
-            type:'oracle'
-        }
-        HttpService.post("reportServer/utils/formatSQL", JSON.stringify(param))
-            .then(res => {
-                if (res.resultCode == "1000") {
-                    this.refs.editorsql.codeMirror.setValue(res.data)
-                }
-                else
-                    message.error(res.message);
-
-            });
-
-    };
-
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -282,7 +260,7 @@ class functionCreator extends React.Component {
 
         return (
             <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px' }}>
-                <Card title="创建函数" bodyStyle={{ padding: "5px" }} headStyle={{ height: '60px' }}
+                <Card title="创建查询" bodyStyle={{ padding: "5px" }} headStyle={{ height: '60px' }}
                     extra={<Dropdown overlay={(
                         <Menu onClick={this.handleMenuClick}>
                             <Menu.Item key="1">存储过程</Menu.Item>
@@ -301,7 +279,7 @@ class functionCreator extends React.Component {
                                     <div>
                                         <Button type="primary" icon="tool" onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成函数</Button>
                                         <Button icon="save" onClick={() => this.onSaveClick()} style={{ marginRight: "10px" }} >保存</Button>
-                                        <Button icon="list" onClick={() => window.location = '#/function/functionList'} style={{ marginRight: "10px" }}   >退出</Button>
+                                        <Button icon="list" onClick={() => window.location = '#/query/QueryList'} style={{ marginRight: "10px" }}   >退出</Button>
                                     </div>
                                     <Divider style={{ margin: "8px 0 8px 0" }} />
 
@@ -316,7 +294,7 @@ class functionCreator extends React.Component {
                                             )
                                         }
                                     </FormItem>
-                                    <Tabs type="card" tabBarExtraContent={<Button icon="profile" onClick={()=>this.formatClick()} style={{ color: "blue" }}></Button>}>
+                                    <Tabs type="card" tabBarExtraContent={<Button icon="profile" style={{ color: "blue" }}></Button>}>
                                         <TabPane tab="输入SQL" key="1">
                                             <CodeMirror ref="editorsql" value='' style={{ height: '600px', width: '450px', border: "1px" }} options={options} />
                                         </TabPane>
@@ -328,7 +306,7 @@ class functionCreator extends React.Component {
                                 <Card bodyStyle={{ padding: '5px' }}>
                                     <Row>
                                         <Col span={12}>
-                                            <FormItem label=" 函数类别"    >
+                                            <FormItem label=" 查询类别"    >
                                                 {
                                                     getFieldDecorator('class_id', {
                                                         rules: [{ required: true, message: '函数名称是必须的' }],
@@ -343,7 +321,7 @@ class functionCreator extends React.Component {
                                             </FormItem>
                                         </Col>
                                         <Col span={12}>
-                                            <FormItem label="函数ID"  >
+                                            <FormItem label="查询ID"  >
                                                 {
                                                     getFieldDecorator('func_id', {
                                                     })(
@@ -356,7 +334,7 @@ class functionCreator extends React.Component {
                                     </Row>
                                     <Row>
                                         <Col span={24}>
-                                            <FormItem label=" 函数名称"   >
+                                            <FormItem label=" 查询名称"   >
                                                 {
                                                     getFieldDecorator('func_name', {
                                                         rules: [{ required: true, message: '函数名称是必须的' }],
@@ -369,7 +347,7 @@ class functionCreator extends React.Component {
                                     </Row>
                                     <Row>
                                         <Col span={24}>
-                                            <FormItem label="函数说明" style={{ marginLeft: '14px' }}  >
+                                            <FormItem label="查询说明" style={{ marginLeft: '14px' }}  >
                                                 {
                                                     getFieldDecorator('func_desc', {
                                                     })(

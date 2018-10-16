@@ -1,74 +1,75 @@
 
-import React                from 'react';
-import { Link }             from 'react-router-dom';
-import User                 from '../../service/user-service.jsx';
-import Pagination           from 'antd/lib/pagination';
-import {Table,Divider,Button,Card, Tooltip,Input}  from 'antd';
-import  LocalStorge         from '../../util/LogcalStorge.jsx';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import User from '../../service/user-service.jsx';
+import Pagination from 'antd/lib/pagination';
+import { Table, Divider, Button, Card, Tooltip, Input, Form } from 'antd';
+import LocalStorge from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
 const _user = new User();
 const Search = Input.Search;
+const FormItem = Form.Item;
 
-class UserList extends React.Component{
-    constructor(props){
+class UserList extends React.Component {
+    constructor(props) {
         super(props);
         this.state = {
-            list            : [],
-            pageNum         : 1,
-            perPage         : 10,
-            listType        :'list',
-            searchKeyword:''
+            list: [],
+            pageNum: 1,
+            perPage: 10,
+            listType: 'list',
+            searchKeyword: ''
         };
     }
-    componentDidMount(){
+    componentDidMount() {
         this.loadUserList();
     }
-    loadUserList(){
+    loadUserList() {
         let listParam = {};
-        listParam.pageNum  = this.state.pageNum;
-        listParam.perPage  = this.state.perPage;
+        listParam.pageNum = this.state.pageNum;
+        listParam.perPage = this.state.perPage;
         // 如果是搜索的话，需要传入搜索类型和搜索关键字
-        if(this.state.listType === 'search'){
-            listParam.keyword    = this.state.searchKeyword;
+        if (this.state.listType === 'search') {
+            listParam.keyword = this.state.searchKeyword;
         }
         _user.getUserList(listParam).then(response => {
             this.setState(response.data);
         }, errMsg => {
             this.setState({
-                list : []
+                list: []
             });
             // _mm.errorTips(errMsg);
         });
     }
     // 页数发生变化的时候
-    onPageNumChange(pageNum){
+    onPageNumChange(pageNum) {
         this.setState({
-            pageNum : pageNum
+            pageNum: pageNum
         }, () => {
             this.loadUserList();
         });
     }
     // 数据变化的时候
-    onValueChange(e){
-        let name    = e.target.name,
-            value   = e.target.value.trim();
+    onValueChange(e) {
+        let name = e.target.name,
+            value = e.target.value.trim();
         this.setState({
-            [name] : value
+            [name]: value
         });
     }
-     // 搜索
-     onSearch(searchKeyword){
+    // 搜索
+    onSearch(searchKeyword) {
         let listType = searchKeyword === '' ? 'list' : 'search';
         this.setState({
-            listType:listType,
-            pageNum         : 1,
-            searchKeyword   : searchKeyword
+            listType: listType,
+            pageNum: 1,
+            searchKeyword: searchKeyword
         }, () => {
             this.loadUserList();
         });
     }
-    deleteUser(id){
-        if(confirm('确认删除吗？')){
+    deleteUser(id) {
+        if (confirm('确认删除吗？')) {
             _user.delUser(id).then(response => {
                 alert("删除成功");
                 this.loadUserList();
@@ -78,75 +79,91 @@ class UserList extends React.Component{
             });
         }
     }
-     //展示当前行信息
-  showCurRowMessage(record){
-    alert("key:"+record.userId + " name:"+record.userName + " description:" + record.description);
-  }
+    //展示当前行信息
+    showCurRowMessage(record) {
+        alert("key:" + record.userId + " name:" + record.userName + " description:" + record.description);
+    }
 
-    render(){
-        this.state.list.map((item,index)=>{
-            item.key=index;
+    render() {
+        this.state.list.map((item, index) => {
+            item.key = index;
         })
-        const userinfos=localStorge.getStorage('userInfo');
+        const userinfos = localStorge.getStorage('userInfo');
         const dataSource = this.state.list;
+      
         let self = this;
-          const columns = [{
+        const columns = [{
             title: 'ID',
             dataIndex: 'userId',
             key: 'userId'
-          },{
+        }, {
             title: '姓名',
             dataIndex: 'userName',
             key: 'userName',
-            render: function(text, record, index) {
-               return <Link to={ `/user/UserView/${record.id}` }>{text}</Link>;
-             } 
-          }, {
+            render: function (text, record, index) {
+                return <Link to={`/user/UserView/${record.id}`}>{text}</Link>;
+            }
+        }, {
             title: '描述',
             dataIndex: 'description',
             key: 'description',
-            width:'200px'
-          },{
-            title:'角色',
-            dataIndex:'isAdminText',
-            key:'isAdminText'
-          }, {
+            width: '200px',
+            editable: true,
+            render: (text, record) => {
+                return (
+                    <Form>
+                        <FormItem >
+                            {this.props.form.getFieldDecorator('userId' + record.key, {
+                                rules: [{ required: true, message: '请输入用户编号!', whitespace: true }],
+                                initialValue:record.userId,
+                            })(
+                                <Input />
+                            )}
+                        </FormItem>
+                    </Form>
+                );
+            }
+        }, {
+            title: '角色',
+            dataIndex: 'isAdminText',
+            key: 'isAdminText'
+        }, {
             title: '入职时间',
             dataIndex: 'creationDate',
             key: 'creationDate'
-          },{
+        }, {
             title: '操作',
             dataIndex: '操作',
             render: (text, record) => (
                 <span>
-                  <Link to={ `/user/userInfo/${record.id}` }>编辑</Link>
-                  <Divider type="vertical" />
-                  {record.userName!='system' &&record.id!=userinfos.id? <a onClick={()=>this.deleteUser(`${record.id}`)} href="javascript:;">删除</a>:""}
+                    <Link to={`/user/userInfo/${record.id}`}>编辑</Link>
+                    <Divider type="vertical" />
+                    {record.userName != 'system' && record.id != userinfos.id ? <a onClick={() => this.deleteUser(`${record.id}`)} href="javascript:;">删除</a> : ""}
                 </span>
-              ),
-          }];
-       
+            ),
+        }];
+
         return (
             <div id="page-wrapper">
-            <Card title="用户列表">
-                <Tooltip>
-                     <Search
-                        style={{ width: 300,marginBottom:'10px' }}
-                        placeholder="请输入..."
-                        enterButton="查询"
-                        onSearch={value => this.onSearch(value)}
+                <Card title="用户列表">
+                    <Tooltip>
+                        <Search
+                            style={{ width: 300, marginBottom: '10px' }}
+                            placeholder="请输入..."
+                            enterButton="查询"
+                            onSearch={value => this.onSearch(value)}
                         />
-                </Tooltip>
-                <Tooltip>
-                    <Button href="#/user/userInfo/null" style={{ float: "right", marginRight: "30px" }} type="primary">新建用户</Button>
-                </Tooltip>
-                
-                <Table dataSource={dataSource} columns={columns}  pagination={false}/>
-                 <Pagination current={this.state.pageNum} 
-                    total={this.state.total} 
-                    onChange={(pageNum) => this.onPageNumChange(pageNum)}/> 
-            </Card>
-                
+                    </Tooltip>
+                    <Tooltip>
+                        <Button href="#/user/userInfo/null" style={{ float: "right", marginRight: "30px" }} type="primary">新建用户</Button>
+                    </Tooltip>
+
+                    <Table dataSource={dataSource} columns={columns} pagination={false} />
+                    <Pagination current={this.state.pageNum}
+                        total={this.state.total}
+                        onChange={(pageNum) => this.onPageNumChange(pageNum)} />
+                </Card>
+
             </div>
         )
     }

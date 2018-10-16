@@ -16,7 +16,7 @@ const functionService = new FunctionService();
 const { Column, ColumnGroup } = Table;
 const Search = Input.Search;
 
-export default class QueryList extends React.Component {
+export default class DictList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -66,15 +66,14 @@ export default class QueryList extends React.Component {
 
         return (
             <div>
-                <Card title="查询列表" bodyStyle={{ padding: "10px" }}>
+                <Card title="字典列表" bodyStyle={{ padding: "10px" }}>
                     {/* <Row style={{marginBottom:"10px"}}>
                         <Col span={6}> <Input prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="输入函数名称" /></Col>
                         <Col span={4}></Col>
                         <Col span={10}></Col>
                         <Col span={4}> <Button type="primary" style={{width:"100px"}} onClick={()=>window.location='#/function/functionCreator/creat/0'} >新建</Button></Col>
                     </Row> */}
-                    <Button href="#/query/QueryCreator/creat/0" style={{ marginRight: "10px" }} type="primary">新建查询</Button>
-                    <Button href="" style={{ marginRight: "15px" }} type="primary">查询类别管理</Button>
+                    <Button href="#/dict/DictCreator/creat/0" style={{ marginRight: "10px" }} type="primary">新建数据字典</Button>
                     <Search
                         style={{ maxWidth: 300, marginBottom: '10px', float: "right" }}
                         placeholder="请输入..."
@@ -84,22 +83,22 @@ export default class QueryList extends React.Component {
 
                     <Table dataSource={this.state.list}>
                         <Column
-                            title="查询ID"
+                            title="字典ID"
                             dataIndex="func_id"
                             key="func_name"
                         />
                         <Column
-                            title="查询名称"
+                            title="字典名称"
                             dataIndex="func_name"
                             key="func_desc"
                         />
                         <Column
-                            title="查询描述"
+                            title="字典描述"
                             dataIndex="func_desc"
                             key="func_desc"
                         />
                         <Column
-                            title="查询类别"
+                            title="字典类别"
                             dataIndex="class_name"
                             key="class_name"
                         />
@@ -113,7 +112,7 @@ export default class QueryList extends React.Component {
                             key="action"
                             render={(text, record) => (
                                 <span>
-                                    <a href={`#/query/QueryCreator/update/${record.func_id}`}>编辑</a>
+                                    <a href={`#/dict/DictCreator/update/${record.func_id}`}>编辑</a>
                                     <Divider type="vertical" />
                                     <a href="javascript:;">删除{record.name}</a>
                                 </span>
