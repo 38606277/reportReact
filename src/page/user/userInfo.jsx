@@ -28,8 +28,8 @@ class UserInfo extends React.Component{
             description:'',
             userId:'',
             isw:false,
-            roleList:[]
-            
+            roleList:[],
+            isAdminText:[]
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleConfirmBlur  = this.handleConfirmBlur.bind(this);
@@ -39,17 +39,21 @@ class UserInfo extends React.Component{
     
  //初始化加载调用方法
     componentDidMount(){
-      _user.getRoleList().then(response=>{
+      _user.getRoleListByUserId(this.state._id).then(response=>{
       const children=[];
-        for (let i = 0; i < response.length; i++) {
-          children.push(<Option key={response[i].roleId}>{response[i].roleName}</Option>);
+        let rlist=response.roleList;
+        let urlist=response.userroleList;
+        for (let i = 0; i < rlist.length; i++) {
+          children.push(<Option key={rlist[i].roleId}>{rlist[i].roleName}</Option>);
         }
-        this.setState({roleList:children});
+        this.setState({roleList:children,isAdminText:urlist},function(){
+        });
       });
        if(null!=this.state._id && ''!=this.state._id  && 'null'!=this.state._id){
             _user.getUserInfo(this.state._id).then(response => {
                 this.setState(response.data.userInfo);
                // this.props.form.setFieldsValue(response.data.userInfo);
+               //console.log(this.state.isAdminText);
                 this.props.form.setFieldsValue({
                       userName:response.data.userInfo.userName,
                       encryptPwd:response.data.userInfo.encryptPwd,
@@ -57,7 +61,7 @@ class UserInfo extends React.Component{
                       endDate:moment(response.data.userInfo.endDate,dateFormat),
                       description:response.data.userInfo.description,
                       userId:response.data.userInfo.userId,
-                      isAdmin:response.data.userInfo.isAdmin.toString(),
+                      isAdminText:this.state.isAdminText,
                       confirm:''
                 });
             }, errMsg => {
@@ -87,8 +91,14 @@ class UserInfo extends React.Component{
     }
     //编辑字段对应值
     onSelectChange(name,value){
-         this.setState({[name]:value});  
-         this.props.form.setFieldsValue({[name]:value});
+          if(name=="isAdminText"){
+           let valuess=value.join(",");
+           console.log(valuess);
+            this.setState({[name]:valuess}); 
+          }else{
+            this.setState({[name]:value}); 
+          }
+          this.props.form.setFieldsValue({[name]:value});
     
   }
     onValueChangeDate(name,date,dateString){
@@ -246,18 +256,19 @@ handleSubmit (e) {
                           <Option value='0' >普通员工</Option>
                           <Option value='1' >管理员</Option>
                         </Select> */}
-                      {getFieldDecorator('isAdmin',{
+                      {getFieldDecorator('isAdminText',{
                           rules:[{required: true, message: '请选择角色!'}],
                         })(
                         <Select
-                                    style={{ width: '120px' }}
-                                    placeholder="请选择"
-                                    name='isAdmin' 
-                                    value={this.state.isAdmin.toString()}
-                                    onChange={(value) =>this.onSelectChange('isAdmin',value)}
-                                  >
-                                    {this.state.roleList}
-                                  </Select>
+                            mode="multiple"
+                            style={{ width: '120px' }}
+                            placeholder="请选择"
+                            name='isAdminText' 
+                           
+                            onChange={(value) =>this.onSelectChange('isAdminText',value)}
+                          >
+                            {this.state.roleList}
+                          </Select>
                         )}
                   </FormItem>
               </Col>

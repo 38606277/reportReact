@@ -72,6 +72,9 @@ class User{
         let url='/reportServer/rule/getRoleList';
         return HttpService.post(url,{});
     }
+    getRoleListByUserId(userid){
+        return HttpService.post('reportServer/auth/getRoleListByUserId',JSON.stringify({'userid':userid}));
+    }
 }
 
 export default User;
