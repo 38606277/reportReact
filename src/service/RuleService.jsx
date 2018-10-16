@@ -22,6 +22,11 @@ export default class RuleService{
         let params=[id,param];
         return HttpService.post(url,JSON.stringify(params));
     }
+    getAuthByConditionsTable(id,param){
+        let url='/reportServer/auth/getAuthByConditionsTable';
+        let params=[id,param];
+        return HttpService.post(url,JSON.stringify(params));
+    }
     
     //模板 
     getDirectory(){

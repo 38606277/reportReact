@@ -387,7 +387,7 @@ class RuleInfo extends React.Component{
              }else if(type=='table'){
                 //如果treeData不为空，根据人名称查人员选中事项
                 if(this.state.treeData.length>0 && ''==isChange){
-                   ruleSevie.getAuthByConditions(roleId,type).then(response=>{
+                   ruleSevie.getAuthByConditionsTable(roleId,type).then(response=>{
                        let  selectedKeys=[];
                        if(response.resultCode!='3000'){
                            response.map((item,index)=>{
@@ -405,7 +405,7 @@ class RuleInfo extends React.Component{
                        ruleSevie.getAllAuthTypeList().then(response=>{
                            if(response.resultCode!='3000'){
                                this.setState({treeData:response.data});
-                               ruleSevie.getAuthByConditions(roleId,type).then(response=>{
+                               ruleSevie.getAuthByConditionsTable(roleId,type).then(response=>{
                                    let  selectedKeys=[];
                                    if(response.resultCode!='3000'){
                                        response.map((item,index)=>{
