@@ -7,7 +7,7 @@ export default class RuleService{
         return HttpService.post(url,{});
     }
     getAuthListByConditions(id,param){
-        let url='/reportServer/rule/getAuthListByConditions';
+        let url='/reportServer/auth/getAuthListByConditions';
         let params=[id,param];
         return HttpService.post(url,JSON.stringify(params));
     }
@@ -18,7 +18,7 @@ export default class RuleService{
         return HttpService.post(url,{});
     }
     getAuthByConditions(id,param){
-        let url='/reportServer/rule/getAuthByConditions';
+        let url='/reportServer/auth/getAuthByConditions';
         let params=[id,param];
         return HttpService.post(url,JSON.stringify(params));
     }
@@ -31,23 +31,23 @@ export default class RuleService{
    
     //功能、网站菜单
     getFunRuleList(param){
-        let url='/reportServer/rule/getFunRuleListReact';
+        let url='/reportServer/auth/getFunRuleListReact';
         let params={type:param};
         return HttpService.post(url,JSON.stringify(params));
     }
     //数据菜单
     getAllAuthTypeList(){
-        let url='/reportServer/authType/getAllAuthTypeList';
+        let url='/reportServer/auth/getAllAuthTypeList';
         return HttpService.post(url,{});
     }
 
     getDataList(){
-        let url='/reportServer/rule/getDataList';
+        let url='/reportServer/auth/getDataList';
         return HttpService.post(url,{});
     }
 
     getDepartmentList(){
-        let url='/reportServer/rule/getDepartmentList';
+        let url='/reportServer/auth/getDepartmentList';
         return HttpService.post(url,{});
     }
 
@@ -57,8 +57,7 @@ export default class RuleService{
     }
     //保存select
     saveAuthRules(param){
-        console.log(param);
-        let url='/reportServer//rule/saveAuthRules';
+        let url='/reportServer/auth/saveAuthRules';
         return HttpService.post(url,JSON.stringify(param));
     }
     

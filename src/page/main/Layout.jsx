@@ -244,8 +244,8 @@ export default class MainLoyout extends React.Component {
                                 <Menu.Item key="/user/userList"><Link to='/user/userList'>用户管理</Link></Menu.Item>
                                 <Menu.Item key="/RoleList"><Link to='/RoleList'>角色管理</Link></Menu.Item>
                                 <Menu.Item key="/rule"><Link to='/rule'>权限管理</Link></Menu.Item>
-                                <Menu.Item key="/Auth"><Link to='/Auth'>授权管理</Link></Menu.Item>
-                              
+                                <Menu.Item key="/dbs"><Link to='/dbs'>连接管理</Link></Menu.Item>
+                                <Menu.Item key="/role"><Link to='/role'>角色管理</Link></Menu.Item>
                                 <Menu.Item key="12">权限类型管理</Menu.Item>
                             </SubMenu>
                             <SubMenu key="sub5" title={<span><Icon type="profile" /><span>函数管理</span></span>}>

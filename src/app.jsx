@@ -18,6 +18,7 @@ import TaskRouter from './page/task/taskrouter.jsx';
 import UserRouter from './page/user/router.jsx';
 import DbsRouter  from './page/system/dbs/dbsrouter.jsx';
 import RuleRouter  from './page/system/rule/rulerouter.jsx';
+import RoleRouter  from './page/system/role/rolerouter.jsx';
 // import Login from './page/login/index.jsx';
 
 // import ErrorPage from './page/error/index.jsx';
@@ -161,8 +162,7 @@ class App extends React.Component {
         let LayoutRouter = (
             <Layout>
                 <Switch>
-                    <Route exact path="/" component={Home} />
-
+                     <Route exact path="/" component={Home} />
                      <Route path="/task" component={TaskRouter}/>
                      <Route path="/user" component={UserRouter}/>
                      <Route path="/RoleList" component={RoleList}/>

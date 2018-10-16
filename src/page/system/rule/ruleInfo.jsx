@@ -1,25 +1,28 @@
 
 import React                from 'react';
-import { Link }             from 'react-router-dom';
-import User                 from '../../../service/user-service.jsx';
+import Role                 from '../../../service/RoleService.jsx';
 import RuleService          from '../../../service/RuleService.jsx';
 
 import {Table,Button,Card, Tooltip,Input,message,Tree,Tabs, Select,Icon}  from 'antd';
 import Pagination           from 'antd/lib/pagination';
-import { removeFileItem } from 'antd/lib/upload/utils';
 
 const TreeNode = Tree.TreeNode;
-const user = new User();
+const _role = new Role();
 const ruleSevie =new RuleService();
 const Search=Input.Search;
 const TabPane = Tabs.TabPane;
 const Option = Select.Option;
+
+
 class RuleInfo extends React.Component{
     constructor(props){
         super(props);
         const panes = [];
+        this.parentNodes = [];
+        this.node = null;
         this.newTabIndex = 0;
         this.state = {
+            roleId:this.props.match.params.roleId,
             list : [],
             pageNum         : 1,
             perPage         : 10,
@@ -31,38 +34,49 @@ class RuleInfo extends React.Component{
             tabPosition: 'top',
             treeData:[],
             activeKey:"select",
-            searchKeyword:'',
+            roleName:'',
             panes,
         };
     }
     
     componentDidMount(){
-        this.loadUserList();
+        this.loadRoleList();
+        if(null!=this.state.roleId && ''!=this.state.roleId && 'null'!=this.state.roleId){
+            this.selectedOnchage(this.state.roleId,'','','');
+        }
+        
     }
-    loadUserList(){
+    loadRoleList(){
         let listParam = {};
         listParam.pageNum  = this.state.pageNum;
         listParam.perPage  = this.state.perPage;
         // 如果是搜索的话，需要传入搜索类型和搜索关键字
         if(this.state.listType === 'search'){
-            listParam.keyword    = this.state.searchKeyword;
+            listParam.roleName    = this.state.roleName;
         }
-        user.getUserList(listParam).then(response => {
-            this.setState(response.data);
+        _role.getRoleList(listParam).then(response => {
+            this.setState(response);
+           
         }, errMsg => {
             this.setState({
                 list : []
             });
         });
+        
+    }
+    onValueChange(e){
+        let name = e.target.name,
+        value = e.target.value.trim();
+           
+        this.setState({roleName:value});
     }
     // 搜索
     onSearch(){
-        console.log(this.state.searchKeyword);
         this.setState({
             pageNum         : 1,
             listType :'search'
         }, () => {
-            this.loadUserList();
+            this.loadRoleList();
         });
     }
     // 页数发生变化的时候
@@ -70,14 +84,11 @@ class RuleInfo extends React.Component{
         this.setState({
             pageNum : pageNum
         }, () => {
-            this.loadUserList();
+            this.loadRoleList();
         });
     }
     //tree
     onExpand = (expandedKeys) => {
-       // console.log('onExpand', expandedKeys);
-        // if not set autoExpandParent to false, if children expanded, parent can not collapse.
-        // or, you can remove all expanded children keys.
         this.setState({
           expandedKeys,
           autoExpandParent: false,
@@ -107,19 +118,71 @@ class RuleInfo extends React.Component{
                 }
             });
         }
-        this.setState({ checkedKeys:checkedKeys });
+        this.setState({ checkedKeys:checkedKeys },function(){});
       }
       //check事件
       onCheck = (checkedKeys,info) => {
+        let checkedKeyVal= checkedKeys.checked;
+        let treedatas=this.state.treeData;
+        this.node=null;
+        this.parentNodes=[];
+        //获取父节点key
+        let arr2 =  this.getNode(treedatas,info.node.props.eventKey);
+        //var arr = [...checkedKeyVal,...arr2];
+        let array = Array.from(new Set([...checkedKeyVal,...arr2]));
+
             if(undefined!=info.node.props.children && 'undefined'!=info.node.props.children){
                 let childrenData=info.node.props.children;
                 let isChecked=info.node.props.checked;
-                this.showExcelRuleTreeNodeReact(isChecked,childrenData,checkedKeys.checked);
+                this.showExcelRuleTreeNodeReact(isChecked,childrenData,array);
             }else{
-                this.setState({ checkedKeys:checkedKeys.checked });
+                this.setState({ checkedKeys:array },function(){});
             }
+            
       }
       
+      getNode(json, nodeId) {
+        //1.第一层 root 深度遍历整个JSON
+        var i = 0;
+        for (i; i < json.length; i++) {
+            if (this.node) {
+                break;
+            }
+            var obj = json[i];
+            //没有就下一个
+            if (!obj || !obj.key) {
+                continue;
+            }
+
+            //2.有节点就开始找，一直递归下去
+            if (obj.key == nodeId) {
+                //找到了与nodeId匹配的节点，结束递归
+                this.node = obj;
+                break;
+            } else {
+                //3.如果有子节点就开始找
+                if (obj.children) {
+                    this.parentNodes.push(obj.key);
+                    //递归往下找
+                    this.getNode(obj.children, nodeId);
+                } else {
+                    //跳出当前递归，返回上层递归
+                    continue;
+                }
+            }
+        }
+        //如果这个循环都没有，则删除父节点
+        if(i==json.length){
+            this.parentNodes.splice(this.parentNodes.length-1,1);
+        }
+        //6.返回结果obj
+        // return {
+        //     parentNode: this.parentNodes,
+        //     node: this.node
+        // };
+        return  this.parentNodes;
+    }
+
       renderTreeNodes = (data) => {
         return data.map((item) => {
           if (item.children) {
@@ -133,8 +196,8 @@ class RuleInfo extends React.Component{
         });
       }
      
-     selectedOnchage(name,types,isChange){
-        this.setState({searchKeyword:name,expandedKeys:[],checkedKeys: []});
+     selectedOnchage(roleId,name,types,isChange){
+        this.setState({roleId:roleId,roleName:name,expandedKeys:[],checkedKeys: []},function(){
          let type='select';
             if(''!=types){
                  type=types;
@@ -144,7 +207,7 @@ class RuleInfo extends React.Component{
              if(type=='select'){
                  //如果treeData不为空，根据人名称查人员选中事项
                  if(this.state.treeData.length>0 && ''==isChange){
-                    ruleSevie.getAuthListByConditions(name,type).then(response=>{
+                    ruleSevie.getAuthListByConditions(roleId,type).then(response=>{
                         let  selectedKeys=[];
                         if(response.resultCode!='3000'){
                             response.map((item,index)=>{
@@ -162,7 +225,7 @@ class RuleInfo extends React.Component{
                      ruleSevie.getSelectClassTree().then(response=>{
                         if(response.status!=500){
                             this.setState({treeData:response});
-                            ruleSevie.getAuthListByConditions(name,type).then(response=>{
+                            ruleSevie.getAuthListByConditions(roleId,type).then(response=>{
                                 let  selectedKeys=[];
                                 if(response.resultCode!='3000'){
                                     response.map((item,index)=>{
@@ -177,11 +240,10 @@ class RuleInfo extends React.Component{
                         }
                     });
                 }
-             }
-             if(type=='template'){
+             }else if(type=='template'){
                   //如果treeData不为空，根据人名称查人员选中事项
                   if(this.state.treeData.length>0 && ''==isChange){
-                    ruleSevie.getAuthByConditions(name,type).then(response=>{
+                    ruleSevie.getAuthByConditions(roleId,type).then(response=>{
                         let  selectedKeys=[];
                         if(response.resultCode!='3000'){
                             response.map((item,index)=>{
@@ -199,7 +261,7 @@ class RuleInfo extends React.Component{
                     ruleSevie.getDirectory().then(response=>{
                         if(response.status!=500){
                                 this.setState({treeData:response});
-                                ruleSevie.getAuthByConditions(name,type).then(response=>{
+                                ruleSevie.getAuthByConditions(roleId,type).then(response=>{
                                     let  selectedKeys=[];
                                     if(response.resultCode!='3000'){
                                         response.map((item,index)=>{
@@ -214,11 +276,10 @@ class RuleInfo extends React.Component{
                         }
                     });
                 }
-             }
-             if(type=='function'){
+             }else if(type=='function'){
                     //如果treeData不为空，根据人名称查人员选中事项
                     if(this.state.treeData.length>0 && ''==isChange){
-                        ruleSevie.getAuthByConditions(name,type).then(response=>{
+                        ruleSevie.getAuthByConditions(roleId,type).then(response=>{
                             let  selectedKeys=[];
                             if(response.resultCode!='3000'){
                                 response.map((item,index)=>{
@@ -236,7 +297,7 @@ class RuleInfo extends React.Component{
                         ruleSevie.getFunctionClass().then(response=>{
                             if(response.status!=500){
                                 this.setState({treeData:response});
-                                ruleSevie.getAuthByConditions(name,type).then(response=>{
+                                ruleSevie.getAuthByConditions(roleId,type).then(response=>{
                                     let  selectedKeys=[];
                                     if(response.resultCode!='3000'){
                                         response.map((item,index)=>{
@@ -251,11 +312,10 @@ class RuleInfo extends React.Component{
                             }
                         });
                     }
-             }
-             if(type=='func'){
+             }else if(type=='func'){
                  //如果treeData不为空，根据人名称查人员选中事项
                  if(this.state.treeData.length>0 && ''==isChange){
-                        ruleSevie.getAuthByConditions(name,type).then(response=>{
+                        ruleSevie.getAuthByConditions(roleId,type).then(response=>{
                             let  selectedKeys=[];
                             if(response.resultCode!='3000'){
                                 response.map((item,index)=>{
@@ -273,7 +333,7 @@ class RuleInfo extends React.Component{
                     ruleSevie.getFunRuleList('excel').then(response=>{
                         if(response.status!=500){
                                 this.setState({treeData:response});
-                                ruleSevie.getAuthByConditions(name,type).then(response=>{
+                                ruleSevie.getAuthByConditions(roleId,type).then(response=>{
                                     let  selectedKeys=[];
                                     if(response.resultCode!='3000'){
                                         response.map((item,index)=>{
@@ -288,11 +348,10 @@ class RuleInfo extends React.Component{
                         }
                     });
                 }
-             }
-             if(type=='webFunc'){
+             }else if(type=='webFunc'){
                  //如果treeData不为空，根据人名称查人员选中事项
                  if(this.state.treeData.length>0 && ''==isChange){
-                    ruleSevie.getAuthByConditions(name,type).then(response=>{
+                    ruleSevie.getAuthByConditions(roleId,type).then(response=>{
                         let  selectedKeys=[];
                         if(response.resultCode!='3000'){
                             response.map((item,index)=>{
@@ -310,7 +369,7 @@ class RuleInfo extends React.Component{
                     ruleSevie.getFunRuleList('web').then(response=>{
                         if(response.status!=500){
                             this.setState({treeData:response});
-                            ruleSevie.getAuthByConditions(name,type).then(response=>{
+                            ruleSevie.getAuthByConditions(roleId,type).then(response=>{
                                 let  selectedKeys=[];
                                 if(response.resultCode!='3000'){
                                     response.map((item,index)=>{
@@ -325,136 +384,173 @@ class RuleInfo extends React.Component{
                         }
                     });
                 }
-             }
-             if(type=='ou'){
-                 //如果treeData不为空，根据人名称查人员选中事项
-                 if(this.state.treeData.length>0 && ''==isChange){
-                    ruleSevie.getAuthByConditions(name,type).then(response=>{
-                        let  selectedKeys=[];
-                        if(response.resultCode!='3000'){
-                            response.map((item,index)=>{
-                                selectedKeys.push(item.funcId);
-                            })
-                            this.setState({
-                                expandedKeys:selectedKeys,
-                                checkedKeys: selectedKeys,
-                            });  
-                        }                 
-                    });
+             }else if(type=='table'){
+                //如果treeData不为空，根据人名称查人员选中事项
+                if(this.state.treeData.length>0 && ''==isChange){
+                   ruleSevie.getAuthByConditions(roleId,type).then(response=>{
+                       let  selectedKeys=[];
+                       if(response.resultCode!='3000'){
+                           response.map((item,index)=>{
+                               selectedKeys.push(item.funcId);
+                           })
+                           this.setState({
+                               expandedKeys:selectedKeys,
+                               checkedKeys: selectedKeys,
+                           });  
+                       }                 
+                   });
                 }else{
-                        //如果treeData为空，根据人与当前tabKey进行先查询treeData后查人员选中事项
-                        this.setState({treeData:[]});
-                        ruleSevie.getAuthTypeListByType().then(response=>{
-                            if(response.resultCode!='3000'){
-                                this.setState({treeData:response});
-                                ruleSevie.getAuthByConditions(name,type).then(response=>{
-                                    let  selectedKeys=[];
-                                    if(response.resultCode!='3000'){
-                                        response.map((item,index)=>{
-                                            selectedKeys.push(item.funcId);
-                                        })
-                                        this.setState({
-                                            expandedKeys:selectedKeys,
-                                            checkedKeys: selectedKeys,
-                                        });  
-                                }          
-                            });
-                        }
-                        });
-                    }
-             }
-             if(type=='dept'){
-                 //如果treeData不为空，根据人名称查人员选中事项
-                 if(this.state.treeData.length>0 && ''==isChange){
-                    ruleSevie.getAuthListByConditions(name,type).then(response=>{
-                        let  selectedKeys=[];
-                        if(response.resultCode!='3000'){
-                            response.map((item,index)=>{
-                                selectedKeys.push(item.funcId);
-                            })
-                            this.setState({
-                                expandedKeys:selectedKeys,
-                                checkedKeys: selectedKeys,
-                            });  
-                        }                 
-                    });
-                 }else{
-                        //如果treeData为空，根据人与当前tabKey进行先查询treeData后查人员选中事项
-                        this.setState({treeData:[]});
-                        ruleSevie.getAuthTypeListByType().then(response=>{
-                            if(response.resultCode!='3000'){
-                                this.setState({treeData:response});
-                                ruleSevie.getAuthListByConditions(name,type).then(response=>{
-                                    let  selectedKeys=[];
-                                    if(response.resultCode!='3000'){
-                                        response.map((item,index)=>{
-                                            selectedKeys.push(item.funcId);
-                                        })
-                                        this.setState({
-                                            expandedKeys:selectedKeys,
-                                            checkedKeys: selectedKeys,
-                                        });   
-                                     }         
-                                 });
-                            }
-                        });
-                }
-             }
-             if(type=='table'){
-                 ruleSevie.getAllAuthTypeList().then(response=>{
-                     if(response.resultCode!='3000'){
-                        const panes = [];
-                        const activeKey = `table`;
-                        response.data.map((item,index)=>{
-                            panes.push({ title: item.name, content: (
-                                <div>
-                                    <Button type="primary" onClick={()=>this.saveSelectObject()}>保存</Button>
-                                    <Tree
-                                        checkable
-                                        onExpand={this.onExpand}
-                                        expandedKeys={this.state.expandedKeys}
-                                        autoExpandParent={this.state.autoExpandParent}
-                                        onCheck={this.onCheck}
-                                        checkedKeys={this.state.checkedKeys}                                       
-                                        selectedKeys={this.state.selectedKeys}
-                                    >
-                                    {this.renderTreeNodes(this.state.treeData)}
-                                    </Tree>
-                                </div>   
-                           ), key: item.value });
+                       //如果treeData为空，根据人与当前tabKey进行先查询treeData后查人员选中事项
+                       this.setState({treeData:[]});
+                       ruleSevie.getAllAuthTypeList().then(response=>{
+                           if(response.resultCode!='3000'){
+                               this.setState({treeData:response.data});
+                               ruleSevie.getAuthByConditions(roleId,type).then(response=>{
+                                   let  selectedKeys=[];
+                                   if(response.resultCode!='3000'){
+                                       response.map((item,index)=>{
+                                           selectedKeys.push(item.funcId);
+                                       })
+                                       this.setState({
+                                           expandedKeys:selectedKeys,
+                                           checkedKeys: selectedKeys,
+                                       });   
+                                    }         
+                                });
+                           }
+                       });
+               }
+               //  ruleSevie.getAllAuthTypeList().then(response=>{
+               //      if(response.resultCode!='3000'){
+               //         const panes = [];
+               //         const activeKey = `table`;
+               //         response.data.map((item,index)=>{
+               //             panes.push({ title: item.name, content: (
+               //                 <div>
+               //                     <Button type="primary" onClick={()=>this.saveSelectObject()}>保存</Button>
+               //                     <Tree
+               //                         checkable
+               //                         onExpand={this.onExpand}
+               //                         expandedKeys={this.state.expandedKeys}
+               //                         autoExpandParent={this.state.autoExpandParent}
+               //                         onCheck={this.onCheck}
+               //                         checkedKeys={this.state.checkedKeys}                                       
+               //                         selectedKeys={this.state.selectedKeys}
+               //                     >
+               //                     {this.renderTreeNodes(this.state.treeData)}
+               //                     </Tree>
+               //                 </div>   
+               //            ), key: item.value });
 
-                        })
-                        this.setState({ panes, activeKey });
-                     }
-                    // this.setState({treeData:response});
-                 });
-            }
+               //         })
+               //         this.setState({ panes, activeKey });
+               //      }
+               //     // this.setState({treeData:response});
+               //  });
+           }
+            //  if(type=='ou'){
+            //      //如果treeData不为空，根据人名称查人员选中事项
+            //      if(this.state.treeData.length>0 && ''==isChange){
+            //         ruleSevie.getAuthByConditions(roleId,type).then(response=>{
+            //             let  selectedKeys=[];
+            //             if(response.resultCode!='3000'){
+            //                 response.map((item,index)=>{
+            //                     selectedKeys.push(item.funcId);
+            //                 })
+            //                 this.setState({
+            //                     expandedKeys:selectedKeys,
+            //                     checkedKeys: selectedKeys,
+            //                 });  
+            //             }                 
+            //         });
+            //     }else{
+            //             //如果treeData为空，根据人与当前tabKey进行先查询treeData后查人员选中事项
+            //             this.setState({treeData:[]});
+            //             ruleSevie.getAuthTypeListByType('ou').then(response=>{
+            //                 if(response.resultCode!='3000'){
+            //                     this.setState({treeData:response});
+            //                     ruleSevie.getAuthByConditions(roleId,type).then(response=>{
+            //                         let  selectedKeys=[];
+            //                         if(response.resultCode!='3000'){
+            //                             response.map((item,index)=>{
+            //                                 selectedKeys.push(item.funcId);
+            //                             })
+            //                             this.setState({
+            //                                 expandedKeys:selectedKeys,
+            //                                 checkedKeys: selectedKeys,
+            //                             });  
+            //                     }          
+            //                 });
+            //             }
+            //             });
+            //         }
+            //  }
+            //  if(type=='dept'){
+            //      //如果treeData不为空，根据人名称查人员选中事项
+            //      if(this.state.treeData.length>0 && ''==isChange){
+            //         ruleSevie.getAuthListByConditions(roleId,type).then(response=>{
+            //             let  selectedKeys=[];
+            //             if(response.resultCode!='3000'){
+            //                 response.map((item,index)=>{
+            //                     selectedKeys.push(item.funcId);
+            //                 })
+            //                 this.setState({
+            //                     expandedKeys:selectedKeys,
+            //                     checkedKeys: selectedKeys,
+            //                 });  
+            //             }                 
+            //         });
+            //      }else{
+            //             //如果treeData为空，根据人与当前tabKey进行先查询treeData后查人员选中事项
+            //             this.setState({treeData:[]});
+            //             ruleSevie.getAuthTypeListByType().then(response=>{
+            //                 if(response.resultCode!='3000'){
+            //                     this.setState({treeData:response});
+            //                     ruleSevie.getAuthListByConditions(roleId,type).then(response=>{
+            //                         let  selectedKeys=[];
+            //                         if(response.resultCode!='3000'){
+            //                             response.map((item,index)=>{
+            //                                 selectedKeys.push(item.funcId);
+            //                             })
+            //                             this.setState({
+            //                                 expandedKeys:selectedKeys,
+            //                                 checkedKeys: selectedKeys,
+            //                             });   
+            //                          }         
+            //                      });
+            //                 }
+            //             });
+            //     }
+            //  }
+             
+        });
      }
      onChangeTab = (activeKey) => {
-        this.setState({ activeKey:activeKey,treeData:[] });
-        let name=this.state.searchKeyword;
-        if(''!=name){
-            this.selectedOnchage(name,activeKey,'true');
-         }
-       
+        this.setState({ activeKey:activeKey,treeData:[] },function () {
+            let name=this.state.roleName;
+            let roleId=this.state.roleId;
+            if(''!=roleId){
+                this.selectedOnchage(roleId,name,activeKey,'true');
+             }
+          });
+             
       }
     saveSelectObject(){
-            let param=[this.state.searchKeyword,this.state.activeKey,this.state.checkedKeys];
+            let param=[this.state.roleId,this.state.activeKey,this.state.checkedKeys];
             ruleSevie.saveAuthRules(param).then(response=>{
                 message.success("保存成功");
             });
     }
-    
     render(){
         this.state.list.map((item,index)=>{
             item.key=index;
         })
         const dataSource = this.state.list;
           const columns = [{
-            dataIndex: 'userName',
-            key: 'userName',
+            dataIndex: 'roleName',
+            key: 'roleName',
             render: (text, record)=> {
-                return <a href="javascript:;" onClick={()=>this.selectedOnchage(record.userName,'','')} >{text}</a>;
+                return <a href="javascript:;" onClick={()=>this.selectedOnchage(record.roleId,record.roleName,'','')} >{text}</a>;
             }
           }];
         const contents=(
@@ -477,14 +573,15 @@ class RuleInfo extends React.Component{
        
         return (
             <div id="page-wrapper">
-            <Card title="用户列表"  style={{float:"left",width:"20%"}}>
+            <Card title="角色列表"  style={{float:"left",width:"20%"}}>
                 <Tooltip>
-                {/* <Input addonAfter={<Icon type="search" onClick={() => this.onSearch()}/>} name="searchKeyword"  /> */}
                     <Search
                         style={{ width: 190,marginBottom:'10px' ,marginLeft: '-20px', marginRight: '-30px', border: '0'}}
-                        placeholder={this.state.searchKeyword==''?'请输入...':this.state.searchKeyword}
+                        placeholder={this.state.roleName==''?'请输入...':this.state.roleName}
                         enterButton="查询"
                         onSearch={value => this.onSearch(value)}
+                        onChange={(e) => this.onValueChange(e)}
+                        value={this.state.roleName}
                         />
                 </Tooltip>
                 <Table dataSource={dataSource} columns={columns}  pagination={false} 
@@ -512,10 +609,11 @@ class RuleInfo extends React.Component{
                     {contents}
                 </TabPane>
                 <TabPane tab="数据权限" key="table">
-                    <Tabs defaultActiveKey="ou" onChange={this.onChangeTab} tabPosition={this.state.tabPosition}>
+                    {contents}
+                    {/* <Tabs  onChange={this.onChangeTab} tabPosition={this.state.tabPosition}>
                     {this.state.panes.map(pane => <TabPane tab={pane.title} key={pane.key}>{pane.content}</TabPane>)}
                        
-                    </Tabs>
+                    </Tabs> */}
                 </TabPane>
                 </Tabs>
             </Card>

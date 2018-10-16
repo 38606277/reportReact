@@ -8,8 +8,8 @@ class RuleRouter extends React.Component{
     render(){
         return (
             <Switch>
-                 <Route path="/rule/ruleInfo" component={RulesInfo} />
-                 <Redirect exact from="/rule" to="/rule/ruleInfo"/> 
+                 <Route path="/rule/ruleInfo/:roleId" component={RulesInfo} />
+                 <Redirect exact from="/rule" to="/rule/ruleInfo/null"/> 
             </Switch>
         )
     }

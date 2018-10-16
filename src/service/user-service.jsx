@@ -46,6 +46,12 @@ class User{
             JSON.stringify(listParam)
          );
     }
+    getUserListRole(listParam){
+        return HttpService.post(
+            '/reportServer/formUser/getUserListRole',
+            JSON.stringify(listParam)
+         );
+    }
     getUserInfo(userId){
         return HttpService.post(
             '/reportServer/formUser/getUserInfoByUserId',
@@ -61,6 +67,10 @@ class User{
     }
     delUser(id){
         return HttpService.post('/reportServer/formUser/deleteUser',id);
+    }
+    getRoleList(){
+        let url='/reportServer/rule/getRoleList';
+        return HttpService.post(url,{});
     }
 }
 
