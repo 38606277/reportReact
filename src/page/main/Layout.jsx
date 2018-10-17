@@ -239,6 +239,7 @@ export default class MainLoyout extends React.Component {
                             </SubMenu>
                             <SubMenu key="sub2" title={<span><Icon type="table" /><span>数据查询</span></span>}>
                                 <Menu.Item key="5"><Link to='/query/QueryData'>查询报表</Link></Menu.Item>
+                                <Menu.Item key="sub22"><Link to='/query/ExecQuery'>执行查询</Link></Menu.Item>
                             </SubMenu>
                             <SubMenu key="sub4" title={<span><Icon type="setting" /><span>系统管理</span></span>}>
                                 <Menu.Item key="/user"><Link to='/user'>用户管理</Link></Menu.Item>

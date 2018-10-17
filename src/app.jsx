@@ -20,6 +20,7 @@ import DbsRouter  from './page/system/dbs/dbsrouter.jsx';
 import RuleRouter  from './page/system/rule/rulerouter.jsx';
 import RoleRouter  from './page/system/role/rolerouter.jsx';
 import AuthTypeRouter  from './page/system/authType/authTypeRouter.jsx';
+import QueryRouter  from './page/query/QueryRouter.jsx';
 // import Login from './page/login/index.jsx';
 
 // import ErrorPage from './page/error/index.jsx';
@@ -161,6 +162,7 @@ class App extends React.Component {
                      <Route path="/Auth" component={Auth}/>
                      <Route path="/role" component={RoleRouter}/>
                      <Route path="/authType" component={AuthTypeRouter}/>
+                     <Route path="/query" component={QueryRouter}/>
                     {/* <Route path="/function/EditableTable" component={EditableTable} /> */}
                     <Route path="/function/functionCreator/:action/:id" component={functionCreator} />
                     
