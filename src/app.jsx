@@ -93,17 +93,7 @@ const QueryData = Loadable({
 });
 
 
-const QueryList = Loadable({
-    loader: () => import('./page/query/QueryList.jsx'),
-    loading: loading,
-    delay:3000
-});
 
-const QueryCreator = Loadable({
-    loader: () => import('./page/query/QueryCreator.jsx'),
-    loading: loading,
-    delay:3000
-});
 
 const DictList = Loadable({
     loader: () => import('./page/dict/DictList.jsx'),
@@ -166,9 +156,7 @@ class App extends React.Component {
                     {/* <Route path="/function/EditableTable" component={EditableTable} /> */}
                     <Route path="/function/functionCreator/:action/:id" component={functionCreator} />
                     
-                    <Route path="/query/QueryData" component={QueryData} />
-                    <Route path="/query/QueryList" component={QueryList} />
-                    <Route path="/query/QueryCreator/:action/:id" component={QueryCreator} />
+                    
 
                      <Route path="/dict/DictList" component={DictList} />
                     <Route path="/dict/DictCreator/:action/:id" component={DictCreator} />

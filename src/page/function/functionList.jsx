@@ -6,7 +6,7 @@
 */
 import React from 'react';
 import Table from 'antd/lib/table';
-import { Card, Button, Divider, Input, Form, FormItem, Icon, Row, Col } from 'antd';
+import { Card, Button, Divider, Input,message,Form, FormItem, Icon, Row, Col } from 'antd';
 
 import FunctionService from '../../service/FunctionService.jsx'
 import HttpService from '../../util/HttpService.jsx';
