@@ -44,24 +44,7 @@ class AuthTypeInfo extends React.Component{
 
     //编辑字段对应值
     onSelectChange(name,value){
-         let drivers=null;
-         let urls=null;
-         if(value=='Oracle'){
-            drivers='oracle.jdbc.OracleDriver';
-            urls='jdbc:oracle:thin:@ip:port:xe';
-         }else if(value=='Mysql'){
-            drivers='com.mysql.cj.jdbc.Driver';
-            urls='jdbc:mysql://ip:port/xe';
-        }else if(value=='DB2'){
-            drivers='com.ibm.db2.jcc.DB2Driver';
-            urls='jdbc:db2://ip:port/xe';
-        }else if(value=='mongoDB'){
-            drivers='';
-            urls='ip:port';
-        }
-        // this.setState({[name]:value,driver:drivers,url:urls});  
-
-         this.props.form.setFieldsValue({[name]:value,driver:drivers,url:urls});
+         this.props.form.setFieldsValue({[name]:value});
     
   }
      //编辑字段对应值
@@ -187,13 +170,6 @@ handleSubmit (e) {
                                   >
                                     {this.state.dbList}
                             </Select>
-
-                    // <Select  name='auth_db'   style={{ width: 120 }} onChange={(value) =>this.onSelectChange('dbtype',value)}>
-                    //     <Option value='Oracle' >Oracle</Option>
-                    //     <Option value='Mysql' >Mysql</Option>
-                    //     <Option value='DB2' >DB2</Option>
-                    //     <Option value='mongoDB' >mongoDB</Option>
-                    //   </Select>
                      )}
                        
                       </FormItem>

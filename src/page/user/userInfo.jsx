@@ -47,6 +47,7 @@ class UserInfo extends React.Component{
           children.push(<Option key={rlist[i].roleId}>{rlist[i].roleName}</Option>);
         }
         this.setState({roleList:children,isAdminText:urlist},function(){
+          this.props.form.setFieldsValue({ isAdminText:this.state.isAdminText});
         });
       });
        if(null!=this.state._id && ''!=this.state._id  && 'null'!=this.state._id){
@@ -61,7 +62,6 @@ class UserInfo extends React.Component{
                       endDate:moment(response.data.userInfo.endDate,dateFormat),
                       description:response.data.userInfo.description,
                       userId:response.data.userInfo.userId,
-                      isAdminText:this.state.isAdminText,
                       confirm:''
                 });
             }, errMsg => {
@@ -93,7 +93,6 @@ class UserInfo extends React.Component{
     onSelectChange(name,value){
           if(name=="isAdminText"){
            let valuess=value.join(",");
-           console.log(valuess);
             this.setState({[name]:valuess}); 
           }else{
             this.setState({[name]:value}); 
