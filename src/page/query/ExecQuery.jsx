@@ -4,13 +4,12 @@ import queryService from '../../service/QueryService.jsx';
 const Option = Select.Option;
 const Search = Input.Search;
 const _query =new queryService();
-
+import ExportJsonExcel from "js-export-excel"; 
 class ExecQuery extends React.Component {
 
     constructor(props) {
         super(props);
         const okdata=[];
-       
         this.state = { 
           data:[],
           formData:{},
@@ -27,7 +26,8 @@ class ExecQuery extends React.Component {
           perPaged         : 10,
           paramValue:'',
           paramName:'',
-          selectedRowKeys:[]
+          selectedRowKeys:[],
+          baoTitle:"数据列表"
         };
         
       }
@@ -95,6 +95,7 @@ class ExecQuery extends React.Component {
       }
      //执行查询 
     execSelect(){
+        this.setState({baoTitle:this.state.reportName},function(){});
         let param=[{in:this.state.data},{startIndex:0,perPage:10}];
         _query.execSelect(this.state.category,this.state.reportName,param).then(response=>{
             this.setState({resultList:response.data.list});
@@ -155,6 +156,53 @@ class ExecQuery extends React.Component {
         this.okdata=selectedRowKeys;
         this.setState({ selectedRowKeys });
       }
+      downloadExcel = () => {
+        // currentPro 是列表数据
+            const  currentPro  = this.state.formData;
+            var option={};
+            let dataTable = [],keyList=[];
+            if (currentPro) {
+              for (let i in currentPro) {
+                  dataTable.push(currentPro[i].title);
+                  keyList.push(currentPro[i].key);
+              }
+            }
+            const  dataListPro  = this.state.resultList;
+            let dataList = [];
+            if (dataListPro) {
+              for (let i in dataListPro) {
+                let obj={};
+                  for(let ii=0;ii<keyList.length;ii++){
+                      let vs=keyList[ii];
+                      obj={
+                        [vs]:dataListPro[i][vs]
+                      }
+                    console.log(dataListPro[i][vs]);
+                    console.log(obj);
+                  }
+                 
+                // let obj = {
+                //     '项目名称': dataListPro[i].name,
+                //     '项目地址': dataListPro[i].address,
+                //     '考勤范围': dataListPro[i].radius,
+                //   }
+                dataList.push(currentPro[i].title);
+              }
+            }
+            option.fileName = this.state.reportName;
+            option.datas=[
+              {
+                sheetData:this.state.resultList,
+                sheetName:'sheet',
+                sheetFilter:dataTable,
+                sheetHeader:dataTable,
+              }
+            ];
+        
+            var toExcel = new ExportJsonExcel(option); //new
+            toExcel.saveExcel();
+          }
+
     render() {
       const  inColumns = [{
         title: '参数名',
@@ -273,8 +321,9 @@ class ExecQuery extends React.Component {
                     </Col></Row>
                 </Card>
             
-                <Card title="数据列表" style={{float:"left",width:"70%"}}>
-                    <Table columns={this.resultColumns} dataSource={this.state.resultList} size="small" bordered  pagination={false}/>
+                <Card title={this.state.baoTitle} style={{float:"left",width:"70%"}}>
+                    <Button type="primary" onClick={this.downloadExcel}>导出</Button>
+                    <Table  columns={this.resultColumns} scroll={{ x: '100%', y: 560 }} dataSource={this.state.resultList} size="small" bordered  pagination={false}/>
                 </Card>
                 <div>
                     <Modal
