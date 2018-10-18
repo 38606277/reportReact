@@ -13,7 +13,10 @@ let WEBPACK_ENV = process.env.WEBPACK_ENV || 'dev';
 console.log(WEBPACK_ENV); 
 module.exports = {
     devtool: 'source-map',
-    entry: './src/app.jsx',
+    // entry: './src/app.jsx',
+    entry: { 
+        app: ["babel-polyfill", "./src/app.jsx"] 
+        },
     output: {
         path: path.resolve(__dirname, 'dist'),
         // publicPath: WEBPACK_ENV === 'dev' 
