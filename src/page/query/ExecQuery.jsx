@@ -1,28 +1,37 @@
 import React from 'react'
-import { Table, Divider, Tag, Form, Input, Select, Button, Card, Checkbox,Tooltip,Row,Col } from 'antd';
+import { Table, Divider,DatePicker,Modal, Icon, Form, Input, Select, Button, Card, Checkbox,Tooltip,Row,Col,Pagination  } from 'antd';
 import queryService from '../../service/QueryService.jsx';
 const Option = Select.Option;
-
+const Search = Input.Search;
 const _query =new queryService();
 
 class ExecQuery extends React.Component {
 
     constructor(props) {
         super(props);
+        const okdata=[];
+       
         this.state = { 
           data:[],
           formData:{},
-          dictData:[],
-          authData:[],
           categoryList:[],
           reportNameList:[],
           category:'',
           reportName:'',
           inlist:[],
           outlist:[],
-          resultList:[]
+          resultList:[],
+          visible: false,
+          dictionaryList:[],
+          pageNumd         : 1,
+          perPaged         : 10,
+          paramValue:'',
+          paramName:'',
+          selectedRowKeys:[]
         };
+        
       }
+      
       componentDidMount() {
           //获取报表列表
         _query.getCategoryList().then(response => {
@@ -68,7 +77,7 @@ class ExecQuery extends React.Component {
            let inColumns=response.data.in;
            let outColumns=response.data.out;
            inColumns.map((item,index)=>{
-                let json={key:item.id,name:item.name};
+                let json={key:item.id,name:item.name,lookup:item.lookup,datatype:item.datatype,mut:item.mut,default:item.default};
                 inlist.push(json);
             });
             outColumns.map((item,index)=>{
@@ -91,6 +100,61 @@ class ExecQuery extends React.Component {
             this.setState({resultList:response.data.list});
         });
     }
+    //打开模式窗口
+    openModelClick(name,param){
+        this.setState({
+            visible: true,
+          });
+          this.okdata=[];
+        //  this.refs.diction;
+         this.setState({dictionaryList:[],paramValue:param,paramName:name,totald:0,selectedRowKeys:[]},function(){
+            this.loadModelData(param);
+         });
+         
+        //console.log("打开"+name);
+    }
+    //调用模式窗口内的数据查询
+    loadModelData(param){
+        let page = {};
+        page.pageNumd  = this.state.pageNumd;
+        page.perPaged  = this.state.perPaged;
+        _query.getDictionaryList(param,page).then(response=>{
+          this.setState({dictionaryList:response.data,totald:response.totald},function(){});
+        });
+    }
+     // 字典页数发生变化的时候
+     onPageNumdChange(pageNumd){
+        this.setState({
+            pageNumd : pageNumd
+        }, () => {
+            this.loadModelData(this.state.paramValue);
+        });
+    }
+    //模式窗口点击确认
+      handleOk = (e) => {
+            let values=this.okdata.join(",");
+            let name = this.state.paramName;
+            let nv={[name]:values};
+            this.state.data.push(nv);
+            this.props.form.setFieldsValue({[name]:values});
+        // document.getElementById(name).value=values;
+            this.setState({
+                 visible: false,
+            });
+
+      }
+    //模式窗口点击取消
+      handleCancel = (e) => {
+        this.okdata=[];
+        this.setState({
+          visible: false,
+          selectedRowKeys:[]
+        });
+      }
+      onSelectChangeDic = (selectedRowKeys) => {
+        this.okdata=selectedRowKeys;
+        this.setState({ selectedRowKeys });
+      }
     render() {
       const  inColumns = [{
         title: '参数名',
@@ -101,19 +165,38 @@ class ExecQuery extends React.Component {
         dataIndex: 'in_name',
         key: 'in_name',
         render: (text, record,index) => {
-            return (
-              <Form>
-                <Form.Item style={{ margin: 0 }}>
-                  {this.props.form.getFieldDecorator(record.name, {
-                    rules: [{
-                      required: true,
-                      message: `参数名是必须的！`,
-                    }]
-                    
-                  })(<Input onChange={e=>this.changeEvent(e)}/>)}
-                </Form.Item>
-              </Form>
-            );
+            if(record.datatype=='varchar'){
+                return (
+                    <Form>
+                      <Form.Item style={{ margin: 0 }}>
+                        {this.props.form.getFieldDecorator(record.name, {
+                          rules: [{
+                            required: true,
+                            message: `参数名是必须的！`,
+                          }]
+                          
+                        })(
+                            <Input onChange={e=>this.changeEvent(e)} addonAfter={record.lookup==''?'':<Icon type="ellipsis" theme="outlined"  onClick={e=>this.openModelClick(record.key,record.lookup)}/>} />
+                        )}
+                     </Form.Item>
+                </Form>
+                );
+            }else{
+                return (
+                <Form>
+                    <Form.Item style={{ margin: 0 }}>
+                    {this.props.form.getFieldDecorator(record.name, {
+                        rules: [{
+                        required: true,
+                        message: `参数名是必须的！`,
+                        }]
+                    })(
+                        <DatePicker />
+                    )}
+                    </Form.Item>
+                </Form>
+               );
+            }
           }
       }];
       const  outColumns = [{
@@ -135,9 +218,27 @@ class ExecQuery extends React.Component {
             });
         },
       };
-      this.state.resultList.map((item,index)=>{
+      const { selectedRowKeys } = this.state;
+    
+      const rowSelectionDictionary = {
+        selectedRowKeys,
+        onChange:this.onSelectChangeDic,
+      };
+    const  dictionaryColumns = [{
+        title: '编码',
+        dataIndex: 'value',
+        key: 'value',
+    },{
+        title: '名称',
+        dataIndex: 'name',
+        key: 'name',
+    }];
+    this.state.resultList.map((item,index)=>{
         item.key=index;
-    })
+    });
+    this.state.dictionaryList.map((item,index)=>{
+        item.key=item.value;
+    });
     return (
         <div id="page-wrapper">
                 <Card title="查询向导"  style={{float:"left",width:"30%"}}>
@@ -160,27 +261,43 @@ class ExecQuery extends React.Component {
                                     {this.state.reportNameList}
                                 </Select>
                         </Col></Row>
+
                     <Row><Col>
-                    
                     <Table title={() => '查询条件'}  ref="table" dataSource={this.state.inlist} columns={inColumns}  pagination={false} 
                     style={{marginLeft: '-30px', marginRight: '-30px', border: '0'}} size="small"/>
                     </Col></Row>
-                      <Row><Col>
-                    
-                    <Table title={() => '输出字段'} rowSelection={rowSelection} dataSource={this.state.outlist} columns={outColumns}  pagination={false} 
+
+                  <Row><Col>
+                     <Table title={() => '输出字段'} rowSelection={rowSelection} dataSource={this.state.outlist} columns={outColumns}  pagination={false} 
                     style={{marginTop:'10px', marginLeft: '-30px', marginRight: '-30px', border: '0'}} size="small"/>
                     </Col></Row>
                 </Card>
             
                 <Card title="数据列表" style={{float:"left",width:"70%"}}>
-                <Table columns={this.resultColumns} dataSource={this.state.resultList} size="small" bordered  pagination={false}/>
+                    <Table columns={this.resultColumns} dataSource={this.state.resultList} size="small" bordered  pagination={false}/>
                 </Card>
-             
+                <div>
+                    <Modal
+                    title="字典查询"
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    >
+                        <Search
+                            style={{ width: 300,marginBottom:'10px' }}
+                            placeholder="请输入..."
+                            enterButton="查询"
+                            onSearch={value => this.onSearch(value)}
+                         />
+                         <Table ref="diction" rowSelection={rowSelectionDictionary} columns={dictionaryColumns} 
+                         dataSource={this.state.dictionaryList} size="small" bordered  pagination={false}/>
+                         <Pagination current={this.state.pageNumd} 
+                            total={this.state.totald} 
+                            onChange={(pageNumd) => this.onPageNumdChange(pageNumd)}/> 
+                    </Modal>
+                </div>
             </div>
-        // <Button onClick={() => this.buttonClick()} >显示结果</Button>
-        // <Button onClick={() => this.changeColumn()} >字段变更</Button>
-    )
-    }
+    )}
 }
 
 export default ExecQuery = Form.create()(ExecQuery);
