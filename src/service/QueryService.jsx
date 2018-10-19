@@ -18,4 +18,8 @@ export default class QueryService {
         let url="reportServer/select/execSelect/"+selectClassId+"/"+selectID;
         return HttpService.post(url,JSON.stringify(param));
     }
+    getDictionaryList(param,page){
+        let url="reportServer/dictionary/execlDictionary/"+param;
+        return HttpService.post(url,JSON.stringify(page));
+    }
 }
