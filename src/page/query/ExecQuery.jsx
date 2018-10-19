@@ -1,10 +1,11 @@
 import React from 'react'
 import { Table, Divider,DatePicker,Modal, Icon, Form, Input, Select, Button, Card, Checkbox,Tooltip,Row,Col,Pagination  } from 'antd';
 import queryService from '../../service/QueryService.jsx';
+import ExportJsonExcel from "js-export-excel"; 
 const Option = Select.Option;
 const Search = Input.Search;
 const _query =new queryService();
-import ExportJsonExcel from "js-export-excel"; 
+
 class ExecQuery extends React.Component {
 
     constructor(props) {
@@ -24,6 +25,10 @@ class ExecQuery extends React.Component {
           dictionaryList:[],
           pageNumd         : 1,
           perPaged         : 10,
+          searchDictionary :'',
+          startIndex         :1,
+          perPage         :10,
+          searchResult     :'',
           paramValue:'',
           paramName:'',
           selectedRowKeys:[],
@@ -96,9 +101,11 @@ class ExecQuery extends React.Component {
      //执行查询 
     execSelect(){
         this.setState({baoTitle:this.state.reportName},function(){});
-        let param=[{in:this.state.data},{startIndex:0,perPage:10}];
+        let param=[{in:this.state.data},{startIndex:this.state.startIndex,perPage:10,searchResult:this.state.searchResult}];
         _query.execSelect(this.state.category,this.state.reportName,param).then(response=>{
-            this.setState({resultList:response.data.list});
+            if(response.resultCode!='3000'){
+                this.setState({resultList:response.data.list,totalR:response.data.totalSize});
+            }
         });
     }
     //打开模式窗口
@@ -119,6 +126,7 @@ class ExecQuery extends React.Component {
         let page = {};
         page.pageNumd  = this.state.pageNumd;
         page.perPaged  = this.state.perPaged;
+        page.searchDictionary=this.state.searchDictionary;
         _query.getDictionaryList(param,page).then(response=>{
           this.setState({dictionaryList:response.data,totald:response.totald},function(){});
         });
@@ -129,6 +137,13 @@ class ExecQuery extends React.Component {
             pageNumd : pageNumd
         }, () => {
             this.loadModelData(this.state.paramValue);
+        });
+    }
+    onPageNumChange(pageNumR){
+        this.setState({
+            startIndex : pageNumR
+        }, () => {
+            this.execSelect();
         });
     }
     //模式窗口点击确认
@@ -202,7 +217,17 @@ class ExecQuery extends React.Component {
             var toExcel = new ExportJsonExcel(option); //new
             toExcel.saveExcel();
           }
-
+     onResultSearch(searchKeyword){
+        this.setState({pageNumR: 1,searchResult:searchKeyword},function(){
+            this.execSelect();
+        });
+     }
+     onDictionarySearch(searchKeyword){
+        this.setState({ pageNumd : 1, searchDictionary   : searchKeyword
+        }, () => {
+            this.loadModelData(this.state.paramValue);
+        });
+     }
     render() {
       const  inColumns = [{
         title: '参数名',
@@ -323,7 +348,16 @@ class ExecQuery extends React.Component {
             
                 <Card title={this.state.baoTitle} style={{float:"left",width:"70%"}}>
                     <Button type="primary" onClick={this.downloadExcel}>导出</Button>
+                    <Search
+                            style={{ width: 300,marginBottom:'10px' }}
+                            placeholder="请输入..."
+                            enterButton="查询"
+                            onSearch={value => this.onResultSearch(value)}
+                         />
                     <Table  columns={this.resultColumns} scroll={{ x: '100%', y: 560 }} dataSource={this.state.resultList} size="small" bordered  pagination={false}/>
+                    <Pagination current={this.state.startIndex} 
+                            total={this.state.totalR} 
+                            onChange={(startIndex) => this.onPageNumChange(startIndex)}/> 
                 </Card>
                 <div>
                     <Modal
@@ -336,7 +370,7 @@ class ExecQuery extends React.Component {
                             style={{ width: 300,marginBottom:'10px' }}
                             placeholder="请输入..."
                             enterButton="查询"
-                            onSearch={value => this.onSearch(value)}
+                            onSearch={value => this.onDictionarySearch(value)}
                          />
                          <Table ref="diction" rowSelection={rowSelectionDictionary} columns={dictionaryColumns} 
                          dataSource={this.state.dictionaryList} size="small" bordered  pagination={false}/>
