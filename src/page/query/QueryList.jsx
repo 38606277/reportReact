@@ -74,7 +74,7 @@ export default class QueryList extends React.Component {
                         <Col span={4}> <Button type="primary" style={{width:"100px"}} onClick={()=>window.location='#/function/functionCreator/creat/0'} >新建</Button></Col>
                     </Row> */}
                     <Button href="#/query/QueryCreator/creat/0" style={{ marginRight: "10px" }} type="primary">新建查询</Button>
-                    <Button href="" style={{ marginRight: "15px" }} type="primary">查询类别管理</Button>
+                    <Button href="#/query/QueryClass" style={{ marginRight: "15px" }} type="primary">查询类别管理</Button>
                     <Search
                         style={{ maxWidth: 300, marginBottom: '10px', float: "right" }}
                         placeholder="请输入..."
