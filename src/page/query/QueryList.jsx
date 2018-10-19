@@ -25,7 +25,7 @@ export default class QueryList extends React.Component {
     }
     componentDidMount() {
         let param = {};
-        HttpService.post('reportServer/function1/getAllFunctionName', null)
+        HttpService.post('reportServer/query/getAllQueryName', null)
             .then(res => {
                 if (res.resultCode == "1000")
                     this.setState({ list: res.data })
@@ -85,17 +85,17 @@ export default class QueryList extends React.Component {
                     <Table dataSource={this.state.list}>
                         <Column
                             title="查询ID"
-                            dataIndex="func_id"
-                            key="func_name"
+                            dataIndex="qry_id"
+                            key="qry_id"
                         />
                         <Column
                             title="查询名称"
-                            dataIndex="func_name"
-                            key="func_desc"
+                            dataIndex="qry_name"
+                            key="qry_name"
                         />
                         <Column
                             title="查询描述"
-                            dataIndex="func_desc"
+                            dataIndex="qry_desc"
                             key="func_desc"
                         />
                         <Column
@@ -105,15 +105,15 @@ export default class QueryList extends React.Component {
                         />
                         <Column
                             title="调用方式"
-                            dataIndex="func_type"
-                            key="func_type"
+                            dataIndex="qry_type"
+                            key="qry_type"
                         />
                         <Column
                             title="动作"
                             key="action"
                             render={(text, record) => (
                                 <span>
-                                    <a href={`#/query/QueryCreator/update/${record.func_id}`}>编辑</a>
+                                    <a href={`#/query/QueryCreator/update/${record.qry_id}`}>编辑</a>
                                     <Divider type="vertical" />
                                     <a href="javascript:;">删除{record.name}</a>
                                 </span>

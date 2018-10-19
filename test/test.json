@@ -1,1 +1,19 @@
-"select nvl(sum(gb.period_net_dr),0)   period_net_dr↵ from gl_balances gb, gl_code_combinations gcc↵ where gb.code_combination_id = gcc.code_combination_id↵   and gcc.summary_flag = 'N'↵      and gb.set_of_books_id = 2↵   and gb.period_name = #{period}↵   and gcc.segment1 like '${segment1}%'↵<if test="segment2!=''">↵   and gcc.segment2=#{segment2}↵</if>↵   and gcc.segment3 like '${segment3}%'"
+link: {
+    func_id: 46,
+    link_qry_id: 36,
+    param: [
+        {
+        link_in_id:'vendor_id',
+        link_in_id_value_type:'out',
+        link_in_id_value:'vendor_id'
+        },
+        {link_in_id:'date',
+            link_in_id_value_type:'out',
+            link_in_id_value:'vendor_id'
+        },
+        {link_in_id:'name',
+                link_in_id_value_type:'out',
+                link_in_id_value:'vendor_id'
+        },
+    ]
+}

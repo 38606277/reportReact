@@ -59,7 +59,7 @@ class functionCreator extends React.Component {
         this.state = {
             //定义窗体参数
             action: this.props.match.params.action,
-            func_id: this.props.match.params.id,
+            qry_id: this.props.match.params.id,
             //定义状态
             inData: [],
             outData: [],
@@ -73,7 +73,7 @@ class functionCreator extends React.Component {
         if (this.state.action == 'update') {
             //查询函数定义
             let param = {};
-            HttpService.post("reportServer/function1/getFunctionByID/" + this.state.func_id, null)
+            HttpService.post("reportServer/query/getQueryByID/" + this.state.qry_id, null)
                 .then(res => {
                     if (res.resultCode == "1000") {
                         this.setState({
@@ -86,7 +86,7 @@ class functionCreator extends React.Component {
 
 
 
-                        this.refs.editorsql.codeMirror.setValue(res.data.func_sql);
+                        this.refs.editorsql.codeMirror.setValue(res.data.qry_sql);
 
                         let editorsql = this.refs.editorsql;
                         editorsql.codeMirror.setSize('100%', '500px');
@@ -105,8 +105,8 @@ class functionCreator extends React.Component {
                 this.setState({ dbList: res });
             });
 
-        //查询函数类别定义
-        functionService.getAllFunctionClass()
+        //查询查询类别定义
+        HttpService.post("reportServer/query/getAllQueryClass", '')
             .then(res => {
                 console.log(JSON.stringify(res));
                 if (res.resultCode == '1000') {
@@ -152,7 +152,7 @@ class functionCreator extends React.Component {
             inData:this.inParam.getFormValue(),
             outData:this.outParam.getFormValue(),
         });
-        formInfo.func_sql=this.refs.editorsql.codeMirror.getValue();
+        formInfo.qry_sql=this.refs.editorsql.codeMirror.getValue();
         formInfo.in=this.state.inData;
         formInfo.out=this.state.outData;
         console.log(formInfo);
@@ -277,7 +277,7 @@ class functionCreator extends React.Component {
                             <Col span={10}>
                                 <Card bodyStyle={{ padding: '8px' }}>
                                     <div>
-                                        <Button type="primary" icon="tool" onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成函数</Button>
+                                        <Button type="primary" icon="tool" onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成查询</Button>
                                         <Button icon="save" onClick={() => this.onSaveClick()} style={{ marginRight: "10px" }} >保存</Button>
                                         <Button icon="list" onClick={() => window.location = '#/query/QueryList'} style={{ marginRight: "10px" }}   >退出</Button>
                                     </div>
@@ -323,7 +323,7 @@ class functionCreator extends React.Component {
                                         <Col span={12}>
                                             <FormItem label="查询ID"  >
                                                 {
-                                                    getFieldDecorator('func_id', {
+                                                    getFieldDecorator('qry_id', {
                                                     })(
                                                         <Input disabled />
                                                     )
@@ -336,7 +336,7 @@ class functionCreator extends React.Component {
                                         <Col span={24}>
                                             <FormItem label=" 查询名称"   >
                                                 {
-                                                    getFieldDecorator('func_name', {
+                                                    getFieldDecorator('qry_name', {
                                                         rules: [{ required: true, message: '函数名称是必须的' }],
                                                     })(
                                                         <Input style={{ minWidth: '300px' }} />

@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { Link }             from 'react-router-dom';
 import { Table, Divider, Tag, Form, Input, Select, Button, Card, Checkbox } from 'antd';
 
 import HttpService from '../../util/HttpService.jsx';
@@ -133,7 +134,7 @@ class EditOut extends React.Component {
       return (
         <Form>
           <Form.Item style={{ margin: 0 }}>
-            {this.props.form.getFieldDecorator(index+'-'+'out_name', {
+            {this.props.form.getFieldDecorator(index+'-'+'width', {
               rules: [{
                 required: true,
                 message: `参数名是必须的！`,
@@ -153,7 +154,7 @@ class EditOut extends React.Component {
       return (
         <Form>
           <Form.Item style={{ margin: 0 }}>
-            {this.props.form.getFieldDecorator(index+'-'+'out_name', {
+            {this.props.form.getFieldDecorator(index+'-'+'render', {
               rules: [{
                 required: true,
                 message: `参数名是必须的！`,
@@ -169,20 +170,8 @@ class EditOut extends React.Component {
     dataIndex: 'out_name',
     key: 'out_name',
     className:'headerRow',
-    render: (text, record,index) => {
-      return (
-        <Form>
-          <Form.Item style={{ margin: 0 }}>
-            {this.props.form.getFieldDecorator(index+'-'+'out_name', {
-              rules: [{
-                required: true,
-                message: `参数名是必须的！`,
-              }]
-              
-            })(<Input  onChange={e=>this.changeEvent(e)}/>)}
-          </Form.Item>
-        </Form>
-      );
+    render: function(text, record, index) {
+      return <Link to={ `/user/UserView/${record.id}` }>配置</Link>;
     }
   }];
 

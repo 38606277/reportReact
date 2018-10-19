@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link }             from 'react-router-dom';
 import { Table, Divider, Tag, Form, Input, Select, Button, Card, Checkbox } from 'antd';
 
 import HttpService from '../../util/HttpService.jsx';
@@ -9,33 +10,6 @@ const Option = Select.Option;
 
 class EditOut extends React.Component {
 
-
-  data1 = [{
-    key: '1',
-    in_id:"vender_name",
-    in_name: '供应商名称',
-    datatype: '字符串',
-    dict: '1',
-    isformula:true,
-    auth:'公司',
-  }, {
-    key: '2',
-    in_id:2,
-    in_name: '项目名称',
-    datatype: '字符串',
-    dict: '2',
-    isformula:true,
-    auth:'公司',
-  },{
-    key: '3',
-    in_id:3,
-    in_name: '开始日期',
-    datatype: '日期',
-    dict: '3',
-    isformula:true,
-    auth:'部门',
-  }];
-  
   constructor(props) {
     super(props);
     this.props.onRef(this)
@@ -46,40 +20,41 @@ class EditOut extends React.Component {
       authData:[],
     };
   }
+
   componentDidMount() {
 
   }
-  setFormValue(d){
-  
+  setFormValue(d) {
+
     //let arr=d.slice(0);
-    this.setState({data:d});
-    let f={};
-    for(var i=0;i<this.state.data.length;i++){
-      let rowObject=this.state.data[i];
-      let keys=Object.getOwnPropertyNames(rowObject);
-      for(var field of keys){
-        let fieldName=i+'-'+field;
-        f[fieldName]=this.state.data[i][field];
+    this.setState({ data: d });
+    let f = {};
+    for (var i = 0; i < this.state.data.length; i++) {
+      let rowObject = this.state.data[i];
+      let keys = Object.getOwnPropertyNames(rowObject);
+      for (var field of keys) {
+        let fieldName = i + '-' + field;
+        f[fieldName] = this.state.data[i][field];
       }
     }
     console.log(f);
-    this.setState({formData:f});
+    this.setState({ formData: f });
     this.props.form.setFieldsValue(this.state.formData);
     //this.props.form.setFieldsValue(this.state.formData);
   }
 
-  getFormValue(){
+  getFormValue() {
     return this.state.data;
   }
 
-  
+
   changeEvent(e) {
     // record.age=e.target.value; 
     console.log(e.target.id, e.target.value);
-     let id = e.target.id;
-     let index = id.split('-')[0];
-     let  field = id.split('-')[1]
-     this.state.data[index][field] = e.target.value;
+    let id = e.target.id;
+    let index = id.split('-')[0];
+    let field = id.split('-')[1]
+    this.state.data[index][field] = e.target.value;
   }
 
   buttonClick() {
@@ -94,30 +69,30 @@ class EditOut extends React.Component {
     this.arr.push(<Input />);
   }
 
- 
+
 
   columns = [{
     title: '列ID',
     dataIndex: 'out_id',
     key: 'out_id',
-    width:'120px',
-    className:'headerRow',
+    width: '120px',
+    className: 'headerRow',
   }, {
     title: '列名',
     dataIndex: 'out_name',
     key: 'out_name',
-    className:'headerRow',
-    render: (text, record,index) => {
+    className: 'headerRow',
+    render: (text, record, index) => {
       return (
         <Form>
           <Form.Item style={{ margin: 0 }}>
-            {this.props.form.getFieldDecorator(index+'-'+'out_name', {
+            {this.props.form.getFieldDecorator(index + '-' + 'out_name', {
               rules: [{
                 required: true,
                 message: `参数名是必须的！`,
               }]
-              
-            })(<Input  onChange={e=>this.changeEvent(e)}/>)}
+
+            })(<Input onChange={e => this.changeEvent(e)} />)}
           </Form.Item>
         </Form>
       );
@@ -126,19 +101,19 @@ class EditOut extends React.Component {
     title: '数据类型',
     dataIndex: 'datatype',
     key: 'datatype',
-    className:'headerRow',
-    render: (text, record,index) => {
+    className: 'headerRow',
+    render: (text, record, index) => {
       return (
         <Form>
 
           <Form.Item style={{ margin: 0 }}>
-            {this.props.form.getFieldDecorator(index+'-'+'datatype', {
+            {this.props.form.getFieldDecorator(index + '-' + 'datatype', {
               rules: [{
                 required: true,
                 message: `数据类型是必须的！`,
               }],
             })(
-              <Select tyle={{ minWidth: '80px' }} >
+              <Select style={{ minWidth: '80px' }} >
                 <Option value="string">字符串</Option>
                 <Option value="number">数字</Option>
                 <Option value="date">日期</Option>
@@ -148,16 +123,25 @@ class EditOut extends React.Component {
         </Form>
       );
     }
-  }];
+  }, {
+    title: '超链接',
+    dataIndex: 'datatype',
+    key: 'datatype',
+    className: 'headerRow',
+    render: function(text, record, index) {
+      return <Link to={ `/user/UserView/${record.id}` }>配置</Link>;
+    } 
+  }
+  ];
 
 
 
   render() {
 
     return (
-        // <Button onClick={() => this.buttonClick()} >显示结果</Button>
-        // <Button onClick={() => this.changeColumn()} >字段变更</Button>
-        <Table ref="table" columns={this.columns} dataSource={this.state.data} size="small" bordered  pagination={false}/>
+      // <Button onClick={() => this.buttonClick()} >显示结果</Button>
+      // <Button onClick={() => this.changeColumn()} >字段变更</Button>
+      <Table ref="table" columns={this.columns} dataSource={this.state.data} size="small" bordered pagination={false} />
     )
   }
 }
