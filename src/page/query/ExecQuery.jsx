@@ -57,12 +57,35 @@ class ExecQuery extends React.Component {
       }
     //下拉事件
     onSelectChange(name,value){
+        // this.state = { 
+        //     data:[],
+        //     formData:{},
+        //     categoryList:[],
+        //     reportNameList:[],
+        //     category:'',
+        //     reportName:'',
+        //     inlist:[],
+        //     outlist:[],
+        //     resultList:[],
+        //     visible: false,
+        //     dictionaryList:[],
+        //     pageNumd         : 1,
+        //     perPaged         : 10,
+        //     searchDictionary :'',
+        //     startIndex         :1,
+        //     perPage         :10,
+        //     searchResult     :'',
+        //     paramValue:'',
+        //     paramName:'',
+        //     selectedRowKeys:[],
+        //     baoTitle:"数据列表"
+        //   };
             if(name=="category"){
-                this.setState({category:value},function(){
+                this.setState({category:value,resultList:[],data:[],selectedRowKeys:[],formData:[],inlist:[],outlist:[],totalR:0},function(){
                     this.loadReportNameList(value);
                 });
             }else if(name=="reportName"){
-                this.setState({reportName:value},function(){
+                this.setState({reportName:value,resultList:[],data:[],selectedRowKeys:[],formData:[],inlist:[],outlist:[],totalR:0},function(){
                     this.loadQueryCriteria(this.state.category,value);
                 });
             }
@@ -95,6 +118,7 @@ class ExecQuery extends React.Component {
             this.setState({inlist:inlist,outlist:outlist},function(){});
         });
     }
+    //设置参数条件值
     changeEvent(e) {
          let id = e.target.id;
          let nv={[id]:e.target.value};
@@ -385,7 +409,7 @@ class ExecQuery extends React.Component {
                             onSearch={value => this.onResultSearch(value)}
                          />
                          <Button type="primary" onClick={()=>this.printResultList()}>打印</Button>
-                    <Table ref="resultTable" columns={this.resultColumns}  dataSource={this.state.resultList} scroll={{ x: 1300 }} size="small" bordered  pagination={false}/>
+                    <Table ref="resultTable" columns={this.resultColumns}  dataSource={this.state.resultList} scroll={{ x: '100%' }} size="small" bordered  pagination={false}/>
                     <Pagination current={this.state.startIndex} 
                             total={this.state.totalR} 
                             onChange={(startIndex) => this.onPageNumChange(startIndex)}/> 
