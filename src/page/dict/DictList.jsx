@@ -112,7 +112,11 @@ export default class DictList extends React.Component {
                             key="action"
                             render={(text, record) => (
                                 <span>
-                                    <a href={`#/dict/DictCreator/update/${record.func_id}`}>编辑</a>
+                                    <a href={`#/dict/DictCreator/update/${record.func_id}`}>查看数据</a>
+                                    <Divider type="vertical" />
+                                    <a href={`#/dict/DictCreator/update/${record.func_id}`}>数据同步</a>
+                                    <Divider type="vertical" />
+                                    <a href={`#/dict/DictCreator/update/${record.func_id}`}>字典编辑</a>
                                     <Divider type="vertical" />
                                     <a href="javascript:;">删除{record.name}</a>
                                 </span>

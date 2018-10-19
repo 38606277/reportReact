@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Button, Table, Form, Input, Divider, Checkbox, Dropdown, Select, Radio, Icon, message, Modal, DatePicker, InputNumber, Switch, Row, Col, Tabs, Menu } from 'antd'
+import { Card, Button, Table, Form, Input, Divider, Checkbox, Dropdown, Select, Radio, Icon, message, Progress,radioButton,Modal, DatePicker, InputNumber, Switch, Row, Col, Tabs, Menu } from 'antd'
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 
@@ -274,7 +274,6 @@ class functionCreator extends React.Component {
                             <Col span={10}>
                                 <Card bodyStyle={{ padding: '8px' }}>
                                     <div>
-                                        <Button type="primary" icon="tool" onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成函数</Button>
                                         <Button icon="save" onClick={() => this.onSaveClick()} style={{ marginRight: "10px" }} >保存</Button>
                                         <Button icon="list" onClick={() => window.location = '#/dict/DictList'} style={{ marginRight: "10px" }}   >退出</Button>
                                     </div>
@@ -338,8 +337,19 @@ class functionCreator extends React.Component {
                                             </FormItem>
                                         </Col>
                                     </Row>
+                                    <Row style={{marginTop:'20px'}}>
+                                        <Col span={6} offset={1} >
+                                            <Button type="primary" style={{width:'120px'}}>开始同步</Button>
+                                        </Col>
+                                        <Col span={12}>
+                                            <Progress percent={30}/>
+                                        </Col>
+                                    </Row>
                                     <Tabs type="card" style={{ marginTop: '15px' }} onChange={this.tabOnChange}>
-                                        <TabPane tab="输出参数" key="2" forceRender>
+                                        <TabPane tab="定义输出字段" key="1" forceRender>
+                                            <EditOut onRef={(ref) => this.outParam = ref} />
+                                        </TabPane>
+                                        <TabPane tab="数据查看" key="2" forceRender>
                                             <EditOut onRef={(ref) => this.outParam = ref} />
                                         </TabPane>
                                     </Tabs>
