@@ -167,35 +167,35 @@ class ExecQuery extends React.Component {
                   keyList.push(currentPro[i].key);
               }
             }
-            const  dataListPro  = this.state.resultList;
-            let dataList = [];
-            if (dataListPro) {
-              for (let i in dataListPro) {
-                let obj={};
-                  for(let ii=0;ii<keyList.length;ii++){
-                      let vs=keyList[ii];
-                      obj={
-                        [vs]:dataListPro[i][vs]
-                      }
-                    console.log(dataListPro[i][vs]);
-                    console.log(obj);
-                  }
+            // const  dataListPro  = this.state.resultList;
+            // let dataList = [];
+            // if (dataListPro) {
+            //   for (let i in dataListPro) {
+            //     let obj={};
+            //       for(let ii=0;ii<keyList.length;ii++){
+            //           let vs=keyList[ii];
+            //           obj={
+            //             [vs]:dataListPro[i][vs]
+            //           }
+            //         console.log(dataListPro[i][vs]);
+            //         console.log(obj);
+            //       }
                  
-                // let obj = {
-                //     '项目名称': dataListPro[i].name,
-                //     '项目地址': dataListPro[i].address,
-                //     '考勤范围': dataListPro[i].radius,
-                //   }
-                dataList.push(currentPro[i].title);
-              }
-            }
+            //     // let obj = {
+            //     //     '项目名称': dataListPro[i].name,
+            //     //     '项目地址': dataListPro[i].address,
+            //     //     '考勤范围': dataListPro[i].radius,
+            //     //   }
+            //    // dataList.push(currentPro[i].title);
+            //   }
+            // }
             option.fileName = this.state.reportName;
             option.datas=[
               {
                 sheetData:this.state.resultList,
                 sheetName:'sheet',
-                sheetFilter:dataTable,
-                sheetHeader:dataTable,
+                sheetFilter:keyList,
+                sheetHeader:keyList,
               }
             ];
         
