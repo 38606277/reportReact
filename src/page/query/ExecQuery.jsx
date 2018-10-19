@@ -1,10 +1,13 @@
 import React from 'react'
+import ReactDOM from 'react-dom';
 import { Table, Divider,DatePicker,Modal, Icon, Form, Input, Select, Button, Card, Checkbox,Tooltip,Row,Col,Pagination  } from 'antd';
 import queryService from '../../service/QueryService.jsx';
+import ExportJsonExcel from "js-export-excel"; 
+import ReactHTMLTableToExcel from 'react-html-table-to-excel'//主要是这个插件！！
 const Option = Select.Option;
 const Search = Input.Search;
 const _query =new queryService();
-import ExportJsonExcel from "js-export-excel"; 
+
 class ExecQuery extends React.Component {
 
     constructor(props) {
@@ -24,6 +27,10 @@ class ExecQuery extends React.Component {
           dictionaryList:[],
           pageNumd         : 1,
           perPaged         : 10,
+          searchDictionary :'',
+          startIndex         :1,
+          perPage         :10,
+          searchResult     :'',
           paramValue:'',
           paramName:'',
           selectedRowKeys:[],
@@ -46,15 +53,39 @@ class ExecQuery extends React.Component {
                 categoryList : []
             });
         });
+        
       }
     //下拉事件
     onSelectChange(name,value){
+        // this.state = { 
+        //     data:[],
+        //     formData:{},
+        //     categoryList:[],
+        //     reportNameList:[],
+        //     category:'',
+        //     reportName:'',
+        //     inlist:[],
+        //     outlist:[],
+        //     resultList:[],
+        //     visible: false,
+        //     dictionaryList:[],
+        //     pageNumd         : 1,
+        //     perPaged         : 10,
+        //     searchDictionary :'',
+        //     startIndex         :1,
+        //     perPage         :10,
+        //     searchResult     :'',
+        //     paramValue:'',
+        //     paramName:'',
+        //     selectedRowKeys:[],
+        //     baoTitle:"数据列表"
+        //   };
             if(name=="category"){
-                this.setState({category:value},function(){
+                this.setState({category:value,resultList:[],data:[],selectedRowKeys:[],formData:[],inlist:[],outlist:[],totalR:0},function(){
                     this.loadReportNameList(value);
                 });
             }else if(name=="reportName"){
-                this.setState({reportName:value},function(){
+                this.setState({reportName:value,resultList:[],data:[],selectedRowKeys:[],formData:[],inlist:[],outlist:[],totalR:0},function(){
                     this.loadQueryCriteria(this.state.category,value);
                 });
             }
@@ -87,6 +118,7 @@ class ExecQuery extends React.Component {
             this.setState({inlist:inlist,outlist:outlist},function(){});
         });
     }
+    //设置参数条件值
     changeEvent(e) {
          let id = e.target.id;
          let nv={[id]:e.target.value};
@@ -96,10 +128,15 @@ class ExecQuery extends React.Component {
      //执行查询 
     execSelect(){
         this.setState({baoTitle:this.state.reportName},function(){});
-        let param=[{in:this.state.data},{startIndex:0,perPage:10}];
+        let param=[{in:this.state.data},{startIndex:this.state.startIndex,perPage:10,searchResult:this.state.searchResult}];
         _query.execSelect(this.state.category,this.state.reportName,param).then(response=>{
-            this.setState({resultList:response.data.list});
+            if(response.resultCode!='3000'){
+                this.setState({resultList:response.data.list,totalR:response.data.totalSize});
+            }
         });
+        const tableCon = ReactDOM.findDOMNode(this.refs['resultTable'])//利用reactdom.finddomnode()来获取真实DOM节点
+        const table = tableCon.querySelector('table')
+        table.setAttribute('id','table-to-xls')
     }
     //打开模式窗口
     openModelClick(name,param){
@@ -119,6 +156,7 @@ class ExecQuery extends React.Component {
         let page = {};
         page.pageNumd  = this.state.pageNumd;
         page.perPaged  = this.state.perPaged;
+        page.searchDictionary=this.state.searchDictionary;
         _query.getDictionaryList(param,page).then(response=>{
           this.setState({dictionaryList:response.data,totald:response.totald},function(){});
         });
@@ -129,6 +167,13 @@ class ExecQuery extends React.Component {
             pageNumd : pageNumd
         }, () => {
             this.loadModelData(this.state.paramValue);
+        });
+    }
+    onPageNumChange(pageNumR){
+        this.setState({
+            startIndex : pageNumR
+        }, () => {
+            this.execSelect();
         });
     }
     //模式窗口点击确认
@@ -152,10 +197,12 @@ class ExecQuery extends React.Component {
           selectedRowKeys:[]
         });
       }
+      //数据字典选中事件
       onSelectChangeDic = (selectedRowKeys) => {
         this.okdata=selectedRowKeys;
         this.setState({ selectedRowKeys });
       }
+      //导出到Excel
       downloadExcel = () => {
         // currentPro 是列表数据
             const  currentPro  = this.state.formData;
@@ -201,8 +248,32 @@ class ExecQuery extends React.Component {
         
             var toExcel = new ExportJsonExcel(option); //new
             toExcel.saveExcel();
-          }
-
+      }
+      //执行查询的search
+     onResultSearch(searchKeyword){
+        this.setState({pageNumR: 1,searchResult:searchKeyword},function(){
+            this.execSelect();
+        });
+     }
+     //数据字典的search
+     onDictionarySearch(searchKeyword){
+        this.setState({ pageNumd : 1, searchDictionary   : searchKeyword
+        }, () => {
+            this.loadModelData(this.state.paramValue);
+        });
+     }
+     //执行查询的打印
+     printResultList(){
+        //  this.refs.diction
+        var tableToPrint = document.getElementById('table-to-xls');//将要被打印的表格
+        var newWin= window.open("");//新打开一个空窗口
+        newWin.document.write(tableToPrint.outerHTML);//将表格添加进新的窗口
+        newWin.document.close();//在IE浏览器中使用必须添加这一句
+        newWin.focus();//在IE浏览器中使用必须添加这一句
+        newWin.print();//打印
+        newWin.close();//关闭窗口
+     }
+    
     render() {
       const  inColumns = [{
         title: '参数名',
@@ -322,8 +393,26 @@ class ExecQuery extends React.Component {
                 </Card>
             
                 <Card title={this.state.baoTitle} style={{float:"left",width:"70%"}}>
-                    <Button type="primary" onClick={this.downloadExcel}>导出</Button>
-                    <Table  columns={this.resultColumns} scroll={{ x: '100%', y: 560 }} dataSource={this.state.resultList} size="small" bordered  pagination={false}/>
+                    <Button type="primary" onClick={this.downloadExcel} style={{marginRight:'10px'}}>导出</Button>
+                    <ReactHTMLTableToExcel
+                      className="downloadButton"
+                      table="table-to-xls"
+                      filename={this.state.reportName}
+                      sheet={this.state.reportName}
+                      buttonText="导出2"
+                        style={{marginRight:'10px'}}/>
+      
+                    <Search
+                            style={{ width: 300,marginBottom:'10px' ,marginRight:'10px'}}
+                            placeholder="请输入..."
+                            enterButton="查询"
+                            onSearch={value => this.onResultSearch(value)}
+                         />
+                         <Button type="primary" onClick={()=>this.printResultList()}>打印</Button>
+                    <Table ref="resultTable" columns={this.resultColumns}  dataSource={this.state.resultList} scroll={{ x: '100%' }} size="small" bordered  pagination={false}/>
+                    <Pagination current={this.state.startIndex} 
+                            total={this.state.totalR} 
+                            onChange={(startIndex) => this.onPageNumChange(startIndex)}/> 
                 </Card>
                 <div>
                     <Modal
@@ -336,7 +425,7 @@ class ExecQuery extends React.Component {
                             style={{ width: 300,marginBottom:'10px' }}
                             placeholder="请输入..."
                             enterButton="查询"
-                            onSearch={value => this.onSearch(value)}
+                            onSearch={value => this.onDictionarySearch(value)}
                          />
                          <Table ref="diction" rowSelection={rowSelectionDictionary} columns={dictionaryColumns} 
                          dataSource={this.state.dictionaryList} size="small" bordered  pagination={false}/>
