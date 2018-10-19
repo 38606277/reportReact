@@ -21,6 +21,7 @@ import RuleRouter  from './page/system/rule/rulerouter.jsx';
 import RoleRouter  from './page/system/role/rolerouter.jsx';
 import AuthTypeRouter  from './page/system/authType/authTypeRouter.jsx';
 import QueryRouter  from './page/query/QueryRouter.jsx';
+import FunctionRouter  from './page/function/FunctionClass.jsx';
 // import Login from './page/login/index.jsx';
 
 // import ErrorPage from './page/error/index.jsx';
@@ -153,6 +154,9 @@ class App extends React.Component {
                      <Route path="/role" component={RoleRouter}/>
                      <Route path="/authType" component={AuthTypeRouter}/>
                      <Route path="/query" component={QueryRouter}/>
+                     <Route path="/function/functionClass" component={FunctionRouter}/>
+
+                     
                     {/* <Route path="/function/EditableTable" component={EditableTable} /> */}
                     <Route path="/function/functionCreator/:action/:id" component={functionCreator} />
                     

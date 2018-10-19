@@ -50,6 +50,18 @@ export default class FunctionService {
   
         return HttpService.post(url, '');
     }
+    saveFunctionClass(param){
+        let url = "reportServer/function1/createFunctionClassInfo";
+        return HttpService.post(url, JSON.stringify(param));
+    }
+    updateFunctionClass(param){
+        let url = "reportServer/function1/updateFunctionClassInfo";
+        return HttpService.post(url, JSON.stringify(param));
+    }
+    deleteFunctionClss(param){
+        let url = "reportServer/function1/deleteFunctionClassInfo";
+        return HttpService.post(url, JSON.stringify(param));
+    }
     // 保存一个函数定义
     CreateFunction(jFunc) {
 

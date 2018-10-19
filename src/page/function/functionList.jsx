@@ -74,7 +74,7 @@ class functionList extends React.Component {
                         <Col span={4}> <Button type="primary" style={{width:"100px"}} onClick={()=>window.location='#/function/functionCreator/creat/0'} >新建</Button></Col>
                     </Row> */}
                     <Button href="#/function/functionCreator/create/0" style={{ marginRight: "10px" }} type="primary">新建函数</Button>
-                    <Button href="" style={{ marginRight: "15px" }} type="primary">函数类别管理</Button>
+                    <Button href="#/function/functionClass" style={{ marginRight: "15px" }} type="primary" >函数类别管理</Button>
                     <Search
                         style={{ maxWidth: 300, marginBottom: '10px', float: "right" }}
                         placeholder="请输入..."
