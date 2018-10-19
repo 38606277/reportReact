@@ -22,4 +22,20 @@ export default class QueryService {
         let url="reportServer/dictionary/execlDictionary/"+param;
         return HttpService.post(url,JSON.stringify(page));
     }
+    getAllQueryClass(){
+        let url = "reportServer/query/getAllQueryClass";  
+        return HttpService.post(url, '');
+    }
+    saveQueryClass(param){
+        let url = "reportServer/query/createQueryClassInfo";
+        return HttpService.post(url, JSON.stringify(param));
+    }
+    updateQueryClass(param){
+        let url = "reportServer/query/updateQueryClassInfo";
+        return HttpService.post(url, JSON.stringify(param));
+    }
+    deleteQueryClass(param){
+        let url = "reportServer/query/deleteQueryClassInfo";
+        return HttpService.post(url, JSON.stringify(param));
+    }
 }
