@@ -33,6 +33,11 @@ const QueryClass = Loadable({
     delay:3000
 });
 
+const QueryTemplate = Loadable({
+    loader: () => import('./QueryTemplate.jsx'),
+    loading: loading,
+    delay:3000
+});
 
 class QueryRouter extends React.Component{
     render(){
@@ -41,6 +46,7 @@ class QueryRouter extends React.Component{
                  <Route path="/query/ExecQuery" component={ExecQuery} />
                  <Route path="/query/QueryList" component={QueryList} />
                  <Route path="/query/QueryClass" component={QueryClass} />
+                 <Route path="/query/QueryTemplate" component={QueryTemplate} />
                  <Route path="/query/QueryCreator/:action/:id" component={QueryCreator} />
                  <Redirect exact from="/query" to="/query/ExecQuery"/> 
             </Switch>
