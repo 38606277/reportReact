@@ -4,12 +4,7 @@ import { HashRouter as Router, Switch, Redirect, Route, Link } from 'react-route
 import Loadable from 'react-loadable';
 import loading from '../../util/loading.jsx';
 // 页面
-//import ExecQuery from './ExecQuery.jsx';
-const QueryData = Loadable({
-    loader: () => import('./QueryList.jsx'),
-    loading: loading,
-    delay:3000
-});
+
 const ExecQuery = Loadable({
     loader:()=>import('./ExecQuery.jsx'),
     loading:loading,
@@ -33,8 +28,14 @@ const QueryClass = Loadable({
     delay:3000
 });
 
-const QueryTemplate = Loadable({
-    loader: () => import('./QueryTemplate.jsx'),
+const CreateTemplate = Loadable({
+    loader: () => import('./CreateTemplate.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const QueryData = Loadable({
+    loader: () => import('./QueryData.jsx'),
     loading: loading,
     delay:3000
 });
@@ -46,7 +47,8 @@ class QueryRouter extends React.Component{
                  <Route path="/query/ExecQuery" component={ExecQuery} />
                  <Route path="/query/QueryList" component={QueryList} />
                  <Route path="/query/QueryClass" component={QueryClass} />
-                 <Route path="/query/QueryTemplate" component={QueryTemplate} />
+                 <Route path="/query/CreateTemplate" component={CreateTemplate} />
+                 <Route path="/query/QueryData" component={QueryData} />
                  <Route path="/query/QueryCreator/:action/:id" component={QueryCreator} />
                  <Redirect exact from="/query" to="/query/ExecQuery"/> 
             </Switch>

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link,Redirect } from 'react-router-dom';
-import { Layout, Menu, Avatar, Icon, Tooltip, Button, Card,Popover } from 'antd';
+import { Link, Redirect } from 'react-router-dom';
+import { Layout, Menu, Avatar, Icon, Tooltip, Button, Card, Popover } from 'antd';
 import './Layout.scss';
 
-const { Header, Content,  Sider } = Layout;
+const { Header, Content, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 
 
@@ -15,7 +15,7 @@ export default class SiderBar extends React.Component {
         this.state = {
             collapsed: false,
             visible: false,
-            ishow:'0',
+            ishow: '0',
         };
 
     }
@@ -38,6 +38,10 @@ export default class SiderBar extends React.Component {
                     </SubMenu>
                     <SubMenu key="sub2" title={<span><Icon type="table" /><span>数据查询</span></span>}>
                         <Menu.Item key="5"><Link to='/query/QueryData'>查询报表</Link></Menu.Item>
+                        <SubMenu key="sub2" title={<span><Icon type="table" /><span>数据查询</span></span>}>
+                            <Menu.Item key="5"><Link to='/query/QueryData'>查询报表</Link></Menu.Item>
+                            <Menu.Item key="sub22"><Link to='/query/ExecQuery'>执行查询</Link></Menu.Item>
+                        </SubMenu>
                         <Menu.Item key="sub22"><Link to='/query/ExecQuery'>执行查询</Link></Menu.Item>
                     </SubMenu>
                     <SubMenu key="sub4" title={<span><Icon type="setting" /><span>系统管理</span></span>}>
@@ -52,7 +56,7 @@ export default class SiderBar extends React.Component {
                         <Menu.Item key="/function/functionList"><Link to='/function/functionList'>函数管理</Link></Menu.Item>
                         <Menu.Item key="/query/QueryList"><Link to='/query/QueryList'>查询管理</Link></Menu.Item>
                         <Menu.Item key="/dict/DictList"><Link to='/dict/DictList'>数据字典</Link></Menu.Item>
-                        <Menu.Item key="/query/QueryTemplate"><Link to='/query/QueryTemplate'>定义查询模板</Link></Menu.Item>
+                        <Menu.Item key="/query/CreateTemplate"><Link to='/query/CreateTemplate'>定义查询模板</Link></Menu.Item>
                     </SubMenu>
                 </Menu>
             </Sider>

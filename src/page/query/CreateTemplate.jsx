@@ -56,7 +56,7 @@ const formItemLayout = {
 
 
 // moment.locales('zh-cn');
-class QueryTemplate extends React.Component {
+class CreateTemplate extends React.Component {
 
     constructor(props) {
         super(props);
@@ -235,4 +235,4 @@ class QueryTemplate extends React.Component {
     }
 
 }
-export default QueryTemplate = Form.create({})(QueryTemplate);
+export default CreateTemplate = Form.create({})(CreateTemplate);

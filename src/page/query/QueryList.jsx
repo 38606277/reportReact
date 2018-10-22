@@ -115,7 +115,7 @@ export default class QueryList extends React.Component {
                                 <span>
                                     <a href={`#/query/QueryCreator/update/${record.qry_id}`}>编辑</a>
                                     <Divider type="vertical" />
-                                    <a href={`#/query/QueryTemplate/update/${record.qry_id}`}>模板</a>
+                                    <a href={`#/query/CreateTemplate`}>模板</a>
                                     <Divider type="vertical" />
                                     <a href="javascript:;">删除{record.name}</a>
                                 </span>
