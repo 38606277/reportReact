@@ -2,9 +2,11 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { Layout, Menu, Avatar, Icon, Tooltip, Button, Card, Popover } from 'antd';
 import './Layout.scss';
+import queryService from '../../service/QueryService.jsx';
 
 const { Header, Content, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
+const _query =new queryService();
 
 
 
@@ -16,12 +18,30 @@ export default class SiderBar extends React.Component {
             collapsed: false,
             visible: false,
             ishow: '0',
+            categoryList:[],
         };
 
     }
-
+    componentDidMount() {
+        //获取报表列表
+      _query.getSelectClassTree().then(response => {
+          this.setState({categoryList:response});
+      }, errMsg => {
+          this.setState({
+              categoryList : []
+          });
+      });
+      
+    }
     render() {
-
+        const submun=this.state.categoryList.map((item,index)=>{
+                const p= item.children.map((items,index)=>{
+                    let toa='/query/QueryData/'+items.value;
+                    return (<Menu.Item key={items.value}><Link to={toa}>{items.name}</Link></Menu.Item>);
+                });
+            return  <SubMenu key={item.name} title={item.name}>{p} </SubMenu>;
+         });
+        
         return (
             <Sider
                 trigger={null}
@@ -29,6 +49,7 @@ export default class SiderBar extends React.Component {
                 collapsed={this.state.collapsed}
                 onCollapse={() => this.onCollapse(this.state.collapsed)}
                 theme="light"
+                style={{ overflow: 'auto', height: '100vh', left: 0 }}
             >
                 <Menu theme="light" defaultSelectedKeys={['1']} mode="inline"  >
                     <Menu.Item key="sub" ><Link to='/'><Icon type="home" /><span>首页</span></Link></Menu.Item>
@@ -38,10 +59,16 @@ export default class SiderBar extends React.Component {
                     </SubMenu>
                     <SubMenu key="sub2" title={<span><Icon type="table" /><span>数据查询</span></span>}>
                         <Menu.Item key="5"><Link to='/query/QueryData'>查询报表</Link></Menu.Item>
-                        <SubMenu key="sub2" title={<span><Icon type="table" /><span>数据查询</span></span>}>
-                            <Menu.Item key="5"><Link to='/query/QueryData'>查询报表</Link></Menu.Item>
-                            <Menu.Item key="sub22"><Link to='/query/ExecQuery'>执行查询</Link></Menu.Item>
-                        </SubMenu>
+                        {this.state.categoryList.map(function (item) {
+                                 return (<SubMenu key={item.name}
+                                                  title={<span><Icon type="table"/><span>{item.name}</span></span>}>
+                                     {item.children.map((vl)=>(
+                                         <Menu.Item key={vl.value}><Link to={'/query/ExecQuery/'+vl.value}>{vl.name}</Link></Menu.Item>
+                                     ))}
+                                 </SubMenu>)
+                             }
+                         )
+                     }
                         <Menu.Item key="sub22"><Link to='/query/ExecQuery'>执行查询</Link></Menu.Item>
                     </SubMenu>
                     <SubMenu key="sub4" title={<span><Icon type="setting" /><span>系统管理</span></span>}>
