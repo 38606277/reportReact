@@ -76,11 +76,9 @@ class functionCreator extends React.Component {
                 .then(res => {
                     if (res.resultCode == "1000") {
                         this.setState({
-                            inData: res.data.in,
                             outData: res.data.out
                         });
                         this.props.form.setFieldsValue(res.data);
-                        this.inParam.setFormValue(this.state.inData);
                         this.outParam.setFormValue(this.state.outData);
 
 
@@ -148,11 +146,9 @@ class functionCreator extends React.Component {
         //this.child.setFormValue(res.data.in);
         let formInfo = this.props.form.getFieldsValue();
         this.setState({
-            inData: this.inParam.getFormValue(),
             outData: this.outParam.getFormValue(),
         });
         formInfo.func_sql = this.refs.editorsql.codeMirror.getValue();
-        formInfo.in = this.state.inData;
         formInfo.out = this.state.outData;
         console.log(formInfo);
         // let sql = this.refs.editorsql.codeMirror.getValue();
@@ -281,7 +277,7 @@ class functionCreator extends React.Component {
 
                                     <FormItem label="选择数据库" style={{ marginBottom: "10px" }}>
                                         {
-                                            getFieldDecorator('func_db', {
+                                            getFieldDecorator('dict_db', {
                                                 rules: [{ required: 'true', message: "必须选择数据库" }]
                                             })(
                                                 <Select setValue={this.form} style={{ width: '160px' }}>
@@ -304,7 +300,7 @@ class functionCreator extends React.Component {
                                         <Col span={12}>
                                             <FormItem label=" 字典名称"   >
                                                 {
-                                                    getFieldDecorator('func_name', {
+                                                    getFieldDecorator('dict_name', {
                                                         rules: [{ required: true, message: '函数名称是必须的' }],
                                                     })(
                                                         <Input style={{ minWidth: '100px' }} />
@@ -315,7 +311,7 @@ class functionCreator extends React.Component {
                                         <Col span={12}>
                                             <FormItem label="字典ID"  >
                                                 {
-                                                    getFieldDecorator('func_id', {
+                                                    getFieldDecorator('dict_id', {
                                                     })(
                                                         <Input disabled />
                                                     )
@@ -329,7 +325,7 @@ class functionCreator extends React.Component {
                                         <Col span={24}>
                                             <FormItem label="字典说明" style={{ marginLeft: '14px' }}  >
                                                 {
-                                                    getFieldDecorator('func_desc', {
+                                                    getFieldDecorator('dict_desc', {
                                                     })(
                                                         <TextArea placeholder="此字典主要完成什么功能..." autosize={{ minRows: 1, maxRows: 6 }} style={{ width: "490px" }} />
                                                     )
