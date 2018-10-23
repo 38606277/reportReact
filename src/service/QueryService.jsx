@@ -6,6 +6,12 @@ export default class QueryService {
         let param = {};  
         return HttpService.post(url,param);
     }
+    // 获取函数列表
+    getSelectClassTree() {
+        let url = "reportServer/select/getSelectClassTree";
+        let param = {};  
+        return HttpService.post(url,param);
+    }
     getReportNameList(name){
         let url="reportServer/select/getSelectName/"+name;
         return HttpService.post(url,{});

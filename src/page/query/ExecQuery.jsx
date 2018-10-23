@@ -1,12 +1,15 @@
-import React from 'react'
+import React from 'react';
 import ReactDOM from 'react-dom';
-import { Table, Divider,DatePicker,Modal, Icon, Form, Input, Select, Button, Card, Checkbox,Tooltip,Row,Col,Pagination  } from 'antd';
+import { Table, Divider,DatePicker,Modal, Icon, Form, Input, Tag,Select, Button, Card, Checkbox,Layout,Tooltip,Row,Col,Pagination  } from 'antd';
 import queryService from '../../service/QueryService.jsx';
 import ExportJsonExcel from "js-export-excel"; 
-import ReactHTMLTableToExcel from 'react-html-table-to-excel'//主要是这个插件！！
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 const Option = Select.Option;
 const Search = Input.Search;
+const FormItem = Form.Item;
 const _query =new queryService();
+const CheckableTag = Tag.CheckableTag;
+const { Header, Footer, Sider, Content } = Layout;
 
 class ExecQuery extends React.Component {
 
@@ -14,108 +17,104 @@ class ExecQuery extends React.Component {
         super(props);
         const okdata=[];
         this.state = { 
-          data:[],
-          formData:{},
-          categoryList:[],
+          paramv:this.props.match.params.paramv,
+          paramv2:this.props.match.params.paramv2,
+          data:[],formData:{},categoryList:[],
           reportNameList:[],
-          category:'',
-          reportName:'',
-          inlist:[],
-          outlist:[],
+          category:'',reportName:'',
+          inList:[], outlist:[],
           resultList:[],
           visible: false,
           dictionaryList:[],
-          pageNumd         : 1,
-          perPaged         : 10,
-          searchDictionary :'',
-          startIndex         :1,
-          perPage         :10,
-          searchResult     :'',
-          paramValue:'',
-          paramName:'',
+          pageNumd         : 1,perPaged         : 10, searchDictionary :'',
+          startIndex         :1,perPage         :10, searchResult     :'',
+          paramValue:'',paramName:'',
           selectedRowKeys:[],
-          baoTitle:"数据列表"
+          baoTitle:"数据列表",
+          selectedTags: [],
+          selectedTagsReport: [],
+          newList:[],
+          loading: false
         };
-        
       }
-      
+      //组件更新时被调用 
+        componentWillReceiveProps(nextProps){
+            let key = nextProps.match.params.paramv;
+            let key2 = nextProps.match.params.paramv2;
+            let oldparamv2=this.state.paramv2;
+            this.setState({
+                paramv:key,
+                paramv2:key2,
+               resultList:[],totalR:0
+            },function(){
+                if(oldparamv2!=key2){
+                    this.loadQueryCriteria(this.state.paramv,this.state.paramv2);
+                }
+            });
+        }
       componentDidMount() {
           //获取报表列表
-        _query.getCategoryList().then(response => {
-            const children=[];
-            let rlist=response.data;
-            for (let i = 0; i < rlist.length; i++) {
-              children.push(<Option key={rlist[i].name}>{rlist[i].name}</Option>);
-            }
-            this.setState({categoryList:children});
-        }, errMsg => {
-            this.setState({
-                categoryList : []
-            });
-        });
+          this.loadQueryCriteria(this.state.paramv,this.state.paramv2);
         
       }
     //下拉事件
-    onSelectChange(name,value){
-        // this.state = { 
-        //     data:[],
-        //     formData:{},
-        //     categoryList:[],
-        //     reportNameList:[],
-        //     category:'',
-        //     reportName:'',
-        //     inlist:[],
-        //     outlist:[],
-        //     resultList:[],
-        //     visible: false,
-        //     dictionaryList:[],
-        //     pageNumd         : 1,
-        //     perPaged         : 10,
-        //     searchDictionary :'',
-        //     startIndex         :1,
-        //     perPage         :10,
-        //     searchResult     :'',
-        //     paramValue:'',
-        //     paramName:'',
-        //     selectedRowKeys:[],
-        //     baoTitle:"数据列表"
-        //   };
-            if(name=="category"){
-                this.setState({category:value,resultList:[],data:[],selectedRowKeys:[],formData:[],inlist:[],outlist:[],totalR:0},function(){
-                    this.loadReportNameList(value);
-                });
-            }else if(name=="reportName"){
-                this.setState({reportName:value,resultList:[],data:[],selectedRowKeys:[],formData:[],inlist:[],outlist:[],totalR:0},function(){
-                    this.loadQueryCriteria(this.state.category,value);
-                });
-            }
-    }
-    //获取报名名称列表
-    loadReportNameList(param){
-        _query.getReportNameList(param).then(response => {
-            const children2=[];
-            let rlist=response.data;
-            for (let i = 0; i < rlist.length; i++) {
-                children2.push(<Option key={rlist[i].name}>{rlist[i].name}</Option>);
-            }
-            this.setState({reportNameList:children2});
-        });     
-    }
+    // onSelectChange(name,value,checked){
+    //         if(name=="category"){
+    //             this.setState({category:value,selectedTags:[],selectedTagsReport:[],resultList:[],data:[],selectedRowKeys:[],formData:[],inlist:[],outlist:[],totalR:0},function(){
+    //                 const { selectedTags } = this.state;
+    //                 const nextSelectedTags = checked? [...selectedTags, value]: selectedTags.filter(t => t !== value);
+    //                 this.setState({ selectedTags: nextSelectedTags });
+    //                 this.loadReportNameList(value);
+    //             });
+    //         }else if(name=="reportName"){
+    //             this.setState({reportName:value,selectedTagsReport:[],resultList:[],data:[],selectedRowKeys:[],formData:[],inlist:[],outlist:[],totalR:0},function(){
+    //                 const { selectedTagsReport } = this.state;
+    //                 const nextSelectedTags = checked? [...selectedTagsReport, value]: selectedTagsReport.filter(t => t !== value);
+    //                 this.setState({ selectedTagsReport: nextSelectedTags });
+    //                 this.loadQueryCriteria(this.state.category,value);
+    //             });
+    //         }
+    // }
+    // //获取报名名称列表
+    // loadReportNameList(param){
+    //     _query.getReportNameList(param).then(response => {
+    //         const children2=[];
+    //         let rlist=response.data;
+    //         for (let i = 0; i < rlist.length; i++) {
+    //             children2.push(rlist[i].name);
+    //             //children2.push(<Option key={rlist[i].name}>{rlist[i].name}</Option>);
+    //         }
+    //         this.setState({reportNameList:children2});
+    //     });     
+    // }
     //获取查询条件及输出字段
     loadQueryCriteria(selectClassId,selectID){
         const inlist=[],outlist=[];
         _query.getQueryCriteria(selectClassId,selectID).then(response=>{
            let inColumns=response.data.in;
            let outColumns=response.data.out;
-           inColumns.map((item,index)=>{
-                let json={key:item.id,name:item.name,lookup:item.lookup,datatype:item.datatype,mut:item.mut,default:item.default};
-                inlist.push(json);
-            });
+        //    inColumns.map((item,index)=>{
+        //         let json={key:item.id,name:item.name,lookup:item.lookup,datatype:item.datatype,mut:item.mut,default:item.default};
+        //         inlist.push(json);
+        //     });
+            var k=Math.ceil(inColumns.length/2);
+            var j= 0;
+            for(var i=1;i<=k;i++){
+                var arr= new Array();
+                for(j ; j < i*2; j++){
+                    if(undefined!=inColumns[j]){
+                        arr.push(inColumns[j]);
+                    }
+                }
+                inlist.push(arr);  
+             }
             outColumns.map((item,index)=>{
                 let json={key:item.id.toUpperCase(),title:item.name,dataIndex:item.id.toUpperCase()};
                 outlist.push(json);
             });
-            this.setState({inlist:inlist,outlist:outlist},function(){});
+            this.setState({outlist:outlist,inList:inlist},function(){
+                
+            });
         });
     }
     //设置参数条件值
@@ -123,33 +122,30 @@ class ExecQuery extends React.Component {
          let id = e.target.id;
          let nv={[id]:e.target.value};
          this.state.data.push(nv);
-         //this.state.data[index][field] = e.target.value;
       }
      //执行查询 
     execSelect(){
-        this.setState({baoTitle:this.state.reportName},function(){});
-        let param=[{in:this.state.data},{startIndex:this.state.startIndex,perPage:10,searchResult:this.state.searchResult}];
-        _query.execSelect(this.state.category,this.state.reportName,param).then(response=>{
-            if(response.resultCode!='3000'){
-                this.setState({resultList:response.data.list,totalR:response.data.totalSize});
-            }
-        });
+        this.setState({baoTitle:this.state.paramv2},function(){});
+        if(null!=this.state.data){
+            let param=[{in:this.state.data},{startIndex:this.state.startIndex,perPage:10,searchResult:this.state.searchResult}];
+            _query.execSelect(this.state.paramv,this.state.paramv2,param).then(response=>{
+                if(response.resultCode!='3000'){
+                    this.setState({resultList:response.data.list,totalR:response.data.totalSize});
+                }
+            });
+        }
         const tableCon = ReactDOM.findDOMNode(this.refs['resultTable'])//利用reactdom.finddomnode()来获取真实DOM节点
         const table = tableCon.querySelector('table')
         table.setAttribute('id','table-to-xls')
     }
     //打开模式窗口
     openModelClick(name,param){
-        this.setState({
-            visible: true,
-          });
-          this.okdata=[];
-        //  this.refs.diction;
-         this.setState({dictionaryList:[],paramValue:param,paramName:name,totald:0,selectedRowKeys:[]},function(){
+         this.okdata=[];
+         this.setState({ visible: true,
+            loading: true,dictionaryList:[],paramValue:param,paramName:name,
+            totald:0,selectedRowKeys:[]},function(){
             this.loadModelData(param);
          });
-         
-        //console.log("打开"+name);
     }
     //调用模式窗口内的数据查询
     loadModelData(param){
@@ -157,8 +153,9 @@ class ExecQuery extends React.Component {
         page.pageNumd  = this.state.pageNumd;
         page.perPaged  = this.state.perPaged;
         page.searchDictionary=this.state.searchDictionary;
+
         _query.getDictionaryList(param,page).then(response=>{
-          this.setState({dictionaryList:response.data,totald:response.totald},function(){});
+          this.setState({loading: false,dictionaryList:response.data,totald:response.totald},function(){});
         });
     }
      // 字典页数发生变化的时候
@@ -178,12 +175,12 @@ class ExecQuery extends React.Component {
     }
     //模式窗口点击确认
       handleOk = (e) => {
+        
             let values=this.okdata.join(",");
             let name = this.state.paramName;
             let nv={[name]:values};
             this.state.data.push(nv);
             this.props.form.setFieldsValue({[name]:values});
-        // document.getElementById(name).value=values;
             this.setState({
                  visible: false,
             });
@@ -205,7 +202,7 @@ class ExecQuery extends React.Component {
       //导出到Excel
       downloadExcel = () => {
         // currentPro 是列表数据
-            const  currentPro  = this.state.formData;
+            const  currentPro  = this.state.outlist;
             var option={};
             let dataTable = [],keyList=[];
             if (currentPro) {
@@ -214,28 +211,6 @@ class ExecQuery extends React.Component {
                   keyList.push(currentPro[i].key);
               }
             }
-            // const  dataListPro  = this.state.resultList;
-            // let dataList = [];
-            // if (dataListPro) {
-            //   for (let i in dataListPro) {
-            //     let obj={};
-            //       for(let ii=0;ii<keyList.length;ii++){
-            //           let vs=keyList[ii];
-            //           obj={
-            //             [vs]:dataListPro[i][vs]
-            //           }
-            //         console.log(dataListPro[i][vs]);
-            //         console.log(obj);
-            //       }
-                 
-            //     // let obj = {
-            //     //     '项目名称': dataListPro[i].name,
-            //     //     '项目地址': dataListPro[i].address,
-            //     //     '考勤范围': dataListPro[i].radius,
-            //     //   }
-            //    // dataList.push(currentPro[i].title);
-            //   }
-            // }
             option.fileName = this.state.reportName;
             option.datas=[
               {
@@ -264,7 +239,6 @@ class ExecQuery extends React.Component {
      }
      //执行查询的打印
      printResultList(){
-        //  this.refs.diction
         var tableToPrint = document.getElementById('table-to-xls');//将要被打印的表格
         var newWin= window.open("");//新打开一个空窗口
         newWin.document.write(tableToPrint.outerHTML);//将表格添加进新的窗口
@@ -273,70 +247,71 @@ class ExecQuery extends React.Component {
         newWin.print();//打印
         newWin.close();//关闭窗口
      }
-    
+        
     render() {
-      const  inColumns = [{
-        title: '参数名',
-        dataIndex: 'key',
-        key: 'key',
-      }, {
-        title: '参数值',
-        dataIndex: 'in_name',
-        key: 'in_name',
-        render: (text, record,index) => {
-            if(record.datatype=='varchar'){
-                return (
-                    <Form>
-                      <Form.Item style={{ margin: 0 }}>
-                        {this.props.form.getFieldDecorator(record.name, {
-                          rules: [{
-                            required: true,
-                            message: `参数名是必须的！`,
-                          }]
+        const { getFieldDecorator } = this.props.form;
+    //   const  inColumns = [{
+    //     title: '参数名',
+    //     dataIndex: 'key',
+    //     key: 'key',
+    //   }, {
+    //     title: '参数值',
+    //     dataIndex: 'in_name',
+    //     key: 'in_name',
+    //     render: (text, record,index) => {
+    //         if(record.datatype=='varchar'){
+    //             return (
+    //                 <Form>
+    //                   <Form.Item style={{ margin: 0 }}>
+    //                     {this.props.form.getFieldDecorator(record.name, {
+    //                       rules: [{
+    //                         required: true,
+    //                         message: `参数名是必须的！`,
+    //                       }]
                           
-                        })(
-                            <Input onChange={e=>this.changeEvent(e)} addonAfter={record.lookup==''?'':<Icon type="ellipsis" theme="outlined"  onClick={e=>this.openModelClick(record.key,record.lookup)}/>} />
-                        )}
-                     </Form.Item>
-                </Form>
-                );
-            }else{
-                return (
-                <Form>
-                    <Form.Item style={{ margin: 0 }}>
-                    {this.props.form.getFieldDecorator(record.name, {
-                        rules: [{
-                        required: true,
-                        message: `参数名是必须的！`,
-                        }]
-                    })(
-                        <DatePicker />
-                    )}
-                    </Form.Item>
-                </Form>
-               );
-            }
-          }
-      }];
-      const  outColumns = [{
-        title: '列名',
-        dataIndex: 'title',
-        key: 'title',
-      }];
-      const resultColumns=[];
-      const rowSelection = {
-        onSelect: (record, selected, selectedRows) => {
-            this.resultColumns=selectedRows;
-          this.setState({formData:selectedRows},function(){
+    //                     })(
+    //                         <Input onChange={e=>this.changeEvent(e)} addonAfter={record.lookup==''?'':<Icon type="ellipsis" theme="outlined"  onClick={e=>this.openModelClick(record.name,record.lookup)}/>} />
+    //                     )}
+    //                  </Form.Item>
+    //             </Form>
+    //             );
+    //         }else{
+    //             return (
+    //             <Form>
+    //                 <Form.Item style={{ margin: 0 }}>
+    //                 {this.props.form.getFieldDecorator(record.name, {
+    //                     rules: [{
+    //                     required: true,
+    //                     message: `参数名是必须的！`,
+    //                     }]
+    //                 })(
+    //                     <DatePicker />
+    //                 )}
+    //                 </Form.Item>
+    //             </Form>
+    //            );
+    //         }
+    //       }
+    //   }];
+    //   const  outColumns = [{
+    //     title: '列名',
+    //     dataIndex: 'title',
+    //     key: 'title',
+    //   }];
+    //  const resultColumns=this.state.outlist;
+    //   const rowSelection = {
+    //     onSelect: (record, selected, selectedRows) => {
+    //         this.resultColumns=selectedRows;
+    //       this.setState({formData:selectedRows},function(){
             
-          });
-        },
-        onSelectAll: (selected, selectedRows, changeRows) => {
-            this.resultColumns=selectedRows;
-            this.setState({formData:selectedRows},function(){
-            });
-        },
-      };
+    //       });
+    //     },
+    //     onSelectAll: (selected, selectedRows, changeRows) => {
+    //         this.resultColumns=selectedRows;
+    //         this.setState({formData:selectedRows},function(){
+    //         });
+    //     },
+    //   };
       const { selectedRowKeys } = this.state;
     
       const rowSelectionDictionary = {
@@ -358,84 +333,157 @@ class ExecQuery extends React.Component {
     this.state.dictionaryList.map((item,index)=>{
         item.key=item.value;
     });
+    
+//   const selectedTags=this.state.selectedTags;
+//   const selectedTagsReport =this.state.selectedTagsReport;
+  const formItemLayout = {
+    labelCol: {
+      xs: { span: 24 },
+      sm: { span: 8 },
+    },
+    wrapperCol: {
+      xs: { span: 24 },
+      sm: { span: 16 },
+    },
+  };
+ 
+  const inColumn=this.state.inList.map((item, index)=>{
+    const rc=item.map((record, index)=> {
+            if(record.datatype=='varchar'){
+                return (
+                    <Col span={12} key={record.name}>
+                    <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.name} >
+                        {getFieldDecorator(record.name, {
+                          rules: [{
+                            required: true,
+                            message: `参数名是必须的！`,
+                          }]
+                        })(
+                            <Input onChange={e=>this.changeEvent(e)} 
+                            addonAfter={record.lookup==''?'':
+                            <Icon type="ellipsis" theme="outlined"  
+                            onClick={e=>this.openModelClick(record.name,record.lookup)}/>} />
+                        )}
+                     </FormItem>
+                </Col>
+                );
+            }else{
+                return (
+                    <Col span={12}  key={record.name}>
+                 <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.name}>
+                    {getFieldDecorator(record.name, {
+                        rules: [{
+                        required: true,
+                        message: `参数名是必须的！`,
+                        }]
+                    })(
+                        <DatePicker />
+                    )}
+                   </FormItem>
+                </Col>
+               );
+            }
+        });
+        return <Row key={index}>{rc}</Row>;
+            
+    });
     return (
         <div id="page-wrapper">
-                <Card title="查询向导"  style={{float:"left",width:"30%"}}>
-                        <Row><Col>
+        {/* <Search style={{ width: 300,marginBottom:'10px' ,marginRight:'10px'}}
+                placeholder="请输入..."
+                enterButton="查询"
+                onSearch={value => this.onResultSearch(value)}
+                /> */}
+        <Card bordered={false} title={this.state.paramv2} extra={ <div>
+                        <a onClick={()=>this.execSelect()}>查询 </a>
+                        <Divider type="vertical" />
+                        <a onClick={this.downloadExcel}>保存到excel</a>
+                        <Divider type="vertical" />
+                        <a onClick={()=>this.printResultList()}>打印</a>
+                    </div>}>
+                    {inColumn}
+        </Card>            
+               {/* <Row><Col>
                           <Button type='primary' onClick={()=>this.execSelect()}>执行查询</Button>
-                        </Col></Row> 
-                        <Row style={{marginTop:'10px'}}><Col>
-                                报表类别：
-                                <Select  style={{ width: '70%' }} placeholder="请选择"  name='category' 
-                                    onChange={(value) =>this.onSelectChange('category',value)}
-                                >
-                                    {this.state.categoryList}
-                                </Select>
-                         </Col></Row>
-                        <Row><Col>
-                            报表名称：
-                                <Select  style={{ width: '70%',marginTop:'20px' }} placeholder="请选择"  name='reportName' 
-                                    onChange={(value) =>this.onSelectChange('reportName',value)}
-                                >
-                                    {this.state.reportNameList}
-                                </Select>
-                        </Col></Row>
+                    </Col></Row> 
+        
+             <Layout>
+                <Sider width={100} style={{backgroundColor:'#fff'}}><h6 style={{ marginRight: 8, display: 'inline' ,fontSize:16}}>报表类别:</h6></Sider>
+                <Content style={{backgroundColor:'#fff',fontSize:14}}>{this.state.categoryList.map(tag => (
+                            <CheckableTag
+                                key={tag}
+                                checked={selectedTags.indexOf(tag) > -1}
+                                onChange={(checked) =>this.onSelectChange('category',tag,checked)}
+                            >
+                                {tag}
+                        </CheckableTag>
+                    ))}</Content>
+            </Layout>
+            <Divider  style={{backgroundColor:'#fff',margin :'1px 0 '}}/>
+            <Layout>
+            <Sider  width={100} style={{backgroundColor:'#fff',fontSize:14}}><h6 style={{ marginRight: 8, display: 'inline' ,fontSize:16}}>报表类别:</h6></Sider>
+                <Content style={{backgroundColor:'#fff'}}> {this.state.reportNameList.map(tag => (
+                        <CheckableTag
+                            key={tag}
+                            checked={selectedTagsReport.indexOf(tag) > -1}
+                            onChange={(checked) =>this.onSelectChange('reportName',tag,checked)}
+                        >
+                            {tag}
+                    </CheckableTag>
+                    ))}</Content>
+            </Layout> 
+            
+                <Row><Col>
+                    <Form>
+                        {listss}
+                    </Form>
+                </Col></Row>
 
-                    <Row><Col>
-                    <Table title={() => '查询条件'}  ref="table" dataSource={this.state.inlist} columns={inColumns}  pagination={false} 
-                    style={{marginLeft: '-30px', marginRight: '-30px', border: '0'}} size="small"/>
-                    </Col></Row>
-
-                  <Row><Col>
+                   <Row><Col>
                      <Table title={() => '输出字段'} rowSelection={rowSelection} dataSource={this.state.outlist} columns={outColumns}  pagination={false} 
                     style={{marginTop:'10px', marginLeft: '-30px', marginRight: '-30px', border: '0'}} size="small"/>
                     </Col></Row>
-                </Card>
-            
-                <Card title={this.state.baoTitle} style={{float:"left",width:"70%"}}>
-                    <Button type="primary" onClick={this.downloadExcel} style={{marginRight:'10px'}}>导出</Button>
-                    <ReactHTMLTableToExcel
+           
+             </Card> */}
+            <Card >
+                {/* <Button type="primary" onClick={this.downloadExcel} style={{marginRight:'10px'}}>导出</Button>
+                <ReactHTMLTableToExcel
                       className="downloadButton"
                       table="table-to-xls"
                       filename={this.state.reportName}
                       sheet={this.state.reportName}
                       buttonText="导出2"
-                        style={{marginRight:'10px'}}/>
+                    style={{marginRight:'10px'}}/> */}
       
+                
+                        {/* <Button type="primary" onClick={()=>this.printResultList()}>打印</Button> */}
+                <Table ref="resultTable" columns={this.state.outlist} dataSource={this.state.resultList} scroll={{ x: '100%' }} size="small" bordered  pagination={false}/>
+                <Pagination current={this.state.startIndex} 
+                        total={this.state.totalR} 
+                        onChange={(startIndex) => this.onPageNumChange(startIndex)}/> 
+            </Card>
+            <div>
+                <Modal
+                title="字典查询"
+                visible={this.state.visible}
+                onOk={this.handleOk}
+                onCancel={this.handleCancel}
+                >
                     <Search
-                            style={{ width: 300,marginBottom:'10px' ,marginRight:'10px'}}
-                            placeholder="请输入..."
-                            enterButton="查询"
-                            onSearch={value => this.onResultSearch(value)}
-                         />
-                         <Button type="primary" onClick={()=>this.printResultList()}>打印</Button>
-                    <Table ref="resultTable" columns={this.resultColumns}  dataSource={this.state.resultList} scroll={{ x: '100%' }} size="small" bordered  pagination={false}/>
-                    <Pagination current={this.state.startIndex} 
-                            total={this.state.totalR} 
-                            onChange={(startIndex) => this.onPageNumChange(startIndex)}/> 
-                </Card>
-                <div>
-                    <Modal
-                    title="字典查询"
-                    visible={this.state.visible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                    >
-                        <Search
-                            style={{ width: 300,marginBottom:'10px' }}
-                            placeholder="请输入..."
-                            enterButton="查询"
-                            onSearch={value => this.onDictionarySearch(value)}
-                         />
-                         <Table ref="diction" rowSelection={rowSelectionDictionary} columns={dictionaryColumns} 
-                         dataSource={this.state.dictionaryList} size="small" bordered  pagination={false}/>
-                         <Pagination current={this.state.pageNumd} 
-                            total={this.state.totald} 
-                            onChange={(pageNumd) => this.onPageNumdChange(pageNumd)}/> 
-                    </Modal>
-                </div>
+                        style={{ width: 300,marginBottom:'10px' }}
+                        placeholder="请输入..."
+                        enterButton="查询"
+                        onSearch={value => this.onDictionarySearch(value)}
+                        />
+                        <Table ref="diction" rowSelection={rowSelectionDictionary} columns={dictionaryColumns} 
+                        dataSource={this.state.dictionaryList} size="small" bordered  pagination={false}/>
+                        <Pagination current={this.state.pageNumd} 
+                        total={this.state.totald} 
+                        onChange={(pageNumd) => this.onPageNumdChange(pageNumd)}/> 
+                </Modal>
             </div>
+         </div>
     )}
 }
 
-export default ExecQuery = Form.create()(ExecQuery);
+export default Form.create()(ExecQuery);
