@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { Layout, Menu, Avatar, Icon, Tooltip, Button, Card, Popover } from 'antd';
-import './Layout.scss';
+import { Layout, Menu, Icon} from 'antd';
 import queryService from '../../service/QueryService.jsx';
 
 const { Header, Content, Sider } = Layout;
@@ -15,9 +14,6 @@ export default class SiderBar extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            collapsed: false,
-            visible: false,
-            ishow: '0',
             categoryList:[],
         };
 
@@ -41,14 +37,14 @@ export default class SiderBar extends React.Component {
                 });
             return  <SubMenu key={item.name} title={item.name}>{p} </SubMenu>;
          });
-        
+         const collapsed=this.props.collapsed;
         return (
             <Sider
                 trigger={null}
                 collapsible
-                collapsed={this.state.collapsed}
-                onCollapse={() => this.onCollapse(this.state.collapsed)}
+                collapsed={collapsed}
                 theme="light"
+                width='300px'
                 style={{ overflow: 'auto', height: '100vh', left: 0 }}
             >
                 <Menu theme="light" defaultSelectedKeys={['1']} mode="inline"  >
@@ -69,7 +65,7 @@ export default class SiderBar extends React.Component {
                              }
                          )
                      }
-                        <Menu.Item key="sub22"><Link to='/query/ExecQuery'>执行查询</Link></Menu.Item>
+                        {/* <Menu.Item key="sub22"><Link to='/query/ExecQuery'>执行查询</Link></Menu.Item> */}
                     </SubMenu>
                     <SubMenu key="sub4" title={<span><Icon type="setting" /><span>系统管理</span></span>}>
                         <Menu.Item key="/user"><Link to='/user'>用户管理</Link></Menu.Item>
