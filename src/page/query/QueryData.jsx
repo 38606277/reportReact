@@ -70,6 +70,7 @@ class QueryData extends React.Component {
                                     <FormItem label=" 项目开工日期"    >
                                         {
                                             getFieldDecorator('class_id', {
+                                                rules: [{ required: true, message: '函数名称是必须的' }],
                                             })(
                                                 <Input style={{ minWidth: '300px' }} />
                                             )
