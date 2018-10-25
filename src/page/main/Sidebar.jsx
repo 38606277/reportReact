@@ -30,13 +30,7 @@ export default class SiderBar extends React.Component {
       
     }
     render() {
-        const submun=this.state.categoryList.map((item,index)=>{
-                const p= item.children.map((items,index)=>{
-                    let toa='/query/QueryData/'+items.value;
-                    return (<Menu.Item key={items.value}><Link to={toa}>{items.name}</Link></Menu.Item>);
-                });
-            return  <SubMenu key={item.name} title={item.name}>{p} </SubMenu>;
-         });
+        
          const collapsed=this.props.collapsed;
         return (
             <Sider
@@ -54,7 +48,8 @@ export default class SiderBar extends React.Component {
                         <Menu.Item key="/task/taskList"><Link to='/task/taskList'>已办任务</Link></Menu.Item>
                     </SubMenu>
                     <SubMenu key="sub2" title={<span><Icon type="table" /><span>数据查询</span></span>}>
-                        <Menu.Item key="5"><Link to='/query/QueryData'>查询报表</Link></Menu.Item>
+                        <Menu.Item key="5"><Link to='/query/QueryData'>数据查询</Link></Menu.Item>
+                        <Menu.Item key="5dd"><Link to='/query/Contaier'>Box</Link></Menu.Item>
                         {this.state.categoryList.map(function (item) {
                                  return (<SubMenu key={item.name}
                                                   title={<span><Icon type="table"/><span>{item.name}</span></span>}>
