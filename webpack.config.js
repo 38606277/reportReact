@@ -46,6 +46,7 @@ module.exports = {
                         presets: ['env', 'react','es2015','stage-0'],
                         plugins: [
                             'syntax-dynamic-import',
+                            "transform-decorators-legacy",
                             ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": "css" }] // `style: true` 会加载 less 
                         ]
 
