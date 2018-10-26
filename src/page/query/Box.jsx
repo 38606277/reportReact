@@ -7,13 +7,16 @@ import { Button } from 'antd';
 
 const sourceSpec = {
   beginDrag(props, monitor, component){
+    console.log("beginDrag");
+    // console.log(monitor);
+    // console.log(component);
     // 返回需要注入的属性
     return {
       name: props.name,
-      index: props.index, 
     }
   },
   endDrag(props, monitor, component){
+    console.log(monitor);
     const item = monitor.getItem()
 		const dropResult = monitor.getDropResult()
 
@@ -41,12 +44,16 @@ const sourceSpec = {
     // const dropResult = monitor.getDropResult();
     // CardActions.moveCardToList(item.id, dropResult.listId);
   },
-  canDrag(props, monitor){
-    // ..
-  },
-  isDragging(props, monitor){
-    // ..
-  }
+  // canDrag(props, monitor){
+  //   console.log(props);
+  //   console.log(monitor);
+  //   // ..
+  // },
+  // isDragging(props, monitor){
+  //   // console.log(props);
+  //   // console.log(monitor);
+  //   // ..
+  // }
 }
 function collect(connect, monitor) {
   return {
@@ -64,11 +71,11 @@ const style = {
 }
 
  class Box extends React.Component  {
-   static propTypes = {
-		connectDragSource: PropTypes.func.isRequired,
-		isDragging: PropTypes.bool.isRequired,
-		name: PropTypes.string.isRequired,
-	}
+  //  static propTypes = {
+	// 	connectDragSource: PropTypes.func.isRequired,
+	// 	isDragging: PropTypes.bool.isRequired,
+	// 	name: PropTypes.string.isRequired,
+	// }
   render() {
     const { isDragging, connectDragSource } = this.props;
 		const { name } = this.props;

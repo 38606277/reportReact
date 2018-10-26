@@ -18,29 +18,34 @@ const style = {
 	float: 'left',
 }
 const targetSpec = {
-  drop(props, monitor, component) {
-		return {
-			name: `${allowedDropEffect} Dustbin`,
-      allowedDropEffect:{
-        connectDropTarget: ConnectDropTarget,
-        canDrop: boolean,
-        isOver: boolean,
-        allowedDropEffect: string
-      }
-		}
-	},
   // drop(props, monitor, component) {
-	// 	// 获取正在拖放的数据
-  //   const item = monitor.getItem();
-  //   console.log(item);
-	// 	// 更新组件状态
-	// 	component.setState({
-	// 		item
-	// 	})
-		
+	// 	return {
+	// 		name: `${allowedDropEffect} Dustbin`,
+  //     allowedDropEffect:{
+  //       connectDropTarget: ConnectDropTarget,
+  //       canDrop: boolean,
+  //       isOver: boolean,
+  //       allowedDropEffect: string
+  //     }
+	// 	}
 	// },
+  drop(props, monitor, component) {
+    console.log("drop");
+    // console.log(monitor);
+    // console.log(component);
+		// 获取正在拖放的数据
+    const item = monitor.getItem();
+    console.log(item);
+		// 更新组件状态
+		component.setState({
+			item
+		})
+		
+	},
   hover(props, monitor, component) {
-        
+    console.log("hover");
+    // console.log(monitor);
+    // console.log(component);
       // 当前拖动的index
       const dragIndex = monitor.getItem().index;
       // 当前hover 的index
@@ -70,9 +75,10 @@ const targetSpec = {
       // 新的位置
       monitor.getItem().index = hoverIndex;
   },
-  canDrop(props, monitor){
-    // ..
-  }
+  // canDrop(props, monitor){
+  //   // console.log(props);
+  //   // console.log(monitor);
+  // }
 }
 function collect(connect, monitor) {
   return {
@@ -82,12 +88,12 @@ function collect(connect, monitor) {
   }
 }
  class Dustbin extends React.Component {
-  static propTypes = {
-		connectDropTarget: PropTypes.func.isRequired,
-		isOver: PropTypes.bool.isRequired,
-		canDrop: PropTypes.bool.isRequired,
-		allowedDropEffect: PropTypes.string.isRequired,
-	}
+  // static propTypes = {
+	// 	connectDropTarget: PropTypes.func.isRequired,
+	// 	isOver: PropTypes.bool.isRequired,
+	// 	canDrop: PropTypes.bool.isRequired,
+	// 	allowedDropEffect: PropTypes.string.isRequired,
+	// }
   render() {
       const { canDrop, isOver, allowedDropEffect, connectDropTarget } = this.props
       const isActive = canDrop && isOver
