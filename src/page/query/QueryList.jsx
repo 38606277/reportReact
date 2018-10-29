@@ -6,7 +6,7 @@
 */
 import React from 'react';
 import Table from 'antd/lib/table';
-import { Card, Button, Divider, Input, Form, FormItem, Icon, Row, Col } from 'antd';
+import { Card, Button, Divider, Input,message,Form, FormItem, Icon, Row, Col } from 'antd';
 
 import FunctionService from '../../service/FunctionService.jsx'
 import HttpService from '../../util/HttpService.jsx';
@@ -73,7 +73,7 @@ export default class QueryList extends React.Component {
                         <Col span={10}></Col>
                         <Col span={4}> <Button type="primary" style={{width:"100px"}} onClick={()=>window.location='#/function/functionCreator/creat/0'} >新建</Button></Col>
                     </Row> */}
-                    <Button href="#/query/QueryCreator/creat/0" style={{ marginRight: "10px" }} type="primary">新建查询</Button>
+                    <Button href="#/query/QueryCreator/create/0" style={{ marginRight: "10px" }} type="primary">新建查询</Button>
                     <Button href="#/query/QueryClass" style={{ marginRight: "15px" }} type="primary">查询类别管理</Button>
                     <Search
                         style={{ maxWidth: 300, marginBottom: '10px', float: "right" }}
@@ -87,6 +87,7 @@ export default class QueryList extends React.Component {
                             title="查询ID"
                             dataIndex="qry_id"
                             key="qry_id"
+                            sorter={(a, b) => a.qry_id - b.qry_id}
                         />
                         <Column
                             title="查询名称"
@@ -102,6 +103,7 @@ export default class QueryList extends React.Component {
                             title="查询类别"
                             dataIndex="class_name"
                             key="class_name"
+                            sorter={(a, b) => a.class_name.length - b.class_name.length}
                         />
                         <Column
                             title="调用方式"

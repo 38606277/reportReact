@@ -24,7 +24,7 @@ class Login extends React.Component{
         }
     }
     componentWillMount(){
-        document.title = '登录 - MMALL ADMIN';
+        document.title = '登录 - report';
     }
     // 当用户名发生改变
     onInputChange(e){

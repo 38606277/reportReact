@@ -55,6 +55,7 @@
     "react-trend": "^1.2.4",
     "simditor": "^2.3.6",
     "umi": "^2.0.0-beta.10",
-    "whatwg-fetch": "^2.0.4"
+    "whatwg-fetch": "^2.0.4",
+    "react-drag-and-drop":"2.4.0"
   }
 }

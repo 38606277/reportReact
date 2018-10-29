@@ -4,19 +4,18 @@
 * @Last Modified by:   Rosen
 * @Last Modified time: 2018-02-07 10:35:01
 */
-const path              = require('path');
-const webpack           = require('webpack');
+const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 let WEBPACK_ENV = process.env.WEBPACK_ENV || 'dev';
-console.log(WEBPACK_ENV); 
+console.log(WEBPACK_ENV);
 module.exports = {
     devtool: 'source-map',
-    // entry: './src/app.jsx',
-    entry: { 
-        app: ["babel-polyfill", "./src/app.jsx"] 
-        },
+    entry: {
+        app: ["babel-polyfill", "./src/app.jsx"]
+    },
     output: {
         path: path.resolve(__dirname, 'dist'),
         // publicPath: WEBPACK_ENV === 'dev' 
@@ -42,8 +41,8 @@ module.exports = {
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        babelrc:false,
-                        presets: ['env', 'react','es2015','stage-0'],
+                        babelrc: false,
+                        presets: ['env', 'react', 'es2015', 'stage-0'],
                         plugins: [
                             'syntax-dynamic-import',
                             ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": "css" }] // `style: true` 会加载 less 
@@ -116,7 +115,7 @@ module.exports = {
         new ExtractTextPlugin("css/[name].css"),
         // 提出公共模块
         new webpack.optimize.CommonsChunkPlugin({
-            name : 'common',
+            name: 'common',
             filename: 'js/base.js'
         })
     ],
@@ -125,14 +124,14 @@ module.exports = {
         historyApiFallback: {
             index: '/dist/index.html'
         },
-        proxy : {
-            '/manage' : {
+        proxy: {
+            '/manage': {
                 target: 'http://admintest.happymmall.com',
-                changeOrigin : true
+                changeOrigin: true
             },
-            '/user/logout.do' : {
+            '/user/logout.do': {
                 target: 'http://admintest.happymmall.com',
-                changeOrigin : true
+                changeOrigin: true
             }
         }
     }

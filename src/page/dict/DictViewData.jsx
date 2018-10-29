@@ -22,11 +22,12 @@ export default class DictList extends React.Component {
         this.state = {
             list: [],
             selectRow:[],
+            dict_id: this.props.match.params.id
         };
     }
     componentDidMount() {
         let param = {};
-        HttpService.post('reportServer/dict/getAllDictName', null)
+        HttpService.post('reportServer/dict/getDictValueByID/'+this.state.dict_id, null)
             .then(res => {
                 if (res.resultCode == "1000")
                     this.setState({ list: res.data })
@@ -82,14 +83,9 @@ export default class DictList extends React.Component {
 
         return (
             <div>
-                <Card title="字典列表" bodyStyle={{ padding: "10px" }}>
-                    {/* <Row style={{marginBottom:"10px"}}>
-                        <Col span={6}> <Input prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="输入函数名称" /></Col>
-                        <Col span={4}></Col>
-                        <Col span={10}></Col>
-                        <Col span={4}> <Button type="primary" style={{width:"100px"}} onClick={()=>window.location='#/function/functionCreator/creat/0'} >新建</Button></Col>
-                    </Row> */}
-                    <Button href="#/dict/DictCreator/create/0" style={{ marginRight: "10px" }} type="primary">新建数据字典</Button>
+                <Card title="字典值列表" bodyStyle={{ padding: "10px" }}>
+                   
+                    <Button href="#/dict/DictCreator/create/0" style={{ marginRight: "10px" }} type="primary">新建</Button>
                     <Button onClick={()=>this.onDelButtonClick()} style={{ marginRight: "10px" }} >删除</Button>
                     <Search
                         style={{ maxWidth: 300, marginBottom: '10px', float: "right" }}
@@ -103,35 +99,24 @@ export default class DictList extends React.Component {
                     ref="tableDict"
                     >
                         <Column
-                            title="字典ID"
-                            dataIndex="dict_id"
-                            key="dict_id"
+                            title="编码"
+                            dataIndex="value_code"
+                            key="value_code"
                         />
                         <Column
-                            title="字典名称"
-                            dataIndex="dict_name"
-                            key="dict_name"
+                            title="名称"
+                            dataIndex="value_name"
+                            key="value_name"
                         />
-                        <Column
-                            title="字典描述"
-                            dataIndex="dict_desc"
-                            key="dict_desc"
-                        />
-                        <Column
-                            title="调用方式"
-                            dataIndex="func_type"
-                            key="func_type"
-                        />
+                       
                         <Column
                             title="动作"
                             key="action"
                             render={(text, record) => (
                                 <span>
-                                    <a href={`#/dict/DictViewData/${record.dict_id}`}>查看数据</a>
-                                    <Divider type="vertical" />
-                                    <a href={`#/dict/DictCreator/update/${record.dict_id}`}>数据同步</a>
-                                    <Divider type="vertical" />
-                                    <a href={`#/dict/DictCreator/update/${record.dict_id}`}>字典编辑</a>
+                                   
+                                   
+                                    <a href={`#/dict/DictCreator/update/${record.dict_id}`}>编辑</a>
                                 </span>
                             )}
                         />

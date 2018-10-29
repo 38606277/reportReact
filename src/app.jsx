@@ -20,7 +20,8 @@ import DbsRouter  from './page/system/dbs/dbsrouter.jsx';
 import RuleRouter  from './page/system/rule/rulerouter.jsx';
 import RoleRouter  from './page/system/role/rolerouter.jsx';
 import AuthTypeRouter  from './page/system/authType/authTypeRouter.jsx';
-import QueryRouter  from './page/query/QueryRouter.jsx';
+
+
 import FunctionRouter  from './page/function/FunctionClass.jsx';
 // import Login from './page/login/index.jsx';
 
@@ -96,28 +97,26 @@ const QueryData = Loadable({
 
 
 
-const DictList = Loadable({
-    loader: () => import('./page/dict/DictList.jsx'),
-    loading: loading,
-    delay:3000
-});
 
-const DictCreator = Loadable({
-    loader: () => import('./page/dict/DictCreator.jsx'),
-    loading: loading,
-    delay:3000
-});
-const EditIn = Loadable({
-    loader: () => import('./page/function/EditIn.jsx'),
-    loading: loading,
-    delay:3000
-});
 
 const cor = Loadable({
     loader: () => import('./page/function/cor.jsx'),
     loading: loading,
     delay:3000
 });
+
+const DictRouter = Loadable({
+    loader: () => import('./page/dict/DictRouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+const QueryRouter = Loadable({
+    loader: () => import('./page/query/QueryRouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+
 // const UserList = Loadable({
 //     loader: () => import('./page/user/index.jsx'),
 //     loading: loading,
@@ -154,18 +153,11 @@ class App extends React.Component {
                      <Route path="/role" component={RoleRouter}/>
                      <Route path="/authType" component={AuthTypeRouter}/>
                      <Route path="/query" component={QueryRouter}/>
+                     <Route path="/dict" component={DictRouter}/>
+  
                      <Route path="/function/functionClass" component={FunctionRouter}/>
-
-                     
-                    {/* <Route path="/function/EditableTable" component={EditableTable} /> */}
-                    <Route path="/function/functionCreator/:action/:id" component={functionCreator} />
-                    
-                    
-
-                     <Route path="/dict/DictList" component={DictList} />
-                    <Route path="/dict/DictCreator/:action/:id" component={DictCreator} />
-                    
-                    <Route path="/function/functionList" component={functionList} />
+                     <Route path="/function/functionCreator/:action/:id" component={functionCreator} />
+                     <Route path="/function/functionList" component={functionList} />
                 </Switch>
             </Layout>
         );
@@ -173,7 +165,6 @@ class App extends React.Component {
             <Router>
                 <Switch>
                     <Route path="/login" component={Login} />
-                    <Route path="/EditIn" component={EditIn} />
                     <Route path="/cor" component={cor} />
                     {/* <Route path="/NavSide" component={NavSide} /> */}
                     {/* <Route path="/functionCreator" component={functionCreator}/> */}

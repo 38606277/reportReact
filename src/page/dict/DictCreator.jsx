@@ -1,17 +1,13 @@
-import React from 'react'
-import { Card, Button, Table, Form, Input, Divider, Checkbox, Dropdown, Select, Radio, Icon, message, Progress,radioButton,Modal, DatePicker, InputNumber, Switch, Row, Col, Tabs, Menu } from 'antd'
-import moment from 'moment';
-import 'moment/locale/zh-cn';
+import React from 'react';
+import { Card, Button, Table, Form, Input, Divider, Checkbox, Dropdown, Select, Radio, Icon, message, Progress,radioButton,Modal, DatePicker, InputNumber, Switch, Row, Col, Tabs, Menu } from 'antd';
 
 import CodeMirror from 'react-codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/sql/sql';
 import 'codemirror/theme/ambiance.css';
-import EditOut from './EditOut.jsx';
-import FunctionService from '../../service/FunctionService.jsx'
 import HttpService from '../../util/HttpService.jsx';
-
-import DbService from '../../service/DbService.jsx'
+import DbService from '../../service/DbService.jsx';
+import EditOut from './EditOut.jsx';
 import './Dict.scss';
 
 const FormItem = Form.Item;
@@ -22,7 +18,6 @@ const TabPane = Tabs.TabPane;
 const ButtonGroup = Button.ButtonGroup;
 
 
-const functionService = new FunctionService();
 const dbService = new DbService();
 const options = {
 
@@ -48,9 +43,10 @@ const formItemLayout = {
 
 
 // moment.locales('zh-cn');
-class functionCreator extends React.Component {
+class DictCreator extends React.Component {
 
     state = {};
+    outParam=null;
     func_data = {};
     constructor(props) {
         super(props);
@@ -58,7 +54,7 @@ class functionCreator extends React.Component {
         this.state = {
             //定义窗体参数
             action: this.props.match.params.action,
-            func_id: this.props.match.params.id,
+            dict_id: this.props.match.params.id,
             //定义状态
             inData: [],
             outData: [],
@@ -72,18 +68,18 @@ class functionCreator extends React.Component {
         if (this.state.action == 'update') {
             //查询函数定义
             let param = {};
-            HttpService.post("reportServer/function1/getFunctionByID/" + this.state.func_id, null)
+            HttpService.post("reportServer/dict/getDictByID/" + this.state.dict_id, null)
                 .then(res => {
                     if (res.resultCode == "1000") {
                         this.setState({
                             outData: res.data.out
                         });
-                        this.props.form.setFieldsValue(res.data);
-                        this.outParam.setFormValue(this.state.outData);
+                         this.props.form.setFieldsValue(res.data);
+                          this.outParam.setFormValue(this.state.outData);
 
 
 
-                        this.refs.editorsql.codeMirror.setValue(res.data.func_sql);
+                        this.refs.editorsql.codeMirror.setValue(res.data.dict_sql);
 
                         let editorsql = this.refs.editorsql;
                         editorsql.codeMirror.setSize('100%', '500px');
@@ -102,77 +98,59 @@ class functionCreator extends React.Component {
                 this.setState({ dbList: res });
             });
 
-        //查询函数类别定义
-        functionService.getAllFunctionClass()
-            .then(res => {
-                console.log(JSON.stringify(res));
-                if (res.resultCode == '1000') {
-                    this.setState({ funcClassList: res.data });
-                }
-                else
-                    message.error(res.message);
-            });
+        
     }
 
-    onRef = (ref) => {
-        this.child = ref
-    }
+    // onRef = (ref) => {
+    //     this.child = ref
+    // }
 
     onSaveClick() {
-        //alert("hello");
-        //校验参数合法性
-        // e.preventDefault();
-        // this.props.form.validateFieldsAndScroll((err, values) => {
-        //   if (!err) {
-        // //let  users=this.props.form.getFieldsValue();
-        // //  console.log(this.state);
-        // // console.log(values);
-        //   _user.saveUserInfo(this.state).then(response => {
-        //     alert("修改成功");
-        //     window.location.href="#user/userList";
-        //   }, errMsg => {
-        //       this.setState({
-        //       });
-        //       localStorge.errorTips(errMsg);
-        //   });
-        //console.log('Received values of form: ', this.state);
-        //   }
-        // });
-
-
-
-        //调用服务保存
-
-        //this.child.setFormValue(res.data.in);
         let formInfo = this.props.form.getFieldsValue();
         this.setState({
             outData: this.outParam.getFormValue(),
         });
-        formInfo.func_sql = this.refs.editorsql.codeMirror.getValue();
+        formInfo.qry_sql = this.refs.editorsql.codeMirror.getValue();
         formInfo.out = this.state.outData;
         console.log(formInfo);
-        // let sql = this.refs.editorsql.codeMirror.getValue();
-        // this.func_data = formInfo;
-        // this.func_data.in = this.child.getFormValue();
-        // //this.func_data.in = this.state.inData;
-        // this.func_data.out = this.state.outData;
-        // this.func_data.program = sql;
+      
+        if(this.state.action=='create')
+        {
+            HttpService.post("reportServer/dict/createDict", JSON.stringify(formInfo))
+            .then(res => {
+                if (res.resultCode == "1000") {
+                    message.success('创建成功！')
+                }
+                else
+                    message.error(res.message);
 
-        // console.log(JSON.stringify(this.func_data));
-        // console.log(this.state);
-        //
-        // functionService.CreateFunction(userInfo)
-        // .then(res=>{
+            });
 
-        // })
-        //message.success(`${userInfo.userName} 保存成功!：${userInfo.userPwd}`)
+        }else if(this.state.action=='update')
+        {
+            HttpService.post("reportServer/dict/updateDict", JSON.stringify(formInfo))
+            .then(res => {
+                if (res.resultCode == "1000") {
+                    message.success(`更新成功！`)
+                }
+                else
+                    message.error(res.message);
+
+            });
+
+
+        }
     }
 
 
     onGenerateClick() {
         let aSQL = this.refs.editorsql.codeMirror.getValue();
 
-        functionService.getSqlInOut(aSQL)
+        let param = {
+            sqlType: "sql",
+            sql:aSQL
+        };
+        HttpService.post("reportServer/sql/getInputOutputParas", JSON.stringify(param))
             .then(res => {
                 if (res.resultCode = 1000) {
                     alert(JSON.stringify(res.data));
@@ -196,20 +174,16 @@ class functionCreator extends React.Component {
                             ins.push(aIn);
                         } else if (item.type == 'out') {
                             let aOut = {
+                                "dict_id": undefined,
+                                "out_id": item.id,
                                 "out_name": item.name,
-                                "datatype": item.datatype,
-                                "link": "{}",
-                                "func_id": 36,
-                                "out_id": item.id
                             };
                             outs.push(aOut);
                         }
 
                     }
-                    this.setState({ inData: ins });
                     this.setState({ outData: outs });
 
-                    this.inParam.setFormValue(this.state.inData);
                     this.outParam.setFormValue(this.state.outData);
                     // this.setState({ inData: res.data });
                 } else {
@@ -223,34 +197,6 @@ class functionCreator extends React.Component {
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const formItemLayout = {
-            labelCol: { span: 10 },
-            wrapperCol: { span: 14 }
-        };
-        const formItemLayout1 = {
-            labelCol: { span: 3 },
-            wrapperCol: { span: 10 }
-        };
-
-        const formItemLayout2 = {
-            labelCol: { span: 5 },
-            wrapperCol: { span: 15 }
-        };
-
-        const offsetLayout = {
-            wrapperCol: {
-                xs: 24,
-                sm: {
-                    span: 12,
-                    offset: 4
-                }
-            }
-        }
-        const rowObject = {
-            minRows: 4, maxRows: 600
-        }
-
-
         return (
             <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px' }}>
                 <Card title="创建字典" bodyStyle={{ padding: "5px" }} headStyle={{ height: '60px' }}
@@ -270,6 +216,7 @@ class functionCreator extends React.Component {
                             <Col span={10}>
                                 <Card bodyStyle={{ padding: '8px' }}>
                                     <div>
+                                    <Button type="primary" icon="tool" onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成字典</Button>
                                         <Button icon="save" onClick={() => this.onSaveClick()} style={{ marginRight: "10px" }} >保存</Button>
                                         <Button icon="list" onClick={() => window.location = '#/dict/DictList'} style={{ marginRight: "10px" }}   >退出</Button>
                                     </div>
@@ -342,11 +289,8 @@ class functionCreator extends React.Component {
                                         </Col>
                                     </Row>
                                     <Tabs type="card" style={{ marginTop: '15px' }} onChange={this.tabOnChange}>
-                                        <TabPane tab="定义输出字段" key="1" forceRender>
-                                            <EditOut onRef={(ref) => this.outParam = ref} />
-                                        </TabPane>
-                                        <TabPane tab="数据查看" key="2" forceRender>
-                                            <EditOut onRef={(ref) => this.outParam = ref} />
+                                        <TabPane tab="输出参数" key="2" forceRender>
+                                           <EditOut onRef={(ref) => this.outParam = ref}/>
                                         </TabPane>
                                     </Tabs>
 
@@ -361,4 +305,4 @@ class functionCreator extends React.Component {
     }
 
 }
-export default functionCreator = Form.create({})(functionCreator);
+export default DictCreator = Form.create({})(DictCreator);

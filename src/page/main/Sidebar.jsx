@@ -46,10 +46,11 @@ export default class SiderBar extends React.Component {
             <Sider
                 trigger={null}
                 collapsible
-                collapsed={this.state.collapsed}
+                collapsed={this.props.collapsed}
                 onCollapse={() => this.onCollapse(this.state.collapsed)}
                 theme="light"
-                style={{ overflow: 'auto', height: '100vh', left: 0 }}
+                width='220px'
+                style={{ overflow: 'auto', height: '100vh',width:'600px', left: 0 }}
             >
                 <Menu theme="light" defaultSelectedKeys={['1']} mode="inline"  >
                     <Menu.Item key="sub" ><Link to='/'><Icon type="home" /><span>首页</span></Link></Menu.Item>

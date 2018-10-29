@@ -1,19 +1,13 @@
 import React from 'react'
-import { Card, Button, Table, Form, Input, Divider, Checkbox, Dropdown, Select, Radio, Icon, message, Modal, DatePicker, InputNumber, Switch, Row, Col, Tabs, Menu } from 'antd'
-import moment from 'moment';
-import 'moment/locale/zh-cn';
+import { Card, Button, Table, Form, Input, Divider, Checkbox, Dropdown, Select, Radio, Icon, message, Progress,radioButton,Modal, DatePicker, InputNumber, Switch, Row, Col, Tabs, Menu } from 'antd'
 
 import CodeMirror from 'react-codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/sql/sql';
 import 'codemirror/theme/ambiance.css';
-import EditIn from './EditIn.jsx';
-import EditOut from './EditOut.jsx';
-import FunctionService from '../../service/FunctionService.jsx'
 import HttpService from '../../util/HttpService.jsx';
-
 import DbService from '../../service/DbService.jsx'
-import './query.scss';
+import './Dict.scss';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -59,7 +53,7 @@ class functionCreator extends React.Component {
         this.state = {
             //定义窗体参数
             action: this.props.match.params.action,
-            qry_id: this.props.match.params.id,
+            dict_id: this.props.match.params.id,
             //定义状态
             inData: [],
             outData: [],
@@ -73,20 +67,18 @@ class functionCreator extends React.Component {
         if (this.state.action == 'update') {
             //查询函数定义
             let param = {};
-            HttpService.post("reportServer/query/getQueryByID/" + this.state.qry_id, null)
+            HttpService.post("reportServer/dict/getDictByID/" + this.state.dict_id, null)
                 .then(res => {
                     if (res.resultCode == "1000") {
                         this.setState({
-                            inData: res.data.in,
                             outData: res.data.out
                         });
                         this.props.form.setFieldsValue(res.data);
-                        this.inParam.setFormValue(this.state.inData);
                         this.outParam.setFormValue(this.state.outData);
 
 
 
-                        this.refs.editorsql.codeMirror.setValue(res.data.qry_sql);
+                        this.refs.editorsql.codeMirror.setValue(res.data.func_sql);
 
                         let editorsql = this.refs.editorsql;
                         editorsql.codeMirror.setSize('100%', '500px');
@@ -105,8 +97,8 @@ class functionCreator extends React.Component {
                 this.setState({ dbList: res });
             });
 
-        //查询查询类别定义
-        HttpService.post("reportServer/query/getAllQueryClass", '')
+        //查询函数类别定义
+        functionService.getAllFunctionClass()
             .then(res => {
                 console.log(JSON.stringify(res));
                 if (res.resultCode == '1000') {
@@ -149,39 +141,26 @@ class functionCreator extends React.Component {
         //this.child.setFormValue(res.data.in);
         let formInfo = this.props.form.getFieldsValue();
         this.setState({
-            inData: this.inParam.getFormValue(),
             outData: this.outParam.getFormValue(),
         });
-        formInfo.qry_sql = this.refs.editorsql.codeMirror.getValue();
-        formInfo.in = this.state.inData;
+        formInfo.func_sql = this.refs.editorsql.codeMirror.getValue();
         formInfo.out = this.state.outData;
         console.log(formInfo);
+        // let sql = this.refs.editorsql.codeMirror.getValue();
+        // this.func_data = formInfo;
+        // this.func_data.in = this.child.getFormValue();
+        // //this.func_data.in = this.state.inData;
+        // this.func_data.out = this.state.outData;
+        // this.func_data.program = sql;
 
-        if (this.state.action == 'create') {
-            HttpService.post("reportServer/query/createQuery", JSON.stringify(formInfo))
-                .then(res => {
-                    if (res.resultCode == "1000") {
-                        message.success('创建成功！')
-                    }
-                    else
-                        message.error(res.message);
+        // console.log(JSON.stringify(this.func_data));
+        // console.log(this.state);
+        //
+        // functionService.CreateFunction(userInfo)
+        // .then(res=>{
 
-                });
-
-        } else if (this.state.action == 'update') {
-            HttpService.post("reportServer/query/updateQuery", JSON.stringify(formInfo))
-                .then(res => {
-                    if (res.resultCode == "1000") {
-                        message.success(`更新成功！`)
-                    }
-                    else
-                        message.error(res.message);
-
-                });
-
-
-        }
-
+        // })
+        //message.success(`${userInfo.userName} 保存成功!：${userInfo.userPwd}`)
     }
 
 
@@ -198,26 +177,25 @@ class functionCreator extends React.Component {
                     for (var item of res.data) {
                         if (item.type == 'in') {
                             let aIn = {
-                                "qry_id": "",
-                                "in_id": item.id,
+                                "dict_id": "",
+                                "authtype_id": "",
                                 "in_name": item.name,
+                                "dict_name": "",
+                                "isformula": 0,
+                                "authtype_desc": "",
                                 "datatype": item.datatype,
-                                "dict_id": undefined,
-                                "dict_name": undefined,
-                                "authtype_id": undefined,
-                                "authtype_desc": undefined,
+                                "func_id": "",
+                                "in_id": item.id,
                                 "validate": ""
                             };
                             ins.push(aIn);
                         } else if (item.type == 'out') {
                             let aOut = {
-                                "qry_id": "",
-                                "out_id": item.id,
                                 "out_name": item.name,
                                 "datatype": item.datatype,
-                                "render": undefined,
-                                "width": 100,
-                                "link": {},
+                                "link": "{}",
+                                "func_id": 36,
+                                "out_id": item.id
                             };
                             outs.push(aOut);
                         }
@@ -237,8 +215,6 @@ class functionCreator extends React.Component {
 
 
     }
-
-    
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -272,7 +248,7 @@ class functionCreator extends React.Component {
 
         return (
             <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px' }}>
-                <Card title="创建查询" bodyStyle={{ padding: "5px" }} headStyle={{ height: '60px' }}
+                <Card title="创建字典" bodyStyle={{ padding: "5px" }} headStyle={{ height: '60px' }}
                     extra={<Dropdown overlay={(
                         <Menu onClick={this.handleMenuClick}>
                             <Menu.Item key="1">存储过程</Menu.Item>
@@ -289,15 +265,15 @@ class functionCreator extends React.Component {
                             <Col span={10}>
                                 <Card bodyStyle={{ padding: '8px' }}>
                                     <div>
-                                        <Button type="primary" icon="tool" onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成查询</Button>
+                                    <Button type="primary" icon="tool" onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成字典</Button>
                                         <Button icon="save" onClick={() => this.onSaveClick()} style={{ marginRight: "10px" }} >保存</Button>
-                                        <Button icon="list" onClick={() => window.location = '#/query/QueryList'} style={{ marginRight: "10px" }}   >退出</Button>
+                                        <Button icon="list" onClick={() => window.location = '#/dict/DictList'} style={{ marginRight: "10px" }}   >退出</Button>
                                     </div>
                                     <Divider style={{ margin: "8px 0 8px 0" }} />
 
                                     <FormItem label="选择数据库" style={{ marginBottom: "10px" }}>
                                         {
-                                            getFieldDecorator('qry_db', {
+                                            getFieldDecorator('dict_db', {
                                                 rules: [{ required: 'true', message: "必须选择数据库" }]
                                             })(
                                                 <Select setValue={this.form} style={{ width: '160px' }}>
@@ -317,76 +293,51 @@ class functionCreator extends React.Component {
                             <Col span={14}>
                                 <Card bodyStyle={{ padding: '5px' }}>
                                     <Row>
-                                        <Col span={16}>
-                                            <FormItem label=" 查询类别"    >
+                                        <Col span={12}>
+                                            <FormItem label=" 字典名称"   >
                                                 {
-                                                    getFieldDecorator('class_id', {
+                                                    getFieldDecorator('dict_name', {
                                                         rules: [{ required: true, message: '函数名称是必须的' }],
                                                     })(
-                                                        <Select style={{ minWidth: '300px' }}  >
-                                                            {this.state.funcClassList.map(item =>
-                                                                <Option key={item.class_id} value={item.class_id}>{item.class_name}</Option>
-                                                            )}
-                                                        </Select>
+                                                        <Input style={{ minWidth: '100px' }} />
                                                     )
                                                 }
                                             </FormItem>
                                         </Col>
-                                        <Col span={8}>
-                                            <FormItem label="查询ID"  >
+                                        <Col span={12}>
+                                            <FormItem label="字典ID"  >
                                                 {
-                                                    getFieldDecorator('qry_id', {
+                                                    getFieldDecorator('dict_id', {
                                                     })(
-                                                        <Input disabled style={{width:'80px'}}/>
+                                                        <Input disabled />
                                                     )
                                                 }
                                             </FormItem>
                                         </Col>
 
                                     </Row>
-                                    <Row>
-                                        <Col span={16}>
-                                            <FormItem label=" 查询名称"   >
-                                                {
-                                                    getFieldDecorator('qry_name', {
-                                                        rules: [{ required: true, message: '函数名称是必须的' }],
-                                                    })(
-                                                        <Input style={{ minWidth: '300px' }} />
-                                                    )
-                                                }
-                                            </FormItem>
-                                        </Col>
-                                        <Col span={8}>
-                                            <FormItem label=" 使用缓存"   >
-                                                {
-                                                    getFieldDecorator('qry_cache', {
-                                                    })(
-                                                        <Checkbox />
-                                                    )
-                                                }
-                                            </FormItem>
-                                        </Col>
-                                    </Row>
+
                                     <Row>
                                         <Col span={24}>
-                                            <FormItem label="查询说明" style={{ marginLeft: '14px' }}  >
+                                            <FormItem label="字典说明" style={{ marginLeft: '14px' }}  >
                                                 {
-                                                    getFieldDecorator('qry_desc', {
+                                                    getFieldDecorator('dict_desc', {
                                                     })(
-                                                        <TextArea placeholder="此函数主要完成什么功能..." autosize={{ minRows: 1, maxRows: 6 }} style={{ width: "490px" }} />
+                                                        <TextArea placeholder="此字典主要完成什么功能..." autosize={{ minRows: 1, maxRows: 6 }} style={{ width: "490px" }} />
                                                     )
                                                 }
                                             </FormItem>
                                         </Col>
                                     </Row>
-                                    <Tabs type="card" style={{ marginTop: '15px' }} onChange={this.tabOnChange}>
-                                        <TabPane tab="输入参数" key="1">
-                                            <EditIn onRef={(ref) => this.inParam = ref} />
-                                        </TabPane>
-                                        <TabPane tab="输出参数" key="2" forceRender>
-                                            <EditOut onRef={(ref) => this.outParam = ref} />
-                                        </TabPane>
-                                    </Tabs>
+                                    <Row style={{marginTop:'20px'}}>
+                                        <Col span={6} offset={1} >
+                                            <Button type="primary" style={{width:'120px'}}>开始同步</Button>
+                                        </Col>
+                                        <Col span={12}>
+                                            <Progress percent={30}/>
+                                        </Col>
+                                    </Row>
+                            
 
                                 </Card>
                             </Col>
