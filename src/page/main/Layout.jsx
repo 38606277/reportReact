@@ -37,7 +37,6 @@ export default class MainLoyout extends React.Component {
         });
     }
     onCollapse(collapsed) {
-        console.log(collapsed);
         this.setState({ collapsed });
     }
     onselect(e) {
@@ -226,7 +225,7 @@ export default class MainLoyout extends React.Component {
                 </Header>
 
                 <Layout>
-                    <SiderBar />
+                    <SiderBar collapsed={this.state.collapsed}/>
                     <Content>
                         {/* <Breadcrumb style={{ margin: '16px 0',backgroundColor:'white' }}>
                             <Breadcrumb.Item>User</Breadcrumb.Item>

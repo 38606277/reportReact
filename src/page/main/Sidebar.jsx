@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { Layout, Menu, Avatar, Icon, Tooltip, Button, Card, Popover } from 'antd';
-import './Layout.scss';
+import { Layout, Menu, Icon} from 'antd';
 import queryService from '../../service/QueryService.jsx';
 
 const { Header, Content, Sider } = Layout;
@@ -15,9 +14,6 @@ export default class SiderBar extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            collapsed: false,
-            visible: false,
-            ishow: '0',
             categoryList:[],
         };
 
@@ -34,23 +30,16 @@ export default class SiderBar extends React.Component {
       
     }
     render() {
-        const submun=this.state.categoryList.map((item,index)=>{
-                const p= item.children.map((items,index)=>{
-                    let toa='/query/QueryData/'+items.value;
-                    return (<Menu.Item key={items.value}><Link to={toa}>{items.name}</Link></Menu.Item>);
-                });
-            return  <SubMenu key={item.name} title={item.name}>{p} </SubMenu>;
-         });
         
+         const collapsed=this.props.collapsed;
         return (
             <Sider
                 trigger={null}
                 collapsible
-                collapsed={this.props.collapsed}
-                onCollapse={() => this.onCollapse(this.state.collapsed)}
+                collapsed={collapsed}
                 theme="light"
-                width='220px'
-                style={{ overflow: 'auto', height: '100vh',width:'600px', left: 0 }}
+                width='300px'
+                style={{ overflow: 'auto', height: '100vh', left: 0 }}
             >
                 <Menu theme="light" defaultSelectedKeys={['1']} mode="inline"  >
                     <Menu.Item key="sub" ><Link to='/'><Icon type="home" /><span>首页</span></Link></Menu.Item>
@@ -59,7 +48,8 @@ export default class SiderBar extends React.Component {
                         <Menu.Item key="/task/taskList"><Link to='/task/taskList'>已办任务</Link></Menu.Item>
                     </SubMenu>
                     <SubMenu key="sub2" title={<span><Icon type="table" /><span>数据查询</span></span>}>
-                        <Menu.Item key="5"><Link to='/query/QueryData'>查询报表</Link></Menu.Item>
+                        <Menu.Item key="5"><Link to='/query/QueryData'>数据查询</Link></Menu.Item>
+                        <Menu.Item key="5dd"><Link to='/query/Contaier'>Box</Link></Menu.Item>
                         {this.state.categoryList.map(function (item) {
                                  return (<SubMenu key={item.name}
                                                   title={<span><Icon type="table"/><span>{item.name}</span></span>}>
@@ -70,7 +60,7 @@ export default class SiderBar extends React.Component {
                              }
                          )
                      }
-                        <Menu.Item key="sub22"><Link to='/query/ExecQuery'>执行查询</Link></Menu.Item>
+                        {/* <Menu.Item key="sub22"><Link to='/query/ExecQuery'>执行查询</Link></Menu.Item> */}
                     </SubMenu>
                     <SubMenu key="sub4" title={<span><Icon type="setting" /><span>系统管理</span></span>}>
                         <Menu.Item key="/user"><Link to='/user'>用户管理</Link></Menu.Item>
