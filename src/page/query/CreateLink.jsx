@@ -12,11 +12,14 @@ class CreateLink extends React.Component {
     super(props);
     this.state = {
       data: [],
+      action: 'create',
       formData: {},
+      qry_id:"",
+      out_id:"",
       queryClass: [],
       queryNames: [],
-      inParam:[],
-      outParam:props.outParam,
+      inParam: [],
+      outParam: props.outParam,
       dictData: [],
       authData: [],
     };
@@ -65,6 +68,35 @@ class CreateLink extends React.Component {
           message.error(res.message);
       });
   }
+  //保存超链接
+  saveQryOutLink() {
+
+    if (this.state.action == 'create') {
+      HttpService.post("reportServer/query/createQueryOutLink", JSON.stringify(formInfo))
+        .then(res => {
+          if (res.resultCode == "1000") {
+            message.success('创建成功！');
+
+          }
+          else
+            message.error(res.message);
+
+        });
+
+    } else if (this.state.action == 'update') {
+      HttpService.post("reportServer/query/updateQuery", JSON.stringify(formInfo))
+        .then(res => {
+          if (res.resultCode == "1000") {
+            message.success(`更新成功！`)
+          }
+          else
+            message.error(res.message);
+
+        });
+
+
+    }
+  }
 
   columns = [{
     title: '列ID',
@@ -78,19 +110,19 @@ class CreateLink extends React.Component {
     key: 'in_name',
     width: '120px',
     className: 'headerRow',
-  },{
+  }, {
     title: '取值',
     dataIndex: 'in_name',
     key: 'in_name',
     className: 'headerRow',
-    render: (text, record,index) => {
+    render: (text, record, index) => {
       return (
 
-              <Select tyle={{ width: '100px' }}  >
-                 {this.state.outParam.map(item =>
-                 <Option key={item.out_id} value={item.out_id}>{item.out_name}</Option>
-            )}
-              </Select>
+        <Select tyle={{ width: '100px' }}  >
+          {this.state.outParam.map(item =>
+            <Option key={item.out_id} value={item.out_id}>{item.out_name}</Option>
+          )}
+        </Select>
       );
     }
   }];
@@ -130,6 +162,14 @@ class CreateLink extends React.Component {
               size="small" bordered pagination={false} />
           </Col>
         </Row>
+        <Divider/>
+       
+          <Button>清空</Button>
+          <Button key="submit" type="primary" style={{ marginLeft: 10 }} onClick={this.handleOk}>
+            保存
+            </Button>
+          <Button key="back" style={{ marginLeft: 10 }} onClick={this.handleCancel}>取消</Button>
+
       </div>
     )
   }

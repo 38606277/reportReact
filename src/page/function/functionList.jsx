@@ -35,6 +35,20 @@ class functionList extends React.Component {
             });
     }
 
+    rowSelection = {
+        onChange: (selectedRowKeys, selectedRows) => {
+            //this.setState={selectedRows:}
+            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        },
+        getCheckboxProps: record => ({
+          disabled: record.name === 'Disabled User', // Column configuration not to be checked
+          name: record.name,
+        }),
+      };
+     onDelButtonClick(){
+         alert(JSON.stringify(this.refs.tableDict.selectedRows));
+     } 
+
     // 页数发生变化的时候
     onPageNumChange(pageNum) {
         this.setState({
@@ -82,7 +96,7 @@ class functionList extends React.Component {
                         onSearch={value => this.onSearch(value)}
                     />
 
-                    <Table dataSource={this.state.list}>
+                    <Table dataSource={this.state.list}  rowSelection={this.rowSelection}>
                         <Column
                             title="函数ID"
                             dataIndex="func_id"

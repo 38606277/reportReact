@@ -110,7 +110,7 @@ class DictCreator extends React.Component {
         this.setState({
             outData: this.outParam.getFormValue(),
         });
-        formInfo.qry_sql = this.refs.editorsql.codeMirror.getValue();
+        formInfo.dict_sql = this.refs.editorsql.codeMirror.getValue();
         formInfo.out = this.state.outData;
         console.log(formInfo);
       

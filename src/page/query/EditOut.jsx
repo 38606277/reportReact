@@ -63,6 +63,9 @@ class EditOut extends React.Component {
 
   handleOk = (e) => {
     console.log(e);
+    //保存到服务端
+
+
     this.setState({
       visible: false,
     });
@@ -100,8 +103,7 @@ class EditOut extends React.Component {
     title: '列ID',
     dataIndex: 'out_id',
     key: 'out_id',
-    width: '140px',
-    className: 'headerRow',
+    width: '150px',
   }, {
     title: '列名',
     dataIndex: 'out_name',
@@ -190,11 +192,14 @@ class EditOut extends React.Component {
     }
   }, {
     title: '数据链接',
-    dataIndex: 'action',
+    dataIndex: 'link',
+    key: 'link',
     className: 'headerRow',
     render: (text, record, index) => {
       return (
-        <Button onClick={() => this.showModal()} >配置</Button>
+        <Button  disabled={this.props.action=='create'?true:false} onClick={() => this.showModal()} >
+        {record.link==null?"创建":"修改"}
+        </Button>
       );
     }
   }];
@@ -215,6 +220,9 @@ class EditOut extends React.Component {
           visible={this.state.visible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
+          okText='保存'
+          cancelText='取消'
+          footer={null}
         >
          <CreateLink outParam={this.state.data}/>
         </Modal>

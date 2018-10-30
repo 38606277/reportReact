@@ -26,57 +26,37 @@ const ButtonGroup = Button.ButtonGroup;
 const { Column, ColumnGroup } = Table;
 
 
-const functionService = new FunctionService();
-const dbService = new DbService();
-const options = {
-
-    lineNumbers: true,                //显示行号  
-    mode: { name: "text/x-mysql" },          //定义mode  
-    extraKeys: { "Ctrl": "autocomplete" },//自动提示配置  
-    theme: "default"
-
-
-};
-
-// const abc = Loadable({
-//     loader: () => import('./abc.jsx'),
-//     loading: loading,
-//     delay:3000
-// });
-
-const formItemLayout = {
-    labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
-    },
-    wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
-    },
-};
 
 
 
-// moment.locales('zh-cn');
 class CreateTemplate extends React.Component {
 
-    allowDrop(ev) {
-        ev.preventDefault();
-    }
+    state = {};
+    constructor(props) {
+        super(props);
 
-    drag(ev) {
-        ev.dataTransfer.setData("Text", ev.target.id);
-        alert(ev.target.id);
+        this.state = {
+            in: [{
+                name: "项目编码",
+                render: <Input id="1" value="aa" draggable="true" onDragStart={(event) => this.drag(event)} style={{ width: '100px' }} />
+            },
+            {
+                name: "项目类型",
+                render: <Input id="1" value="bb" draggable="true" onDragStart={(event) => this.drag(event)} style={{ width: '100px' }} />
+            },
+            {
+                name: "创建时间",
+                render: <Input id="1" value="cc" draggable="true" onDragStart={(event) => this.drag(event)} style={{ width: '100px' }} />
+            },
+            {
+                name: "项目经理",
+                render: <Input id="1" value="dd" draggable="true" onDragStart={(event) => this.drag(event)} style={{ width: '100px' }} />
+            }
+            ],
+            project: "aaa",
+            components:{c1:<Input id="1" value="1"/>,C2:<Input id="1" value="2"/>,C3:<Input id="1" value="3"/>}
+        }
     }
-
-    drop(ev) {
-        ev.preventDefault();
-        var data = ev.dataTransfer.getData("Text");
-        ev.target.appendChild(document.getElementById(data));
-    }
-    // constructor(props) {
-    //     super(props);
-    //     const { getFieldDecorator } = this.props.form;
     //     this.state = {
     //         list: [{
     //             in_name: '部门', render: '选择框'
@@ -190,75 +170,108 @@ class CreateTemplate extends React.Component {
         });
     }
 
-    render() {
-        return (
-            <div>
-                <ul>
-                    <Draggable type="fruit" data="banana"><li>Banana</li></Draggable>
-                    <Draggable type="fruit" data="apple"><li>Apple</li></Draggable>
-                    <Draggable type="metal" data="silver"><li>Silver</li></Draggable>
-                </ul>
-                <Droppable>
-                    types={['fruit']}
-                    onDrop={this.onDrop.bind(this)}
-                    <div>hello</div>
-                </Droppable>
-            </div>)
+    drop(ev, key) {
+        // alert(ev.dataTransfer.getData("param"));
+        // ev.preventDefault();
+         let param = ev.dataTransfer.getData("param");
+        // let aInput = this.state.in[param];
+        // let t = ev.target.id;
+        // this.state.in[1] = aInput;
+         let com=this.state.components;
+        com[key]=<Input value="100"/>;
+         this.setState({components : com });
     }
-    onDrop(data) {
-        console.log(data)
-        // => banana 
+    drag(ev) {
+        ev.dataTransfer.setData("param", ev.target.id);
     }
+
     // render() {
-
-
-
     //     return (
-
-    //         <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px' }}>
-    //             <Card title="创建模板" bodyStyle={{ padding: "5px" }} headStyle={{ height: '60px' }}
-    //                 extra={
-    //                     <span>
-    //                         <Button style={{ marginLeft: 8 }} onClick={() => this.onSaveButtonClick()}>
-    //                             保存 <Icon type="save" />
-    //                         </Button>
-    //                         <Button style={{ marginLeft: 8 }}>
-    //                             关闭 <Icon type="close" />
-    //                         </Button>
-    //                     </span>
-
-    //                 }>
-    //                 <Form layout="inline">
-    //                     <Row gutter={0}>
-    //                         <Col span={6}>
-    //                             <Card bodyStyle={{ padding: '8px' }}>
-    //                                 <div style={{ padding: '15px' }}>
-    //                                     <Input draggable="true" ondragstart={() => this.drag(event)} style={{ minWidth: '150px' }} />
-    //                                 </div>
-    //                                 <div style={{ padding: '15px' }}>
-    //                                     <Input draggable="true" ondragstart={() => this.drag(event)} style={{ minWidth: '150px' }} />
-    //                                 </div>
-    //                                 <div style={{ padding: '15px' }}>
-    //                                     <Select draggable="true" ondragstart={() => this.drag(event)} style={{ minWidth: '150px' }} />
-    //                                 </div>
-    //                             </Card>
-    //                         </Col>
-
-    //                         <Col span={18}>
-    //                             <div >
-    //                                 <Input draggable="true" ondragstart="alert('aaa')" style={{ minWidth: '150px' }} />
-    //                             </div>
-    //                             <div ondrop={(event) => this.drop(event)} ondragover={(event) => this.allowDrop(event)}
-    //                                 style={{ height: '500px', backgroundColor: '#ececec' }}>aaa</div>
-    //                             {/* {this.state.qryTemplate} */}
-    //                         </Col>
-    //                     </Row>
-    //                 </Form>
+    //         <div>
+    //             <Card id="div1" onDrop={(ev) => this.drop(ev)} style={{ width: '198px', height: '66px', padding: '10px', border: '1px solid #aaaaaa' }}
+    //                 onDragOver={(ev) => ev.preventDefault()}>
+    //                 {/* <Row>
+    //                     <Col onDrop={(ev) => this.drop(ev)}   onDragOver={(ev) => ev.preventDefault()}>col1{this.state.aComponet}</Col>
+    //                     <Col>col2</Col>
+    //                 </Row>
+    //                  */}
+    //                 {this.state.aComponet}
     //             </Card>
+    //             <Input id="drag1" draggable="true"
+    //                 onDragStart={(event) => this.drag(event)} style={{width:'100px'}} />
+    //             <Input id="drag2" draggable="true"
+    //                 onDragStart={(event) => this.drag(event)} style={{width:'100px'}}/>
+    //         </div>)
+    // }
+    render() {
 
-    //         </div >
-    //     );
-    //}
+
+
+        return (
+
+            <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px' }}>
+                <Card title="创建模板" bodyStyle={{ padding: "5px" }} headStyle={{ height: '60px' }}
+                    extra={
+                        <span>
+                            <Button style={{ marginLeft: 8 }} onClick={() => this.onSaveButtonClick()}>
+                                保存 <Icon type="save" />
+                            </Button>
+                            <Button style={{ marginLeft: 8 }}>
+                                关闭 <Icon type="close" />
+                            </Button>
+                        </span>
+
+                    }>
+                    <Row gutter={0}>
+                        <Form layout="inline">
+                            <Col span={10}>
+                                <Card>
+                                    {this.state.in.map((item) =>
+                                        <Row>
+                                            <Col>{item.name}</Col>
+                                            <Col>{item.render}</Col>
+                                        </Row>)
+
+                                    }
+                                </Card>
+                            </Col>
+
+                            <Col span={14}>
+
+
+                                <Card id="div1"  style={{ width: '198px', height: '66px', padding: '10px', border: '1px solid #aaaaaa' }}>
+                                <Row>
+                                   {Object.keys(this.state.components).map((key)=>
+                                    <Col style={{border:"1px solid red",height:"80px",width:"400px"}}
+                                            onDrop={(ev) => this.drop(ev, key)}
+                                            onDragOver={(ev) => ev.preventDefault()}>
+                                            {this.state.components[key]}
+                                     </Col>
+
+                                   )}
+                                   </Row>
+                                    {/* {this.state.in.map((item,index) =>
+                                        <Row>
+                                            <Col style={{border:"1px solid red",height:"80px",width:"400px"}}
+                                            onDrop={(ev) => this.drop(ev, index)}
+                                            onDragOver={(ev) => ev.preventDefault()}>
+                                            {item.render}
+                                            </Col>
+                                        </Row>)
+
+                                    } */}
+
+
+                                </Card>
+
+                            </Col>
+                        </Form>
+                    </Row>
+                </Card>
+
+            </div >
+        );
+    }
 
 }
 export default CreateTemplate; //= Form.create({})(CreateTemplate);

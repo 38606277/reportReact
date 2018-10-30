@@ -6,7 +6,7 @@
 */
 import React from 'react';
 import Table from 'antd/lib/table';
-import { Card, Button, Divider, Input,message,Form, FormItem, Icon, Row, Col } from 'antd';
+import { Card, Button, Divider, Input, message,Modal, Form, FormItem, Icon, Row, Col } from 'antd';
 
 import FunctionService from '../../service/FunctionService.jsx'
 import HttpService from '../../util/HttpService.jsx';
@@ -20,10 +20,14 @@ export default class QueryList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            list: []
+            list: [],
+            selectedRows: [],
         };
     }
     componentDidMount() {
+        this.getAllQueryName();
+    }
+    getAllQueryName() {
         let param = {};
         HttpService.post('reportServer/query/getAllQueryName', null)
             .then(res => {
@@ -33,6 +37,62 @@ export default class QueryList extends React.Component {
                     message.error(res.message);
 
             });
+
+
+    }
+
+
+    rowSelection = {
+        onChange: (selectedRowKeys, selectedRows) => {
+            this.setState({ selectedRows: selectedRows });
+            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        },
+        getCheckboxProps: record => ({
+            disabled: record.name === 'Disabled User', // Column configuration not to be checked
+            name: record.name,
+        }),
+    };
+    onDelButtonClick() {
+        //  Modal.confirm({
+        //     title: '删除确认',
+        //     content: '确认要删除这些查询吗？',
+        //     okText: '确认',
+        //     cancelText: '取消',
+        //     onOk() {
+        //        this.deleteQuery();
+        //       },
+        //       onCancel() {
+        //         console.log('Cancel');
+        //       },
+        //   });
+        if(confirm('确认删除吗？')){
+            HttpService.post('reportServer/query/deleteQuery', JSON.stringify(this.state.selectedRows))
+            .then(res => {
+                if (res.resultCode == "1000") {
+                    message.success("删除成功！");
+                    this.getAllQueryName();
+                    this.setState({ selectedRows: [] });
+                }
+    
+                else
+                    message.error(res.message);
+    
+            });
+        }
+    }
+    deleteQuery(){
+        HttpService.post('reportServer/query/deleteQuery', JSON.stringify(this.state.selectedRows))
+        .then(res => {
+            if (res.resultCode == "1000") {
+                message.success("删除成功！");
+                this.getAllQueryName();
+                this.setState({ selectedRows: [] });
+            }
+
+            else
+                message.error(res.message);
+
+        });
     }
 
     // 页数发生变化的时候
@@ -75,6 +135,7 @@ export default class QueryList extends React.Component {
                     </Row> */}
                     <Button href="#/query/QueryCreator/create/0" style={{ marginRight: "10px" }} type="primary">新建查询</Button>
                     <Button href="#/query/QueryClass" style={{ marginRight: "15px" }} type="primary">查询类别管理</Button>
+                    <Button onClick={() => this.onDelButtonClick()} style={{ marginRight: "10px" }} >删除</Button>
                     <Search
                         style={{ maxWidth: 300, marginBottom: '10px', float: "right" }}
                         placeholder="请输入..."
@@ -82,7 +143,7 @@ export default class QueryList extends React.Component {
                         onSearch={value => this.onSearch(value)}
                     />
 
-                    <Table dataSource={this.state.list}>
+                    <Table dataSource={this.state.list} rowSelection={this.rowSelection}>
                         <Column
                             title="查询ID"
                             dataIndex="qry_id"
@@ -118,8 +179,6 @@ export default class QueryList extends React.Component {
                                     <a href={`#/query/QueryCreator/update/${record.qry_id}`}>编辑</a>
                                     <Divider type="vertical" />
                                     <a href={`#/query/CreateTemplate`}>模板</a>
-                                    <Divider type="vertical" />
-                                    <a href="javascript:;">删除{record.name}</a>
                                 </span>
                             )}
                         />

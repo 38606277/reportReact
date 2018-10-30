@@ -6,7 +6,7 @@
 */
 import React from 'react';
 import Table from 'antd/lib/table';
-import { Card, Button, Divider, Input, Form, FormItem, Icon, Row, Col } from 'antd';
+import { Card, Button, Divider, Input,message, Form, FormItem, Icon, Row, Col } from 'antd';
 
 import FunctionService from '../../service/FunctionService.jsx'
 import HttpService from '../../util/HttpService.jsx';
@@ -21,10 +21,16 @@ export default class DictList extends React.Component {
         super(props);
         this.state = {
             list: [],
-            selectRow:[],
+            selectedRows: [],
         };
     }
     componentDidMount() {
+        this.getAllDictName();
+    }
+
+
+    getAllDictName()
+    {
         let param = {};
         HttpService.post('reportServer/dict/getAllDictName', null)
             .then(res => {
@@ -34,6 +40,7 @@ export default class DictList extends React.Component {
                     message.error(res.message);
 
             });
+
     }
 
     // 页数发生变化的时候
@@ -62,17 +69,29 @@ export default class DictList extends React.Component {
 
     rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
-            //this.setState={selectedRows:}
+            this.setState({ selectedRows: selectedRowKeys });
             console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
         },
         getCheckboxProps: record => ({
-          disabled: record.name === 'Disabled User', // Column configuration not to be checked
-          name: record.name,
+            disabled: record.name === 'Disabled User', // Column configuration not to be checked
+            name: record.name,
         }),
-      };
-     onDelButtonClick(){
-         alert(JSON.stringify(this.refs.tableDict.selectedRows));
-     } 
+    };
+    onDelButtonClick() {
+       
+        HttpService.post('reportServer/dict/deleteDict', JSON.stringify(this.state.selectedRows))
+            .then(res => {
+                if (res.resultCode == "1000"){
+                    message.success("删除成功！");
+                    this.getAllDictName();
+                    this.setState({ selectedRows: [] });
+                }
+                   
+                else
+                    message.error(res.message);
+
+            });
+    }
 
 
     render() {
@@ -90,7 +109,7 @@ export default class DictList extends React.Component {
                         <Col span={4}> <Button type="primary" style={{width:"100px"}} onClick={()=>window.location='#/function/functionCreator/creat/0'} >新建</Button></Col>
                     </Row> */}
                     <Button href="#/dict/DictCreator/create/0" style={{ marginRight: "10px" }} type="primary">新建数据字典</Button>
-                    <Button onClick={()=>this.onDelButtonClick()} style={{ marginRight: "10px" }} >删除</Button>
+                    <Button onClick={() => this.onDelButtonClick()} style={{ marginRight: "10px" }} >删除</Button>
                     <Search
                         style={{ maxWidth: 300, marginBottom: '10px', float: "right" }}
                         placeholder="请输入..."
@@ -99,8 +118,8 @@ export default class DictList extends React.Component {
                     />
 
                     <Table dataSource={this.state.list}
-                    rowSelection={this.rowSelection}
-                    ref="tableDict"
+                        rowSelection={this.rowSelection}
+                        ref="tableDict"
                     >
                         <Column
                             title="字典ID"

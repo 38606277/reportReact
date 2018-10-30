@@ -38,7 +38,7 @@ export default class SiderBar extends React.Component {
                 collapsible
                 collapsed={collapsed}
                 theme="light"
-                width='300px'
+                width='250px'
                 style={{ overflow: 'auto', height: '100vh', left: 0 }}
             >
                 <Menu theme="light" defaultSelectedKeys={['1']} mode="inline"  >

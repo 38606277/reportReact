@@ -161,7 +161,9 @@ class functionCreator extends React.Component {
             HttpService.post("reportServer/query/createQuery", JSON.stringify(formInfo))
                 .then(res => {
                     if (res.resultCode == "1000") {
-                        message.success('创建成功！')
+                        message.success('创建成功！');
+                        this.setState({action:'update'});
+                        this.props.form.setFieldsValue({qry_id:res.data});
                     }
                     else
                         message.error(res.message);
@@ -272,7 +274,7 @@ class functionCreator extends React.Component {
 
         return (
             <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px' }}>
-                <Card title="创建查询" bodyStyle={{ padding: "5px" }} headStyle={{ height: '60px' }}
+                <Card title={this.state.action=='create'?'创建查询':'编辑查询'} bordered={false}  bodyStyle={{ padding: "5px" }} headStyle={{ height: '60px' }}
                     extra={<Dropdown overlay={(
                         <Menu onClick={this.handleMenuClick}>
                             <Menu.Item key="1">存储过程</Menu.Item>
@@ -287,7 +289,7 @@ class functionCreator extends React.Component {
                     <Form layout="inline">
                         <Row gutter={0}>
                             <Col span={10}>
-                                <Card bodyStyle={{ padding: '8px' }}>
+                                <Card bodyStyle={{ padding: '8px' }} >
                                     <div>
                                         <Button type="primary" icon="tool" onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成查询</Button>
                                         <Button icon="save" onClick={() => this.onSaveClick()} style={{ marginRight: "10px" }} >保存</Button>
@@ -384,7 +386,7 @@ class functionCreator extends React.Component {
                                             <EditIn onRef={(ref) => this.inParam = ref} />
                                         </TabPane>
                                         <TabPane tab="输出参数" key="2" forceRender>
-                                            <EditOut onRef={(ref) => this.outParam = ref} />
+                                            <EditOut onRef={(ref) => this.outParam = ref} action={this.state.action} />
                                         </TabPane>
                                     </Tabs>
 
