@@ -1,9 +1,10 @@
 
 import   HttpService  from '../util/HttpService.jsx';
 export default class RuleService{
-    // 查询 select
+    //  查询 select 
     getSelectClassTree(){
-        let url='/reportServer/select/getSelectClassTreeReact';
+      //  let url='/reportServer/select/getSelectClassTreeReact';
+      let url = "reportServer/query/getQueryClassTree";
         return HttpService.post(url,{});
     }
     getAuthListByConditions(id,param){
@@ -14,7 +15,7 @@ export default class RuleService{
 
     //函数 function
     getFunctionClass(){
-        let url='/reportServer/function/getFunctionClassReact';
+        let url='/reportServer/function1/getFunctionClass';
         return HttpService.post(url,{});
     }
     getAuthByConditions(id,param){
