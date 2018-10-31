@@ -12,6 +12,12 @@ export default class QueryService {
         let param = {};  
         return HttpService.post(url,param);
     }
+    // 获取权限可访问列表
+    getQueryClassTree(userId) {
+        let url = "reportServer/query/getAuthTree";
+        let param = {userId:userId};  
+        return HttpService.post(url,JSON.stringify(param));
+    }
     getReportNameList(name){
         let url="reportServer/select/getSelectName/"+name;
         return HttpService.post(url,{});

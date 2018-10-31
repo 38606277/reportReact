@@ -2,7 +2,8 @@ import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { Layout, Menu, Icon} from 'antd';
 import queryService from '../../service/QueryService.jsx';
-
+import  LocalStorge         from '../../util/LogcalStorge.jsx';
+const localStorge = new LocalStorge();
 const { Header, Content, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 const _query =new queryService();
@@ -20,7 +21,11 @@ export default class SiderBar extends React.Component {
     }
     componentDidMount() {
         //获取报表列表
-      _query.getSelectClassTree().then(response => {
+       let param=''
+        if(undefined!=localStorge.getStorage('userInfo') && ''!=localStorge.getStorage('userInfo')){
+            param= localStorge.getStorage('userInfo').id;
+        }
+      _query.getQueryClassTree(param).then(response => {
           this.setState({categoryList:response});
       }, errMsg => {
           this.setState({
@@ -30,7 +35,7 @@ export default class SiderBar extends React.Component {
       
     }
     render() {
-        
+       
          const collapsed=this.props.collapsed;
         return (
             <Sider
@@ -48,13 +53,13 @@ export default class SiderBar extends React.Component {
                         <Menu.Item key="/task/taskList"><Link to='/task/taskList'>已办任务</Link></Menu.Item>
                     </SubMenu>
                     <SubMenu key="sub2" title={<span><Icon type="table" /><span>数据查询</span></span>}>
-                        <Menu.Item key="5"><Link to='/query/QueryData'>数据查询</Link></Menu.Item>
+                        <Menu.Item key="sub5"><Link to='/query/QueryData'>数据查询</Link></Menu.Item>
                         <Menu.Item key="5dd"><Link to='/query/Contaier'>Box</Link></Menu.Item>
-                        {this.state.categoryList.map(function (item) {
-                                 return (<SubMenu key={item.name}
+                        {this.state.categoryList.map(function (item,index) {
+                                 return (<SubMenu key={item.name+index}
                                                   title={<span><Icon type="table"/><span>{item.name}</span></span>}>
-                                     {item.children.map((vl)=>(
-                                         <Menu.Item key={vl.value}><Link to={'/query/ExecQuery/'+vl.value}>{vl.name}</Link></Menu.Item>
+                                     {item.children.map((vl,index)=>(
+                                         <Menu.Item key={vl.name+vl.value}><Link to={'/query/ExecQuery/'+item.name+'/'+vl.name}>{vl.name}</Link></Menu.Item>
                                      ))}
                                  </SubMenu>)
                              }
