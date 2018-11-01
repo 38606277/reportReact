@@ -19,6 +19,7 @@ class ExecQuery extends React.Component {
         this.state = { 
           paramv:this.props.match.params.paramv,
           paramv2:this.props.match.params.paramv2,
+          paramv3:this.props.match.params.paramv3,
           data:[],formData:{},categoryList:[],
           reportNameList:[],
           category:'',reportName:'',
@@ -41,20 +42,21 @@ class ExecQuery extends React.Component {
         componentWillReceiveProps(nextProps){
             let key = nextProps.match.params.paramv;
             let key2 = nextProps.match.params.paramv2;
-            let oldparamv2=this.state.paramv2;
+            let oldparamv2=this.state.paramv;
             this.setState({
                 paramv:key,
                 paramv2:key2,
+                paramv3:nextProps.match.params.paramv3,
                resultList:[],totalR:0
             },function(){
-                if(oldparamv2!=key2){
-                    this.loadQueryCriteria(this.state.paramv,this.state.paramv2);
+                if(oldparamv2!=key){
+                    this.loadQueryCriteria(this.state.paramv);
                 }
             });
         }
       componentDidMount() {
           //获取报表列表
-          this.loadQueryCriteria(this.state.paramv,this.state.paramv2);
+          this.loadQueryCriteria(this.state.paramv);
         
       }
     //下拉事件
@@ -88,9 +90,9 @@ class ExecQuery extends React.Component {
     //     });     
     // }
     //获取查询条件及输出字段
-    loadQueryCriteria(selectClassId,selectID){
+    loadQueryCriteria(selectClassId){
         const inlist=[],outlist=[];
-        _query.getQueryCriteria(selectClassId,selectID).then(response=>{
+        _query.getQueryCriteria(selectClassId).then(response=>{
            let inColumns=response.data.in;
            let outColumns=response.data.out;
         //    inColumns.map((item,index)=>{
@@ -109,7 +111,7 @@ class ExecQuery extends React.Component {
                 inlist.push(arr);  
              }
             outColumns.map((item,index)=>{
-                let json={key:item.id.toUpperCase(),title:item.name,dataIndex:item.id.toUpperCase()};
+                let json={key:item.out_id,title:item.out_name,dataIndex:item.qry_id};
                 outlist.push(json);
             });
             this.setState({outlist:outlist,inList:inlist},function(){
@@ -121,11 +123,19 @@ class ExecQuery extends React.Component {
     changeEvent(e) {
          let id = e.target.id;
          let nv={[id]:e.target.value};
+         let arrd=this.state.data;
+         arrd.forEach(function(item,index){
+            for (var key in item) {
+                if(id==key){
+                    arrd.splice(index,1);     
+                }
+            }
+          });
          this.state.data.push(nv);
       }
      //执行查询 
     execSelect(){
-        this.setState({baoTitle:this.state.paramv2},function(){});
+        this.setState({baoTitle:this.state.paramv3},function(){});
         if(null!=this.state.data){
             let param=[{in:this.state.data},{startIndex:this.state.startIndex,perPage:10,searchResult:this.state.searchResult}];
             _query.execSelect(this.state.paramv,this.state.paramv2,param).then(response=>{
@@ -179,6 +189,14 @@ class ExecQuery extends React.Component {
             let values=this.okdata.join(",");
             let name = this.state.paramName;
             let nv={[name]:values};
+            let arrd=this.state.data;
+            arrd.forEach(function(item,index){
+                for (var key in item) {
+                    if(name==key){
+                        arrd.splice(index,1);     
+                    }
+                }
+            });
             this.state.data.push(nv);
             this.props.form.setFieldsValue({[name]:values});
             this.setState({
@@ -351,27 +369,27 @@ class ExecQuery extends React.Component {
     const rc=item.map((record, index)=> {
             if(record.datatype=='varchar'){
                 return (
-                    <Col span={12} key={record.name}>
-                    <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.name} >
-                        {getFieldDecorator(record.name, {
+                    <Col span={12} key={record.qry_id+index}>
+                    <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name} >
+                        {getFieldDecorator(record.in_id, {
                           rules: [{
                             required: true,
                             message: `参数名是必须的！`,
                           }]
                         })(
                             <Input onChange={e=>this.changeEvent(e)} 
-                            addonAfter={record.lookup==''?'':
+                            addonAfter={record.in_id==''?'':
                             <Icon type="ellipsis" theme="outlined"  
-                            onClick={e=>this.openModelClick(record.name,record.lookup)}/>} />
+                            onClick={e=>this.openModelClick(record.in_id,record.in_id)}/>} />
                         )}
                      </FormItem>
                 </Col>
                 );
             }else{
                 return (
-                    <Col span={12}  key={record.name}>
-                 <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.name}>
-                    {getFieldDecorator(record.name, {
+                    <Col span={12} key={record.qry_id+index}>
+                 <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name}>
+                    {getFieldDecorator(record.in_id, {
                         rules: [{
                         required: true,
                         message: `参数名是必须的！`,
@@ -394,7 +412,7 @@ class ExecQuery extends React.Component {
                 enterButton="查询"
                 onSearch={value => this.onResultSearch(value)}
                 /> */}
-        <Card bordered={false} title={this.state.paramv2} extra={ <div>
+        <Card bordered={false} title={this.state.paramv3} extra={ <div>
                         <a onClick={()=>this.execSelect()}>查询 </a>
                         <Divider type="vertical" />
                         <a onClick={this.downloadExcel}>保存到excel</a>

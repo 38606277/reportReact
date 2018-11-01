@@ -34,8 +34,50 @@ export default class SiderBar extends React.Component {
       });
       
     }
+
+    threeformSubmenusChild(obj,index){
+        let cHtml=<div></div>;
+        let childArray=obj.children;
+        if("undefined"!=typeof(childArray)&&childArray.length>0) {
+            cHtml = childArray.map((item, index) => {
+                return this.threeformSubmenusChild(item,obj.value);
+            });
+            return <SubMenu key={obj.name+index} title={obj.name==undefined?obj.func_name:obj.name}>{cHtml}</SubMenu>
+        }else{
+            return <Menu.Item key={obj.name+index} ><Link to={'/query/ExecQuery/'+obj.value+'/'+index+'/'+obj.name}><Icon type='table' /><span>{obj.name==undefined?obj.func_name:obj.name}</span></Link></Menu.Item>
+        }
+
+
+    }
+    formSubmenusChild(obj){
+        let cHtml=<div></div>;
+        let childArray=obj.children;
+        if("undefined"!=typeof(childArray)&&childArray.length>0) {
+          cHtml = childArray.map((item, index) => {
+                return this.formSubmenusChild(item);
+            });
+            return <SubMenu key={obj.func_name} title={obj.func_name}>{cHtml}</SubMenu>
+        }else{
+            return <Menu.Item key={obj.func_name} ><Link to={obj.func_url}><Icon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>
+        }
+
+
+    }
     render() {
-       
+        let html=this.state.categoryList.map((obj,index)=> {
+            if ("undefined"!=typeof(obj.children)&&obj.children.length>0) {
+                if(obj.func_id=='1001'){
+                    return this.threeformSubmenusChild(obj,obj.func_id);
+
+                }else{
+                    return this.formSubmenusChild(obj);
+
+                }
+            } else {
+                //这里的routeurl是路由地址，是自定义的一个属性
+                return <Menu.Item key={"sub"+index} ><Link to={obj.func_url}><Icon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>
+            }
+        });
          const collapsed=this.props.collapsed;
         return (
             <Sider
@@ -47,7 +89,8 @@ export default class SiderBar extends React.Component {
                 style={{ overflow: 'auto', height: '100vh', left: 0 }}
             >
                 <Menu theme="light" defaultSelectedKeys={['1']} mode="inline"  >
-                    <Menu.Item key="sub" ><Link to='/'><Icon type="home" /><span>首页</span></Link></Menu.Item>
+                {html}
+                    {/* <Menu.Item key="sub" ><Link to='/'><Icon type="home" /><span>首页</span></Link></Menu.Item>
                     <SubMenu key="sub1" title={<span><Icon type="appstore" /><span>我的任务</span></span>}>
                         <Menu.Item key="/task/AgencyTaskList"><Link to='/task/AgencyTaskList'>代办任务</Link></Menu.Item>
                         <Menu.Item key="/task/taskList"><Link to='/task/taskList'>已办任务</Link></Menu.Item>
@@ -65,7 +108,6 @@ export default class SiderBar extends React.Component {
                              }
                          )
                      }
-                        {/* <Menu.Item key="sub22"><Link to='/query/ExecQuery'>执行查询</Link></Menu.Item> */}
                     </SubMenu>
                     <SubMenu key="sub4" title={<span><Icon type="setting" /><span>系统管理</span></span>}>
                         <Menu.Item key="/user"><Link to='/user'>用户管理</Link></Menu.Item>
@@ -74,13 +116,12 @@ export default class SiderBar extends React.Component {
                         <Menu.Item key="authType"><Link to="/authType">权限类型管理</Link></Menu.Item>
                     </SubMenu>
                     <SubMenu key="sub5" title={<span><Icon type="profile" /><span>函数管理</span></span>}>
-                        {/* <Menu.Item key="/dbs"><Link to='/dbs'>数据源管理</Link></Menu.Item> */}
                         <Menu.Item key="/dbs"><Link to='/dbs'>数据源管理</Link></Menu.Item>
                         <Menu.Item key="/function/functionList"><Link to='/function/functionList'>函数管理</Link></Menu.Item>
                         <Menu.Item key="/query/QueryList"><Link to='/query/QueryList'>查询管理</Link></Menu.Item>
                         <Menu.Item key="/dict/DictList"><Link to='/dict/DictList'>数据字典</Link></Menu.Item>
                         <Menu.Item key="/query/CreateTemplate"><Link to='/query/CreateTemplate'>定义查询模板</Link></Menu.Item>
-                    </SubMenu>
+                    </SubMenu> */}
                 </Menu>
             </Sider>
         )

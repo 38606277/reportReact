@@ -14,7 +14,7 @@ export default class QueryService {
     }
     // 获取权限可访问列表
     getQueryClassTree(userId) {
-        let url = "reportServer/query/getAuthTree";
+        let url = "reportServer/auth/getMenuList";
         let param = {userId:userId};  
         return HttpService.post(url,JSON.stringify(param));
     }
@@ -22,12 +22,12 @@ export default class QueryService {
         let url="reportServer/select/getSelectName/"+name;
         return HttpService.post(url,{});
     }
-    getQueryCriteria(selectClassId,selectID){
-        let url="reportServer/select/getSelectParam/"+selectClassId+"/"+selectID;
+    getQueryCriteria(selectClassId){
+        let url="reportServer/query/getQueryParamByFuncID/"+selectClassId;
         return HttpService.post(url,{});
     }
     execSelect(selectClassId,selectID,param){
-        let url="reportServer/select/execSelect/"+selectClassId+"/"+selectID;
+        let url="reportServer/query/execQuery/"+selectID+"/"+selectClassId;
         return HttpService.post(url,JSON.stringify(param));
     }
     getDictionaryList(param,page){
