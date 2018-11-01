@@ -366,7 +366,7 @@ class RuleInfo extends React.Component{
                  }else{
                     //如果treeData为空，根据人与当前tabKey进行先查询treeData后查人员选中事项
                     this.setState({treeData:[]});
-                    ruleSevie.getFunRuleList('web').then(response=>{
+                    ruleSevie.getFunRuleList('reactWeb').then(response=>{
                         if(response.status!=500){
                             this.setState({treeData:response});
                             ruleSevie.getAuthByConditions(roleId,type).then(response=>{

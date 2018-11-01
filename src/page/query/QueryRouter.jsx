@@ -49,7 +49,7 @@ class QueryRouter extends React.Component{
     render(){
         return (
             <Switch>
-                 <Route path="/query/ExecQuery/:paramv/:paramv2" component={ExecQuery} />
+                 <Route path="/query/ExecQuery/:paramv/:paramv2/:paramv3" component={ExecQuery} />
                  <Route path="/query/QueryList" component={QueryList} />
                  <Route path="/query/QueryClass" component={QueryClass} />
                  <Route path="/query/CreateTemplate" component={CreateTemplate} />
