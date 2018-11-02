@@ -35,14 +35,14 @@ export default class SiderBar extends React.Component {
       
     }
 
-    threeformSubmenusChild(obj,index){
+    threeformSubmenusChild(obj,index,indexs){
         let cHtml=<div></div>;
         let childArray=obj.children;
         if("undefined"!=typeof(childArray)&&childArray.length>0) {
             cHtml = childArray.map((item, index) => {
-                return this.threeformSubmenusChild(item,obj.value);
+                return this.threeformSubmenusChild(item,obj.value,index);
             });
-            return <SubMenu key={obj.name+index} title={obj.name==undefined?obj.func_name:obj.name}>{cHtml}</SubMenu>
+            return <SubMenu key={obj.name==undefined?obj.func_name+(indexs):obj.name+(indexs)} title={obj.name==undefined?obj.func_name:obj.name}>{cHtml}</SubMenu>
         }else{
             return <Menu.Item key={obj.name+index} ><Link to={'/query/ExecQuery/'+obj.value+'/'+index+'/'+obj.name}><Icon type='table' /><span>{obj.name==undefined?obj.func_name:obj.name}</span></Link></Menu.Item>
         }
@@ -67,7 +67,7 @@ export default class SiderBar extends React.Component {
         let html=this.state.categoryList.map((obj,index)=> {
             if ("undefined"!=typeof(obj.children)&&obj.children.length>0) {
                 if(obj.func_id=='1001'){
-                    return this.threeformSubmenusChild(obj,obj.func_id);
+                    return this.threeformSubmenusChild(obj,obj.func_id,index);
 
                 }else{
                     return this.formSubmenusChild(obj);

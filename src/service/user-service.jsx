@@ -31,10 +31,7 @@ class User{
         }
     }
     encodePwd(pwd){
-        return HttpService.post(
-            '/reportServer/user/encodePwd',
-            JSON.stringify({Pwd:pwd})
-        );
+        return HttpService.post('/reportServer/user/encodePwd',pwd);
     }
     // 退出登录
     logout(){
