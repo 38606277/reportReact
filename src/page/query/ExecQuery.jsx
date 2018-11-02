@@ -111,7 +111,8 @@ class ExecQuery extends React.Component {
                 inlist.push(arr);  
              }
             outColumns.map((item,index)=>{
-                let json={key:item.out_id,title:item.out_name,dataIndex:item.qry_id};
+               
+                let json={key:item.out_id.toUpperCase(),title:item.out_name,dataIndex:item.out_id.toUpperCase()};
                 outlist.push(json);
             });
             this.setState({outlist:outlist,inList:inlist},function(){
@@ -140,7 +141,7 @@ class ExecQuery extends React.Component {
             let param=[{in:this.state.data},{startIndex:this.state.startIndex,perPage:10,searchResult:this.state.searchResult}];
             _query.execSelect(this.state.paramv,this.state.paramv2,param).then(response=>{
                 if(response.resultCode!='3000'){
-                    this.setState({resultList:response.data.list,totalR:response.data.totalSize});
+                    this.setState({resultList:response.list,totalR:response.totalSize});
                 }
             });
         }
