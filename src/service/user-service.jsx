@@ -75,6 +75,10 @@ class User{
     getRoleListByUserId(userid){
         return HttpService.post('reportServer/auth/getRoleListByUserId',JSON.stringify({'userid':userid}));
     }
+
+    UpdatePwd(userInfo){
+        return HttpService.post('/reportServer/formUser/updatePwd',JSON.stringify(userInfo));
+    }
 }
 
 export default User;
