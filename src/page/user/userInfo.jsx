@@ -1,6 +1,6 @@
 import React        from 'react';
 import User         from '../../service/user-service.jsx'
-import PageTitle    from '../../component/page-title/index.jsx';
+import createHistory from 'history/createBrowserHistory';
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import moment from 'moment';
 import { Form, Input, Select,Button, DatePicker,Card,Row, Col } from 'antd';
@@ -39,39 +39,43 @@ class UserInfo extends React.Component{
     
  //初始化加载调用方法
     componentDidMount(){
-      _user.getRoleListByUserId(this.state._id).then(response=>{
-      const children=[];
-        let rlist=response.roleList;
-        let urlist=response.userroleList;
-        for (let i = 0; i < rlist.length; i++) {
-          children.push(<Option key={rlist[i].roleId}>{rlist[i].roleName}</Option>);
-        }
-        this.setState({roleList:children,isAdminText:urlist},function(){
-          this.props.form.setFieldsValue({ isAdminText:this.state.isAdminText});
-        });
-      });
-       if(null!=this.state._id && ''!=this.state._id  && 'null'!=this.state._id){
-            _user.getUserInfo(this.state._id).then(response => {
-                this.setState(response.data.userInfo);
-               // this.props.form.setFieldsValue(response.data.userInfo);
-               //console.log(this.state.isAdminText);
-                this.props.form.setFieldsValue({
-                      userName:response.data.userInfo.userName,
-                      encryptPwd:response.data.userInfo.encryptPwd,
-                      startDate:moment(response.data.userInfo.startDate,dateFormat),
-                      endDate:moment(response.data.userInfo.endDate,dateFormat),
-                      description:response.data.userInfo.description,
-                      userId:response.data.userInfo.userId,
-                      confirm:''
-                });
-            }, errMsg => {
-                this.setState({
-                });
-                localStorge.errorTips(errMsg);
+      if(this.state._id=='1'){
+        window.location.href="#/user/userView/"+this.state._id;
+      }else{
+        _user.getRoleListByUserId(this.state._id).then(response=>{
+          const children=[];
+            let rlist=response.roleList;
+            let urlist=response.userroleList;
+            for (let i = 0; i < rlist.length; i++) {
+              children.push(<Option key={rlist[i].roleId}>{rlist[i].roleName}</Option>);
+            }
+            this.setState({roleList:children,isAdminText:urlist},function(){
+              this.props.form.setFieldsValue({ isAdminText:this.state.isAdminText});
             });
+          });
+           if(null!=this.state._id && ''!=this.state._id  && 'null'!=this.state._id){
+                _user.getUserInfo(this.state._id).then(response => {
+                    this.setState(response.data.userInfo);
+                   // this.props.form.setFieldsValue(response.data.userInfo);
+                   //console.log(this.state.isAdminText);
+                    this.props.form.setFieldsValue({
+                          userName:response.data.userInfo.userName,
+                          encryptPwd:response.data.userInfo.encryptPwd,
+                          startDate:moment(response.data.userInfo.startDate,dateFormat),
+                          endDate:moment(response.data.userInfo.endDate,dateFormat),
+                          description:response.data.userInfo.description,
+                          userId:response.data.userInfo.userId,
+                          confirm:''
+                    });
+                }, errMsg => {
+                    this.setState({
+                    });
+                    localStorge.errorTips(errMsg);
+                });
+            }
         }
         
-    }
+      }
 
     
     //编辑字段对应值

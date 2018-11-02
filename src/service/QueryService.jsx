@@ -31,7 +31,7 @@ export default class QueryService {
         return HttpService.post(url,JSON.stringify(param));
     }
     getDictionaryList(param,page){
-        let url="reportServer/dictionary/execlDictionary/"+param;
+        let url="reportServer/dict/getDictByID/"+param;
         return HttpService.post(url,JSON.stringify(page));
     }
     getAllQueryClass(){

@@ -111,7 +111,8 @@ class ExecQuery extends React.Component {
                 inlist.push(arr);  
              }
             outColumns.map((item,index)=>{
-                let json={key:item.out_id,title:item.out_name,dataIndex:item.qry_id};
+               
+                let json={key:item.out_id.toUpperCase(),title:item.out_name,dataIndex:item.out_id.toUpperCase()};
                 outlist.push(json);
             });
             this.setState({outlist:outlist,inList:inlist},function(){
@@ -140,7 +141,7 @@ class ExecQuery extends React.Component {
             let param=[{in:this.state.data},{startIndex:this.state.startIndex,perPage:10,searchResult:this.state.searchResult}];
             _query.execSelect(this.state.paramv,this.state.paramv2,param).then(response=>{
                 if(response.resultCode!='3000'){
-                    this.setState({resultList:response.data.list,totalR:response.data.totalSize});
+                    this.setState({resultList:response.list,totalR:response.totalSize});
                 }
             });
         }
@@ -345,15 +346,16 @@ class ExecQuery extends React.Component {
         dataIndex: 'name',
         key: 'name',
     }];
-    this.state.resultList.map((item,index)=>{
-        item.key=index;
-    });
-    this.state.dictionaryList.map((item,index)=>{
-        item.key=item.value;
-    });
-    
-//   const selectedTags=this.state.selectedTags;
-//   const selectedTagsReport =this.state.selectedTagsReport;
+    if(null!=this.state.resultList){
+        this.state.resultList.map((item,index)=>{
+            item.key=index;
+        });
+    }
+    if(null!=this.state.dictionaryList){
+        this.state.dictionaryList.map((item,index)=>{
+            item.key=item.value;
+        });
+    }
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -378,9 +380,9 @@ class ExecQuery extends React.Component {
                           }]
                         })(
                             <Input onChange={e=>this.changeEvent(e)} 
-                            addonAfter={record.in_id==''?'':
+                            addonAfter={record.dict_id==null?'':
                             <Icon type="ellipsis" theme="outlined"  
-                            onClick={e=>this.openModelClick(record.in_id,record.in_id)}/>} />
+                            onClick={e=>this.openModelClick(record.in_id,record.dict_id)}/>} />
                         )}
                      </FormItem>
                 </Col>

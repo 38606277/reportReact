@@ -4,7 +4,6 @@ import { Layout, Menu, Avatar, Icon, Tooltip, Button, Card, Popover, Breadcrumb 
 import './Layout.scss';
 import SiderBar from './SideBar.jsx';
 import LocalStorge from '../../util/LogcalStorge.jsx';
-
 const localStorge = new LocalStorge();
 const { Header, Content, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
@@ -19,7 +18,8 @@ export default class MainLoyout extends React.Component {
             collapsed: false,
             visible: false,
             ishow: '0',
-            userCode: localStorge.getStorage('userInfo') == '' ? '' : localStorge.getStorage('userInfo').userCode
+            userCode: localStorge.getStorage('userInfo') == '' ? '' : localStorge.getStorage('userInfo').userCode,
+            userid:localStorge.getStorage('userInfo') == '' ? '' : localStorge.getStorage('userInfo').id,
         };
 
     }
@@ -44,12 +44,13 @@ export default class MainLoyout extends React.Component {
     }
     // 退出登录
     onLogout() {
-
         localStorge.removeStorage('userInfo');
         this.setState({ redirect: true });
-
     }
 
+    linkUserInfo(){
+        this.props.history.push("/user/userView/"+this.state.userid);
+    }
     render() {
         if (this.state.redirect) {
             return <Redirect push to="/login" />; //or <Redirect push to="/sample?a=xxx&b=yyy" /> 传递更多参数
@@ -138,9 +139,22 @@ export default class MainLoyout extends React.Component {
         } else if (ss == '4') {
             contsss = <li className="dropdown">
                 <ul className="dropdown-menu">
-                    <li style={{ margin: '10px' }}><a href="javascript:void(0)"><Icon type="user" theme="outlined" style={{ fontSize: '18px', color: '#0a0a0a' }} /> <span style={{ fontSize: '16px', marginLeft: '5px', color: '#0a0a0a' }}>个人信息</span></a></li>
-                    <li style={{ margin: '10px' }} ><a href="javascript:void(0)"><Icon type="setting" theme="outlined" style={{ fontSize: '18px', color: '#0a0a0a' }} /><span style={{ fontSize: '16px', marginLeft: '5px', color: '#0a0a0a' }}>设置</span></a></li>
-                    <li style={{ margin: '10px' }} ><a onClick={() => { this.onLogout() }}><Icon type="logout" theme="outlined" style={{ fontSize: '18px', color: '#0a0a0a' }} /><span style={{ fontSize: '16px', marginLeft: '5px', color: '#0a0a0a' }}>退出</span> </a></li>
+                    <li style={{ margin: '10px' }}>
+                        <Link to={"/user/userView/"+this.state.userid}>
+                            <Icon type="user" theme="outlined" style={{ fontSize: '18px', color: '#0a0a0a' }} /> 
+                            <span style={{ fontSize: '16px', marginLeft: '5px', color: '#0a0a0a' }}>个人信息</span>
+                         </Link>
+                    </li>
+                    <li style={{ margin: '10px' }}><Link to={"/user/UpdatePwd/"+this.state.userid}>
+                        <Icon type="key" theme="outlined" style={{ fontSize: '18px', color: '#0a0a0a' }} /> 
+                        <span style={{ fontSize: '16px', marginLeft: '5px', color: '#0a0a0a' }}>密码修改</span></Link>
+                    </li>
+                    <li style={{ margin: '10px' }} ><a href="javascript:void(0)"><Icon type="setting" theme="outlined" style={{ fontSize: '18px', color: '#0a0a0a' }} />
+                        <span style={{ fontSize: '16px', marginLeft: '5px', color: '#0a0a0a' }}>设置</span></a>
+                    </li>
+                    <li style={{ margin: '10px' }} ><a onClick={() => { this.onLogout() }}><Icon type="logout" theme="outlined" style={{ fontSize: '18px', color: '#0a0a0a' }} />
+                        <span style={{ fontSize: '16px', marginLeft: '5px', color: '#0a0a0a' }}>退出</span> </a>
+                    </li>
                 </ul>
             </li>;
             showwei = 'bottomRight';

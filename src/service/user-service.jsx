@@ -31,10 +31,7 @@ class User{
         }
     }
     encodePwd(pwd){
-        return HttpService.post(
-            '/reportServer/user/encodePwd',
-            JSON.stringify({Pwd:pwd})
-        );
+        return HttpService.post('/reportServer/user/encodePwd',pwd);
     }
     // 退出登录
     logout(){
@@ -74,6 +71,10 @@ class User{
     }
     getRoleListByUserId(userid){
         return HttpService.post('reportServer/auth/getRoleListByUserId',JSON.stringify({'userid':userid}));
+    }
+
+    UpdatePwd(userInfo){
+        return HttpService.post('/reportServer/formUser/updatePwd',JSON.stringify(userInfo));
     }
 }
 
