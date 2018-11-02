@@ -346,15 +346,16 @@ class ExecQuery extends React.Component {
         dataIndex: 'name',
         key: 'name',
     }];
-    this.state.resultList.map((item,index)=>{
-        item.key=index;
-    });
-    this.state.dictionaryList.map((item,index)=>{
-        item.key=item.value;
-    });
-    
-//   const selectedTags=this.state.selectedTags;
-//   const selectedTagsReport =this.state.selectedTagsReport;
+    if(null!=this.state.resultList){
+        this.state.resultList.map((item,index)=>{
+            item.key=index;
+        });
+    }
+    if(null!=this.state.dictionaryList){
+        this.state.dictionaryList.map((item,index)=>{
+            item.key=item.value;
+        });
+    }
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -379,9 +380,9 @@ class ExecQuery extends React.Component {
                           }]
                         })(
                             <Input onChange={e=>this.changeEvent(e)} 
-                            addonAfter={record.in_id==''?'':
+                            addonAfter={record.dict_id==null?'':
                             <Icon type="ellipsis" theme="outlined"  
-                            onClick={e=>this.openModelClick(record.in_id,record.in_id)}/>} />
+                            onClick={e=>this.openModelClick(record.in_id,record.dict_id)}/>} />
                         )}
                      </FormItem>
                 </Col>
