@@ -1,62 +1,42 @@
-/*
-* @Author: Rosen
-* @Date:   2018-01-13 11:27:21
-* @Last Modified by:   Rosen
-* @Last Modified time: 2018-02-05 14:02:20
-*/
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { HashRouter as Router, Switch, Redirect, Route} from 'react-router-dom'
 
-// import Layout from 'component/layout/index.jsx';
- import Layout from './page/main/Layout.jsx';
-// // 页面
-
-// import Home from './page/home/index.jsx';
-import TaskRouter from './page/task/taskrouter.jsx';
-import UserRouter from './page/user/router.jsx';
-import DbsRouter  from './page/system/dbs/dbsrouter.jsx';
-import RuleRouter  from './page/system/rule/rulerouter.jsx';
-import RoleRouter  from './page/system/role/rolerouter.jsx';
-import AuthTypeRouter  from './page/system/authType/authTypeRouter.jsx';
-
-
-import FunctionRouter  from './page/function/FunctionClass.jsx';
-// import Login from './page/login/index.jsx';
-
-// import ErrorPage from './page/error/index.jsx';
-// import functionCreator from './page/function/functionCreator.jsx';
-// import functionList from './page/function/functionList.jsx';
-// import QueryList from './page/query/QueryList.jsx';
-// import EditableTable from './page/function/EditTable.jsx'
-
-
-// import Home from './page/home/index.jsx';
-// import ProductRouter from './page/product/router.jsx';
-// import Login from './page/login/index.jsx';
-// import UserList from './page/user/index.jsx';
-// import UserInfo from './page/user/userInfo.jsx';
-// import User1 from './page/user/User1.jsx';
-//  import ErrorPage from './page/error/index.jsx';
-// import functionCreator from './page/function/functionCreator.jsx';
-// import functionList from './page/function/functionList.jsx';
-// import QueryList from './page/query/QueryList.jsx';
-// import EditableTable from './page/function/EditTable.jsx'
-// import NavSide from './component/nav-side/NavSide.jsx';
- import './App.css'
 import Loadable from 'react-loadable';
 import loading from './util/loading.jsx'
-import { userInfo } from 'os';
+import './App.css'
 
 
-// function Load(component){
-//     return Loadable({
-//         loader: () => import(component),
-//         loading: loading,
-//         delay:3000
-//     })
-// }
+import Layout from './page/main/Layout.jsx';
+
+const TaskRouter = Loadable({
+    loader: () => import('./page/task/taskrouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const UserRouter = Loadable({
+    loader: () => import('./page/user/router.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const DbsRouter = Loadable({
+    loader: () => import('./page/system/dbs/dbsrouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+const RuleRouter = Loadable({
+    loader: () => import('./page/system/rule/rulerouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const RoleRouter = Loadable({
+    loader: () => import('./page/system/role/rolerouter.jsx'),
+    loading: loading,
+    delay:3000
+});
 
 const Login = Loadable({
     loader: () => import('./page/login/index.jsx'),
@@ -70,40 +50,19 @@ const Home = Loadable({
     delay:3000
 });
 
-const functionList = Loadable({
-    loader: () => import('./page/function/functionList.jsx'),
-    loading: loading,
-    delay:3000
-});
 
-const functionCreator = Loadable({
-    loader: () => import('./page/function/functionCreator.jsx'),
-    loading: loading,
-    delay:3000
-});
 
 const Auth = Loadable({
     loader: () => import('./page/user/Auth.jsx'),
     loading: loading,
     delay:3000
 });
-
-const QueryData = Loadable({
-    loader: () => import('./page/query/QueryList.jsx'),
+const AuthTypeRouter = Loadable({
+    loader: () => import('./page/system/authType/authTypeRouter.jsx'),
     loading: loading,
     delay:3000
 });
 
-
-
-
-
-
-const cor = Loadable({
-    loader: () => import('./page/function/cor.jsx'),
-    loading: loading,
-    delay:3000
-});
 
 const DictRouter = Loadable({
     loader: () => import('./page/dict/DictRouter.jsx'),
@@ -116,18 +75,17 @@ const QueryRouter = Loadable({
     delay:3000
 });
 
+const FunctionRouter = Loadable({
+    loader: () => import('./page/function/FunctionRouter.jsx'),
+    loading: loading,
+    delay:3000
+});
 
-// const UserList = Loadable({
-//     loader: () => import('./page/user/index.jsx'),
-//     loading: loading,
-//     delay:3000
-// });
-
-// const UserInfo = Loadable({
-//     loader: () => import('./page/user/userInfo.jsx'),
-//     loading: loading,
-//     delay:3000
-// });
+const dashboardRouter = Loadable({
+    loader: () => import('./page/dashboard/dashboardRouter.jsx'),
+    loading: loading,
+    delay:3000
+});
 
 function LoadPage(url){
 //    console.log(Loadable({
@@ -145,6 +103,7 @@ class App extends React.Component {
             <Layout>
                 <Switch>
                      <Route exact path="/" component={Home} />
+                     <Route path="/dashboard" component={dashboardRouter}/>
                      <Route path="/task" component={TaskRouter}/>
                      <Route path="/user" component={UserRouter}/>
                      <Route path="/dbs" component={DbsRouter}/>
@@ -154,10 +113,7 @@ class App extends React.Component {
                      <Route path="/authType" component={AuthTypeRouter}/>
                      <Route path="/query" component={QueryRouter}/>
                      <Route path="/dict" component={DictRouter}/>
-  
-                     <Route path="/function/functionClass" component={FunctionRouter}/>
-                     <Route path="/function/functionCreator/:action/:id" component={functionCreator} />
-                     <Route path="/function/functionList" component={functionList} />
+                     <Route path="/function" component={FunctionRouter}/>
                 </Switch>
             </Layout>
         );
@@ -165,10 +121,6 @@ class App extends React.Component {
             <Router>
                 <Switch>
                     <Route path="/login" component={Login} />
-                    <Route path="/cor" component={cor} />
-                    {/* <Route path="/NavSide" component={NavSide} /> */}
-                    {/* <Route path="/functionCreator" component={functionCreator}/> */}
-                    {/* <Route path="/user/User1" component={User1}/> */}
                     <Route path="/" render={props => LayoutRouter} />
                 </Switch>
             </Router>

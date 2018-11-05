@@ -1,15 +1,21 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { Layout, Menu, Avatar, Icon, Tooltip, Button, Card, Popover, Breadcrumb } from 'antd';
+import { Layout, Menu, Avatar, Icon, Tooltip, Button, Card, Popover } from 'antd';
 import './Layout.scss';
-import SiderBar from './SideBar.jsx';
+// import SiderBar from './SideBar.jsx';
 import LocalStorge from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
 const { Header, Content, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 import logo from '../../asset/logo.png'
+import Loadable from 'react-loadable';
+import loading from '../../util/loading.jsx'
 
-
+const SiderBar = Loadable({
+    loader: () => import('./SideBar.jsx'),
+    loading: loading,
+    delay:3000
+});
 
 export default class MainLoyout extends React.Component {
     constructor(props) {
@@ -235,23 +241,16 @@ export default class MainLoyout extends React.Component {
                                 <Icon type="question-circle-o" style={{ fontSize: '18px', color: '#ffffff' }}/>
                             </a>
                         </Tooltip>*/}
-                    </div>
+                    </div> 
                 </Header>
 
                 <Layout>
                     <SiderBar collapsed={this.state.collapsed}/>
                     <Content>
-                        {/* <Breadcrumb style={{ margin: '16px 0',backgroundColor:'white' }}>
-                            <Breadcrumb.Item>User</Breadcrumb.Item>
-                            <Breadcrumb.Item>Bill</Breadcrumb.Item>
-                        </Breadcrumb> */}
                         <Card bodyStyle={{ padding: "10px", marginLeft: 2, background: '#ececec', minHeight: 900 }}>
                             {this.props.children}
                         </Card>
                     </Content>
-                    {/* <Footer style={{ textAlign: 'center' }}>
-                        Ant Design ©2018 Created by Ant UED
-                    </Footer> */}
                 </Layout>
             </Layout>
         );

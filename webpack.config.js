@@ -12,7 +12,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 let WEBPACK_ENV = process.env.WEBPACK_ENV || 'dev';
 console.log(WEBPACK_ENV);
 module.exports = {
-    devtool: 'source-map',
+     devtool: 'source-map',
     entry: {
         app: ["babel-polyfill", "./src/app.jsx"]
     },
@@ -77,6 +77,25 @@ module.exports = {
                     fallback: 'style-loader',
                     use: ['css-loader', 'sass-loader']
                 })
+            },{
+                test: /\.less$/,
+                use:ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                    {
+                        loader: "style-loader"
+                    },
+                    {
+                        loader: "css-loader"
+                    },
+                    {
+                        loader: 'postcss-loader'
+                    },
+                    {
+                        loader: "less-loader",
+                        options: { javascriptEnabled: true }
+                    }
+                ]})
             },
             // 图片的配置
             {

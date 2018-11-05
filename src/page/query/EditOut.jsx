@@ -224,7 +224,7 @@ class EditOut extends React.Component {
           cancelText='取消'
           footer={null}
         >
-         <CreateLink outParam={this.state.data}/>
+         <CreateLink outParam={this.state.data} />
         </Modal>
       </div>
     )

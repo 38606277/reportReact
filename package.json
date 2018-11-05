@@ -36,7 +36,6 @@
   },
   "dependencies": {
     "antd": "^3.9.3",
-    "antd-mobile": "^2.2.3",
     "bizcharts": "^3.2.4",
     "bizcharts-plugin-slider": "^2.0.3",
     "classnames": "^2.2.6",
@@ -44,6 +43,9 @@
     "echarts": "^4.2.0-rc.1",
     "immutability-helper": "^2.7.1",
     "js-export-excel": "^1.1.2",
+    "less": "^3.8.1",
+    "less-loader": "^4.1.0",
+    "postcss-loader": "3.0.0",
     "numeral": "^2.0.6",
     "prop-types": "15.6.0",
     "rc-pagination": "1.15.1",
@@ -52,13 +54,13 @@
     "react-dnd": "^5.0.0",
     "react-dnd-html5-backend": "^5.0.1",
     "react-dom": "16.4.0",
+    "react-drag-and-drop": "2.4.0",
     "react-html-table-to-excel": "^2.0.0",
     "react-loadable": "^5.5.0",
     "react-router-dom": "4.2.2",
     "react-trend": "^1.2.4",
     "simditor": "^2.3.6",
     "umi": "^2.0.0-beta.10",
-    "whatwg-fetch": "^2.0.4",
-    "react-drag-and-drop":"2.4.0"
+    "whatwg-fetch": "^2.0.4"
   }
 }
