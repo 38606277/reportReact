@@ -47,6 +47,7 @@ class ExecQuery extends React.Component {
                 paramv:key,
                 paramv2:key2,
                 paramv3:nextProps.match.params.paramv3,
+                
                resultList:[],totalR:0
             },function(){
                 if(oldparamv2!=key){
@@ -99,9 +100,19 @@ class ExecQuery extends React.Component {
         //         let json={key:item.id,name:item.name,lookup:item.lookup,datatype:item.datatype,mut:item.mut,default:item.default};
         //         inlist.push(json);
         //     });
+        this.setState({data:[]},function(){
+            for(var l=0;l<inColumns.length;l++){
+                let idkey=inColumns[l].in_id;
+                let nv={[idkey]:''};
+                this.state.data.push(nv);
+            }
+        })
+           
             var k=Math.ceil(inColumns.length/2);
             var j= 0;
             for(var i=1;i<=k;i++){
+                
+
                 var arr= new Array();
                 for(j ; j < i*2; j++){
                     if(undefined!=inColumns[j]){
@@ -138,7 +149,7 @@ class ExecQuery extends React.Component {
     execSelect(){
         this.setState({baoTitle:this.state.paramv3},function(){});
         if(null!=this.state.data){
-            let param=[{in:this.state.data},{startIndex:this.state.startIndex,perPage:10,searchResult:this.state.searchResult}];
+            let param=[{in:this.state.data},{startIndex:1,perPage:10,searchResult:this.state.searchResult}];
             _query.execSelect(this.state.paramv,this.state.paramv2,param).then(response=>{
                 if(response.resultCode!='3000'){
                     this.setState({resultList:response.list,totalR:response.totalSize});
@@ -369,7 +380,7 @@ class ExecQuery extends React.Component {
  
   const inColumn=this.state.inList.map((item, index)=>{
     const rc=item.map((record, index)=> {
-            if(record.datatype=='varchar'){
+            if(record.datatype=='varchar' || record.datatype=='number' || record.datatype=='string'){
                 return (
                     <Col span={12} key={record.qry_id+index}>
                     <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name} >
@@ -387,7 +398,7 @@ class ExecQuery extends React.Component {
                      </FormItem>
                 </Col>
                 );
-            }else{
+            }else  if(record.datatype=='date'){
                 return (
                     <Col span={12} key={record.qry_id+index}>
                  <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name}>
@@ -398,6 +409,21 @@ class ExecQuery extends React.Component {
                         }]
                     })(
                         <DatePicker />
+                    )}
+                   </FormItem>
+                </Col>
+               );
+            }else{
+                return (
+                    <Col span={12} key={record.qry_id+index}>
+                 <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name}>
+                    {getFieldDecorator(record.in_id, {
+                        rules: [{
+                        required: true,
+                        message: `参数名是必须的！`,
+                        }]
+                    })(
+                        <Input onChange={e=>this.changeEvent(e)}  />
                     )}
                    </FormItem>
                 </Col>
