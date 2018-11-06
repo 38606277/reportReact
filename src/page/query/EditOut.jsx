@@ -14,6 +14,7 @@ class EditOut extends React.Component {
     super(props);
     this.props.onRef(this)
     this.state = {
+      createLinkFormVisible:false,
       data: [],
       formData: {},
       dictData: [],
@@ -55,10 +56,11 @@ class EditOut extends React.Component {
     let field = id.split('-')[1]
     this.state.data[index][field] = e.target.value;
   }
-  showModal() {
+  showModal(outItem) {
     this.setState({
-      visible: true,
+      createLinkFormVisible: true,
     });
+    // this.refs.createLinkForm.
   }
 
   handleOk = (e) => {
@@ -197,7 +199,7 @@ class EditOut extends React.Component {
     className: 'headerRow',
     render: (text, record, index) => {
       return (
-        <Button  disabled={this.props.action=='create'?true:false} onClick={() => this.showModal()} >
+        <Button  disabled={this.props.action=='create'?true:false} onClick={() => this.showModal(record)} >
         {record.link==null?"创建":"修改"}
         </Button>
       );
@@ -217,14 +219,14 @@ class EditOut extends React.Component {
         <Modal
           title="创建数据链接"
           // maskStyle={{opacity:'0.2'}}
-          visible={this.state.visible}
+          visible={this.state.createLinkFormVisible}
           onOk={this.handleOk}
           onCancel={this.handleCancel}
           okText='保存'
           cancelText='取消'
           footer={null}
         >
-         <CreateLink outParam={this.state.data} />
+         <CreateLink outParam={this.state.data} ref="createLinkForm"/>
         </Modal>
       </div>
     )

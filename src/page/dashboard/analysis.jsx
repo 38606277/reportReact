@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Row, Col, Card,Tooltip,Icon } from 'antd';
-import ChartCard from '../../components/Charts/ChartCard/index.jsx';
-import Field from '../../components/Charts/ChartCard/index.jsx';
+// import ChartCard from '../../components/Charts/ChartCard/index.jsx';
+// import Field from '../../components/Charts/ChartCard/index.jsx';
 
 // import {
 //   ChartCard,
@@ -13,7 +13,7 @@ import Field from '../../components/Charts/ChartCard/index.jsx';
 //   Pie,
 //   TimelineChart,
 // } from '../../components/Charts';
-import Trend from '../../components/Trend/index.jsx';
+// import Trend from '../../components/Trend/index.jsx';
 
 
 class Analysis extends Component {
@@ -33,7 +33,7 @@ class Analysis extends Component {
             <Card style={{width:'235px',lineHeight:'182px'}}>aa</Card>
           </Col>
           <Col span={6}>
-          <ChartCard
+          {/* <ChartCard
               bordered={false}
               title={
                 "总销售额111"
@@ -63,7 +63,7 @@ class Analysis extends Component {
                 <span>周同比</span>
                 <span >11%</span>
               </Trend>
-            </ChartCard>
+            </ChartCard> */}
             </Col>
           <Col span={6}><Card >aa</Card></Col>
           <Col span={6}><Card >aa</Card></Col>

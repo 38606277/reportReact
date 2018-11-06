@@ -1,5 +1,5 @@
 import React from 'react'
-import { Table, Divider, Tag, Form, Input, Select, Button, Card, Checkbox } from 'antd';
+import { Table, Divider, Tag, Form, Input, Select,Row,Col, Button, Card, Checkbox } from 'antd';
 
 import HttpService from '../../util/HttpService.jsx';
 import './query.scss';
@@ -187,114 +187,30 @@ class EditIn extends React.Component {
         </Form>
       );
     }
-  }, {
-    title: '数据类型',
-    dataIndex: 'datatype',
-    key: 'datatype',
-    className:'headerRow',
-    render: (text, record,index) => {
-      return (
-        <Form>
-
-          <Form.Item style={{ margin: 0 }}>
-            {this.props.form.getFieldDecorator(index+'-'+'datatype', {
-              rules: [{
-                required: true,
-                message: `数据类型是必须的！`,
-              }],
-            })(
-              <Select tyle={{ minWidth: '80px' }} onChange={value=>this.SelectChangeEvent(index+'-'+'datatype',value)} >
-                <Option value="string">字符串</Option>
-                <Option value="number">数字</Option>
-                <Option value="date">日期</Option>
-              </Select>
-            )}
-          </Form.Item>
-        </Form>
-      );
-    }
-  }, {
-    title: '数据字典',
-    dataIndex: 'dict_id',
-    key: 'dict_id',
-    className:'headerRow',
-    render: (text, record,index) => {
-      return (
-        <Form>
-
-          <Form.Item style={{ margin: 0 }}>
-            {this.props.form.getFieldDecorator(index+'-'+'dict_id', {
-            })(
-              <Select style={{ minWidth: '100px' }} onChange={value=>this.SelectChangeEvent(index+'-'+'dict_id',value)}>
-                  {this.state.dictData.map(item=><Option  value={item.dict_id}>{item.dict_name}</Option>)} 
-                  {/* <Option value="1">公司</Option>
-                  <Option value="2">部门</Option>  */}
-              </Select>
-            )}
-          </Form.Item>
-        </Form>
-      );
-    }
-
-  },{
-    title: '输入组件',
-    dataIndex: 'render',
-    key: 'dict_id',
-    className:'headerRow',
-    render: (text, record,index) => {
-      return (
-          <Form.Item style={{ margin: 0 }}>
-            {this.props.form.getFieldDecorator(index+'-'+'render', {
-            })(
-              <Select style={{ minWidth: '100px' }} onChange={value=>this.SelectChangeEvent(index+'-'+'render',value)}>
-                  <Option value="Input">输入框</Option>
-                  <Option value="InputButton">弹出选择</Option> 
-                  <Option value="Select">下拉选择</Option> 
-                  <Option value="TagSelect">标签选择</Option> 
-                  <Option value="Datepicker">日期选择</Option> 
-                  <Option value="Checkbox">复选框</Option> 
-              </Select>
-            )}
-          </Form.Item>
-      );
-    }
-
-  },  {
-    title: '数据权限',
-    key: 'authtype_id',
-    width:'16%',
-    dataIndex: 'authtype_id',
-    render: (text, record,index) => {
-      return (
-        <Form>
-
-          <Form.Item style={{ margin: 0 }}>
-            {this.props.form.getFieldDecorator(index+'-'+'authtype_id', {
-              rules: [{
-                required: true,
-                message: `Please Input `,
-              }],
-            })(
-              <Select style={{ minWidth: '100px' }} onChange={value=>this.SelectChangeEvent(index+'-'+'authtype_id',value)}>
-                {this.state.authData.map(item=><Option key={item.value} value={item.value}>{item.name}</Option>)}
-                {/* <Option value="1">公司</Option>
-                <Option value="2">部门</Option> */}
-              </Select>
-            )}
-          </Form.Item>
-        </Form>
-      );
-    }
   }];
 
+  columns1 = [{
+    title: '属性',
+    dataIndex: 'in_id',
+    width:'120px',
+    className:'headerRow',
+  }, {
+    title: '值',
+    dataIndex: 'in_name',
+    className:'headerRow',
+  }];
 
 
   render() {
 
     return (
+        <Row gutter={10}>
+          <Col span={12}><Table ref="table" columns={this.columns} dataSource={this.state.data} size="small" bordered  pagination={false}/></Col>
+          <Col span={12}><Table ref="table" columns={this.columns1} dataSource={this.state.data} size="small" bordered  pagination={false}/></Col>
+        </Row >
         // <Button onClick={() => this.buttonClick()} >显示结果</Button>
         // <Button onClick={() => this.changeColumn()} >字段变更</Button>
-        <Table ref="table" columns={this.columns} dataSource={this.state.data} size="small" bordered  pagination={false}/>
+       
     )
   }
 }
