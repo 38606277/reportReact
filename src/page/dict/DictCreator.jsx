@@ -194,6 +194,16 @@ class DictCreator extends React.Component {
 
 
     }
+    BeginImport(){
+        HttpService.post("reportServer/dict/initImportDictValue/"+this.state.dict_id, null)
+        .then(res => {
+            if (res.resultCode == "1000") {
+                message.success('导入成功！')
+            }
+            else
+                message.error(res.message);
+        });
+    }
 
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -282,7 +292,7 @@ class DictCreator extends React.Component {
                                     </Row>
                                     <Row style={{marginTop:'20px'}}>
                                         <Col span={6} offset={1} >
-                                            <Button type="primary" style={{width:'120px'}}>开始同步</Button>
+                                            <Button type="primary" onClick={()=>this.BeginImport()} style={{width:'120px'}} >开始同步</Button>
                                         </Col>
                                         <Col span={12}>
                                             <Progress percent={30}/>

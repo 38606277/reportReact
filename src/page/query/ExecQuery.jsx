@@ -123,7 +123,7 @@ class ExecQuery extends React.Component {
              }
             outColumns.map((item,index)=>{
                
-                let json={key:item.out_id.toUpperCase(),title:item.out_name,dataIndex:item.out_id.toUpperCase()};
+                let json={key:item.out_id,title:item.out_name,dataIndex:item.out_id};
                 outlist.push(json);
             });
             this.setState({outlist:outlist,inList:inlist},function(){
