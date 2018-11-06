@@ -16,6 +16,8 @@ class CreateLink extends React.Component {
       formData: {},
       qry_id:"",
       out_id:"",
+      link_qry_id:"",
+      link_qry_class_id:"",
       queryClass: [],
       queryNames: [],
       inParam: [],
