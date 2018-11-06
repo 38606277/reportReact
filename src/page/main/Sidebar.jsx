@@ -42,7 +42,7 @@ export default class SiderBar extends React.Component {
             cHtml = childArray.map((item, index) => {
                 return this.threeformSubmenusChild(item,obj.value,index);
             });
-            return <SubMenu key={obj.name==undefined?obj.func_name+(indexs):obj.name+(indexs)} title={obj.name==undefined?obj.func_name:obj.name}>{cHtml}</SubMenu>
+            return <SubMenu key={obj.name==undefined?obj.func_name+(indexs):obj.name+(indexs)} title={<span><Icon type={obj.func_icon} /><span>{obj.name==undefined?obj.func_name:obj.name}</span></span>}>{cHtml}</SubMenu>
         }else{
             return <Menu.Item key={obj.name+index} ><Link to={'/query/ExecQuery/'+obj.value+'/'+index+'/'+obj.name}><Icon type='table' /><span>{obj.name==undefined?obj.func_name:obj.name}</span></Link></Menu.Item>
         }
@@ -56,7 +56,7 @@ export default class SiderBar extends React.Component {
           cHtml = childArray.map((item, index) => {
                 return this.formSubmenusChild(item);
             });
-            return <SubMenu key={obj.func_name} title={obj.func_name}>{cHtml}</SubMenu>
+            return <SubMenu key={obj.func_name} title={<span><Icon type={obj.func_icon} /><span>{obj.func_name}</span></span>}>{cHtml}</SubMenu>
         }else{
             return <Menu.Item key={obj.func_name} ><Link to={obj.func_url}><Icon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>
         }
