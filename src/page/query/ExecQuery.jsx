@@ -227,6 +227,7 @@ class ExecQuery extends React.Component {
       //数据字典选中事件
       onSelectChangeDic = (selectedRowKeys) => {
         this.okdata=selectedRowKeys;
+        console.log(selectedRowKeys);
         this.setState({ selectedRowKeys });
       }
       //导出到Excel
@@ -350,12 +351,12 @@ class ExecQuery extends React.Component {
       };
     const  dictionaryColumns = [{
         title: '编码',
-        dataIndex: 'value',
-        key: 'value',
+        dataIndex: 'value_code',
+        key: 'value_code',
     },{
         title: '名称',
-        dataIndex: 'name',
-        key: 'name',
+        dataIndex: 'value_name',
+        key: 'value_name',
     }];
     if(null!=this.state.resultList){
         this.state.resultList.map((item,index)=>{
@@ -364,7 +365,7 @@ class ExecQuery extends React.Component {
     }
     if(null!=this.state.dictionaryList){
         this.state.dictionaryList.map((item,index)=>{
-            item.key=item.value;
+            item.key=item.dict_id;
         });
     }
   const formItemLayout = {
