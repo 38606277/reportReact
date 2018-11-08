@@ -248,11 +248,12 @@ class EditIn extends React.Component {
             })(
               <Select style={{ minWidth: '100px' }} onChange={value=>this.SelectChangeEvent(index+'-'+'render',value)}>
                   <Option value="Input">输入框</Option>
+                  <Option value="Datepicker">日期选择</Option> 
+                  <Option value="Checkbox">复选框</Option> 
                   <Option value="InputButton">弹出选择</Option> 
                   <Option value="Select">下拉选择</Option> 
                   <Option value="TagSelect">标签选择</Option> 
-                  <Option value="Datepicker">日期选择</Option> 
-                  <Option value="Checkbox">复选框</Option> 
+                 
               </Select>
             )}
           </Form.Item>

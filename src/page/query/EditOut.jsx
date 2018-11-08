@@ -14,7 +14,10 @@ class EditOut extends React.Component {
     super(props);
     this.props.onRef(this)
     this.state = {
-      createLinkFormVisible:false,
+      linkFormVisible:false,
+      linkFormAction:'',
+      linkFormQryID:'',
+      linFormOutID:'',
       data: [],
       formData: {},
       dictData: [],
@@ -57,10 +60,15 @@ class EditOut extends React.Component {
     this.state.data[index][field] = e.target.value;
   }
   showModal(outItem) {
+   
     this.setState({
-      createLinkFormVisible: true,
+      linkFormVisible: true,
+      linkFormAction:"update",
+      linkFormQryID:"70",
+      linFormOutID:"50",
     });
-    // this.refs.createLinkForm.
+   
+    //  this.refs.linkForm.hello();
   }
 
   handleOk = (e) => {
@@ -69,14 +77,15 @@ class EditOut extends React.Component {
 
 
     this.setState({
-      visible: false,
+      linkFormVisible: false,
     });
   }
 
   handleCancel = (e) => {
     console.log(e);
+   
     this.setState({
-      visible: false,
+      linkFormVisible: false,
     });
   }
 
@@ -94,7 +103,7 @@ class EditOut extends React.Component {
   }
 
 
-  state = { visible: false }
+  state = { linkFormVisible: false }
 
 
 
@@ -199,7 +208,15 @@ class EditOut extends React.Component {
     className: 'headerRow',
     render: (text, record, index) => {
       return (
-        <Button  disabled={this.props.action=='create'?true:false} onClick={() => this.showModal(record)} >
+        <Button  disabled={this.props.action=='create'?true:false} onClick={() => {
+          this.setState({
+            linkFormVisible: true,
+            linkFormAction:record.link==null?"create":"update",
+            linkFormQryID:record.qry_id,
+            linkFormOutID:record.out_id,
+          });
+        //  alert(JSON.stringify(record));
+        } }>
         {record.link==null?"创建":"修改"}
         </Button>
       );
@@ -216,17 +233,24 @@ class EditOut extends React.Component {
 
         <Table ref="table" columns={this.columns}
           dataSource={this.state.data} size="small" bordered scroll={{ x: '600px' }} pagination={false} />
+      
         <Modal
           title="创建数据链接"
           // maskStyle={{opacity:'0.2'}}
-          visible={this.state.createLinkFormVisible}
+          visible={this.state.linkFormVisible}
           onOk={this.handleOk}
-          onCancel={this.handleCancel}
+          onCancel={(e)=>this.handleCancel(e)}
           okText='保存'
           cancelText='取消'
-          footer={null}
+          destroyOnClose
+
         >
-         <CreateLink outParam={this.state.data} ref="createLinkForm"/>
+             <CreateLink outParam={this.state.data} 
+             action={this.state.linkFormAction}
+             qry_id={this.state.linkFormQryID}
+             out_id={this.state.linkFormOutID}
+             ref='linkForm'
+             />
         </Modal>
       </div>
     )

@@ -24,11 +24,14 @@ export default class DictList extends React.Component {
             selectedRows: [],
         };
     }
+    state = {
+        selectedRowKeys: [13], // Check here to configure the default column
+        selectedRows:[],
+        loading: false,
+      };
     componentDidMount() {
         this.getAllDictName();
     }
-
-
     getAllDictName()
     {
         let param = {};
@@ -40,7 +43,6 @@ export default class DictList extends React.Component {
                     message.error(res.message);
 
             });
-
     }
 
     // 页数发生变化的时候
@@ -67,47 +69,38 @@ export default class DictList extends React.Component {
         alert("key:" + record.userId + " name:" + record.userName + " description:" + record.description);
     }
 
-    rowSelection = {
-        onChange: (selectedRowKeys, selectedRows) => {
-            this.setState({ selectedRows: selectedRowKeys });
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        },
-        getCheckboxProps: record => ({
-            disabled: record.name === 'Disabled User', // Column configuration not to be checked
-            name: record.name,
-        }),
-    };
     onDelButtonClick() {
-       
-        HttpService.post('reportServer/dict/deleteDict', JSON.stringify(this.state.selectedRows))
+        // this.setState({ selectedRowKeys:[],selectedRows:[]});
+        if(confirm('确认删除吗？')){
+            HttpService.post('reportServer/dict/deleteDict', JSON.stringify(this.state.selectedRows))
             .then(res => {
                 if (res.resultCode == "1000"){
                     message.success("删除成功！");
                     this.getAllDictName();
-                    this.setState({ selectedRows: [] });
+                    this.setState({selectedRowKeys:[], selectedRows: [] });
                 }
-                   
                 else
                     message.error(res.message);
 
             });
+        }
     }
-
+ 
 
     render() {
         const data = this.state.list;
         let self = this;
 
-
+        const rowSelection = {
+          selectedRowKeys:this.state.selectedRowKeys,
+          onChange:  (selectedRowKeys,selectedRows) => {
+            console.log('selectedRowKeys changed: ', selectedRowKeys);
+            this.setState({ selectedRowKeys:selectedRowKeys,selectedRows:selectedRows});
+          },
+        };
         return (
             <div>
                 <Card title="字典列表" bodyStyle={{ padding: "10px" }}>
-                    {/* <Row style={{marginBottom:"10px"}}>
-                        <Col span={6}> <Input prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="输入函数名称" /></Col>
-                        <Col span={4}></Col>
-                        <Col span={10}></Col>
-                        <Col span={4}> <Button type="primary" style={{width:"100px"}} onClick={()=>window.location='#/function/functionCreator/creat/0'} >新建</Button></Col>
-                    </Row> */}
                     <Button href="#/dict/DictCreator/create/0" style={{ marginRight: "10px" }} type="primary">新建数据字典</Button>
                     <Button onClick={() => this.onDelButtonClick()} style={{ marginRight: "10px" }} >删除</Button>
                     <Search
@@ -118,32 +111,28 @@ export default class DictList extends React.Component {
                     />
 
                     <Table dataSource={this.state.list}
-                        rowSelection={this.rowSelection}
+                        rowSelection={rowSelection}
                         ref="tableDict"
+                        rowKey={"dict_id"}
                     >
                         <Column
                             title="字典ID"
                             dataIndex="dict_id"
-                            key="dict_id"
                         />
                         <Column
                             title="字典名称"
                             dataIndex="dict_name"
-                            key="dict_name"
                         />
                         <Column
                             title="字典描述"
                             dataIndex="dict_desc"
-                            key="dict_desc"
                         />
                         <Column
                             title="调用方式"
                             dataIndex="func_type"
-                            key="func_type"
                         />
                         <Column
                             title="动作"
-                            key="action"
                             render={(text, record) => (
                                 <span>
                                     <a href={`#/dict/DictViewData/${record.dict_id}`}>查看数据</a>

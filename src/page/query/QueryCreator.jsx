@@ -117,9 +117,9 @@ class functionCreator extends React.Component {
             });
     }
 
-    onRef = (ref) => {
-        this.child = ref
-    }
+    // onRef = (ref) => {
+    //     this.child = ref
+    // }
 
     onSaveClick() {
         //alert("hello");

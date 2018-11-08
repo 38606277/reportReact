@@ -10,6 +10,7 @@ class CreateLink extends React.Component {
 
   constructor(props) {
     super(props);
+    // alert(props.action);
     this.state = {
       data: [],
       action: 'create',
@@ -27,7 +28,30 @@ class CreateLink extends React.Component {
     };
   }
   componentDidMount() {
-    //查询查询类别定义
+     //查询查询类别定义
+     
+     if (this.props.action == 'update') {
+      //查询函数定义
+      let param = {};
+      HttpService.post("reportServer/query/getQueryOutLink/" + this.state.qry_id, null)
+          .then(res => {
+              if (res.resultCode == "1000") {
+                  this.setState({
+                      inData: res.data.in,
+                      outData: res.data.out
+                  });
+                  
+              }
+              else
+                  message.error(res.message);
+
+          });
+
+       }else if(this.props.action=='create')
+       {
+
+       }
+    // alert('componentDidMount'+'action:'+this.props.action+'qry_id:'+this.props.qry_id+'out_id:'+this.props.out_id);
     HttpService.post("reportServer/query/getAllQueryClass", '')
       .then(res => {
         console.log(JSON.stringify(res));
@@ -39,6 +63,26 @@ class CreateLink extends React.Component {
       });
 
   }
+
+
+
+  getQryLinkById()
+  {
+    // //查询报表名称
+    // HttpService.post("reportServer/query/getQueryByClassID/" + value, '')
+    //   .then(res => {
+
+    //     if (res.resultCode == '1000') {
+    //       this.setState({ queryNames: res.data });
+    //       console.log(this.state.queryNames);
+    //     }
+    //     else
+          message.error("dddd");
+      // });
+  }
+
+
+
   //下拉事件
   onSelectChange(value) {
 
@@ -73,8 +117,26 @@ class CreateLink extends React.Component {
   //保存超链接
   saveQryOutLink() {
 
+    let linFormValue={
+      qry_id:this.props.qry_id,
+      out_id:this.props.out_id,
+      link_qry_id:this.props.form.getFieldsValue('link_qry_id'),
+      param:[
+        {
+          link_in_id:"",
+          link_in_id_value_type:"",
+          link_in_id_value:"",
+        },
+        {
+          link_in_id:"",
+          link_in_id_value_type:"",
+          link_in_id_value:"",
+        }
+      ]
+    };
+
     if (this.state.action == 'create') {
-      HttpService.post("reportServer/query/createQueryOutLink", JSON.stringify(formInfo))
+      HttpService.post("reportServer/query/createQueryOutLink", JSON.stringify(linFormValue))
         .then(res => {
           if (res.resultCode == "1000") {
             message.success('创建成功！');
@@ -103,19 +165,16 @@ class CreateLink extends React.Component {
   columns = [{
     title: '列ID',
     dataIndex: 'in_id',
-    key: 'in_id',
     width: '120px',
     className: 'headerRow',
   }, {
     title: '列名',
     dataIndex: 'in_name',
-    key: 'in_name',
     width: '120px',
     className: 'headerRow',
   }, {
     title: '取值',
     dataIndex: 'in_name',
-    key: 'in_name',
     className: 'headerRow',
     render: (text, record, index) => {
       return (
@@ -177,4 +236,4 @@ class CreateLink extends React.Component {
   }
 }
 
-export default CreateLink = Form.create()(CreateLink);
+export default CreateLink= Form.create()(CreateLink);

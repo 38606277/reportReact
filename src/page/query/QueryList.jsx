@@ -6,7 +6,7 @@
 */
 import React from 'react';
 import Table from 'antd/lib/table';
-import { Card, Button, Divider, Input, message,Modal, Form, FormItem, Icon, Row, Col } from 'antd';
+import { Card, Button, Divider, Input, message,Modal, Form, FormItem, Icon, Row, Col,loading } from 'antd';
 
 import FunctionService from '../../service/FunctionService.jsx'
 import HttpService from '../../util/HttpService.jsx';
@@ -19,11 +19,14 @@ const Search = Input.Search;
 export default class QueryList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            list: [],
-            selectedRows: [],
-        };
     }
+    state = {
+       // Check here to configure the default column
+        loading: false,
+        list: [],
+        selectedRows: [],
+        selectedRowKeys: []
+      };
     componentDidMount() {
         this.getAllQueryName();
     }
@@ -42,16 +45,7 @@ export default class QueryList extends React.Component {
     }
 
 
-    rowSelection = {
-        onChange: (selectedRowKeys, selectedRows) => {
-            this.setState({ selectedRows: selectedRows });
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        },
-        getCheckboxProps: record => ({
-            disabled: record.name === 'Disabled User', // Column configuration not to be checked
-            name: record.name,
-        }),
-    };
+
     onDelButtonClick() {
         //  Modal.confirm({
         //     title: '删除确认',
@@ -71,7 +65,7 @@ export default class QueryList extends React.Component {
                 if (res.resultCode == "1000") {
                     message.success("删除成功！");
                     this.getAllQueryName();
-                    this.setState({ selectedRows: [] });
+                    this.setState({selectedRowKeys:[], selectedRows: [] });
                 }
     
                 else
@@ -80,20 +74,7 @@ export default class QueryList extends React.Component {
             });
         }
     }
-    deleteQuery(){
-        HttpService.post('reportServer/query/deleteQuery', JSON.stringify(this.state.selectedRows))
-        .then(res => {
-            if (res.resultCode == "1000") {
-                message.success("删除成功！");
-                this.getAllQueryName();
-                this.setState({ selectedRows: [] });
-            }
-
-            else
-                message.error(res.message);
-
-        });
-    }
+ 
 
     // 页数发生变化的时候
     onPageNumChange(pageNum) {
@@ -121,8 +102,13 @@ export default class QueryList extends React.Component {
 
     render() {
         const data = this.state.list;
-        let self = this;
-
+        const rowSelection = {
+            selectedRowKeys:this.state.selectedRowKeys,
+            onChange:  (selectedRowKeys,selectedRows) => {
+              console.log('selectedRowKeys changed: ', selectedRowKeys);
+              this.setState({ selectedRowKeys:selectedRowKeys,selectedRows:selectedRows});
+            },
+          };
 
         return (
             <div>
@@ -143,37 +129,31 @@ export default class QueryList extends React.Component {
                         onSearch={value => this.onSearch(value)}
                     />
 
-                    <Table dataSource={this.state.list} rowSelection={this.rowSelection}>
+                    <Table dataSource={this.state.list} rowKey={"qry_id"} rowSelection={rowSelection} ref="qryTable" >
                         <Column
                             title="查询ID"
                             dataIndex="qry_id"
-                            key="qry_id"
                             sorter={(a, b) => a.qry_id - b.qry_id}
                         />
                         <Column
                             title="查询名称"
                             dataIndex="qry_name"
-                            key="qry_name"
                         />
                         <Column
                             title="查询描述"
                             dataIndex="qry_desc"
-                            key="func_desc"
                         />
                         <Column
                             title="查询类别"
                             dataIndex="class_name"
-                            key="class_name"
                             sorter={(a, b) => a.class_name.length - b.class_name.length}
                         />
                         <Column
                             title="调用方式"
                             dataIndex="qry_type"
-                            key="qry_type"
                         />
                         <Column
                             title="动作"
-                            key="action"
                             render={(text, record) => (
                                 <span>
                                     <a href={`#/query/QueryCreator/update/${record.qry_id}`}>编辑</a>

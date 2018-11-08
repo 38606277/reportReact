@@ -19,11 +19,20 @@ const Search = Input.Search;
 class functionList extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            list: []
-        };
+       
     }
+    state = {
+         loading: false,
+         list: [],
+         selectedRows: [],
+         selectedRowKeys: []
+       };
+
+
     componentDidMount() {
+        this.getAllFunctionName();
+    }
+    getAllFunctionName() {
         let param = {};
         HttpService.post('reportServer/function1/getAllFunctionName', null)
             .then(res => {
@@ -33,20 +42,27 @@ class functionList extends React.Component {
                     message.error(res.message);
 
             });
+
+
     }
 
-    rowSelection = {
-        onChange: (selectedRowKeys, selectedRows) => {
-            //this.setState={selectedRows:}
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        },
-        getCheckboxProps: record => ({
-          disabled: record.name === 'Disabled User', // Column configuration not to be checked
-          name: record.name,
-        }),
-      };
+
+
      onDelButtonClick(){
-         alert(JSON.stringify(this.refs.tableDict.selectedRows));
+        if(confirm('确认删除吗？')){
+            HttpService.post('reportServer/function1/deleteFunction', JSON.stringify(this.state.selectedRows))
+            .then(res => {
+                if (res.resultCode == "1000") {
+                    message.success("删除成功！");
+                    this.getAllQueryName();
+                    this.setState({selectedRowKeys:[], selectedRows: [] });
+                }
+    
+                else
+                    message.error(res.message);
+    
+            });
+        }
      } 
 
     // 页数发生变化的时候
@@ -76,7 +92,13 @@ class functionList extends React.Component {
     render() {
         const data = this.state.list;
         let self = this;
-
+        const rowSelection = {
+            selectedRowKeys:this.state.selectedRowKeys,
+            onChange:  (selectedRowKeys,selectedRows) => {
+              console.log('selectedRowKeys changed: ', selectedRowKeys);
+              this.setState({ selectedRowKeys:selectedRowKeys,selectedRows:selectedRows});
+            },
+          };
 
         return (
             <div>
@@ -89,6 +111,7 @@ class functionList extends React.Component {
                     </Row> */}
                     <Button href="#/function/functionCreator/create/0" style={{ marginRight: "10px" }} type="primary">新建函数</Button>
                     <Button href="#/function/functionClass" style={{ marginRight: "15px" }} type="primary" >函数类别管理</Button>
+                    <Button onClick={() => this.onDelButtonClick()} style={{ marginRight: "10px" }} >删除</Button>
                     <Search
                         style={{ maxWidth: 300, marginBottom: '10px', float: "right" }}
                         placeholder="请输入..."
@@ -96,7 +119,7 @@ class functionList extends React.Component {
                         onSearch={value => this.onSearch(value)}
                     />
 
-                    <Table dataSource={this.state.list}  rowSelection={this.rowSelection}>
+                    <Table dataSource={this.state.list}  rowSelection={rowSelection}>
                         <Column
                             title="函数ID"
                             dataIndex="func_id"
