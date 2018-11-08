@@ -35,8 +35,7 @@ class ExecQuery extends React.Component {
           selectedTags: [],
           selectedTagsReport: [],
           newList:[],
-          loading: false,
-          dictData:{},tagData:{}
+          loading: false
         };
       }
       //组件更新时被调用 
@@ -97,25 +96,23 @@ class ExecQuery extends React.Component {
         _query.getQueryCriteria(selectClassId).then(response=>{
            let inColumns=response.data.in;
            let outColumns=response.data.out;
-           //清空选中的值，并重新设置in条件字段
-           this.setState({data:[]},function(){
-                for(var l=0;l<inColumns.length;l++){
-                    let idkey=inColumns[l].in_id;
-                    let nv={[idkey]:''};
-                    this.state.data.push(nv);
-                    if("Select"==inColumns[l].render){
-                        this.getDiclist(inColumns[l].in_id,inColumns[l].dict_id,"Select");
-                    }else if("TagSelect"==inColumns[l].render){
-                        this.getDiclist(inColumns[l].in_id,inColumns[l].dict_id,"TagSelect");
-                    }else if("Checkbox"==inColumns[l].render){
-                        this.getDiclist(inColumns[l].in_id,inColumns[l].dict_id,"Checkbox");
-                    }
-                }
-            })
-           //条件列两两一组进行组合，作为一行显示
+        //    inColumns.map((item,index)=>{
+        //         let json={key:item.id,name:item.name,lookup:item.lookup,datatype:item.datatype,mut:item.mut,default:item.default};
+        //         inlist.push(json);
+        //     });
+        this.setState({data:[]},function(){
+            for(var l=0;l<inColumns.length;l++){
+                let idkey=inColumns[l].in_id;
+                let nv={[idkey]:''};
+                this.state.data.push(nv);
+            }
+        })
+           
             var k=Math.ceil(inColumns.length/2);
             var j= 0;
             for(var i=1;i<=k;i++){
+                
+
                 var arr= new Array();
                 for(j ; j < i*2; j++){
                     if(undefined!=inColumns[j]){
@@ -124,12 +121,14 @@ class ExecQuery extends React.Component {
                 }
                 inlist.push(arr);  
              }
-             //输出列进行重新组装显示
             outColumns.map((item,index)=>{
-                let json={key:item.out_id.toUpperCase(),title:item.out_name,dataIndex:item.out_id.toUpperCase(),width:item.width};
+               
+                let json={key:item.out_id.toUpperCase(),title:item.out_name,dataIndex:item.out_id.toUpperCase()};
                 outlist.push(json);
             });
-            this.setState({outlist:outlist,inList:inlist});
+            this.setState({outlist:outlist,inList:inlist},function(){
+                
+            });
         });
     }
     //设置参数条件值
@@ -173,7 +172,7 @@ class ExecQuery extends React.Component {
     //调用模式窗口内的数据查询
     loadModelData(param){
         let page = {};
-        page.pageNumd  = 1;
+        page.pageNumd  = this.state.pageNumd;
         page.perPaged  = this.state.perPaged;
         page.searchDictionary=this.state.searchDictionary;
 
@@ -228,6 +227,7 @@ class ExecQuery extends React.Component {
       //数据字典选中事件
       onSelectChangeDic = (selectedRowKeys) => {
         this.okdata=selectedRowKeys;
+        console.log(selectedRowKeys);
         this.setState({ selectedRowKeys });
       }
       //导出到Excel
@@ -278,101 +278,71 @@ class ExecQuery extends React.Component {
         newWin.print();//打印
         newWin.close();//关闭窗口
      }
-     //根据条件列的dict_id进行查询数据字典
-     getDiclist(in_id,dictId,type){
-        let page = {};
-        page.pageNumd  = 1;
-        page.perPaged  = 15;
-        page.searchDictionary='';
-        _query.getDictionaryList(dictId,page).then(response=>{
-            let optionlist1=[];
-            let rlist=response.data;
-            for (let i = 0; i < rlist.length; i++) {
-                if(type=="Select"){
-                    optionlist1.push(<Option key={rlist[i].value_code}>{rlist[i].value_name}</Option>);
-                }else if(type=="TagSelect"){
-                    optionlist1.push(rlist[i].value_code);                
-                }else if(type=="Checkbox"){
-
-                }
-            }
-            var objs= this.state.dictData;
-            if(type=="TagSelect"){
-                objs[dictId]=optionlist1;
-            }else{
-                objs[in_id+dictId]=optionlist1;
-            }
-            this.setState({dictData:objs});
-        });
-     }
-     //下拉选中事件
-     inSelectChange(clumnName,value){
-        let nv={[clumnName]:value};
-        let arrd=this.state.data;
-        arrd.forEach(function(item,index){
-            for (var key in item) {
-                if(clumnName==key){
-                    arrd.splice(index,1);     
-                }
-            }
-        });
-        this.state.data.push(nv);
-     }
-     //tag选中事件
-     onTagChange(clumnName,value,checked){
-        let clumnNames = this.state.tagData[clumnName];
-        if(clumnNames==undefined){
-            clumnNames=[];
-        }
-        const nextSelectedTags = checked? [...clumnNames, value]: clumnNames.filter(t => t !== value);
-        let Tagd=this.state.tagData;
-        Tagd[clumnName]=nextSelectedTags;
-        this.setState({ tagData: Tagd },function(){
-            let nv={[clumnName]:nextSelectedTags};
-            let arrd=this.state.data;
-            arrd.forEach(function(item,index){
-                for (var key in item) {
-                    if(clumnName==key){
-                        arrd.splice(index,1);     
-                    }
-                }
-            });
-            this.state.data.push(nv);
-        });
-     }
-     //选中日期设置值
-     onChangeDate(clumnName,date,dateString){
-        let nv={[clumnName]:dateString};
-            let arrd=this.state.data;
-            arrd.forEach(function(item,index){
-                for (var key in item) {
-                    if(clumnName==key){
-                        arrd.splice(index,1);     
-                    }
-                }
-            });
-            this.state.data.push(nv);
-     }
-     //选中checkbox设置值
-     onChangeCheckbox(clumnName,value){
-         let v=0;
-        if(value.target.checked){
-            v=1;
-        }
-        let nv={[clumnName]:v};
-        let arrd=this.state.data;
-        arrd.forEach(function(item,index){
-            for (var key in item) {
-                if(clumnName==key){
-                    arrd.splice(index,1);     
-                }
-            }
-        });
-        this.state.data.push(nv);
-     }
+        
     render() {
         const { getFieldDecorator } = this.props.form;
-   
+    //   const  inColumns = [{
+    //     title: '参数名',
+    //     dataIndex: 'key',
+    //     key: 'key',
+    //   }, {
+    //     title: '参数值',
+    //     dataIndex: 'in_name',
+    //     key: 'in_name',
+    //     render: (text, record,index) => {
+    //         if(record.datatype=='varchar'){
+    //             return (
+    //                 <Form>
+    //                   <Form.Item style={{ margin: 0 }}>
+    //                     {this.props.form.getFieldDecorator(record.name, {
+    //                       rules: [{
+    //                         required: true,
+    //                         message: `参数名是必须的！`,
+    //                       }]
+                          
+    //                     })(
+    //                         <Input onChange={e=>this.changeEvent(e)} addonAfter={record.lookup==''?'':<Icon type="ellipsis" theme="outlined"  onClick={e=>this.openModelClick(record.name,record.lookup)}/>} />
+    //                     )}
+    //                  </Form.Item>
+    //             </Form>
+    //             );
+    //         }else{
+    //             return (
+    //             <Form>
+    //                 <Form.Item style={{ margin: 0 }}>
+    //                 {this.props.form.getFieldDecorator(record.name, {
+    //                     rules: [{
+    //                     required: true,
+    //                     message: `参数名是必须的！`,
+    //                     }]
+    //                 })(
+    //                     <DatePicker />
+    //                 )}
+    //                 </Form.Item>
+    //             </Form>
+    //            );
+    //         }
+    //       }
+    //   }];
+    //   const  outColumns = [{
+    //     title: '列名',
+    //     dataIndex: 'title',
+    //     key: 'title',
+    //   }];
+    //  const resultColumns=this.state.outlist;
+    //   const rowSelection = {
+    //     onSelect: (record, selected, selectedRows) => {
+    //         this.resultColumns=selectedRows;
+    //       this.setState({formData:selectedRows},function(){
+            
+    //       });
+    //     },
+    //     onSelectAll: (selected, selectedRows, changeRows) => {
+    //         this.resultColumns=selectedRows;
+    //         this.setState({formData:selectedRows},function(){
+    //         });
+    //     },
+    //   };
       const { selectedRowKeys } = this.state;
     
       const rowSelectionDictionary = {
@@ -395,7 +365,7 @@ class ExecQuery extends React.Component {
     }
     if(null!=this.state.dictionaryList){
         this.state.dictionaryList.map((item,index)=>{
-            item.key=item.value_code;
+            item.key=item.dict_id;
         });
     }
   const formItemLayout = {
@@ -410,129 +380,55 @@ class ExecQuery extends React.Component {
   };
  
   const inColumn=this.state.inList.map((item, index)=>{
-    const rc= item.map((record, index)=> {
-            if(record.render=='Input'){
+    const rc=item.map((record, index)=> {
+            if(record.datatype=='varchar' || record.datatype=='number' || record.datatype=='string'){
                 return (
                     <Col span={12} key={record.qry_id+index}>
                     <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name} >
                         {getFieldDecorator(record.in_id, {
-                            rules: [{
+                          rules: [{
                             required: true,
                             message: `参数名是必须的！`,
-                            }]
-                        })(
-                            <Input onChange={e=>this.changeEvent(e)}  />
-                        )}
-                        </FormItem>
-                </Col>
-                );
-            }else if(record.render=='InputButton'){
-                return (
-                    <Col span={12} key={record.qry_id+index}>
-                    <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name} >
-                        {getFieldDecorator(record.in_id, {
-                            rules: [{
-                            required: true,
-                            message: `参数名是必须的！`,
-                            }]
+                          }]
                         })(
                             <Input onChange={e=>this.changeEvent(e)} 
                             addonAfter={record.dict_id==null?'':
                             <Icon type="ellipsis" theme="outlined"  
                             onClick={e=>this.openModelClick(record.in_id,record.dict_id)}/>} />
                         )}
-                        </FormItem>
+                     </FormItem>
                 </Col>
                 );
-            }else if(record.render=='Select'){
+            }else  if(record.datatype=='date'){
                 return (
                     <Col span={12} key={record.qry_id+index}>
-                    <FormItem {...formItemLayout} label={record.in_name}>
-                    {getFieldDecorator(record.in_id, {
-                           rules: [{ required: true, message: '请输入参数!', whitespace: true }],
-                         })(
-                           <Select  style={{ width: '120px' }}
-                                     placeholder="请选择"
-                                     name={record.in_id}
-                                     onChange={(value) =>this.inSelectChange(record.in_id,value)}
-                                   >
-                                     {this.state.dictData[record.in_id+record.dict_id]}
-                             </Select>
-                      )}
-                       </FormItem>
-                    </Col> 
-                );
-            }else if(record.render=='TagSelect'){
-                return (
-                    <Col span={12} key={record.qry_id+index}>
-                        {/* <Layout>
-                            <Sider width={100} style={{backgroundColor:'#fff'}}><h6 style={{ marginRight: 8, display: 'inline' ,fontSize:16}}>条件选择:</h6></Sider>
-                            <Content style={{backgroundColor:'#fff',fontSize:14}}> */}
-                               <h6 style={{ marginLeft:20, display: 'inline' ,fontSize:16}}>{record.in_name}:</h6>
-                               {this.state.dictData[record.dict_id]==undefined?'':
-                                    this.state.dictData[record.dict_id].map(tag => (
-                                            <CheckableTag
-                                                    key={tag}
-                                                    checked={this.state.tagData[record.in_id]==undefined ?'':this.state.tagData[record.in_id].indexOf(tag) > -1}
-                                                    onChange={(checked) =>this.onTagChange(record.in_id,tag,checked)}
-                                            >
-                                                    {tag}
-                                            </CheckableTag>
-                                    ))
-                                }
-                            {/* </Content>
-                        </Layout>  */}
-                    </Col> 
-                );
-                              
-            }else if(record.render=='Checkbox'){
-                return (
-                    <Col span={12} key={record.qry_id+index}>
-                    <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name}>
+                 <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name}>
                     {getFieldDecorator(record.in_id, {
                         rules: [{
                         required: true,
                         message: `参数名是必须的！`,
                         }]
                     })(
-                        <Checkbox onChange={(value)=>this.onChangeCheckbox(record.in_id,value)}>是</Checkbox>,
-                     )}
-                    </FormItem>
-                </Col>
-                );
-            }else if(record.render=='Datepicker'){
-                return (
-                    <Col span={12} key={record.qry_id+index}>
-                    <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name}>
-                    {getFieldDecorator(record.in_id, {
-                        rules: [{
-                        required: true,
-                        message: `参数名是必须的！`,
-                        }]
-                    })(
-                        <DatePicker name={record.in_id} onChange={(date,dateString) => this.onChangeDate(record.in_id,date,dateString)} />
+                        <DatePicker />
                     )}
-                    </FormItem>
+                   </FormItem>
                 </Col>
-                );
+               );
             }else{
                 return (
                     <Col span={12} key={record.qry_id+index}>
-                    <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name} >
-                        {getFieldDecorator(record.in_id, {
-                            rules: [{
-                            required: true,
-                            message: `参数名是必须的！`,
-                            }]
-                        })(
-                            <Input onChange={e=>this.changeEvent(e)} 
-                            addonAfter={record.dict_id==null?'':
-                            <Icon type="ellipsis" theme="outlined"  
-                            onClick={e=>this.openModelClick(record.in_id,record.dict_id)}/>} />
-                        )}
-                        </FormItem>
+                 <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name}>
+                    {getFieldDecorator(record.in_id, {
+                        rules: [{
+                        required: true,
+                        message: `参数名是必须的！`,
+                        }]
+                    })(
+                        <Input onChange={e=>this.changeEvent(e)}  />
+                    )}
+                   </FormItem>
                 </Col>
-                );
+               );
             }
         });
         return <Row key={index}>{rc}</Row>;
