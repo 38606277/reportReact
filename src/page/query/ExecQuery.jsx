@@ -102,14 +102,15 @@ class ExecQuery extends React.Component {
                 for(var l=0;l<inColumns.length;l++){
                     let idkey=inColumns[l].in_id;
                     let nv={[idkey]:''};
-                    this.state.data.push(nv);
                     if("Select"==inColumns[l].render){
                         this.getDiclist(inColumns[l].in_id,inColumns[l].dict_id,"Select");
                     }else if("TagSelect"==inColumns[l].render){
                         this.getDiclist(inColumns[l].in_id,inColumns[l].dict_id,"TagSelect");
                     }else if("Checkbox"==inColumns[l].render){
                         this.getDiclist(inColumns[l].in_id,inColumns[l].dict_id,"Checkbox");
+                        nv={[idkey]:0};
                     }
+                    this.state.data.push(nv);
                 }
             })
            //条件列两两一组进行组合，作为一行显示
@@ -292,8 +293,6 @@ class ExecQuery extends React.Component {
                     optionlist1.push(<Option key={rlist[i].value_code}>{rlist[i].value_name}</Option>);
                 }else if(type=="TagSelect"){
                     optionlist1.push(rlist[i].value_code);                
-                }else if(type=="Checkbox"){
-
                 }
             }
             var objs= this.state.dictData;
