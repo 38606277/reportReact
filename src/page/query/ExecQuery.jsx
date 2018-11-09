@@ -175,7 +175,7 @@ class ExecQuery extends React.Component {
     //调用模式窗口内的数据查询
     loadModelData(param){
         let page = {};
-        page.pageNumd  = 1;
+        page.pageNumd  = this.state.pageNumd;
         page.perPaged  = this.state.perPaged;
         page.searchDictionary=this.state.searchDictionary;
 
@@ -215,7 +215,7 @@ class ExecQuery extends React.Component {
             this.state.data.push(nv);
             this.props.form.setFieldsValue({[name]:values});
             this.setState({
-                 visible: false,
+                 visible: false,pageNumd:1
             });
 
       }
