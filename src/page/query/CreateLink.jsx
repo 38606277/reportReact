@@ -25,8 +25,10 @@ class CreateLink extends React.Component {
       outParam: props.outParam,
       dictData: [],
       authData: [],
+      editable:true,
     };
   }
+  
   componentDidMount() {
      //查询查询类别定义
      
@@ -107,8 +109,18 @@ class CreateLink extends React.Component {
       .then(res => {
 
         if (res.resultCode == '1000') {
-          this.setState({ inParam: res.data.in });
-          console.log(this.state.inParam);
+       //   this.setState({ data: res.data.in });
+          let newdata=[];
+          res.data.in.forEach(item => {
+             newdata.push({
+              link_in_id:item["in_id"],
+              link_in_name:item["in_name"],
+              link_in_id_value_type:"",
+              link_in_id_value:"",
+            });
+          });
+          this.setState({data:newdata});
+          // console.log(this.state.inParam);
         }
         else
           message.error(res.message);
@@ -164,41 +176,66 @@ class CreateLink extends React.Component {
 
   columns = [{
     title: '列ID',
-    dataIndex: 'in_id',
+    dataIndex: 'link_in_id',
     width: '120px',
     className: 'headerRow',
   }, {
     title: '列名',
-    dataIndex: 'in_name',
+    dataIndex: 'link_in_name',
     width: '120px',
     className: 'headerRow',
-  }, {
+   }, 
+  //  {
+  //   title: '取值',
+  //   dataIndex: 'link_in_id_value',
+  //   className: 'headerRow',
+  //   render: (text, record, index) => {
+  //     return (
+
+  //       <Select tyle={{ width: '100px' }}  >
+  //         {this.state.outParam.map(item =>
+  //           <Option key={item.out_id} value={item.out_id}>{item.out_name}</Option>
+  //         )}
+  //       </Select>
+  //     );
+  //   }
+  // }, 
+  {
     title: '取值',
-    dataIndex: 'in_name',
+    dataIndex: 'link_in_id_value',
     className: 'headerRow',
     render: (text, record, index) => {
-      return (
-
-        <Select tyle={{ width: '100px' }}  >
-          {this.state.outParam.map(item =>
-            <Option key={item.out_id} value={item.out_id}>{item.out_name}</Option>
-          )}
-        </Select>
-      );
+        if (this.state.editable) {
+          return (
+            <Input
+              value={text}
+              onChange={e => this.handleFieldChange(e, 'link_in_id_value', record.key)}
+              placeholder="所属部门"
+            />
+          );
+        }
+        return text;
     }
-  }];
-
-
+  }
+  ];
+  handleFieldChange(e, fieldName, key) {
+    const { data } = this.state;
+    const newData = data.map(item => ({ ...item }));
+    const target = this.getRowByKey(key, newData);
+    if (target) {
+      target[fieldName] = e.target.value;
+      this.setState({ data: newData });
+    }
+  }
+  getRowByKey(key, newData) {
+    const { data } = this.state;
+    return (newData || data).filter(item => item.key === key)[0];
+  }
 
   render() {
 
     return (
       <div>
-        <Row>
-          {/* <Col>
-            <Button type='primary' onClick={() => this.execSelect()}>保存</Button>
-          </Col> */}
-        </Row>
         <Row style={{ marginTop: '10px' }}><Col>
           报表类别：
           <Select style={{ width: '70%' }} onChange={(value) => this.onSelectChange(value)} >
@@ -219,7 +256,7 @@ class CreateLink extends React.Component {
           <Col>
             <Table ref="table"
               columns={this.columns}
-              dataSource={this.state.inParam}
+              dataSource={this.state.data}
               size="small" bordered pagination={false} />
           </Col>
         </Row>
