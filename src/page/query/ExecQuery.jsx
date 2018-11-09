@@ -48,8 +48,8 @@ class ExecQuery extends React.Component {
                 paramv:key,
                 paramv2:key2,
                 paramv3:nextProps.match.params.paramv3,
-                
-               resultList:[],totalR:0
+                resultList:[],totalR:0,pageNumd:1,startIndex:1,
+                dictData:{},tagData:{}
             },function(){
                 if(oldparamv2!=key){
                     this.loadQueryCriteria(this.state.paramv);
@@ -152,7 +152,7 @@ class ExecQuery extends React.Component {
     execSelect(){
         this.setState({baoTitle:this.state.paramv3},function(){});
         if(null!=this.state.data){
-            let param=[{in:this.state.data},{startIndex:1,perPage:10,searchResult:this.state.searchResult}];
+            let param=[{in:this.state.data},{startIndex:this.state.startIndex,perPage:10,searchResult:this.state.searchResult}];
             _query.execSelect(this.state.paramv,this.state.paramv2,param).then(response=>{
                 if(response.resultCode!='3000'){
                     this.setState({resultList:response.list,totalR:response.totalSize});
