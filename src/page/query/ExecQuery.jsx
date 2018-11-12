@@ -451,7 +451,7 @@ class ExecQuery extends React.Component {
                     {getFieldDecorator(record.in_id, {
                            rules: [{ required: true, message: '请输入参数!', whitespace: true }],
                          })(
-                           <Select  style={{ width: '120px' }}
+                           <Select allowClear={true} style={{ width: '120px' }}
                                      placeholder="请选择"
                                      name={record.in_id}
                                      onChange={(value) =>this.inSelectChange(record.in_id,value)}
