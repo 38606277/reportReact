@@ -18,10 +18,12 @@ export default class LocalStorage {
     // 获取URL参数
     getUrlParam(name){
         // param=123&param1=456
-        let queryString = window.location.search.split('?')[1] || '',
+        let queryString = window.location.href.split('#')[1] || '',
             reg         = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"),
             result      = queryString.match(reg);
-        return result ? decodeURIComponent(result[2]) : null;
+
+            // console.log("/query/QueryClass");
+        return result ? decodeURIComponent(queryString) : null;
     }
     // 本地存储
     setStorage(name, value) {
@@ -47,12 +49,15 @@ export default class LocalStorage {
     // 取出本地存储内容
     getStorage(name) {
         let data = window.localStorage.getItem(name);
-        if (data) {
-            let exp=1000*60*5*60;
+
+        if (data && name!="lasurl") {
+            let exp=1000*60*5*60;//1000*60*5*60
             let dataObj = JSON.parse(data);
             let t=new Date().getTime() - dataObj.time;
             if (t>exp) {
                 window.localStorage.removeItem(name);
+                let lasturl = window.location.href.split('#')[1] || '';
+                window.localStorage.setItem('lasurl', lasturl);
                 alert('登录信息已过期，请重新登录！');
                 return '';
             }else{
@@ -61,7 +66,11 @@ export default class LocalStorage {
                 return dataObj.data;
             }
         } else {
-            return '';
+            if(null!=data && 'null'!=data && ''!=data){
+                return data;
+            }else{
+                return '';
+            }
         }
 
         // if (data) {
