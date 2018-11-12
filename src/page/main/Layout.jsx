@@ -51,6 +51,7 @@ export default class MainLoyout extends React.Component {
     // 退出登录
     onLogout() {
         localStorge.removeStorage('userInfo');
+        localStorge.removeStorage('lasurl');
         this.setState({ redirect: true });
     }
 

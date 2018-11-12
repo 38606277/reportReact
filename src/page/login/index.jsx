@@ -13,14 +13,14 @@ const localStorge = new LocalStorge();
 const _user = new User();
 
 import './index.scss';
-
+//localStorge.getUrlParam('redirect')
 class Login extends React.Component{
     constructor(props){
         super(props);
         this.state = {
             userCode: '',
             Pwd: '',
-            redirect: localStorge.getUrlParam('redirect') || '/'
+            redirect: localStorge.getStorage('lasurl') || '/'
         }
     }
     componentWillMount(){
