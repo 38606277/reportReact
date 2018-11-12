@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {  Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Table, Divider, Tag, Form, Input, Select, Modal, Button, Card, Checkbox } from 'antd';
 
@@ -206,9 +206,26 @@ class EditOut extends React.Component {
     dataIndex: 'link',
     key: 'link',
     className: 'headerRow',
+    width:'90px',
     render: (text, record, index) => {
       return (
-        <Button  disabled={this.props.action=='create'?true:false} onClick={() => {
+        record.link!=null?
+        <Fragment>
+        <a  disabled={this.props.action=='create'?true:false} onClick={() => {
+          this.setState({
+            linkFormVisible: true,
+            linkFormAction:record.link==null?"create":"update",
+            linkFormQryID:record.qry_id,
+            linkFormOutID:record.out_id,
+          });
+        } }>
+        修改
+        </a>
+        <Divider type="vertical" />
+        <a>删除</a>
+        </Fragment>:
+        <Fragment>
+        <a  disabled={this.props.action=='create'?true:false} onClick={() => {
           this.setState({
             linkFormVisible: true,
             linkFormAction:record.link==null?"create":"update",
@@ -217,8 +234,9 @@ class EditOut extends React.Component {
           });
         //  alert(JSON.stringify(record));
         } }>
-        {record.link==null?"创建":"修改"}
-        </Button>
+        创建
+        </a>
+        </Fragment>
       );
     }
   }];
@@ -237,6 +255,7 @@ class EditOut extends React.Component {
         <Modal
           title="创建数据链接"
           // maskStyle={{opacity:'0.2'}}
+          width='800px'
           visible={this.state.linkFormVisible}
           onOk={this.handleOk}
           onCancel={(e)=>this.handleCancel(e)}
