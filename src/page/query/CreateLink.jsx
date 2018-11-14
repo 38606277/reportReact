@@ -16,8 +16,8 @@ class CreateLink extends React.Component {
       data: [],
       action: 'create',
       formData: {},
-      qry_id: "",
-      out_id: "",
+      qry_id: this.props.qry_id,
+      out_id: this.props.out_id,
       link_qry_id: "",
       link_qry_class_id: "",
       queryClass: [],
@@ -32,11 +32,11 @@ class CreateLink extends React.Component {
 
   componentDidMount() {
     //查询查询类别定义
-
+    this.props.form.setFieldsValue({qry_id:this.props.qry_id,out_id:this.props.out_id});
     if (this.props.action == 'update') {
       //查询函数定义
       let param = {};
-      HttpService.post("reportServer/query/getQueryOutLink/" + this.state.qry_id + "/" + this.state.out_id, null)
+      HttpService.post("reportServer/query/getQueryOutLink/" + this.props.qry_id + "/" + this.props.out_id, null)
         .then(res => {
           if (res.resultCode == "1000") {
             this.setState({
@@ -135,18 +135,18 @@ class CreateLink extends React.Component {
       out_id: this.props.out_id,
       link_qry_id: this.state.link_qry_id,
       param: this.state.data,
-      param: [
-        {
-          link_in_id: "",
-          link_in_id_value_type: "",
-          link_in_id_value: "",
-        },
-        {
-          link_in_id: "",
-          link_in_id_value_type: "",
-          link_in_id_value: "",
-        }
-      ]
+      // param: [
+      //   {
+      //     link_in_id: "",
+      //     link_in_id_value_type: "",
+      //     link_in_id_value: "",
+      //   },
+      //   {
+      //     link_in_id: "",
+      //     link_in_id_value_type: "",
+      //     link_in_id_value: "",
+      //   }
+      // ]
     };
     alert(linkFormValue);
     if (this.state.action == 'create') {
@@ -266,17 +266,17 @@ class CreateLink extends React.Component {
       <Form layout="horizontal">
         <Row>
           <Col span={12}>
-            <FormItem label="函数名称" {...formItemLayout}>
+            <FormItem label="函数名称" {...formItemLayout} >
               {
-                getFieldDecorator('qry_name', {})(
-                  <Input/>
+                getFieldDecorator('qry_id', {})(
+                  <Input disabled/>
                 )
               }
             </FormItem>
             <FormItem label="链接输出名称" {...formItemLayout}>
               {
-                getFieldDecorator('out_name', {})(
-                  <Input/>
+                getFieldDecorator('out_id', {})(
+                  <Input disabled/>
                 )
               }
             </FormItem>
