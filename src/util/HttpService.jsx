@@ -25,9 +25,11 @@ export default class HttpService {
             };
 
             return fetch(fullUrl, opts).then((response) => {
-                //console.log(response.json())
-                return response.json();
-            });
+                    //console.log(response.json())
+                    return response.json();
+                }).catch((error)=>{
+                    return error.json();
+                });
         }
     }
 
