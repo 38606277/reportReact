@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Link } from 'react-router-dom';
 import { Table, Divider,DatePicker,Modal, Icon, Form, Input, TimePicker, Tag,Select,message, Button, Card, Checkbox,Layout,Tooltip,Row,Col,Pagination,Spin   } from 'antd';
 import queryService from '../../service/QueryService.jsx';
 import ExportJsonExcel from "js-export-excel"; 
@@ -7,6 +8,7 @@ import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import TagSelect from '../../components/TagSelect';
 import classNames from 'classnames';
 import moment from 'moment';
+import locale from 'antd/lib/date-picker/locale/zh_CN';
 const Option = Select.Option;
 const Search = Input.Search;
 const FormItem = Form.Item;
@@ -22,6 +24,7 @@ class ExecQuery extends React.Component {
           paramv:this.props.match.params.paramv,
           paramv2:this.props.match.params.paramv2,
           paramv3:this.props.match.params.paramv3,
+          paramv4:this.props.match.params.paramv4,
           data:[],formData:{},reportName:'',
           inList:[], outlist:[],resultList:[],visible: false,
           pageNumd :1,perPaged : 10, searchDictionary :'',
@@ -29,6 +32,7 @@ class ExecQuery extends React.Component {
           paramValue:'',paramName:'',selectedRowKeys:[],dictionaryList:[],
           baoTitle:"数据列表",loading: false, dictData:{},tagData:{},expand:false
         };
+        this.linkToOnClick=this.linkToOnClick.bind(this);
       }
       //组件更新时被调用 
         componentWillReceiveProps(nextProps){
@@ -41,6 +45,7 @@ class ExecQuery extends React.Component {
                     paramv:key,
                     paramv2:key2,
                     paramv3:nextProps.match.params.paramv3,
+                    paramv4:nextProps.match.params.paramv4,
                     totalR:0, data:[],formData:{},reportName:'',
                     inList:[], outlist:[], resultList:[],
                     visible: false, dictionaryList:[],
@@ -53,10 +58,10 @@ class ExecQuery extends React.Component {
                 });
             }
         }
-      componentDidMount() {
-          //获取报表列表
-          this.loadQueryCriteria(this.state.paramv);
-      }
+    componentDidMount() {
+        //获取报表列表
+        this.loadQueryCriteria(this.state.paramv);
+    }
     //获取查询条件及输出字段
     loadQueryCriteria(selectClassId){
         const inlist=[],outlist=[];
@@ -99,15 +104,31 @@ class ExecQuery extends React.Component {
              }
              //输出列进行重新组装显示
             outColumns.map((item,index)=>{
-               
-                let json={key:item.out_id.toUpperCase(),title:item.out_name,dataIndex:item.out_id.toUpperCase()};
-                outlist.push(json);
+                if(null!=item.link&&item.link!=''){
+                    let json={key:item.out_id.toUpperCase(),title:item.out_name,dataIndex:item.out_id.toUpperCase(),
+                        link:item.link,qry_id:item.qry_id,width:item.width,
+                        render: function(text, record, index) {
+                            return <a onClick={()=>this.linkToOnClick(item.link)} >{text}</a>;
+                        } 
+                    };
+                   outlist.push(json);
+               }else{
+                    let json={key:item.out_id.toUpperCase(),title:item.out_name,dataIndex:item.out_id.toUpperCase(),
+                        link:item.link,qry_id:item.qry_id,width:item.width
+                    };
+                   
+                    outlist.push(json);
+                }
             });
+            
             this.setState({outlist:outlist,inList:inlist});
         }).catch(error=>{
             this.setState({loading:false});
-           message.err(error);
+           message.error(error);
         });
+    }
+    linkToOnClick(linkId){
+        console.log(linkId);
     }
     //设置参数条件值
     changeEvent(e) {
@@ -124,8 +145,8 @@ class ExecQuery extends React.Component {
          this.state.data.push(nv);
       }
      //执行查询 
-    execSelect(){
-        this.props.form.validateFieldsAndScroll((err, fieldsValue) => {
+    execSelect(startIn){
+        this.props.form.validateFieldsAndScroll((error, fieldsValue) => {
             let arrd=this.state.data;
             for(var kname in fieldsValue){//遍历json对象的每个key/value对,p为key
                 arrd.forEach(function(item,index){
@@ -143,8 +164,12 @@ class ExecQuery extends React.Component {
         })
         this.setState({baoTitle:this.state.paramv3,loading: true},function(){});
         if(null!=this.state.data){
-           
-            let param=[{in:this.state.data},{startIndex:this.state.startIndex,perPage:10,searchResult:this.state.searchResult}];
+           if(startIn=='1'){
+            startIn=1;
+           }else{
+            startIn=this.state.startIndex;
+           }
+            let param=[{in:this.state.data},{startIndex:startIn,perPage:10,searchResult:this.state.searchResult}];
             _query.execSelect(this.state.paramv,this.state.paramv2,param).then(response=>{
                 if(response.resultCode!='3000'){
                     this.setState({loading:false,resultList:response.list,totalR:response.totalSize});
@@ -154,7 +179,7 @@ class ExecQuery extends React.Component {
                 }
             }).catch(error=>{
                 this.setState({loading:false});
-               message.err(error);
+               message.error(error);
             });
         }
         const tableCon = ReactDOM.findDOMNode(this.refs['resultTable'])//利用reactdom.finddomnode()来获取真实DOM节点
@@ -181,7 +206,7 @@ class ExecQuery extends React.Component {
           this.setState({loading: false,dictionaryList:response.data,totald:response.totald},function(){});
         }).catch(error=>{
             this.setState({loading:false});
-           message.err(error);
+           message.error(error);
         });
     }
      // 字典页数发生变化的时候
@@ -196,7 +221,7 @@ class ExecQuery extends React.Component {
         this.setState({
             startIndex : pageNumR
         }, () => {
-            this.execSelect();
+            this.execSelect('2');
         });
     }
     //模式窗口点击确认
@@ -261,7 +286,7 @@ class ExecQuery extends React.Component {
       //执行查询的search
      onResultSearch(searchKeyword){
         this.setState({pageNumR: 1,searchResult:searchKeyword},function(){
-            this.execSelect();
+            this.execSelect('1');
         });
      }
      //数据字典的search
@@ -460,7 +485,7 @@ class ExecQuery extends React.Component {
                         {getFieldDecorator(record.in_id, {
                             rules: [{ required: false, message: '请输入参数!', whitespace: true }],
                             })(
-                            <Select allowClear={true} style={{ width: '120px' }}
+                            <Select allowClear={true} style={{ width: '180px' }}
                                         placeholder="请选择"
                                         name={record.in_id}
                                         onChange={(value) =>this.inSelectChange(record.in_id,value)}
@@ -542,7 +567,7 @@ class ExecQuery extends React.Component {
                             message: `参数名是必须的！`,
                             }]
                         })( */}
-                            <DatePicker name={record.in_id} onChange={(date,dateString) => this.onChangeDate(record.in_id,date,dateString)} />
+                            <DatePicker name={record.in_id} onChange={(date,dateString) => this.onChangeDate(record.in_id,date,dateString)} locale={locale}/>
                     {/* )}  */}
                         </FormItem>
                     </Col>
@@ -579,7 +604,7 @@ class ExecQuery extends React.Component {
                 onSearch={value => this.onResultSearch(value)}
                 /> */}
         <Card bordered={false} title={this.state.paramv3} extra={ <div>
-                        <a onClick={()=>this.execSelect()}>查询 </a>
+                        <a onClick={()=>this.execSelect('1')}>查询 </a>
                         <Divider type="vertical" />
                         <a onClick={this.downloadExcel}>保存到excel</a>
                         <Divider type="vertical" />

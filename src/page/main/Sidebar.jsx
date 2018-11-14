@@ -44,7 +44,7 @@ export default class SiderBar extends React.Component {
             });
             return <SubMenu key={obj.name==undefined?obj.func_name+(indexs):obj.name+(indexs)} title={<span><Icon type='folder' /><span>{obj.name==undefined?obj.func_name:obj.name}</span></span>}>{cHtml}</SubMenu>
         }else{
-            return <Menu.Item key={obj.name+index} ><Link to={'/query/ExecQuery/'+obj.value+'/'+index+'/'+obj.name}><Icon type={childArray==undefined?'table':'folder'} /><span>{obj.name==undefined?obj.func_name:obj.name}</span></Link></Menu.Item>
+            return <Menu.Item key={obj.name+index} ><Link to={'/query/ExecQuery/'+obj.value+'/'+index+'/'+obj.name+'/'}><Icon type={childArray==undefined?'table':'folder'} /><span>{obj.name==undefined?obj.func_name:obj.name}</span></Link></Menu.Item>
         }
 
 
