@@ -571,7 +571,7 @@ class ExecQuery extends React.Component {
         });
     return (
         <div id="page-wrapper">
-                <Spin spinning={this.state.loading} delay={500}></Spin>
+                <Spin spinning={this.state.loading} delay={500}>
 
         {/* <Search style={{ width: 300,marginBottom:'10px' ,marginRight:'10px'}}
                 placeholder="请输入..."
@@ -617,6 +617,7 @@ class ExecQuery extends React.Component {
                         onChange={(pageNumd) => this.onPageNumdChange(pageNumd)}/> 
                 </Modal>
             </div>
+            </Spin>
          </div>
     )}
 }
