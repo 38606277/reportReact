@@ -100,7 +100,7 @@ class ExecQuery extends React.Component {
              //输出列进行重新组装显示
             outColumns.map((item,index)=>{
                
-                let json={key:item.out_id,title:item.out_name,dataIndex:item.out_id};
+                let json={key:item.out_id.toUpperCase(),title:item.out_name,dataIndex:item.out_id.toUpperCase()};
                 outlist.push(json);
             });
             this.setState({outlist:outlist,inList:inlist});
