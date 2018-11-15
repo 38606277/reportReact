@@ -122,36 +122,13 @@ class functionCreator extends React.Component {
     // }
 
     onSaveClick() {
-        //alert("hello");
-        //校验参数合法性
-        // e.preventDefault();
-        // this.props.form.validateFieldsAndScroll((err, values) => {
-        //   if (!err) {
-        // //let  users=this.props.form.getFieldsValue();
-        // //  console.log(this.state);
-        // // console.log(values);
-        //   _user.saveUserInfo(this.state).then(response => {
-        //     alert("修改成功");
-        //     window.location.href="#user/userList";
-        //   }, errMsg => {
-        //       this.setState({
-        //       });
-        //       localStorge.errorTips(errMsg);
-        //   });
-        //console.log('Received values of form: ', this.state);
-        //   }
-        // });
-
-
-
-        //调用服务保存
-
         //this.child.setFormValue(res.data.in);
         let formInfo = this.props.form.getFieldsValue();
         this.setState({
             inData: this.inParam.getFormValue(),
             outData: this.outParam.getFormValue(),
         });
+        formInfo.qry_type='sql';
         formInfo.qry_sql = this.refs.editorsql.codeMirror.getValue();
         formInfo.in = this.state.inData;
         formInfo.out = this.state.outData;
