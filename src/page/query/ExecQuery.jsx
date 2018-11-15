@@ -27,20 +27,20 @@ class ExecQuery extends React.Component {
           paramv4:this.props.match.params.paramv4,
           data:[],formData:{},reportName:'',
           inList:[], outlist:[],resultList:[],visible: false,
-          pageNumd :1,perPaged : 10, searchDictionary :'',
-          startIndex:1,perPage :10, searchResult     :'',
+          pageNumd :1,perPaged : 10, searchDictionary :'',totald:0,
+          startIndex:1,perPage :10, searchResult     :'',totalR:0,
           paramValue:'',paramName:'',selectedRowKeys:[],dictionaryList:[],
           baoTitle:"数据列表",loading: false, dictData:{},tagData:{},expand:false
         };
-        this.linkToOnClick=this.linkToOnClick.bind(this);
       }
       //组件更新时被调用 
         componentWillReceiveProps(nextProps){
             let key = nextProps.match.params.paramv;
             let key2 = nextProps.match.params.paramv2;
-            let oldparamv2=this.state.paramv;
+            let oldparamv1=this.state.paramv;
+            let oldparamv2=this.state.paramv2;
             //如果qryId发生变化则这个页面全部重新加载
-            if(oldparamv2!=key){
+            if(oldparamv1!=key || key2!=oldparamv2){
                 this.setState({
                     paramv:key,
                     paramv2:key2,
@@ -51,21 +51,27 @@ class ExecQuery extends React.Component {
                     visible: false, dictionaryList:[],
                     pageNumd: 1,perPaged: 10, searchDictionary :'',
                     startIndex:1,perPage:10, searchResult     :'',
-                    paramValue:'',paramName:'',selectedRowKeys:[],
+                    paramValue:'',paramName:'',selectedRowKeys:[],totald:0,
                     baoTitle:"数据列表",loading: false,dictData:{},tagData:{}
                 },function(){
-                    this.loadQueryCriteria(this.state.paramv);
+                    this.loadQueryCriteria(this.state.paramv,this.state.paramv4);
                 });
             }
         }
     componentDidMount() {
+      //  console.log("参数4",this.state.paramv4);
         //获取报表列表
-        this.loadQueryCriteria(this.state.paramv);
+        this.loadQueryCriteria(this.state.paramv,this.state.paramv4);
     }
+   
     //获取查询条件及输出字段
-    loadQueryCriteria(selectClassId){
+    loadQueryCriteria(selectClassId,paramStrValue){
         const inlist=[],outlist=[];
+        let paramInIdValue=[];
         this.setState({loading:true});
+        if(undefined!=paramStrValue && null!=paramStrValue && 'null'!=paramStrValue){
+            paramInIdValue=paramStrValue.split("&");
+        }
         _query.getQueryCriteria(selectClassId).then(response=>{
            let inColumns=response.data.in;
            let outColumns=response.data.out;
@@ -89,6 +95,7 @@ class ExecQuery extends React.Component {
                     }
                    
                 }
+                
             })
            //条件列两两一组进行组合，作为一行显示
             var k=Math.ceil(inColumns.length/2);
@@ -107,8 +114,8 @@ class ExecQuery extends React.Component {
                 if(null!=item.link&&item.link!=''){
                     let json={key:item.out_id.toUpperCase(),title:item.out_name,dataIndex:item.out_id.toUpperCase(),
                         link:item.link,qry_id:item.qry_id,width:item.width,
-                        render: function(text, record, index) {
-                            return <a onClick={()=>this.linkToOnClick(item.link)} >{text}</a>;
+                        render: (text, record, index)=> {
+                            return (<a onClick={()=>this.linkToOnClick(record,item.qry_id,item.out_id)} >{text}</a>)
                         } 
                     };
                    outlist.push(json);
@@ -121,14 +128,78 @@ class ExecQuery extends React.Component {
                 }
             });
             
-            this.setState({outlist:outlist,inList:inlist});
+            this.setState({outlist:outlist,inList:inlist},function(){
+                //参数4不为空的情况下进行值设置
+                if(null!=paramInIdValue && paramInIdValue.length>0){
+                    for(var j=0;j<paramInIdValue.length;j++){
+                        let indexkey=paramInIdValue[j].indexOf("=");
+                        let inkey=paramInIdValue[j].substring(0,indexkey);
+                        let invalue=paramInIdValue[j].substring(indexkey+1,paramInIdValue[j].length);
+                        let nv={[inkey]:invalue};
+                        this.state.data.push(nv);
+                        if(null!=invalue && ''!=invalue){
+                            this.props.form.setFieldsValue({[inkey]:invalue});
+
+                            // console.log(document.getElementById("'"+inkey+"'"));
+                            // document.getElementById("'"+inkey+"'").value="'"+invalue+"'";
+                        }
+                    }
+                }
+                if(undefined!=paramStrValue && null!=paramStrValue && 'null'!=paramStrValue){
+                  this.execSelect('1');
+                }
+            });
         }).catch(error=>{
             this.setState({loading:false});
            message.error(error);
         });
     }
-    linkToOnClick(linkId){
-        console.log(linkId);
+    linkToOnClick(objValue,qryId,outId){
+        this.setState({loading:true});
+        _query.selectLinkValue(qryId,outId).then(response=>{
+            this.setState({loading:false});
+            let linkQryId=null,linkClassId=null,theme=null,paramStr='';
+            if(response.resultCode=='1000'){
+                response.data.map((item,index)=>{
+                    linkQryId   = item.link_qry_id;
+                    linkClassId = item.class_id;
+                    theme       = item.qry_name;
+                    let vl=null;
+                    if(item.link_in_id_value_type=="out"){
+                        let inId=item.link_in_id.toUpperCase();
+                        vl=objValue[inId];
+                    }else{
+                        vl=item.link_in_id_value;
+                    }
+                    paramStr=paramStr+"&"+item.link_in_id+'='+vl;
+                })
+                paramStr=paramStr.substring(1,paramStr.length);
+                let to='#/query/ExecQuery/'+linkQryId+'/'+linkClassId+'/'+theme+'/'+paramStr;
+                window.location.href=to;
+                
+                // this.setState({
+                //     paramv:linkQryId,
+                //     paramv2:linkClassId,
+                //     paramv3:theme,
+                //     paramv4:paramStr,
+                //     totalR:0, data:[],formData:{},reportName:'',
+                //     inList:[], outlist:[], resultList:[],
+                //     visible: false, dictionaryList:[],
+                //     pageNumd: 1,perPaged: 10, searchDictionary :'',
+                //     startIndex:1,perPage:10, searchResult     :'',
+                //     paramValue:'',paramName:'',selectedRowKeys:[],totald:0,
+                //     baoTitle:theme,loading: false,dictData:{},tagData:{}
+                // },function(){
+                //     this.loadQueryCriteria(linkQryId,paramStr);
+                // });
+               // console.log(to);
+            }else{
+                message.error("查询失败");
+            }
+        }).catch(error=>{
+            this.setState({loading:false});
+            message.error(error);
+        });
     }
     //设置参数条件值
     changeEvent(e) {
@@ -148,7 +219,9 @@ class ExecQuery extends React.Component {
     execSelect(startIn){
         this.props.form.validateFieldsAndScroll((error, fieldsValue) => {
             let arrd=this.state.data;
+           // console.log(fieldsValue);
             for(var kname in fieldsValue){//遍历json对象的每个key/value对,p为key
+               // console.log(typeof fieldsValue[kname]);  
                 arrd.forEach(function(item,index){
                     for (var key in item) {
                         if(kname==key){
@@ -162,7 +235,7 @@ class ExecQuery extends React.Component {
              }
            // console.log(this.state.data);
         })
-        this.setState({baoTitle:this.state.paramv3,loading: true},function(){});
+       this.setState({baoTitle:this.state.paramv3,loading: true},function(){});
         if(null!=this.state.data){
            if(startIn=='1'){
             startIn=1;
@@ -319,7 +392,7 @@ class ExecQuery extends React.Component {
                 if(type=="Select"){
                     optionlist1.push(<Option key={rlist[i].value_code}>{rlist[i].value_name}</Option>);
                 }else if(type=="TagSelect"){
-                    optionlist1.push(rlist[i].value_code);                
+                    optionlist1.push(<TagSelect.Option value={rlist[i].value_code} key={rlist[i].value_code}>{rlist[i].value_name}</TagSelect.Option>);
                 }
             }
             var objs= this.state.dictData;
@@ -368,7 +441,7 @@ class ExecQuery extends React.Component {
      }
      //选中日期设置值
      onChangeDate(clumnName,date,dateString){
-        let nv={[clumnName]:dateString};
+            let nv={[clumnName]:dateString};
             let arrd=this.state.data;
             arrd.forEach(function(item,index){
                 for (var key in item) {
@@ -378,7 +451,7 @@ class ExecQuery extends React.Component {
                 }
             });
             this.state.data.push(nv);
-            this.props.form.setFieldsValue({[clumnName]:dateString});
+           // this.props.form.setFieldsValue({[clumnName]:dateString});
      }
      //选中checkbox设置值
      onChangeCheckbox(clumnName,value){
@@ -445,6 +518,22 @@ class ExecQuery extends React.Component {
  
     const inColumn=this.state.inList.map((item, index)=>{
         const rc= item.map((record, index)=> {
+            // let defaultValues=null;
+            // const inValueList=this.state.data;
+            // console.log(inValueList);
+            // let clid=record.in_id;
+            // for(var h=0;inValueList.length>0;h++){
+            //     const jsons= inValueList[h];
+            //     for (var key in jsons){
+            //         if(key==clid){
+            //             defaultValues=jsons[key];
+            //         }
+            //         console.log(key); 	//Type, Height
+            //         console.log(defaultValues);	//Coding, 100
+            //     }
+            //     // defaultValues=inValueList[h][clid];
+            //     // console.log(defaultValues);
+            // }
                 if(record.render=='Input'){
                     return (
                         <Col span={12} key={record.qry_id+index}>
@@ -528,11 +617,7 @@ class ExecQuery extends React.Component {
                         <FormItem {...formItemLayout} label={record.in_name}>
                             {getFieldDecorator(record.in_id)( 
                                 <TagSelect expandable >
-                                    {this.state.dictData[record.dict_id]==undefined?'':
-                                        this.state.dictData[record.dict_id].map(tag => (
-                                            <TagSelect.Option value={tag} key={tag}>{tag}</TagSelect.Option>
-                                        ))
-                                    }
+                                    {this.state.dictData[record.dict_id]==undefined?'':this.state.dictData[record.dict_id]}
                                 </TagSelect> 
                             )}
                         </FormItem>
@@ -556,19 +641,19 @@ class ExecQuery extends React.Component {
                     </Col>
                     );
                 }else if(record.render=='Datepicker'){
-                    const endTime = moment().format('YYYY-MM-DD');
+                    // const endTime = moment().format('YYYY-MM-DD');
                     return (
                         <Col span={12} key={record.qry_id+index}>
                         <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name}>
                         {/* {getFieldDecorator(record.in_id, {
                         
                             rules: [{
-                            required: true,
+                            required: false,
                             message: `参数名是必须的！`,
                             }]
                         })( */}
-                            <DatePicker name={record.in_id} onChange={(date,dateString) => this.onChangeDate(record.in_id,date,dateString)} locale={locale}/>
-                    {/* )}  */}
+                            <DatePicker format={'YYYY-MM-DD'} name={record.in_id} onChange={(date,dateString) => this.onChangeDate(record.in_id,date,dateString)} locale={locale}/>
+                        {/* )}  */}
                         </FormItem>
                     </Col>
                     );
@@ -620,6 +705,7 @@ class ExecQuery extends React.Component {
                 <Table ref="resultTable" columns={this.state.outlist} dataSource={this.state.resultList} scroll={{ x: '100%' }} size="small" bordered  pagination={false}/>
                 <Pagination current={this.state.startIndex} 
                         total={this.state.totalR} 
+                        showTotal={total => `共 ${this.state.totalR} 条`}
                         onChange={(startIndex) => this.onPageNumChange(startIndex)}/> 
             </Card>
             <div>
@@ -638,7 +724,7 @@ class ExecQuery extends React.Component {
                         <Table ref="diction" rowSelection={rowSelectionDictionary} columns={dictionaryColumns} 
                         dataSource={this.state.dictionaryList} size="small" bordered  pagination={false}/>
                         <Pagination current={this.state.pageNumd} 
-                        total={this.state.totald} 
+                        total={this.state.totald}  showTotal={total => `共 ${this.state.totald} 条`}
                         onChange={(pageNumd) => this.onPageNumdChange(pageNumd)}/> 
                 </Modal>
             </div>

@@ -50,4 +50,8 @@ export default class QueryService {
         let url = "reportServer/query/deleteQueryClassInfo";
         return HttpService.post(url, JSON.stringify(param));
     }
+    selectLinkValue(qryId,outId){
+        let url = "reportServer/query/getQueryOutLink/"+qryId+"/"+outId;;
+        return HttpService.post(url,{});
+    }
 }
