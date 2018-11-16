@@ -17,6 +17,7 @@ TagSelectOption.isTagSelectOption = true;
 class TagSelect extends Component {
   static defaultProps = {
     hideCheckAll: false,
+    isOnlyCheck: false,
   };
 
   constructor(props) {
@@ -63,7 +64,14 @@ class TagSelect extends Component {
 
   handleTagChange = (value, checked) => {
     const { value: StateValue } = this.state;
-    const checkedTags = [...StateValue];
+    let checkedTags =[];
+    console.log(this.props.isOnlyCheck);
+    if(this.props.isOnlyCheck){
+      checkedTags = [value];
+    }else{
+      checkedTags = [...StateValue];
+    }
+    
 
     const index = checkedTags.indexOf(value);
     if (checked && index === -1) {
@@ -88,7 +96,7 @@ class TagSelect extends Component {
 
   render() {
     const { value, expand } = this.state;
-    const { children, hideCheckAll, className, style, expandable } = this.props;
+    const { children, hideCheckAll,isOnlyCheck, className, style, expandable } = this.props;
 
     const checkedAll = this.getAllTags().length === value.length;
 

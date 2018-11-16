@@ -231,6 +231,9 @@ class ExecQuery extends React.Component {
                         fieldsValue[kname]=0;
                     }
                 }
+                if(fieldsValue[kname] instanceof Array){
+                    fieldsValue[kname]=fieldsValue[kname].join(',');
+                }
                 arrd.forEach(function(item,index){
                     for (var key in item) {
                         if(kname==key){
@@ -526,22 +529,6 @@ class ExecQuery extends React.Component {
  
     const inColumn=this.state.inList.map((item, index)=>{
         const rc= item.map((record, index)=> {
-            // let defaultValues=null;
-            // const inValueList=this.state.data;
-            // console.log(inValueList);
-            // let clid=record.in_id;
-            // for(var h=0;inValueList.length>0;h++){
-            //     const jsons= inValueList[h];
-            //     for (var key in jsons){
-            //         if(key==clid){
-            //             defaultValues=jsons[key];
-            //         }
-            //         console.log(key); 	//Type, Height
-            //         console.log(defaultValues);	//Coding, 100
-            //     }
-            //     // defaultValues=inValueList[h][clid];
-            //     // console.log(defaultValues);
-            // }
                 if(record.render=='Input'){
                     return (
                         <Col span={12} key={record.qry_id+index}>
@@ -580,12 +567,13 @@ class ExecQuery extends React.Component {
                         <Col span={12} key={record.qry_id+index}>
                         <FormItem {...formItemLayout} label={record.in_name}>
                         {getFieldDecorator(record.in_id, {
-                            rules: [{ required: false, message: '请输入参数!', whitespace: true }],
+                            // rules: [{ required: false, message: '请输入参数!', whitespace: true }],
                             })(
                             <Select allowClear={true} style={{ width: '180px' }}
                                         placeholder="请选择"
                                         name={record.in_id}
                                         onChange={(value) =>this.inSelectChange(record.in_id,value)}
+                                        mode={record.dict_multiple==null?'':'multiple'}
                                     >
                                         {this.state.dictData[record.in_id+record.dict_id]}
                                 </Select>
@@ -602,6 +590,14 @@ class ExecQuery extends React.Component {
                     //   });
                     return (
                         <Col span={12} key={record.qry_id+index}>
+                            <FormItem {...formItemLayout} label={record.in_name}>
+                                {getFieldDecorator(record.in_id)( 
+                                    <TagSelect expandable hideCheckAll={true} isOnlyCheck={false}>
+                                        {this.state.dictData[record.dict_id]==undefined?'':this.state.dictData[record.dict_id]}
+                                    </TagSelect> 
+                                )}
+                            </FormItem>
+                         
                         {/* <div className={cls}>
                             <h6 style={{ marginLeft:5, display: 'inline' ,fontSize:14}}>{record.in_name}:</h6>
                             {this.state.dictData[record.dict_id]==undefined?'':
@@ -621,15 +617,7 @@ class ExecQuery extends React.Component {
                                 </a>
                             )}
                         </div> */}
-
-                        <FormItem {...formItemLayout} label={record.in_name}>
-                            {getFieldDecorator(record.in_id)( 
-                                <TagSelect expandable >
-                                    {this.state.dictData[record.dict_id]==undefined?'':this.state.dictData[record.dict_id]}
-                                </TagSelect> 
-                            )}
-                        </FormItem>
-                        </Col> 
+                        </Col>
                     );
                                 
                 }else if(record.render=='Checkbox'){
