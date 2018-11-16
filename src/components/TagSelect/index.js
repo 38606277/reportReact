@@ -65,7 +65,6 @@ class TagSelect extends Component {
   handleTagChange = (value, checked) => {
     const { value: StateValue } = this.state;
     let checkedTags =[];
-    console.log(this.props.isOnlyCheck);
     if(this.props.isOnlyCheck){
       checkedTags = [value];
     }else{
