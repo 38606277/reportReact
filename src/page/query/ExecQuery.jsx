@@ -1,20 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Link } from 'react-router-dom';
 import { Table, Divider,DatePicker,Modal, Icon, Form, Input, TimePicker, Tag,Select,message, Button, Card, 
     Checkbox,Layout,Tooltip,Row,Col,Pagination,Spin   } from 'antd';
 import queryService from '../../service/QueryService.jsx';
 import ExportJsonExcel from "js-export-excel"; 
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import TagSelect from '../../components/TagSelect';
-import classNames from 'classnames';
 import moment from 'moment';
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 const Option = Select.Option;
 const Search = Input.Search;
 const FormItem = Form.Item;
 const _query =new queryService();
-const CheckableTag = Tag.CheckableTag;
 
 class ExecQuery extends React.Component {
     constructor(props) {
@@ -92,9 +89,7 @@ class ExecQuery extends React.Component {
                     }else{
                         this.state.data.push(nv);
                     }
-                   
                 }
-                
             })
            //条件列两两一组进行组合，作为一行显示
             var k=Math.ceil(inColumns.length/2);
@@ -122,11 +117,9 @@ class ExecQuery extends React.Component {
                     let json={key:item.out_id.toUpperCase(),title:item.out_name,dataIndex:item.out_id.toUpperCase(),
                         link:item.link,qry_id:item.qry_id,width:item.width
                     };
-                   
                     outlist.push(json);
                 }
             });
-            
             this.setState({outlist:outlist,inList:inlist},function(){
                 //参数4不为空的情况下进行值设置
                 if(null!=paramInIdValue && paramInIdValue.length>0){
@@ -549,12 +542,6 @@ class ExecQuery extends React.Component {
                         </Col> 
                     );
                 }else if(record.render=='TagSelect'){
-                    // const { className,expandable } = this.props;
-                    // const { expand } = this.state;
-                    // const cls = classNames('tagSelect', className, {
-                    //     ['hasExpandTag']: true,
-                    //     ['expanded']: expand,
-                    //   });
                     return (
                         <Col span={12} key={record.qry_id+index}>
                             <FormItem {...formItemLayout} label={record.in_name}>
@@ -564,22 +551,6 @@ class ExecQuery extends React.Component {
                                     </TagSelect> 
                                 )}
                             </FormItem>
-                         
-                        {/* <div className={cls}>
-                            <h6 style={{ marginLeft:5, display: 'inline' ,fontSize:14}}>{record.in_name}:</h6>
-                            {this.state.dictData[record.dict_id]==undefined?'':
-                                    this.state.dictData[record.dict_id].map(tag => (
-                                            <CheckableTag  key={tag}
-                                                    checked={this.state.tagData[record.in_id]==undefined ?'':this.state.tagData[record.in_id].indexOf(tag) > -1}
-                                                    onChange={(checked) =>this.onTagChange(record.in_id,tag,checked)}
-                                            >  {tag}  </CheckableTag>
-                                    ))
-                            }
-                            {(  <a className='trigger' onClick={this.handleExpand}>
-                                    {expand ? '收起' : '展开'} <Icon type={expand ? 'up' : 'down'} />
-                                </a>
-                            )}
-                        </div> */}
                         </Col>
                     );      
                 }else if(record.render=='Checkbox'){
@@ -595,7 +566,6 @@ class ExecQuery extends React.Component {
                     </Col>
                     );
                 }else if(record.render=='Datepicker'){
-                    // const endTime = moment().format('YYYY-MM-DD');
                     return (
                         <Col span={12} key={record.qry_id+index}>
                         <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name}>
