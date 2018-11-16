@@ -221,7 +221,19 @@ class ExecQuery extends React.Component {
             let arrd=this.state.data;
            // console.log(fieldsValue);
             for(var kname in fieldsValue){//遍历json对象的每个key/value对,p为key
-               // console.log(typeof fieldsValue[kname]);  
+                if(fieldsValue[kname] instanceof moment){
+                  
+                  fieldsValue[kname]=moment(fieldsValue[kname]).format("YYYY-MM-DD");
+                } 
+                //console.log(typeof fieldsValue[kname]);
+                // if(fieldsValue[kname] instanceof boolean){
+                //     if(fieldsValue[kname]){
+                //         fieldsValue[kname]=1;
+                //     }else{
+                //         fieldsValue[kname]=0;
+                //     }
+                // } 
+                //console.log(fieldsValue[kname] instanceof boolean)
                 arrd.forEach(function(item,index){
                     for (var key in item) {
                         if(kname==key){
@@ -233,7 +245,8 @@ class ExecQuery extends React.Component {
                 let nv={[kname]:value};
                 this.state.data.push(nv);
              }
-           // console.log(this.state.data);
+            console.log(this.state.data);
+            console.log(fieldsValue);
         })
        this.setState({baoTitle:this.state.paramv3,loading: true},function(){});
         if(null!=this.state.data){
@@ -245,7 +258,7 @@ class ExecQuery extends React.Component {
             let param=[{in:this.state.data},{startIndex:startIn,perPage:10,searchResult:this.state.searchResult}];
             _query.execSelect(this.state.paramv,this.state.paramv2,param).then(response=>{
                 if(response.resultCode!='3000'){
-                    this.setState({loading:false,resultList:response.list,totalR:response.totalSize});
+                    this.setState({loading:false,resultList:response.data.list,totalR:response.data.totalSize});
                 }else{
                     this.setState({loading:false});
                     message.error(response.message);
@@ -451,7 +464,7 @@ class ExecQuery extends React.Component {
                 }
             });
             this.state.data.push(nv);
-           // this.props.form.setFieldsValue({[clumnName]:dateString});
+            this.props.form.setFieldsValue({[clumnName]:dateString});
      }
      //选中checkbox设置值
      onChangeCheckbox(clumnName,value){
@@ -631,7 +644,7 @@ class ExecQuery extends React.Component {
                         {/* {getFieldDecorator(record.in_id,{
                             initialValue: '0' ,
                             rules: [{
-                            required: true,
+                            required: false,
                             message: `参数名是必须的！`,
                             }]
                         })( */}
@@ -645,15 +658,15 @@ class ExecQuery extends React.Component {
                     return (
                         <Col span={12} key={record.qry_id+index}>
                         <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name}>
-                        {/* {getFieldDecorator(record.in_id, {
+                        {getFieldDecorator(record.in_id, {
                         
                             rules: [{
                             required: false,
                             message: `参数名是必须的！`,
                             }]
-                        })( */}
+                        })(
                             <DatePicker format={'YYYY-MM-DD'} name={record.in_id} onChange={(date,dateString) => this.onChangeDate(record.in_id,date,dateString)} locale={locale}/>
-                        {/* )}  */}
+                         )}  
                         </FormItem>
                     </Col>
                     );
