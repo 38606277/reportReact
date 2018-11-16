@@ -219,21 +219,18 @@ class ExecQuery extends React.Component {
     execSelect(startIn){
         this.props.form.validateFieldsAndScroll((error, fieldsValue) => {
             let arrd=this.state.data;
-           // console.log(fieldsValue);
             for(var kname in fieldsValue){//遍历json对象的每个key/value对,p为key
                 if(fieldsValue[kname] instanceof moment){
                   
                   fieldsValue[kname]=moment(fieldsValue[kname]).format("YYYY-MM-DD");
                 } 
-                //console.log(typeof fieldsValue[kname]);
-                // if(fieldsValue[kname] instanceof boolean){
-                //     if(fieldsValue[kname]){
-                //         fieldsValue[kname]=1;
-                //     }else{
-                //         fieldsValue[kname]=0;
-                //     }
-                // } 
-                //console.log(fieldsValue[kname] instanceof boolean)
+                if(typeof fieldsValue[kname]== 'boolean'){
+                    if(fieldsValue[kname]){
+                        fieldsValue[kname]=1;
+                    }else{
+                        fieldsValue[kname]=0;
+                    }
+                }
                 arrd.forEach(function(item,index){
                     for (var key in item) {
                         if(kname==key){
@@ -245,8 +242,6 @@ class ExecQuery extends React.Component {
                 let nv={[kname]:value};
                 this.state.data.push(nv);
              }
-            console.log(this.state.data);
-            console.log(fieldsValue);
         })
        this.setState({baoTitle:this.state.paramv3,loading: true},function(){});
         if(null!=this.state.data){
@@ -641,15 +636,15 @@ class ExecQuery extends React.Component {
                     return (
                         <Col span={12} key={record.qry_id+index}>
                         <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name}>
-                        {/* {getFieldDecorator(record.in_id,{
+                        {getFieldDecorator(record.in_id,{
                             initialValue: '0' ,
                             rules: [{
                             required: false,
                             message: `参数名是必须的！`,
                             }]
-                        })( */}
+                        })(
                             <Checkbox  onChange={(value)=>this.onChangeCheckbox(record.in_id,value)}>是</Checkbox>
-                        {/* )} */}
+                        )}
                         </FormItem>
                     </Col>
                     );
