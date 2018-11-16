@@ -82,19 +82,17 @@ module.exports = {
                 use:ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: [
-                    {
-                        loader: "style-loader"
-                    },
-                    {
-                        loader: "css-loader"
-                    },
-                    {
-                        loader: 'postcss-loader'
-                    },
-                    {
-                        loader: "less-loader",
-                        options: { javascriptEnabled: true }
-                    }
+                        {
+                            loader: "css-loader",
+                            options: { modules: true }
+                        },
+                        {
+                            loader: 'postcss-loader'
+                        },
+                        {
+                            loader: "less-loader",
+                            options: { javascriptEnabled: true }
+                        }
                 ]})
             },
             // 图片的配置

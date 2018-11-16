@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 import { Tag, Icon } from 'antd';
 
-import  './index.scss';
+import styles from './index.less';
 
 const { CheckableTag } = Tag;
 
@@ -99,9 +99,9 @@ class TagSelect extends Component {
 
     const checkedAll = this.getAllTags().length === value.length;
 
-    const cls = classNames('tagSelect', className, {
-      ['hasExpandTag']: expandable,
-      ['expanded']: expand,
+    const cls = classNames(styles.tagSelect, className, {
+      [styles.hasExpandTag]: expandable,
+      [styles.expanded]: expand,
     });
     return (
       <div className={cls} style={style}>
@@ -123,7 +123,7 @@ class TagSelect extends Component {
             return child;
           })}
         {expandable && (
-          <a className='trigger' onClick={this.handleExpand}>
+          <a className={styles.trigger} onClick={this.handleExpand}>
             {expand ? '收起' : '展开'} <Icon type={expand ? 'up' : 'down'} />
           </a>
         )}
