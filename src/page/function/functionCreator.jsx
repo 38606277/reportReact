@@ -157,7 +157,9 @@ class functionCreator extends React.Component {
             HttpService.post("reportServer/function1/createFunction", JSON.stringify(formInfo))
             .then(res => {
                 if (res.resultCode == "1000") {
-                    message.success('创建成功！')
+                    message.success('创建成功！');
+                    this.setState({action:'update'});
+                    this.props.form.setFieldsValue({func_id:res.data});
                 }
                 else
                     message.error(res.message);
