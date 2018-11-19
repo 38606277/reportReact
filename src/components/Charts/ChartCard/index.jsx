@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from 'antd';
 import classNames from 'classnames';
 
-import styles from './index.scss';
+import styles from './index.less';
 
 const renderTotal = total => {
   let totalDom;
