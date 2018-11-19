@@ -27,7 +27,7 @@ class ExecQuery extends React.Component {
           pageNumd :1,perPaged : 10, searchDictionary :'',totald:0,
           startIndex:1,perPage :10, searchResult     :'',totalR:0,
           paramValue:'',paramName:'',selectedRowKeys:[],dictionaryList:[],
-          baoTitle:"数据列表",loading: false, dictData:{},tagData:{},expand:false
+          baoTitle:"数据列表",loading: false, dictData:{},tagData:{},expand:false,testData:{}
         };
       }
       //组件更新时被调用 
@@ -49,7 +49,7 @@ class ExecQuery extends React.Component {
                     pageNumd: 1,perPaged: 10, searchDictionary :'',
                     startIndex:1,perPage:10, searchResult     :'',
                     paramValue:'',paramName:'',selectedRowKeys:[],totald:0,
-                    baoTitle:"数据列表",loading: false,dictData:{},tagData:{}
+                    baoTitle:"数据列表",loading: false,dictData:{},tagData:{},testData:{}
                 },function(){
                     this.loadQueryCriteria(this.state.paramv,this.state.paramv4);
                 });
@@ -75,19 +75,22 @@ class ExecQuery extends React.Component {
            this.setState({data:[],loading:false},function(){
                 for(var l=0;l<inColumns.length;l++){
                     let idkey=inColumns[l].in_id;
-                    let nv={[idkey]:''};
+                    //let nv={[idkey]:''};
+                   
                     if("Select"==inColumns[l].render){
                         this.getDiclist(inColumns[l].in_id,inColumns[l].dict_id,"Select");
-                        this.state.data.push(nv);
+                       // this.state.data.push(nv);
+                       this.state.testData[idkey]='';
                     }else if("TagSelect"==inColumns[l].render){
                         this.getDiclist(inColumns[l].in_id,inColumns[l].dict_id,"TagSelect");
-                        
+                        this.state.testData[idkey]='';
                     }else if("Checkbox"==inColumns[l].render){
                         this.getDiclist(inColumns[l].in_id,inColumns[l].dict_id,"Checkbox");
-                        nv={[idkey]:0};
-                        this.state.data.push(nv);
+                        this.state.testData[idkey]='0';
+                       // this.state.data.push(nv);
                     }else{
-                        this.state.data.push(nv);
+                        //this.state.data.push(nv);
+                        this.state.testData[idkey]='';
                     }
                 }
             })
@@ -138,8 +141,9 @@ class ExecQuery extends React.Component {
                         let indexkey=paramInIdValue[j].indexOf("=");
                         let inkey=paramInIdValue[j].substring(0,indexkey);
                         let invalue=paramInIdValue[j].substring(indexkey+1,paramInIdValue[j].length);
-                        let nv={[inkey]:invalue};
-                        this.state.data.push(nv);
+                       // let nv={[inkey]:invalue};
+                        this.state.testData[inkey]=invalue;
+                       // this.state.data.push(nv);
                         if(null!=invalue && ''!=invalue){
                             this.props.form.setFieldsValue({[inkey]:invalue});
                         }
@@ -187,21 +191,22 @@ class ExecQuery extends React.Component {
     //设置参数条件值
     changeEvent(e) {
          let id = e.target.id;
-         let nv={[id]:e.target.value};
-         let arrd=this.state.data;
-         arrd.forEach(function(item,index){
-            for (var key in item) {
-                if(id==key){
-                    arrd.splice(index,1);     
-                }
-            }
-          });
-         this.state.data.push(nv);
+        //  let nv={[id]:e.target.value};
+        //  let arrd=this.state.data;
+        //  arrd.forEach(function(item,index){
+        //     for (var key in item) {
+        //         if(id==key){
+        //             arrd.splice(index,1);     
+        //         }
+        //     }
+        //   });
+        //  this.state.data.push(nv);
+        this.state.testData[id]=e.target.value;
       }
      //执行查询 
     execSelect(startIn){
         this.props.form.validateFieldsAndScroll((error, fieldsValue) => {
-            let arrd=this.state.data;
+           // let arrd=this.state.data;
             for(var kname in fieldsValue){//遍历json对象的每个key/value对,p为key
                 //处理日期类型
                 if(fieldsValue[kname] instanceof moment){
@@ -220,26 +225,27 @@ class ExecQuery extends React.Component {
                     fieldsValue[kname]=fieldsValue[kname].join(',');
                 }
                 //循环重新赋值
-                arrd.forEach(function(item,index){
-                    for (var key in item) {
-                        if(kname==key){
-                            arrd.splice(index,1);     
-                        }
-                    }
-                });
+                // arrd.forEach(function(item,index){
+                //     for (var key in item) {
+                //         if(kname==key){
+                //             arrd.splice(index,1);     
+                //         }
+                //     }
+                // });
                 let value=fieldsValue[kname]==undefined?'':fieldsValue[kname];
-                let nv={[kname]:value};
-                this.state.data.push(nv);
+                // let nv={[kname]:value};
+                // this.state.data.push(nv);
+                this.state.testData[kname]=value;
              }
         })
        this.setState({baoTitle:this.state.paramv3,loading: true},function(){});
-        if(null!=this.state.data){
+        // if(null!=this.state.testData){
            if(startIn=='1'){
             startIn=1;
            }else{
             startIn=this.state.startIndex;
            }
-            let param=[{in:this.state.data},{startIndex:startIn,perPage:10,searchResult:this.state.searchResult}];
+            let param=[{in:this.state.testData},{startIndex:startIn,perPage:10,searchResult:this.state.searchResult}];
             _query.execSelect(this.state.paramv,this.state.paramv2,param).then(response=>{
                 if(response.resultCode!='3000'){
                     this.setState({loading:false,resultList:response.data.list,totalR:response.data.totalSize});
@@ -251,7 +257,7 @@ class ExecQuery extends React.Component {
                 this.setState({loading:false});
                message.error(error);
             });
-        }
+        // }
         const tableCon = ReactDOM.findDOMNode(this.refs['resultTable'])//利用reactdom.finddomnode()来获取真实DOM节点
         const table = tableCon.querySelector('table')
         table.setAttribute('id','table-to-xls')
@@ -298,16 +304,17 @@ class ExecQuery extends React.Component {
       handleOk = (e) => {
             let values=this.okdata.join(",");
             let name = this.state.paramName;
-            let nv={[name]:values};
-            let arrd=this.state.data;
-            arrd.forEach(function(item,index){
-                for (var key in item) {
-                    if(name==key){
-                        arrd.splice(index,1);     
-                    }
-                }
-            });
-            this.state.data.push(nv);
+            // let nv={[name]:values};
+            // let arrd=this.state.data;
+            // arrd.forEach(function(item,index){
+            //     for (var key in item) {
+            //         if(name==key){
+            //             arrd.splice(index,1);     
+            //         }
+            //     }
+            // });
+            // this.state.data.push(nv);
+            this.state.testData[name]=values;
             this.props.form.setFieldsValue({[name]:values});
             this.setState({visible: false,pageNumd:1});
       }
@@ -397,16 +404,17 @@ class ExecQuery extends React.Component {
      }
      //下拉选中事件
      inSelectChange(clumnName,value){
-        let nv={[clumnName]:value};
-        let arrd=this.state.data;
-        arrd.forEach(function(item,index){
-            for (var key in item) {
-                if(clumnName==key){
-                    arrd.splice(index,1);     
-                }
-            }
-        });
-        this.state.data.push(nv);
+        // let nv={[clumnName]:value};
+        // let arrd=this.state.data;
+        // arrd.forEach(function(item,index){
+        //     for (var key in item) {
+        //         if(clumnName==key){
+        //             arrd.splice(index,1);     
+        //         }
+        //     }
+        // });
+        // this.state.data.push(nv);
+        this.state.testData[clumnName]=value;
      }
      //tag选中事件
      onTagChange(clumnName,value,checked){
@@ -418,30 +426,32 @@ class ExecQuery extends React.Component {
         let Tagd=this.state.tagData;
         Tagd[clumnName]=nextSelectedTags;
         this.setState({ tagData: Tagd },function(){
-            let nv={[clumnName]:nextSelectedTags};
-            let arrd=this.state.data;
-            arrd.forEach(function(item,index){
-                for (var key in item) {
-                    if(clumnName==key){
-                        arrd.splice(index,1);     
-                    }
-                }
-            });
-            this.state.data.push(nv);
+            // let nv={[clumnName]:nextSelectedTags};
+            // let arrd=this.state.data;
+            // arrd.forEach(function(item,index){
+            //     for (var key in item) {
+            //         if(clumnName==key){
+            //             arrd.splice(index,1);     
+            //         }
+            //     }
+            // });
+            // this.state.data.push(nv);
+            this.state.testData[clumnName]=nextSelectedTags;
         });
      }
      //选中日期设置值
      onChangeDate(clumnName,date,dateString){
-            let nv={[clumnName]:dateString};
-            let arrd=this.state.data;
-            arrd.forEach(function(item,index){
-                for (var key in item) {
-                    if(clumnName==key){
-                        arrd.splice(index,1);     
-                    }
-                }
-            });
-            this.state.data.push(nv);
+            // let nv={[clumnName]:dateString};
+            // let arrd=this.state.data;
+            // arrd.forEach(function(item,index){
+            //     for (var key in item) {
+            //         if(clumnName==key){
+            //             arrd.splice(index,1);     
+            //         }
+            //     }
+            // });
+            // this.state.data.push(nv);
+            this.state.testData[clumnName]=dateString;
             this.props.form.setFieldsValue({[clumnName]:dateString});
      }
      //选中checkbox设置值
@@ -450,16 +460,17 @@ class ExecQuery extends React.Component {
         if(value.target.checked){
             v=1;
         }
-        let nv={[clumnName]:v};
-        let arrd=this.state.data;
-        arrd.forEach(function(item,index){
-            for (var key in item) {
-                if(clumnName==key){
-                    arrd.splice(index,1);     
-                }
-            }
-        });
-        this.state.data.push(nv);
+        // let nv={[clumnName]:v};
+        // let arrd=this.state.data;
+        // arrd.forEach(function(item,index){
+        //     for (var key in item) {
+        //         if(clumnName==key){
+        //             arrd.splice(index,1);     
+        //         }
+        //     }
+        // });
+        // this.state.data.push(nv);
+        this.state.testData[clumnName]=v;
         //this.props.form.setFieldsValue({[clumnName]:v});
      }
      handleExpand = () => {
