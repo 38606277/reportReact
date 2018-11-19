@@ -54,7 +54,7 @@ class functionList extends React.Component {
             .then(res => {
                 if (res.resultCode == "1000") {
                     message.success("删除成功！");
-                    this.getAllQueryName();
+                    this.getAllFunctionName();
                     this.setState({selectedRowKeys:[], selectedRows: [] });
                 }
     
