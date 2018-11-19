@@ -98,7 +98,18 @@ class ExecQuery extends React.Component {
                 var arr= new Array();
                 for(j ; j < i*2; j++){
                     if(undefined!=inColumns[j]){
-                        arr.push(inColumns[j]);
+                        if("TagSelect"==inColumns[j].render){
+                            k=k+1;
+                            if(arr.length>0){
+                                break;
+                            }else{
+                                arr.push(inColumns[j]);
+                                j=j+1;
+                                break;
+                            }
+                        }else{
+                            arr.push(inColumns[j]);
+                        }
                     }
                 }
                 inlist.push(arr);  
@@ -493,7 +504,16 @@ class ExecQuery extends React.Component {
             sm: { span: 16 },
             },
         };
- 
+        const formItemLayoutTag = {
+            labelCol: {
+            xs: { span: 24 },
+            sm: { span: 4 },
+            },
+            wrapperCol: {
+            xs: { span: 24 },
+            sm: { span: 20 },
+            },
+        };
         const inColumn=this.state.inList.map((item, index)=>{
             const rc= item.map((record, index)=> {
                 if(record.render=='Input'){
@@ -543,8 +563,8 @@ class ExecQuery extends React.Component {
                     );
                 }else if(record.render=='TagSelect'){
                     return (
-                        <Col span={12} key={record.qry_id+index}>
-                            <FormItem {...formItemLayout} label={record.in_name}>
+                        <Col span={24} key={record.qry_id+index}>
+                            <FormItem {...formItemLayoutTag} label={record.in_name}>
                                 {getFieldDecorator(record.in_id)( 
                                     <TagSelect expandable hideCheckAll={true} isOnlyCheck={false}>
                                         {this.state.dictData[record.dict_id]==undefined?'':this.state.dictData[record.dict_id]}
