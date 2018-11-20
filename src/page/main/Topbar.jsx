@@ -1,10 +1,9 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { Layout, Menu, Avatar, Icon, Tooltip, Button, Card, Popover } from 'antd';
+import {  Avatar, Icon, Tooltip, Button, Card, Popover } from 'antd';
 import './Layout.scss';
 import LocalStorge from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
-const { Header, Content, Sider } = Layout;
 import logo from '../../asset/logo.png'
 import Loadable from 'react-loadable';
 import loading from '../../util/loading.jsx'
@@ -32,7 +31,10 @@ export default class TopBar extends React.Component {
     toggle = () => {
         this.setState({
             collapsed: !this.state.collapsed,
+        },function(){
+            this.props.callbackParent(this.state.collapsed);
         });
+        
     }
     onCollapse(collapsed) {
         this.setState({ collapsed });
