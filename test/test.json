@@ -1,87 +1,64 @@
-{
-    "qry_db": "jlerp",
-    "class_id": 7,
-    "qry_name": "aaa",
-    "qry_desc": "aaaa",
-    "qry_sql": "SELECT\n\tppa.PROJECT_ID ,\n\tppa. NAME ,\n\tppa.SEGMENT1 ,\n\tppa.PROJECT_TYPE ,\n\tppa.START_DATE ,\n\tppa.COMPLETION_DATE,\n        ppa.CLOSED_DATE,\n\tppa.PROJECT_STATUS_CODE\nFROM\n\tpa_projects_all ppa\nWHERE\n\tppa.SEGMENT1 = ${project_code}\nAND ppa.PROJECT_TYPE = ${project_type}\nAND ppa.PROJECT_STATUS_CODE = ${project_state}\nAND ppa.START_DATE >= ${start_Date}",
-    "in": [
-        {
-            "qry_id": "",
-            "in_id": "project_code",
-            "in_name": "project_code",
-            "datatype": "varchar",
-            "validate": ""
-        },
-        {
-            "qry_id": "",
-            "in_id": "project_type",
-            "in_name": "project_type",
-            "datatype": "varchar",
-            "validate": ""
-        },
-        {
-            "qry_id": "",
-            "in_id": "project_state",
-            "in_name": "project_state",
-            "datatype": "varchar",
-            "validate": ""
-        },
-        {
-            "qry_id": "",
-            "in_id": "start_date",
-            "in_name": "start_date",
-            "datatype": "varchar",
-            "validate": ""
+[
+    {
+        "in": [
+            {
+                "field": "begindate",
+                "value": ""
+            },
+            {
+                "enddate": ""
+            },
+            {
+                "org_id": "4324"
+            },
+            {
+                "po_number": ""
+            },
+            {
+                "vendor_name": ""
+            }
+        ]
+    },
+    {
+        "startIndex": 1,
+        "perPage": 10,
+        "searchResult": ""
+    }
+]
+
+[
+    {
+        "in": [
+            {
+                "segment1": ""
+            },
+            {
+                "tax": ""
+            },
+            {
+                "vendor_attribute12": ""
+            },
+            {
+                "vendor_name": "盈科"
+            }
+        ]
+    }
+]
+
+
+[
+    {
+        "in": {
+            "begindate": "",
+            "enddate": "",
+            "org_id": "4329",
+            "po_number": "",
+            "vendor_name": ""
         }
-    ],
-    "out": [
-        {
-            "qry_id": "",
-            "out_id": "project_id",
-            "out_name": "project_id",
-            "datatype": "varchar"
-        },
-        {
-            "qry_id": "",
-            "out_id": "name",
-            "out_name": "name",
-            "datatype": "varchar"
-        },
-        {
-            "qry_id": "",
-            "out_id": "segment1",
-            "out_name": "segment1",
-            "datatype": "varchar"
-        },
-        {
-            "qry_id": "",
-            "out_id": "project_type",
-            "out_name": "project_type",
-            "datatype": "varchar"
-        },
-        {
-            "qry_id": "",
-            "out_id": "start_date",
-            "out_name": "start_date",
-            "datatype": "varchar"
-        },
-        {
-            "qry_id": "",
-            "out_id": "completion_date",
-            "out_name": "completion_date",
-            "datatype": "varchar"
-        },
-        {
-            "qry_id": "",
-            "out_id": "closed_date",
-            "out_name": "closed_date",
-            "datatype": "varchar"
-        },
-        {
-            "qry_id": "",
-            "out_id": "project_status_code",
-            "out_name": "project_status_code",
-            "datatype": "varchar"
-        }
-    ]
-}
+    },
+    {
+        "startIndex": 1,
+        "perPage": 10,
+        "searchResult": ""
+    }
+]

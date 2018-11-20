@@ -46,6 +46,8 @@
     "echarts": "^4.2.0-rc.1",
     "immutability-helper": "^2.7.1",
     "js-export-excel": "^1.1.2",
+    "lodash": "^4.17.10",
+    "lodash-decorators": "^6.0.0",
     "less": "^3.8.1",
     "less-loader": "^4.1.0",
     "numeral": "^2.0.6",
