@@ -124,7 +124,7 @@ class ExecQuery extends React.Component {
              //输出列进行重新组装显示
              let totalOutColumnWidth=0;
             outColumns.map((item,index)=>{
-                if(null!=item.width && ''!=item.width){
+                if(null!=item.width && ''!=item.width && 0!=item.width){
                     totalOutColumnWidth=totalOutColumnWidth+item.width;
                 }else{
                     totalOutColumnWidth=totalOutColumnWidth+300;
