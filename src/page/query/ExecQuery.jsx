@@ -8,6 +8,8 @@ import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import TagSelect from '../../components/TagSelect';
 import moment from 'moment';
 import locale from 'antd/lib/date-picker/locale/zh_CN';
+import StandardFormRow from '../../components/StandardFormRow';
+import './exceQuery.scss';
 const Option = Select.Option;
 const Search = Input.Search;
 const FormItem = Form.Item;
@@ -115,7 +117,9 @@ class ExecQuery extends React.Component {
                         }
                     }
                 }
-                inlist.push(arr);  
+                if(arr.length>0){
+                    inlist.push(arr);
+                }
              }
              //输出列进行重新组装显示
             outColumns.map((item,index)=>{
@@ -603,7 +607,7 @@ class ExecQuery extends React.Component {
                         {getFieldDecorator(record.in_id, {
                             rules: [{required: false,message: `参数名是必须的！`,}]
                         })(
-                            <DatePicker format={'YYYY-MM-DD'} name={record.in_id} 
+                            <DatePicker format={'YYYY-MM-DD'} name={record.in_id} style={{width:'280px'}}
                             onChange={(date,dateString) => this.onChangeDate(record.in_id,date,dateString)} locale={locale}/>
                          )}  
                         </FormItem>
@@ -626,7 +630,7 @@ class ExecQuery extends React.Component {
                     );
                 }
             });
-            return <Row key={index}>{rc}</Row>;
+            return <StandardFormRow key={'formrow'+index}><Row key={index}>{rc}</Row></StandardFormRow>;
         });
     return (
         <div id="page-wrapper">
