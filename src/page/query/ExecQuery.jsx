@@ -29,7 +29,7 @@ class ExecQuery extends React.Component {
           pageNumd :1,perPaged : 10, searchDictionary :'',totald:0,
           startIndex:1,perPage :10, searchResult     :'',totalR:0,
           paramValue:'',paramName:'',selectedRowKeys:[],dictionaryList:[],
-          baoTitle:"数据列表",loading: false, dictData:{},tagData:{},expand:false,testData:{}
+          baoTitle:"数据列表",loading: false, dictData:{},tagData:{},expand:false,testData:{},totalOutColumnWidth:0
         };
       }
       //组件更新时被调用 
@@ -51,7 +51,7 @@ class ExecQuery extends React.Component {
                     pageNumd: 1,perPaged: 10, searchDictionary :'',
                     startIndex:1,perPage:10, searchResult     :'',
                     paramValue:'',paramName:'',selectedRowKeys:[],totald:0,
-                    baoTitle:"数据列表",loading: false,dictData:{},tagData:{},testData:{}
+                    baoTitle:"数据列表",loading: false,dictData:{},tagData:{},testData:{},totalOutColumnWidth:0
                 },function(){
                     this.loadQueryCriteria(this.state.paramv,this.state.paramv4);
                 });
@@ -122,7 +122,13 @@ class ExecQuery extends React.Component {
                 }
              }
              //输出列进行重新组装显示
+             let totalOutColumnWidth=0;
             outColumns.map((item,index)=>{
+                if(null!=item.width && ''!=item.width){
+                    totalOutColumnWidth=totalOutColumnWidth+item.width;
+                }else{
+                    totalOutColumnWidth=totalOutColumnWidth+300;
+                }
                 if(null!=item.link&&item.link!=''){
                     let json={key:item.out_id.toUpperCase(),title:item.out_name,dataIndex:item.out_id.toUpperCase(),
                         link:item.link,qry_id:item.qry_id,width:item.width,
@@ -138,7 +144,7 @@ class ExecQuery extends React.Component {
                     outlist.push(json);
                 }
             });
-            this.setState({outlist:outlist,inList:inlist},function(){
+            this.setState({outlist:outlist,inList:inlist,totalOutColumnWidth:totalOutColumnWidth},function(){
                 //参数4不为空的情况下进行值设置
                 if(null!=paramInIdValue && paramInIdValue.length>0){
                     for(var j=0;j<paramInIdValue.length;j++){
@@ -654,8 +660,8 @@ class ExecQuery extends React.Component {
                 <ReactHTMLTableToExcel className="downloadButton" table="table-to-xls" filename={this.state.reportName}
                       sheet={this.state.reportName}  buttonText="导出2"  style={{marginRight:'10px'}}/> */}
                 
-                <Table ref="resultTable" columns={this.state.outlist} dataSource={this.state.resultList} 
-                scroll={{ x: 1100 }} size="small" bordered  pagination={false}/>
+                <Table ref="resultTable" columns={this.state.outlist} dataSource={this.state.resultList}
+                scroll={{ x: this.state.totalOutColumnWidth }} size="small" bordered  pagination={false}/>
                 <Pagination current={this.state.startIndex} 
                         total={this.state.totalR} showTotal={total => `共 ${this.state.totalR} 条`}
                         onChange={(startIndex) => this.onPageNumChange(startIndex)}/> 
