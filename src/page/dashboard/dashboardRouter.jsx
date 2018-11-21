@@ -5,6 +5,7 @@ import Loadable from 'react-loadable';
 import loading from '../../util/loading.jsx';
 import analysis from './analysis.jsx';
 import monitor from './monitor.jsx';
+import DataAnalysis  from './DataAnalysis.jsx';
 
 class FunctionRouter extends React.Component {
     render() {
@@ -12,6 +13,7 @@ class FunctionRouter extends React.Component {
             <Switch>
                 <Route path="/dashboard/analysis" component={analysis} />
                 <Route path="/dashboard/monitor" component={monitor} />
+                <Route path="/dashboard/DataAnalysis" component={DataAnalysis}/>
             </Switch>
         )
     }
