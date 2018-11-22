@@ -7,15 +7,22 @@ import analysis from './analysis.jsx';
 import monitor from './monitor.jsx';
 import DataAnalysis  from './DataAnalysis.jsx';
 
-class FunctionRouter extends React.Component {
+const DashboardCreator = Loadable({
+    loader: () => import('./DashboardCreator.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+
+export default class DashboardRouter extends React.Component {
     render() {
         return (
             <Switch>
                 <Route path="/dashboard/analysis" component={analysis} />
                 <Route path="/dashboard/monitor" component={monitor} />
                 <Route path="/dashboard/DataAnalysis" component={DataAnalysis}/>
+                <Route path="/dashboard/DashboardCreator" component={DashboardCreator}/>
             </Switch>
         )
     }
 }
-export default FunctionRouter;
