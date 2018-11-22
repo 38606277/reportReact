@@ -14,7 +14,7 @@ export default class QueryService {
     }
     // 获取权限可访问列表
     getQueryClassTree(userId) {
-        let url = "reportServer/auth/getMenuList";
+        let url = "reportServer/auth/getMenuListNew";
         let param = {userId:userId};  
         return HttpService.post(url,JSON.stringify(param));
     }
@@ -53,5 +53,16 @@ export default class QueryService {
     selectLinkValue(qryId,outId){
         let url = "reportServer/query/getQueryOutLink/"+qryId+"/"+outId;;
         return HttpService.post(url,{});
+    }
+
+     // 获取权限可访问列表
+     getQueryClassTreetwo(userId) {
+        let url = "reportServer/auth/getClassId";
+        let param = {userId:userId};  
+        return HttpService.post(url,JSON.stringify(param));
+    }
+    getQryNameByClassId(obj){
+        let url = "reportServer/auth/getQryNameByClassId";
+        return HttpService.post(url,JSON.stringify(obj));
     }
 }
