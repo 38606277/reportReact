@@ -7,7 +7,13 @@ import loading from './util/loading.jsx'
 import './App.css'
 
 
-import Layout from './page/main/Layout.jsx';
+// import Layout from './page/main/Layout.jsx';
+
+const Layout = Loadable({
+    loader: () => import('./page/main/Layout.jsx'),
+    loading: loading,
+    delay:3000
+});
 
 const TaskRouter = Loadable({
     loader: () => import('./page/task/taskrouter.jsx'),
