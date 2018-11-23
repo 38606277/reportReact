@@ -7,7 +7,6 @@
 import React        from 'react';
 import User         from '../../service/user-service.jsx'
 import LocalStorge  from '../../util/LogcalStorge.jsx';
-import {Card,Form}       from 'antd';
 
 const localStorge = new LocalStorge();
 const _user = new User();
