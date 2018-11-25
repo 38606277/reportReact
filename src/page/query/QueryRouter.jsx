@@ -39,11 +39,11 @@ const QueryData = Loadable({
     loading: loading,
     delay:3000
 });
-const Indexs = Loadable({
-    loader: () => import('./Indexs.jsx'),
-    loading: loading,
-    delay:3000
-});
+// const Indexs = Loadable({
+//     loader: () => import('./Indexs.jsx'),
+//     loading: loading,
+//     delay:3000
+// });
 
 class QueryRouter extends React.Component{
     render(){
@@ -54,7 +54,7 @@ class QueryRouter extends React.Component{
                  <Route path="/query/QueryClass" component={QueryClass} />
                  <Route path="/query/CreateTemplate" component={CreateTemplate} />
                  <Route path="/query/QueryData" component={QueryData} />
-                 <Route path="/query/Contaier" component={Indexs} />
+                 {/* <Route path="/query/Contaier" component={Indexs} /> */}
                  <Route path="/query/QueryCreator/:action/:id" component={QueryCreator} />
                  <Redirect exact from="/query" to="/query/ExecQuery"/> 
             </Switch>

@@ -1,7 +1,6 @@
 import React from 'react';
-import { Link, Redirect } from 'react-router-dom';
-import { Layout,Card } from 'antd';
-const { Header, Content, Sider } = Layout;
+import  Layout  from 'antd/lib/layout';
+import 'antd/lib/layout/style/css';        // 加载 CSS
 import Loadable from 'react-loadable';
 import loading from '../../util/loading.jsx'
 
@@ -32,18 +31,18 @@ export default class MainLoyout extends React.Component {
         
         return (
             <Layout style={{ minHeight: '100vh' }}>
-                <Header style={{ background: '#4b9adf', color: '#FFFF', padding: 0, height: "50px", lineHeight: "50px" }} >
+                <Layout.Header style={{ background: '#4b9adf', color: '#FFFF', padding: 0, height: "50px", lineHeight: "50px" }} >
                     
                     <TopBar callbackParent={this.onChildChanged}/>
-                </Header>
+                </Layout.Header>
 
                 <Layout>
                     <SiderBar collapsed={this.state.collapsed}/>
-                    <Content>
-                        <Card bodyStyle={{ padding: "10px", marginLeft: 2, background: '#ececec', minHeight: 900 }}>
+                    <Layout.Content>
+                        {/* <Card bodyStyle={{ padding: "10px", marginLeft: 2, background: '#ececec', minHeight: 900 }}> */}
                             {this.props.children}
-                        </Card>
-                    </Content>
+                        {/* </Card> */}
+                    </Layout.Content>
                 </Layout>
             </Layout>
         );

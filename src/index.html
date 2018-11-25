@@ -9,8 +9,13 @@
     <script type="text/javascript">
         function getServerUrl()
         {
-            var hostname = "http://"+location.hostname+":"+"8080"+"/";
-            return hostname;
+            if(location.hostname)
+            {
+                return "http://"+location.hostname+":"+"8080"+"/";
+            }else
+            {
+                return 'http://localhost:8080/';
+            }
             // return 'http://localhost:8080/';
         }
         //  alert(getServerUrl());
