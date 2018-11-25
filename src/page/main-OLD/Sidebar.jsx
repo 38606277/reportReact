@@ -4,7 +4,7 @@ import { Layout, Menu, Icon,Spin} from 'antd';
 import queryService from '../../service/QueryService.jsx';
 import  LocalStorge         from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
-const { Sider } = Layout;
+const { Header, Content, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 const _query =new queryService();
 
@@ -129,7 +129,6 @@ export default class SiderBar extends React.Component {
         });
          const collapsed=this.props.collapsed;
         return (
-            <div className="navbar-side">
             <Sider
                 trigger={null}
                 collapsible
@@ -144,7 +143,6 @@ export default class SiderBar extends React.Component {
                 </Menu>
                 </Spin>
             </Sider>
-            </div>
         )
     }
 }

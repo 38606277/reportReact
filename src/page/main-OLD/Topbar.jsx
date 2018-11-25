@@ -5,6 +5,8 @@ import './Layout.scss';
 import LocalStorge from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
 import logo from '../../asset/logo.png'
+import Loadable from 'react-loadable';
+import loading from '../../util/loading.jsx'
 
 export default class TopBar extends React.Component {
     constructor(props) {
@@ -78,7 +80,7 @@ export default class TopBar extends React.Component {
         } else if (ss == '2') {
             contsss = <li className="dropdown hidden-xs">
                 <ul className="dropdown-menu dropdown-menu-lg">
-                    <li className="text-center notifi-title" style={{paddingLeft:'10px'}}>通知</li>
+                    <li className="text-center notifi-title">通知</li>
                     <li className="list-group">
 
                         <a className="list-group-item" href="javascript:void(0)" style={{ cursor: 'pointer' }}>
@@ -161,8 +163,8 @@ export default class TopBar extends React.Component {
         const contenttwo = (<div ><ul className="nav navbar-nav navbar-right pull-right">{contsss}</ul></div>);
 
         return (
-            <div className="top-navbar" style={{lineHeight:'50px',background:'#2f96e2'}}>
-                <div style={{float:'left',background:'#2f96e2'}} >
+            <div>
+                <div style={{ float: "left", paddingLeft: "10px", verticalAlign: "middle", width: "50%" }}>
 
                         <a href="javascript:;">
                             <img alt="logo" style={{ width: '30px', height: '30px' }} src={logo} />
@@ -183,11 +185,11 @@ export default class TopBar extends React.Component {
                             <button className="btn-search" type="submit"><i className="fa fa-search"></i></button>
                         </Tooltip> */}
                     </div>
-                <div style={{float:'right',background:'#2f96e2'}} >
+                <div style={{ float: "right", marginRight: "30px" }}>
                         {
                             this.state.userCode
-                                ? <span style={{color: 'white'}}>欢迎，{this.state.userCode}</span>
-                                : <span style={{color: 'white'}}>请登录</span>
+                                ? <span>欢迎，{this.state.userCode}</span>
+                                : <span>欢迎您</span>
                         }
                         <Tooltip>
                             <Popover
