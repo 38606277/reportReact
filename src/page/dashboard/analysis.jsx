@@ -391,11 +391,11 @@ const radarData=[{"name":"个人","label":"引用","value":10},{"name":"个人",
                     <div className={styles.salesRank}>
                       <h4 className={styles.rankingTitle}>
                        {"Sales Ranking"}
-                        />
+                       
                       </h4>
                       <ul className={styles.rankingList}>
                         {this.rankingListData.map((item, i) => (
-                          <li key={item.title}>
+                          <li key={item.title+'s'+i}>
                             <span
                               className={`${styles.rankingItemNumber} ${
                                 i < 3 ? styles.active : ''
@@ -437,7 +437,7 @@ const radarData=[{"name":"个人","label":"引用","value":10},{"name":"个人",
                       </h4>
                       <ul className={styles.rankingList}>
                         {this.rankingListData.map((item, i) => (
-                          <li key={item.title}>
+                          <li key={item.title+'v'+i}>
                             <span
                               className={`${styles.rankingItemNumber} ${
                                 i < 3 ? styles.active : ''
