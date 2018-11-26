@@ -65,4 +65,8 @@ export default class QueryService {
         let url = "reportServer/auth/getQryNameByClassId";
         return HttpService.post(url,JSON.stringify(obj));
     }
+    getAllQueryNameList(param){
+        let url = "reportServer/query/getAllQueryNameList";
+        return HttpService.post(url,JSON.stringify(param));
+    }
 }
