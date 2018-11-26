@@ -66,5 +66,13 @@ export default class RuleService{
         let url='/reportServer/auth/saveAuthRules';
         return HttpService.post(url,JSON.stringify(param));
     }
+    getAllCube(){
+        let url='/reportServer/auth/getAllCube';
+        return HttpService.post(url,{});
+    }
+    getAllDashBoard(){
+        let url='/reportServer/auth/getAllDashBoard';
+        return HttpService.post(url,{});
+    }
     
 }

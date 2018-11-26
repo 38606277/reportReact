@@ -447,6 +447,78 @@ class RuleInfo extends React.Component{
                //      }
                //     // this.setState({treeData:response});
                //  });
+           }else if(type=='cube'){
+                //如果treeData不为空，根据人名称查人员选中事项
+                if(this.state.treeData.length>0 && ''==isChange){
+                    ruleSevie.getAuthByConditions(roleId,type).then(response=>{
+                        let  selectedKeys=[];
+                        if(response.resultCode!='3000'){
+                            response.map((item,index)=>{
+                                selectedKeys.push(item.funcId);
+                            })
+                            this.setState({
+                                expandedKeys:selectedKeys,
+                                checkedKeys: selectedKeys,
+                            });  
+                        }                 
+                    });
+                 }else{
+                        //如果treeData为空，根据人与当前tabKey进行先查询treeData后查人员选中事项
+                        this.setState({treeData:[]});
+                        ruleSevie.getAllCube().then(response=>{
+                            if(response.status!=500){
+                                    this.setState({treeData:response.data});
+                                    ruleSevie.getAuthByConditions(roleId,type).then(response=>{
+                                        let  selectedKeys=[];
+                                        if(response.resultCode!='3000'){
+                                            response.map((item,index)=>{
+                                                selectedKeys.push(item.funcId);
+                                            })
+                                            this.setState({
+                                                expandedKeys:selectedKeys,
+                                                checkedKeys: selectedKeys,
+                                            });  
+                                        }                 
+                                    });
+                            }
+                        });
+                }
+           }else if(type=='dashboard'){
+                //如果treeData不为空，根据人名称查人员选中事项
+                if(this.state.treeData.length>0 && ''==isChange){
+                    ruleSevie.getAuthByConditions(roleId,type).then(response=>{
+                        let  selectedKeys=[];
+                        if(response.resultCode!='3000'){
+                            response.map((item,index)=>{
+                                selectedKeys.push(item.funcId);
+                            })
+                            this.setState({
+                                expandedKeys:selectedKeys,
+                                checkedKeys: selectedKeys,
+                            });  
+                        }                 
+                    });
+                 }else{
+                        //如果treeData为空，根据人与当前tabKey进行先查询treeData后查人员选中事项
+                        this.setState({treeData:[]});
+                        ruleSevie.getAllDashBoard().then(response=>{
+                            if(response.status!=500){
+                                    this.setState({treeData:response.data});
+                                    ruleSevie.getAuthByConditions(roleId,type).then(response=>{
+                                        let  selectedKeys=[];
+                                        if(response.resultCode!='3000'){
+                                            response.map((item,index)=>{
+                                                selectedKeys.push(item.funcId);
+                                            })
+                                            this.setState({
+                                                expandedKeys:selectedKeys,
+                                                checkedKeys: selectedKeys,
+                                            });  
+                                        }                 
+                                    });
+                            }
+                        });
+                }
            }
             //  if(type=='ou'){
             //      //如果treeData不为空，根据人名称查人员选中事项
@@ -599,6 +671,12 @@ class RuleInfo extends React.Component{
                 <TabPane tab="函数" key="function">
                     {contents}
                 </TabPane>
+                <TabPane tab="多维分析" key="cube">
+                     {contents}
+                </TabPane>
+                <TabPane tab="仪表盘" key="dashboard">
+                    {contents}
+                </TabPane>
                 <TabPane tab="模板" key="template">
                      {contents}
                 </TabPane>
@@ -615,6 +693,7 @@ class RuleInfo extends React.Component{
                        
                     </Tabs> */}
                 </TabPane>
+               
                 </Tabs>
             </Card>
              
