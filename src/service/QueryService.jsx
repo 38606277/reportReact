@@ -69,4 +69,14 @@ export default class QueryService {
         let url = "reportServer/query/getAllQueryNameList";
         return HttpService.post(url,JSON.stringify(param));
     }
+    getCubeListInAuth(userId){
+        let url = "reportServer/auth/getCubeListInAuth";
+        let param = {userId:userId};  
+        return HttpService.post(url,JSON.stringify(param));
+    }
+    getDashboardListInAuth(userId){
+        let url = "reportServer/auth/getDashboardListInAuth";
+        let param = {userId:userId};  
+        return HttpService.post(url,JSON.stringify(param));
+    }
 }

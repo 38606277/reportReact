@@ -37,6 +37,36 @@ export default class SiderBar extends React.Component {
       });
       
     }
+    dashboardformSubmenusChild(obj,index){
+        return (<SubMenu key={obj.func_name+obj.func_id} 
+                onTitleClick={this.dashBoardClickMuen.bind(this,obj)} 
+                title={<span><Icon type={obj.func_icon} />
+                <span>{obj.func_name}</span></span>}>
+                {
+                     obj.dashboardList==null?'':obj.dashboardList.map(obj2=>(
+                        <Menu.Item key={obj2.dashboard_name+obj2.dashboard_id} >
+                        <Link to={'#'}>
+                        <Icon type={'table'} /><span>{obj2.dashboard_name}</span>
+                        </Link></Menu.Item>
+                    ))
+                }
+            </SubMenu>);
+        }
+    cubeformSubmenusChild(obj,index){
+        return (<SubMenu key={obj.func_name+obj.func_id} 
+                onTitleClick={this.cubeClickMuen.bind(this,obj)} 
+                title={<span><Icon type={obj.func_icon} />
+                <span>{obj.func_name}</span></span>}>
+                {
+                    obj.cubeList==null?'':obj.cubeList.map(obj2=>(
+                        <Menu.Item key={obj2.cube_name+obj2.cube_id} >
+                        <Link to={'#'}>
+                        <Icon type={'table'} /><span>{obj2.cube_name}</span>
+                        </Link></Menu.Item>
+                    ))
+                }
+            </SubMenu>);
+        }
     fourformSubmenusChild(obj,index){
     return (<SubMenu key={obj.func_name+obj.func_id} 
             onTitleClick={this.clickMuen.bind(this,obj,index)} 
@@ -110,11 +140,35 @@ export default class SiderBar extends React.Component {
             });
         }
     }
+    cubeClickMuen=(obj)=>{
+        if(undefined==obj.cubeList){
+            this.setState({loading:true});
+            _query.getCubeListInAuth(this.state.userId).then(response=>{
+                this.setState({loading:false});
+               obj['cubeList']=response.data;
+               this.setState({categoryList:this.state.categoryList});
+            });
+        }
+    }
+    dashBoardClickMuen=(obj)=>{
+        if(undefined==obj.dashboardList){
+            this.setState({loading:true});
+            _query.getDashboardListInAuth(this.state.userId).then(response=>{
+                this.setState({loading:false});
+               obj['dashboardList']=response.data;
+               this.setState({categoryList:this.state.categoryList});
+             });
+        }
+    }
     render() {
         let html=this.state.categoryList.map((obj,index)=> {
             if ("undefined"!=typeof(obj.children)) {
                 if(obj.func_id=='1001'){
                    return this.fourformSubmenusChild(obj,index);
+                }else if(obj.func_id=='1006'){
+                    return this.cubeformSubmenusChild(obj,index);
+                }else if(obj.func_id=='1007'){
+                    return this.dashboardformSubmenusChild(obj,index);
                 }else{
                     if("undefined"!=typeof(obj.children) &&obj.children.length>0){
                         return this.formSubmenusChild(obj);
