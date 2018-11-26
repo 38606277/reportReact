@@ -69,6 +69,7 @@ class CubeInfo extends React.Component{
           values.cube_id=this.state.cube_id;
         }else{
           values.cube_id='null';
+          values.cube_sql='';
         }
         _cubeService.saveCubeInfo(values).then(response => {
             if(null!=this.state.cube_id && ''!=this.state.cube_id  && 'null'!=this.state.cube_id){
