@@ -26,7 +26,8 @@ export default class CubeService {
         }
     }
     delCube(id){
-        return HttpService.post('/reportServer/cube/deleteCube',id);
+        let param=[{cube_id:id}];
+        return HttpService.post('/reportServer/cube/deleteCube',JSON.stringify(param));
     }
 
 }
