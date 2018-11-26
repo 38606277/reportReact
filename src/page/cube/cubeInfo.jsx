@@ -35,6 +35,7 @@ class CubeInfo extends React.Component{
                       cube_name:response.data.cube_name,
                       cube_desc:response.data.cube_desc,
                       qry_id:response.data.qry_id,
+                      class_name:response.data.class_name,
                 });
             }, errMsg => {
                 this.setState({
@@ -64,8 +65,12 @@ class CubeInfo extends React.Component{
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
-        
-        _cubeService.saveCubeInfo(this.state).then(response => {
+        if(null!=this.state.cube_id && ''!=this.state.cube_id  && 'null'!=this.state.cube_id){
+          values.cube_id=this.state.cube_id;
+        }else{
+          values.cube_id='null';
+        }
+        _cubeService.saveCubeInfo(values).then(response => {
             if(null!=this.state.cube_id && ''!=this.state.cube_id  && 'null'!=this.state.cube_id){
                 alert("修改成功");
             }else{
@@ -108,9 +113,16 @@ class CubeInfo extends React.Component{
 }
 //模式窗口点击确认
   handleOk = (e) => {
-        let values=this.state.selectedRowKeys.join(",");
-        this.props.form.setFieldsValue({['qry_id']:values});
-        this.setState({visible: false,pageNumd:1,qry_id:values});
+    let values='';
+    if(this.state.selectedRowKeys.length>0){
+        const arr1=this.state.selectedRowKeys[0];
+        const dataArr=arr1.split("&");
+        values=dataArr[0];
+        let qryname=dataArr[1];
+        this.props.form.setFieldsValue({['qry_id']:values,['class_name']:qryname});
+        // this.props.form.setFieldsValue({['qry_name']:qryname});
+    }
+    this.setState({visible: false,pageNumd:1,qry_id:values});
   }
 //模式窗口点击取消
   handleCancel = (e) => {
@@ -171,7 +183,7 @@ class CubeInfo extends React.Component{
         }];
     if(null!=this.state.dictionaryList){
         this.state.dictionaryList.map((item,index)=>{
-            item.key=item.qry_id;
+            item.key=item.qry_id+"&"+item.qry_name;
         });
     }
     return (
@@ -204,8 +216,17 @@ class CubeInfo extends React.Component{
                     {getFieldDecorator('qry_id', {
                       rules: [{required: true, message: '请输入描述!'}],
                     })(
-                      <Input onChange={e=>this.onValueChange(e)} 
+                      <Input readOnly onChange={e=>this.onValueChange(e)} 
                       addonAfter={<Icon type="ellipsis" theme="outlined" onClick={e=>this.openModelClick()}/>} />
+                    )}
+                  </FormItem>
+              </Col>
+              <Col span={12}>
+                <FormItem {...formItemLayout} label="class_name">
+                    {getFieldDecorator('class_name', {
+                     // rules: [{required: true, message: '请输入描述!'}],
+                    })(
+                      <Input readOnly />
                     )}
                   </FormItem>
               </Col>
