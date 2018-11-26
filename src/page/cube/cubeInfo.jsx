@@ -20,7 +20,8 @@ class CubeInfo extends React.Component{
             cube_desc:'',
             visible:false,
             dictionaryList:[],
-            qry_name:''
+            qry_name:'',
+            cube_sql:'',
         };
         this.handleSubmit = this.handleSubmit.bind(this);
       
@@ -36,6 +37,7 @@ class CubeInfo extends React.Component{
                       cube_desc:response.data.cube_desc,
                       qry_id:response.data.qry_id,
                       class_name:response.data.class_name,
+                      cube_sql:response.data.cube_sql,
                 });
             }, errMsg => {
                 this.setState({
@@ -69,7 +71,6 @@ class CubeInfo extends React.Component{
           values.cube_id=this.state.cube_id;
         }else{
           values.cube_id='null';
-          values.cube_sql='';
         }
         _cubeService.saveCubeInfo(values).then(response => {
             if(null!=this.state.cube_id && ''!=this.state.cube_id  && 'null'!=this.state.cube_id){
@@ -228,6 +229,17 @@ class CubeInfo extends React.Component{
                      // rules: [{required: true, message: '请输入描述!'}],
                     })(
                       <Input readOnly />
+                    )}
+                  </FormItem>
+              </Col>
+          </Row> 
+          <Row>
+            <Col span={12}>
+                <FormItem {...formItemLayout} label="SQL">
+                    {getFieldDecorator('cube_sql', {
+                      rules: [{required: true, message: '请输入SQL!'}],
+                    })(
+                      <Input  onChange={(e) => this.onValueChange(e)}/>
                     )}
                   </FormItem>
               </Col>
