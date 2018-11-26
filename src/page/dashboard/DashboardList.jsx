@@ -67,12 +67,12 @@ export default class DashboardList extends React.Component {
         });
     }
      // 搜索
-     onSearch(name){
+     onSearch(dashboard_name){
         let listType = dashboard_name === '' ? 'list' : 'search';
         this.setState({
             listType:listType,
             pageNum         : 1,
-            dashboard_name   : name
+            dashboard_name   : dashboard_name
         }, () => {
             this.loadDashboardList();
         });
