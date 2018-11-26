@@ -23,7 +23,7 @@ export default class QueryService {
         return HttpService.post(url,{});
     }
     getQueryCriteria(selectClassId){
-        let url="reportServer/query/getQueryParamByFuncID/"+selectClassId;
+        let url="reportServer/query/getQueryParam/"+selectClassId;
         return HttpService.post(url,{});
     }
     execSelect(selectClassId,selectID,param){
