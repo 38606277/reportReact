@@ -11,7 +11,6 @@ const Search = Input.Search;
 class CubeInfo extends React.Component{
     constructor(props){
         super(props);
-        const okdata=[];
         this.state = {
             confirmDirty: false,
             cube_id:this.props.match.params.cube_id,
@@ -89,7 +88,7 @@ class CubeInfo extends React.Component{
   }
 
   openModelClick(){
-    this.setState({ visible: true,qry_id:'',totald:0,selectedRowKeys:[]},function(){
+    this.setState({ visible: true,totald:0,selectedRowKeys:[]},function(){
       this.loadModelData();
     });
   }
@@ -190,7 +189,7 @@ class CubeInfo extends React.Component{
     }
     return (
         <div id="page-wrapper">
-        <Card title={this.state._id=='null' ?'新建':'编辑'}>
+        <Card title={this.state.cube_id=='null' ?'新建':'编辑'}>
         <Form onSubmit={this.handleSubmit}>
         <Row>
              <Col span={12}>

@@ -7,7 +7,7 @@
 import React from 'react';
 import { Link }             from 'react-router-dom';
 import Pagination           from 'antd/lib/pagination';
-import {Table,Divider,Button,Card, Tooltip,Input, Form}  from 'antd';
+import {Table,Divider,Button,Card, Tooltip,Input, Form,Spin}  from 'antd';
 import CubeService from '../../service/CubeService.jsx';
 const _cubeService = new CubeService();
 const Search = Input.Search;
@@ -21,7 +21,8 @@ export default class CubeList extends React.Component {
             pageNum         : 1,
             perPage         : 10,
             listType        :'list',
-            cube_name:''
+            cube_name:'',
+            loading:false,
         };
     }
     componentDidMount(){
@@ -35,11 +36,12 @@ export default class CubeList extends React.Component {
         if(this.state.listType === 'search'){
             listParam.cube_name    = this.state.cube_name;
         }
+        this.setState({loading:true});
         _cubeService.getCubeList(listParam).then(response => {
-            this.setState(response.data);
+            this.setState({list:response.data.list,total:response.data.total,loading:false});
         }, errMsg => {
             this.setState({
-                list : []
+                list : [],loading:false
             });
             // _mm.errorTips(errMsg);
         });
@@ -119,6 +121,7 @@ export default class CubeList extends React.Component {
        
         return (
             <div id="page-wrapper">
+            <Spin  spinning={this.state.loading} delay={100}>
             <Card title="多维列表">
                 <Tooltip>
                      <Search
@@ -137,7 +140,7 @@ export default class CubeList extends React.Component {
                     total={this.state.total} 
                     onChange={(pageNum) => this.onPageNumChange(pageNum)}/> 
             </Card>
-                
+                </Spin>
             </div>
         )
     }
