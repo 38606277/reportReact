@@ -30,4 +30,8 @@ export default class CubeService {
         return HttpService.post('/reportServer/cube/deleteCube',JSON.stringify(param));
     }
 
+    getDataAndalysisByqryId(qryid){
+        let param={};
+        return HttpService.post('/reportServer/cube/getCubeValueByID/'+qryid,JSON.stringify(param));
+    }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Card} from 'antd';
+//import {Card ,Table,Modal, Icon, Form, Input, TimePicker, Tag,Select,message, Button,Checkbox,Layout,Tooltip,Row,Col,Pagination,Spin} from 'antd';
 import PivotTableUI from 'react-pivottable/PivotTableUI';
 import 'react-pivottable/pivottable.css';
 import TableRenderers from 'react-pivottable/TableRenderers';
@@ -7,262 +7,301 @@ import Plot from 'react-plotly.js';
 import createPlotlyRenderers from 'react-pivottable/PlotlyRenderers';
 //const Plot = createPlotlyComponent(window.Plotly);
 const PlotlyRenderers = createPlotlyRenderers(Plot);
-const data = [
-    ["账单金额", "小费", "性别", "是否吸烟", "星期几", "进餐时间", "宴会规模"],
-    [16.99, 1.01, "女", "不吸烟的人", "周日", "晚餐", 2],
-    [10.34, 1.66, "男", "不吸烟的人", "周日", "晚餐", 3],
-    [21.01, 3.5, "男", "不吸烟的人", "周日", "晚餐", 3],
-    [23.68, 3.31, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [24.59, 3.61, "女", "不吸烟的人", "周日", "晚餐", 4],
-    [25.29, 4.71, "男", "不吸烟的人", "周日", "晚餐", 4],
-    [8.77, 2, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [26.88, 3.12, "男", "不吸烟的人", "周日", "晚餐", 4],
-    [15.04, 1.96, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [14.78, 3.23, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [10.27, 1.71, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [35.26, 5, "女", "不吸烟的人", "周日", "晚餐", 4],
-    [15.42, 1.57, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [18.43, 3, "男", "不吸烟的人", "周日", "晚餐", 4],
-    [14.83, 3.02, "女", "不吸烟的人", "周日", "晚餐", 2],
-    [21.58, 3.92, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [10.33, 1.67, "女", "不吸烟的人", "周日", "晚餐", 3],
-    [16.29, 3.71, "男", "不吸烟的人", "周日", "晚餐", 3],
-    [16.97, 3.5, "女", "不吸烟的人", "周日", "晚餐", 3],
-    [20.65, 3.35, "男", "不吸烟的人", "周六", "晚餐", 3],
-    [17.92, 4.08, "男", "不吸烟的人", "周六", "晚餐", 2],
-    [20.29, 2.75, "女", "不吸烟的人", "周六", "晚餐", 2],
-    [15.77, 2.23, "女", "不吸烟的人", "周六", "晚餐", 2],
-    [39.42, 7.58, "男", "不吸烟的人", "周六", "晚餐", 4],
-    [19.82, 3.18, "男", "不吸烟的人", "周六", "晚餐", 2],
-    [17.81, 2.34, "男", "不吸烟的人", "周六", "晚餐", 4],
-    [13.37, 2, "男", "不吸烟的人", "周六", "晚餐", 2],
-    [12.69, 2, "男", "不吸烟的人", "周六", "晚餐", 2],
-    [21.7, 4.3, "男", "不吸烟的人", "周六", "晚餐", 2],
-    [19.65, 3, "女", "不吸烟的人", "周六", "晚餐", 2],
-    [9.55, 1.45, "男", "不吸烟的人", "周六", "晚餐", 2],
-    [18.35, 2.5, "男", "不吸烟的人", "周六", "晚餐", 4],
-    [15.06, 3, "女", "不吸烟的人", "周六", "晚餐", 2],
-    [20.69, 2.45, "女", "不吸烟的人", "周六", "晚餐", 4],
-    [17.78, 3.27, "男", "不吸烟的人", "周六", "晚餐", 2],
-    [24.06, 3.6, "男", "不吸烟的人", "周六", "晚餐", 3],
-    [16.31, 2, "男", "不吸烟的人", "周六", "晚餐", 3],
-    [16.93, 3.07, "女", "不吸烟的人", "周六", "晚餐", 3],
-    [18.69, 2.31, "男", "不吸烟的人", "周六", "晚餐", 3],
-    [31.27, 5, "男", "不吸烟的人", "周六", "晚餐", 3],
-    [16.04, 2.24, "男", "不吸烟的人", "周六", "晚餐", 3],
-    [17.46, 2.54, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [13.94, 3.06, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [9.68, 1.32, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [30.4, 5.6, "男", "不吸烟的人", "周日", "晚餐", 4],
-    [18.29, 3, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [22.23, 5, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [32.4, 6, "男", "不吸烟的人", "周日", "晚餐", 4],
-    [28.55, 2.05, "男", "不吸烟的人", "周日", "晚餐", 3],
-    [18.04, 3, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [12.54, 2.5, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [10.29, 2.6, "女", "不吸烟的人", "周日", "晚餐", 2],
-    [34.81, 5.2, "女", "不吸烟的人", "周日", "晚餐", 4],
-    [9.94, 1.56, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [25.56, 4.34, "男", "不吸烟的人", "周日", "晚餐", 4],
-    [19.49, 3.51, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [38.01, 3, "男", "吸烟的人", "周六", "晚餐", 4],
-    [26.41, 1.5, "女", "不吸烟的人", "周六", "晚餐", 2],
-    [11.24, 1.76, "男", "吸烟的人", "周六", "晚餐", 2],
-    [48.27, 6.73, "男", "不吸烟的人", "周六", "晚餐", 4],
-    [20.29, 3.21, "男", "吸烟的人", "周六", "晚餐", 2],
-    [13.81, 2, "男", "吸烟的人", "周六", "晚餐", 2],
-    [11.02, 1.98, "男", "吸烟的人", "周六", "晚餐", 2],
-    [18.29, 3.76, "男", "吸烟的人", "周六", "晚餐", 4],
-    [17.59, 2.64, "男", "不吸烟的人", "周六", "晚餐", 3],
-    [20.08, 3.15, "男", "不吸烟的人", "周六", "晚餐", 3],
-    [16.45, 2.47, "女", "不吸烟的人", "周六", "晚餐", 2],
-    [3.07, 1, "女", "吸烟的人", "周六", "晚餐", 1],
-    [20.23, 2.01, "男", "不吸烟的人", "周六", "晚餐", 2],
-    [15.01, 2.09, "男", "吸烟的人", "周六", "晚餐", 2],
-    [12.02, 1.97, "男", "不吸烟的人", "周六", "晚餐", 2],
-    [17.07, 3, "女", "不吸烟的人", "周六", "晚餐", 3],
-    [26.86, 3.14, "女", "吸烟的人", "周六", "晚餐", 2],
-    [25.28, 5, "女", "吸烟的人", "周六", "晚餐", 2],
-    [14.73, 2.2, "女", "不吸烟的人", "周六", "晚餐", 2],
-    [10.51, 1.25, "男", "不吸烟的人", "周六", "晚餐", 2],
-    [17.92, 3.08, "男", "吸烟的人", "周六", "晚餐", 2],
-    [27.2, 4, "男", "不吸烟的人", "周四", "午餐", 4],
-    [22.76, 3, "男", "不吸烟的人", "周四", "午餐", 2],
-    [17.29, 2.71, "男", "不吸烟的人", "周四", "午餐", 2],
-    [19.44, 3, "男", "吸烟的人", "周四", "午餐", 2],
-    [16.66, 3.4, "男", "不吸烟的人", "周四", "午餐", 2],
-    [10.07, 1.83, "女", "不吸烟的人", "周四", "午餐", 1],
-    [32.68, 5, "男", "吸烟的人", "周四", "午餐", 2],
-    [15.98, 2.03, "男", "不吸烟的人", "周四", "午餐", 2],
-    [34.83, 5.17, "女", "不吸烟的人", "周四", "午餐", 4],
-    [13.03, 2, "男", "不吸烟的人", "周四", "午餐", 2],
-    [18.28, 4, "男", "不吸烟的人", "周四", "午餐", 2],
-    [24.71, 5.85, "男", "不吸烟的人", "周四", "午餐", 2],
-    [21.16, 3, "男", "不吸烟的人", "周四", "午餐", 2],
-    [28.97, 3, "男", "吸烟的人", "周五", "晚餐", 2],
-    [22.49, 3.5, "男", "不吸烟的人", "周五", "晚餐", 2],
-    [5.75, 1, "女", "吸烟的人", "周五", "晚餐", 2],
-    [16.32, 4.3, "女", "吸烟的人", "周五", "晚餐", 2],
-    [22.75, 3.25, "女", "不吸烟的人", "周五", "晚餐", 2],
-    [40.17, 4.73, "男", "吸烟的人", "周五", "晚餐", 4],
-    [27.28, 4, "男", "吸烟的人", "周五", "晚餐", 2],
-    [12.03, 1.5, "男", "吸烟的人", "周五", "晚餐", 2],
-    [21.01, 3, "男", "吸烟的人", "周五", "晚餐", 2],
-    [12.46, 1.5, "男", "不吸烟的人", "周五", "晚餐", 2],
-    [11.35, 2.5, "女", "吸烟的人", "周五", "晚餐", 2],
-    [15.38, 3, "女", "吸烟的人", "周五", "晚餐", 2],
-    [44.3, 2.5, "女", "吸烟的人", "周六", "晚餐", 3],
-    [22.42, 3.48, "女", "吸烟的人", "周六", "晚餐", 2],
-    [20.92, 4.08, "女", "不吸烟的人", "周六", "晚餐", 2],
-    [15.36, 1.64, "男", "吸烟的人", "周六", "晚餐", 2],
-    [20.49, 4.06, "男", "吸烟的人", "周六", "晚餐", 2],
-    [25.21, 4.29, "男", "吸烟的人", "周六", "晚餐", 2],
-    [18.24, 3.76, "男", "不吸烟的人", "周六", "晚餐", 2],
-    [14.31, 4, "女", "吸烟的人", "周六", "晚餐", 2],
-    [14, 3, "男", "不吸烟的人", "周六", "晚餐", 2],
-    [7.25, 1, "女", "不吸烟的人", "周六", "晚餐", 1],
-    [38.07, 4, "男", "不吸烟的人", "周日", "晚餐", 3],
-    [23.95, 2.55, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [25.71, 4, "女", "不吸烟的人", "周日", "晚餐", 3],
-    [17.31, 3.5, "女", "不吸烟的人", "周日", "晚餐", 2],
-    [29.93, 5.07, "男", "不吸烟的人", "周日", "晚餐", 4],
-    [10.65, 1.5, "女", "不吸烟的人", "周四", "午餐", 2],
-    [12.43, 1.8, "女", "不吸烟的人", "周四", "午餐", 2],
-    [24.08, 2.92, "女", "不吸烟的人", "周四", "午餐", 4],
-    [11.69, 2.31, "男", "不吸烟的人", "周四", "午餐", 2],
-    [13.42, 1.68, "女", "不吸烟的人", "周四", "午餐", 2],
-    [14.26, 2.5, "男", "不吸烟的人", "周四", "午餐", 2],
-    [15.95, 2, "男", "不吸烟的人", "周四", "午餐", 2],
-    [12.48, 2.52, "女", "不吸烟的人", "周四", "午餐", 2],
-    [29.8, 4.2, "女", "不吸烟的人", "周四", "午餐", 6],
-    [8.52, 1.48, "男", "不吸烟的人", "周四", "午餐", 2],
-    [14.52, 2, "女", "不吸烟的人", "周四", "午餐", 2],
-    [11.38, 2, "女", "不吸烟的人", "周四", "午餐", 2],
-    [22.82, 2.18, "男", "不吸烟的人", "周四", "午餐", 3],
-    [19.08, 1.5, "男", "不吸烟的人", "周四", "午餐", 2],
-    [20.27, 2.83, "女", "不吸烟的人", "周四", "午餐", 2],
-    [11.17, 1.5, "女", "不吸烟的人", "周四", "午餐", 2],
-    [12.26, 2, "女", "不吸烟的人", "周四", "午餐", 2],
-    [18.26, 3.25, "女", "不吸烟的人", "周四", "午餐", 2],
-    [8.51, 1.25, "女", "不吸烟的人", "周四", "午餐", 2],
-    [10.33, 2, "女", "不吸烟的人", "周四", "午餐", 2],
-    [14.15, 2, "女", "不吸烟的人", "周四", "午餐", 2],
-    [16, 2, "男", "吸烟的人", "周四", "午餐", 2],
-    [13.16, 2.75, "女", "不吸烟的人", "周四", "午餐", 2],
-    [17.47, 3.5, "女", "不吸烟的人", "周四", "午餐", 2],
-    [34.3, 6.7, "男", "不吸烟的人", "周四", "午餐", 6],
-    [41.19, 5, "男", "不吸烟的人", "周四", "午餐", 5],
-    [27.05, 5, "女", "不吸烟的人", "周四", "午餐", 6],
-    [16.43, 2.3, "女", "不吸烟的人", "周四", "午餐", 2],
-    [8.35, 1.5, "女", "不吸烟的人", "周四", "午餐", 2],
-    [18.64, 1.36, "女", "不吸烟的人", "周四", "午餐", 3],
-    [11.87, 1.63, "女", "不吸烟的人", "周四", "午餐", 2],
-    [9.78, 1.73, "男", "不吸烟的人", "周四", "午餐", 2],
-    [7.51, 2, "男", "不吸烟的人", "周四", "午餐", 2],
-    [14.07, 2.5, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [13.13, 2, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [17.26, 2.74, "男", "不吸烟的人", "周日", "晚餐", 3],
-    [24.55, 2, "男", "不吸烟的人", "周日", "晚餐", 4],
-    [19.77, 2, "男", "不吸烟的人", "周日", "晚餐", 4],
-    [29.85, 5.14, "女", "不吸烟的人", "周日", "晚餐", 5],
-    [48.17, 5, "男", "不吸烟的人", "周日", "晚餐", 6],
-    [25, 3.75, "女", "不吸烟的人", "周日", "晚餐", 4],
-    [13.39, 2.61, "女", "不吸烟的人", "周日", "晚餐", 2],
-    [16.49, 2, "男", "不吸烟的人", "周日", "晚餐", 4],
-    [21.5, 3.5, "男", "不吸烟的人", "周日", "晚餐", 4],
-    [12.66, 2.5, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [16.21, 2, "女", "不吸烟的人", "周日", "晚餐", 3],
-    [13.81, 2, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [17.51, 3, "女", "吸烟的人", "周日", "晚餐", 2],
-    [24.52, 3.48, "男", "不吸烟的人", "周日", "晚餐", 3],
-    [20.76, 2.24, "男", "不吸烟的人", "周日", "晚餐", 2],
-    [31.71, 4.5, "男", "不吸烟的人", "周日", "晚餐", 4],
-    [10.59, 1.61, "女", "吸烟的人", "周六", "晚餐", 2],
-    [10.63, 2, "女", "吸烟的人", "周六", "晚餐", 2],
-    [50.81, 10, "男", "吸烟的人", "周六", "晚餐", 3],
-    [15.81, 3.16, "男", "吸烟的人", "周六", "晚餐", 2],
-    [7.25, 5.15, "男", "吸烟的人", "周日", "晚餐", 2],
-    [31.85, 3.18, "男", "吸烟的人", "周日", "晚餐", 2],
-    [16.82, 4, "男", "吸烟的人", "周日", "晚餐", 2],
-    [32.9, 3.11, "男", "吸烟的人", "周日", "晚餐", 2],
-    [17.89, 2, "男", "吸烟的人", "周日", "晚餐", 2],
-    [14.48, 2, "男", "吸烟的人", "周日", "晚餐", 2],
-    [9.6, 4, "女", "吸烟的人", "周日", "晚餐", 2],
-    [34.63, 3.55, "男", "吸烟的人", "周日", "晚餐", 2],
-    [34.65, 3.68, "男", "吸烟的人", "周日", "晚餐", 4],
-    [23.33, 5.65, "男", "吸烟的人", "周日", "晚餐", 2],
-    [45.35, 3.5, "男", "吸烟的人", "周日", "晚餐", 3],
-    [23.17, 6.5, "男", "吸烟的人", "周日", "晚餐", 4],
-    [40.55, 3, "男", "吸烟的人", "周日", "晚餐", 2],
-    [20.69, 5, "男", "不吸烟的人", "周日", "晚餐", 5],
-    [20.9, 3.5, "女", "吸烟的人", "周日", "晚餐", 3],
-    [30.46, 2, "男", "吸烟的人", "周日", "晚餐", 5],
-    [18.15, 3.5, "女", "吸烟的人", "周日", "晚餐", 3],
-    [23.1, 4, "男", "吸烟的人", "周日", "晚餐", 3],
-    [15.69, 1.5, "男", "吸烟的人", "周日", "晚餐", 2],
-    [19.81, 4.19, "女", "吸烟的人", "周四", "午餐", 2],
-    [28.44, 2.56, "男", "吸烟的人", "周四", "午餐", 2],
-    [15.48, 2.02, "男", "吸烟的人", "周四", "午餐", 2],
-    [16.58, 4, "男", "吸烟的人", "周四", "午餐", 2],
-    [7.56, 1.44, "男", "不吸烟的人", "周四", "午餐", 2],
-    [10.34, 2, "男", "吸烟的人", "周四", "午餐", 2],
-    [43.11, 5, "女", "吸烟的人", "周四", "午餐", 4],
-    [13, 2, "女", "吸烟的人", "周四", "午餐", 2],
-    [13.51, 2, "男", "吸烟的人", "周四", "午餐", 2],
-    [18.71, 4, "男", "吸烟的人", "周四", "午餐", 3],
-    [12.74, 2.01, "女", "吸烟的人", "周四", "午餐", 2],
-    [13, 2, "女", "吸烟的人", "周四", "午餐", 2],
-    [16.4, 2.5, "女", "吸烟的人", "周四", "午餐", 2],
-    [20.53, 4, "男", "吸烟的人", "周四", "午餐", 4],
-    [16.47, 3.23, "女", "吸烟的人", "周四", "午餐", 3],
-    [26.59, 3.41, "男", "吸烟的人", "周六", "晚餐", 3],
-    [38.73, 3, "男", "吸烟的人", "周六", "晚餐", 4],
-    [24.27, 2.03, "男", "吸烟的人", "周六", "晚餐", 2],
-    [12.76, 2.23, "女", "吸烟的人", "周六", "晚餐", 2],
-    [30.06, 2, "男", "吸烟的人", "周六", "晚餐", 3],
-    [25.89, 5.16, "男", "吸烟的人", "周六", "晚餐", 4],
-    [48.33, 9, "男", "不吸烟的人", "周六", "晚餐", 4],
-    [13.27, 2.5, "女", "吸烟的人", "周六", "晚餐", 2],
-    [28.17, 6.5, "女", "吸烟的人", "周六", "晚餐", 3],
-    [12.9, 1.1, "女", "吸烟的人", "周六", "晚餐", 2],
-    [28.15, 3, "男", "吸烟的人", "周六", "晚餐", 5],
-    [11.59, 1.5, "男", "吸烟的人", "周六", "晚餐", 2],
-    [7.74, 1.44, "男", "吸烟的人", "周六", "晚餐", 2],
-    [30.14, 3.09, "女", "吸烟的人", "周六", "晚餐", 4],
-    [12.16, 2.2, "男", "吸烟的人", "周五", "午餐", 2],
-    [13.42, 3.48, "女", "吸烟的人", "周五", "午餐", 2],
-    [8.58, 1.92, "男", "吸烟的人", "周五", "午餐", 1],
-    [15.98, 3, "女", "不吸烟的人", "周五", "午餐", 3],
-    [13.42, 1.58, "男", "吸烟的人", "周五", "午餐", 2],
-    [16.27, 2.5, "女", "吸烟的人", "周五", "午餐", 2],
-    [10.09, 2, "女", "吸烟的人", "周五", "午餐", 2],
-    [20.45, 3, "男", "不吸烟的人", "周六", "晚餐", 4],
-    [13.28, 2.72, "男", "不吸烟的人", "周六", "晚餐", 2],
-    [22.12, 2.88, "女", "吸烟的人", "周六", "晚餐", 2],
-    [24.01, 2, "男", "吸烟的人", "周六", "晚餐", 4],
-    [15.69, 3, "男", "吸烟的人", "周六", "晚餐", 3],
-    [11.61, 3.39, "男", "不吸烟的人", "周六", "晚餐", 2],
-    [10.77, 1.47, "男", "不吸烟的人", "周六", "晚餐", 2],
-    [15.53, 3, "男", "吸烟的人", "周六", "晚餐", 2],
-    [10.07, 1.25, "男", "不吸烟的人", "周六", "晚餐", 2],
-    [12.6, 1, "男", "吸烟的人", "周六", "晚餐", 2],
-    [32.83, 1.17, "男", "吸烟的人", "周六", "晚餐", 2],
-    [35.83, 4.67, "女", "不吸烟的人", "周六", "晚餐", 3],
-    [29.03, 5.92, "男", "不吸烟的人", "周六", "晚餐", 3],
-    [27.18, 2, "女", "吸烟的人", "周六", "晚餐", 2],
-    [22.67, 2, "男", "吸烟的人", "周六", "晚餐", 2],
-    [17.82, 1.75, "男", "不吸烟的人", "周六", "晚餐", 2],
-    [18.78, 3, "女", "不吸烟的人", "周四", "晚餐", 2]
-];
+//const data = [];
+  
+import CubeService from '../../service/CubeService.jsx';
+const _cubeService =new CubeService();
+import { Table, Divider,DatePicker,Modal, Icon, Form, Input, TimePicker, Tag,Select,message, Button, Card, 
+    Checkbox,Layout,Tooltip,Row,Col,Pagination,Spin   } from 'antd';
+import queryService from '../../service/QueryService.jsx';
+import TagSelect from '../../components/TagSelect';
+import moment from 'moment';
+import locale from 'antd/lib/date-picker/locale/zh_CN';
+import StandardFormRow from '../../components/StandardFormRow';
 
-const dataTwo = [['attribute', 'attribute2'], ['value1', 'value2']];
+const Option = Select.Option;
+const Search = Input.Search;
+const FormItem = Form.Item;
+const _query =new queryService();
+//const dataTwo = [['attribute', 'attribute2'], ['value1', 'value2']];
 class DataAnalysis extends React.Component {
     constructor(props) {
         super(props);
-        this.state = props;
+        const okdata=[];
+        this.state = {
+              qry_id: this.props.match.params.qry_id,
+              class_id:this.props.match.params.class_id,
+              inList:[], outlist:[],resultList:[],visible: false,
+              pageNumd :1,perPaged : 10, searchDictionary :'',totald:0,
+              paramValue:'',paramName:'',selectedRowKeys:[],dictionaryList:[],
+              baoTitle:"数据列表",loading: false, dictData:{},tagData:{},expand:false,testData:{},
+              data:[],
+            };
     }
+    //组件更新时被调用 
+    componentWillReceiveProps(nextProps){
+        let key = nextProps.match.params.qry_id;
+        let key2 = nextProps.match.params.class_id;
+        let oldparamv1=this.state.qry_id;
+        let oldparamv2=this.state.class_id;
+        //如果qryId发生变化则这个页面全部重新加载
+        if(oldparamv1!=key || key2!=oldparamv2){
+            this.setState({
+                qry_id:key,
+                class_id:key2,
+                inList:[], outlist:[],resultList:[],visible: false,
+                pageNumd :1,perPaged : 10, searchDictionary :'',totald:0,
+                paramValue:'',paramName:'',selectedRowKeys:[],dictionaryList:[],
+                baoTitle:"数据列表",loading: false, dictData:{},tagData:{},expand:false,testData:{},data:[],
+            },function(){
+                this.loadDataAnalysis(this.state.qry_id);
+            });
+        }
+    }
+    componentDidMount() {
+       this.loadDataAnalysis(this.state.qry_id);
+    }
+    loadDataAnalysis(qry_id){
+        const inlist=[],outlist=[];
+        _cubeService.getDataAndalysisByqryId(qry_id).then(response=>{
+            let inColumns=response.data.in;
+            let outColumns=response.data.out;
+            //清空选中的值，并重新设置in条件字段
+            this.setState({loading:false},function(){
+                    for(var l=0;l<inColumns.length;l++){
+                        let idkey=inColumns[l].in_id;
+                        if("Select"==inColumns[l].render){
+                            this.getDiclist(inColumns[l].in_id,inColumns[l].dict_id,"Select");
+                        this.state.testData[idkey]='';
+                        }else if("TagSelect"==inColumns[l].render){
+                            this.getDiclist(inColumns[l].in_id,inColumns[l].dict_id,"TagSelect");
+                            this.state.testData[idkey]='';
+                        }else if("Checkbox"==inColumns[l].render){
+                            this.getDiclist(inColumns[l].in_id,inColumns[l].dict_id,"Checkbox");
+                            this.state.testData[idkey]='0';
+                        }else{
+                            this.state.testData[idkey]='';
+                        }
+                    }
+                })
+            //条件列两两一组进行组合，作为一行显示
+                var k=Math.ceil(inColumns.length/2);
+                var j= 0;
+                for(var i=1;i<=k;i++){
+                    var arr= new Array();
+                    for(j ; j < i*2; j++){
+                        if(undefined!=inColumns[j]){
+                            if("TagSelect"==inColumns[j].render){
+                                k=k+1;
+                                if(arr.length>0){
+                                    break;
+                                }else{
+                                    arr.push(inColumns[j]);
+                                    j=j+1;
+                                    break;
+                                }
+                            }else{
+                                arr.push(inColumns[j]);
+                            }
+                        }
+                    }
+                    if(arr.length>0){
+                        inlist.push(arr);
+                    }
+                }
+                //输出列进行重新组装显示
+                outColumns.map((item,index)=>{
+                    outlist.push(item.out_name);
+                });
+                this.state.resultList.push(outlist);
+                this.setState({inList:inlist},function(){});
+        });
+    }
+    //设置参数条件值
+    changeEvent(e) {
+        let id = e.target.id;
+       this.state.testData[id]=e.target.value;
+     }
+    //执行查询 
+   execSelect(){
+       this.props.form.validateFieldsAndScroll((error, fieldsValue) => {
+           for(var kname in fieldsValue){//遍历json对象的每个key/value对,p为key
+               //处理日期类型
+               if(fieldsValue[kname] instanceof moment){
+                 fieldsValue[kname]=moment(fieldsValue[kname]).format("YYYY-MM-DD");
+               } 
+               //处理checkbox值为1、0
+               if(typeof fieldsValue[kname]== 'boolean'){
+                   if(fieldsValue[kname]){
+                       fieldsValue[kname]=1;
+                   }else{
+                       fieldsValue[kname]=0;
+                   }
+               }
+               //将[]转换为join(",") 逗号隔开字符串
+               if(fieldsValue[kname] instanceof Array){
+                   fieldsValue[kname]=fieldsValue[kname].join(',');
+               }
+               let value=fieldsValue[kname]==undefined?'':fieldsValue[kname];
+               this.state.testData[kname]=value;
+            }
+       })
+            this.setState({loading: true},function(){});
+           let param=[{in:this.state.testData},{}];
+           _query.execSelect(this.state.qry_id,this.state.class_id,param).then(response=>{
+               if(response.resultCode!='3000'){
+                   let resList=response.data.list;
+                   let d2=[];
+                   d2.push(this.state.resultList[0]);
+                   if(null==resList || resList.length==0){
+                        this.setState({loading:false,data:d2},function(){}); 
+                   }else{
+                       
+                        resList.map((item,index)=>{
+                            let dataArr=[];
+                            for(var key in item){  
+                                dataArr.push(item[key]); //json对象的值  
+                            }  
+                            d2.push(dataArr);
+                        });
+                        this.setState({loading:false,data:d2},function(){});                   
+                    }
+               }else{
+                   this.setState({loading:false});
+                   message.error(response.message);
+               }
+           }).catch(error=>{
+               this.setState({loading:false});
+              message.error(error);
+           });
+      
+   }
+   //打开模式窗口
+   openModelClick(name,param){
+        this.okdata=[];
+        this.setState({ visible: true,
+           dictionaryList:[],paramValue:param,paramName:name,
+           totald:0,selectedRowKeys:[]},function(){
+           this.loadModelData(param);
+        });
+   }
+   //调用模式窗口内的数据查询
+   loadModelData(param){
+       let page = {};
+       page.pageNumd  = this.state.pageNumd;
+       page.perPaged  = this.state.perPaged;
+       page.searchDictionary=this.state.searchDictionary;
+       this.setState({loading:true});
+       _query.getDictionaryList(param,page).then(response=>{
+         this.setState({loading: false,dictionaryList:response.data,totald:response.totald},function(){});
+       }).catch(error=>{
+           this.setState({loading:false});
+          message.error(error);
+       });
+   }
+    // 字典页数发生变化的时候
+    onPageNumdChange(pageNumd){
+       this.setState({
+           pageNumd : pageNumd
+       }, () => {
+           this.loadModelData(this.state.paramValue);
+       });
+   }
+   
+   //模式窗口点击确认
+     handleOk = (e) => {
+           let values=this.okdata.join(",");
+           let name = this.state.paramName;
+           this.state.testData[name]=values;
+           this.props.form.setFieldsValue({[name]:values});
+           this.setState({visible: false,pageNumd:1});
+     }
+   //模式窗口点击取消
+     handleCancel = (e) => {
+       this.okdata=[];
+       this.setState({
+         visible: false,
+         selectedRowKeys:[]
+       });
+     }
+     //数据字典选中事件
+     onSelectChangeDic = (selectedRowKeys) => {
+       this.okdata=selectedRowKeys;
+       this.setState({ selectedRowKeys });
+     }
+     
+    //数据字典的search
+    onDictionarySearch(searchKeyword){
+       this.setState({pageNumd:1,searchDictionary:searchKeyword}, () => {
+           this.loadModelData(this.state.paramValue);
+       });
+    }
+    
+    //根据条件列的dict_id进行查询数据字典
+    getDiclist(in_id,dictId,type){
+       let page = {};
+       page.pageNumd  = 1;
+       page.perPaged  = 15;
+       page.searchDictionary='';
+       _query.getDictionaryList(dictId,page).then(response=>{
+           let optionlist1=[];
+           let rlist=response.data;
+           for (let i = 0; i < rlist.length; i++) {
+               if(type=="Select"){
+                   optionlist1.push(<Option key={rlist[i].value_code}>{rlist[i].value_name}</Option>);
+               }else if(type=="TagSelect"){
+                   optionlist1.push(<TagSelect.Option value={rlist[i].value_code} key={rlist[i].value_code}>{rlist[i].value_name}</TagSelect.Option>);
+               }
+           }
+           var objs= this.state.dictData;
+           if(type=="TagSelect"){
+               objs[dictId]=optionlist1;
+           }else{
+               objs[in_id+dictId]=optionlist1;
+           }
+           this.setState({dictData:objs});
+       });
+    }
+    //下拉选中事件
+    inSelectChange(clumnName,value){
+       this.state.testData[clumnName]=value;
+    }
+    //tag选中事件
+    onTagChange(clumnName,value,checked){
+       let clumnNames = this.state.tagData[clumnName];
+       if(clumnNames==undefined){
+           clumnNames=[];
+       }
+       const nextSelectedTags = checked? [...clumnNames, value]: clumnNames.filter(t => t !== value);
+       let Tagd=this.state.tagData;
+       Tagd[clumnName]=nextSelectedTags;
+       this.setState({ tagData: Tagd },function(){
+           this.state.testData[clumnName]=nextSelectedTags;
+       });
+    }
+    //选中日期设置值
+    onChangeDate(clumnName,date,dateString){
+           this.state.testData[clumnName]=dateString;
+           this.props.form.setFieldsValue({[clumnName]:dateString});
+    }
+    //选中checkbox设置值
+    onChangeCheckbox(clumnName,value){
+        let v=0;
+       if(value.target.checked){
+           v=1;
+       }
+       this.state.testData[clumnName]=v;
+       //this.props.form.setFieldsValue({[clumnName]:v});
+    }
+    handleExpand = () => {
+       const { expand } = this.state;
+       this.setState({
+         expand: !expand,
+       });
+     };
+    
 
-    // componentWillMount() {
+    componentWillMount() {
     //   this.setState({
     //           data:data,
     //           plotlyOptions: {width: 900, height: 500},
@@ -280,19 +319,185 @@ class DataAnalysis extends React.Component {
 
     //       },
     //   });
-    //  }
+    }
     render() {
+        const { getFieldDecorator } = this.props.form;
+        const { selectedRowKeys } = this.state;
+        const rowSelectionDictionary = {
+            selectedRowKeys,
+            onChange:this.onSelectChangeDic,
+        };
+        const  dictionaryColumns = [{
+                title: '编码',
+                dataIndex: 'value_code',
+                key: 'value_code',
+            },{
+                title: '名称',
+                dataIndex: 'value_name',
+                key: 'value_name',
+            }];
+           
+        if(null!=this.state.dictionaryList){
+            this.state.dictionaryList.map((item,index)=>{
+                item.key=item.value_code;
+            });
+        }
+        const formItemLayout = {
+            labelCol: {
+            xs: { span: 24 },
+            sm: { span: 8 },
+            },
+            wrapperCol: {
+            xs: { span: 24 },
+            sm: { span: 16 },
+            },
+        };
+        const formItemLayoutTag = {
+            labelCol: {
+            xs: { span: 24 },
+            sm: { span: 4 },
+            },
+            wrapperCol: {
+            xs: { span: 24 },
+            sm: { span: 20 },
+            },
+        };
+        const inColumn=this.state.inList.map((item, index)=>{
+            const rc= item.map((record, index)=> {
+                if(record.render=='Input'){
+                    return (
+                        <Col span={12} key={record.qry_id+index}>
+                        <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name} >
+                            {getFieldDecorator(record.in_id, {
+                                rules: [{required: false,message: `参数名是必须的！`,}]
+                            })(
+                                <Input onChange={e=>this.changeEvent(e)}  />
+                            )}
+                            </FormItem>
+                    </Col>
+                    );
+                }else if(record.render=='InputButton'){
+                    return (
+                        <Col span={12} key={record.qry_id+index}>
+                        <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name} >
+                            {getFieldDecorator(record.in_id, {
+                                rules: [{required: false,message: `参数名是必须的！`,}]
+                            })(
+                                <Input onChange={e=>this.changeEvent(e)} 
+                                addonAfter={record.dict_id==null?'':
+                                <Icon type="ellipsis" theme="outlined"  
+                                onClick={e=>this.openModelClick(record.in_id,record.dict_id)}/>} />
+                            )}
+                            </FormItem>
+                    </Col>
+                    );
+                }else if(record.render=='Select'){
+                    return (
+                        <Col span={12} key={record.qry_id+index}>
+                        <FormItem {...formItemLayout} label={record.in_name}>
+                        {getFieldDecorator(record.in_id, {
+                            // rules: [{ required: false, message: '请输入参数!', whitespace: true }],
+                            })(
+                            <Select allowClear={true} style={{ width: '280px' }}
+                                        placeholder="请选择"name={record.in_id}
+                                        onChange={(value) =>this.inSelectChange(record.in_id,value)}
+                                        mode={record.dict_multiple==null?'':'multiple'}
+                                    >
+                                        {this.state.dictData[record.in_id+record.dict_id]}
+                                </Select>
+                        )}
+                        </FormItem>
+                        </Col> 
+                    );
+                }else if(record.render=='TagSelect'){
+                    return (
+                        <Col span={24} key={record.qry_id+index}>
+                            <FormItem {...formItemLayoutTag} label={record.in_name}>
+                                {getFieldDecorator(record.in_id)( 
+                                    <TagSelect expandable hideCheckAll={true} isOnlyCheck={false}>
+                                        {this.state.dictData[record.dict_id]==undefined?'':this.state.dictData[record.dict_id]}
+                                    </TagSelect> 
+                                )}
+                            </FormItem>
+                        </Col>
+                    );      
+                }else if(record.render=='Checkbox'){
+                    return (
+                        <Col span={12} key={record.qry_id+index}>
+                        <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name}>
+                        {getFieldDecorator(record.in_id,{
+                            initialValue: '0',rules: [{required: false,message: `参数名是必须的！`, }]
+                        })(
+                            <Checkbox  onChange={(value)=>this.onChangeCheckbox(record.in_id,value)}>是</Checkbox>
+                        )}
+                        </FormItem>
+                    </Col>
+                    );
+                }else if(record.render=='Datepicker'){
+                    return (
+                        <Col span={12} key={record.qry_id+index}>
+                        <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name}>
+                        {getFieldDecorator(record.in_id, {
+                            rules: [{required: false,message: `参数名是必须的！`,}]
+                        })(
+                            <DatePicker format={'YYYY-MM-DD'} name={record.in_id} style={{width:'280px'}}
+                            onChange={(date,dateString) => this.onChangeDate(record.in_id,date,dateString)} locale={locale}/>
+                         )}  
+                        </FormItem>
+                    </Col>
+                    );
+                }else{
+                    return (
+                        <Col span={12} key={record.qry_id+index}>
+                        <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name} >
+                            {getFieldDecorator(record.in_id, {
+                                rules: [{required: false,message: `参数名是必须的！`,}]
+                            })(
+                                <Input onChange={e=>this.changeEvent(e)} 
+                                addonAfter={record.dict_id==null?'':
+                                <Icon type="ellipsis" theme="outlined"  
+                                onClick={e=>this.openModelClick(record.in_id,record.dict_id)}/>} />
+                            )}
+                            </FormItem>
+                    </Col>
+                    );
+                }
+            });
+            return <StandardFormRow key={'formrow'+index}><Row key={index}>{rc}</Row></StandardFormRow>;
+        });
         return (
+            <div>
+                <Card bordered={false} title={this.state.baoTitle} extra={ <div>
+                            <a onClick={()=>this.execSelect()}>查询 </a>
+                            
+                        </div>}>
+                        {inColumn}
+            </Card>
             <Card title='消费数据多维分析' bodyStyle={{padding:'0px'}}>
                 <PivotTableUI
-                    data={data}
+                    data={this.state.data}
                     renderers={Object.assign({}, TableRenderers, PlotlyRenderers)}
                     {...this.state}
                     onChange={s => this.setState(s)}
                     unusedOrientationCutoff={Infinity}
                 />
             </Card>
+            <div>
+                <Modal  title="字典查询" visible={this.state.visible}  onOk={this.handleOk} onCancel={this.handleCancel}>
+                    <Search
+                        style={{ width: 300,marginBottom:'10px' }}
+                        placeholder="请输入..." enterButton="查询"
+                        onSearch={value => this.onDictionarySearch(value)}
+                        />
+                        <Table ref="diction" rowSelection={rowSelectionDictionary} columns={dictionaryColumns} 
+                        dataSource={this.state.dictionaryList} size="small" bordered  pagination={false}/>
+                        <Pagination current={this.state.pageNumd} 
+                        total={this.state.totald}  showTotal={total => `共 ${this.state.totald} 条`}
+                        onChange={(pageNumd) => this.onPageNumdChange(pageNumd)}/> 
+                </Modal>
+            </div>
+            </div>
         );
     }
 }
-export default DataAnalysis;
+export default Form.create()(DataAnalysis);
