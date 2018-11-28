@@ -31,11 +31,12 @@ class DataAnalysis extends React.Component {
         this.state = {
               qry_id: this.props.match.params.qry_id,
               class_id:this.props.match.params.class_id,
+              cube_name:this.props.match.params.cube_name,
               inList:[], outlist:[],resultList:[],visible: false,
               pageNumd :1,perPaged : 10, searchDictionary :'',totald:0,
               paramValue:'',paramName:'',selectedRowKeys:[],dictionaryList:[],
               baoTitle:"数据列表",loading: false, dictData:{},tagData:{},expand:false,testData:{},
-              data:[],
+              data:[],colunmlist:[]
             };
     }
     //组件更新时被调用 
@@ -49,10 +50,11 @@ class DataAnalysis extends React.Component {
             this.setState({
                 qry_id:key,
                 class_id:key2,
+                cube_name:nextProps.match.params.cube_name,
                 inList:[], outlist:[],resultList:[],visible: false,
-                pageNumd :1,perPaged : 10, searchDictionary :'',totald:0,
-                paramValue:'',paramName:'',selectedRowKeys:[],dictionaryList:[],
-                baoTitle:"数据列表",loading: false, dictData:{},tagData:{},expand:false,testData:{},data:[],
+                pageNumd :1,perPaged : 10, searchDictionary :'',totald:0,data:[],
+                paramValue:'',paramName:'',selectedRowKeys:[],dictionaryList:[],colunmlist:[],
+                baoTitle:"数据列表",loading: false, dictData:{},tagData:{},expand:false,testData:{}
             },function(){
                 this.loadDataAnalysis(this.state.qry_id);
             });
@@ -112,7 +114,9 @@ class DataAnalysis extends React.Component {
                 //输出列进行重新组装显示
                 outColumns.map((item,index)=>{
                     outlist.push(item.out_name);
+                    this.state.colunmlist.push(item.out_id);
                 });
+
                 this.state.resultList.push(outlist);
                 this.setState({inList:inlist},function(){});
         });
@@ -156,14 +160,22 @@ class DataAnalysis extends React.Component {
                    if(null==resList || resList.length==0){
                         this.setState({loading:false,data:d2},function(){}); 
                    }else{
-                       
-                        resList.map((item,index)=>{
-                            let dataArr=[];
-                            for(var key in item){  
-                                dataArr.push(item[key]); //json对象的值  
-                            }  
-                            d2.push(dataArr);
-                        });
+                       let colunmlists=this.state.colunmlist;
+                       if(null!=colunmlists && colunmlists.length>0){
+                            resList.map((item,index)=>{
+                                let dataArr=[];
+                                for(var c=0;c<colunmlists.length;c++){
+                                    for(var key in item){
+                                        if(key==colunmlists[c].toUpperCase()){
+                                            dataArr.push(item[key]); //json对象的值
+                                        }
+                                    }
+                                }  
+                                if(null!=dataArr){
+                                    d2.push(dataArr);
+                                }
+                            });
+                        }
                         this.setState({loading:false,data:d2},function(){});                   
                     }
                }else{
@@ -467,13 +479,13 @@ class DataAnalysis extends React.Component {
         });
         return (
             <div>
-                <Card bordered={false} title={this.state.baoTitle} extra={ <div>
+                <Card bordered={false} title={this.state.cube_name} extra={ <div>
                             <a onClick={()=>this.execSelect()}>查询 </a>
                             
                         </div>}>
                         {inColumn}
             </Card>
-            <Card title='消费数据多维分析' bodyStyle={{padding:'0px'}}>
+            
                 <PivotTableUI
                     data={this.state.data}
                     renderers={Object.assign({}, TableRenderers, PlotlyRenderers)}
@@ -481,7 +493,7 @@ class DataAnalysis extends React.Component {
                     onChange={s => this.setState(s)}
                     unusedOrientationCutoff={Infinity}
                 />
-            </Card>
+            
             <div>
                 <Modal  title="字典查询" visible={this.state.visible}  onOk={this.handleOk} onCancel={this.handleCancel}>
                     <Search
