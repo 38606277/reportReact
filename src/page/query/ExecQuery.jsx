@@ -396,20 +396,22 @@ class ExecQuery extends React.Component {
         _query.getDictionaryList(dictId,page).then(response=>{
             let optionlist1=[];
             let rlist=response.data;
-            for (let i = 0; i < rlist.length; i++) {
-                if(type=="Select"){
-                    optionlist1.push(<Option key={rlist[i].value_code}>{rlist[i].value_name}</Option>);
-                }else if(type=="TagSelect"){
-                    optionlist1.push(<TagSelect.Option value={rlist[i].value_code} key={rlist[i].value_code}>{rlist[i].value_name}</TagSelect.Option>);
+            if(undefined!=rlist){
+                for (let i = 0; i < rlist.length; i++) {
+                    if(type=="Select"){
+                        optionlist1.push(<Option key={rlist[i].value_code}>{rlist[i].value_name}</Option>);
+                    }else if(type=="TagSelect"){
+                        optionlist1.push(<TagSelect.Option value={rlist[i].value_code} key={rlist[i].value_code}>{rlist[i].value_name}</TagSelect.Option>);
+                    }
                 }
-            }
-            var objs= this.state.dictData;
-            if(type=="TagSelect"){
-                objs[dictId]=optionlist1;
-            }else{
-                objs[in_id+dictId]=optionlist1;
-            }
-            this.setState({dictData:objs});
+                var objs= this.state.dictData;
+                if(type=="TagSelect"){
+                    objs[dictId]=optionlist1;
+                }else{
+                    objs[in_id+dictId]=optionlist1;
+                }
+                this.setState({dictData:objs});
+            }    
         });
      }
      //下拉选中事件
