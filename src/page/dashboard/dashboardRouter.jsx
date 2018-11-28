@@ -21,7 +21,7 @@ export default class DashboardRouter extends React.Component {
             <Switch>
                 <Route path="/dashboard/analysis" component={analysis} />
                 <Route path="/dashboard/monitor" component={monitor} />
-                <Route path="/dashboard/DataAnalysis/:qry_id/:class_id" component={DataAnalysis}/>
+                <Route path="/dashboard/DataAnalysis/:qry_id/:class_id/:cube_name" component={DataAnalysis}/>
                 <Route path="/dashboard/DashboardCreator" component={DashboardCreator}/>
                 <Route path="/dashboard/DashboardList" component={DashboardList}/>
                 {/* <Route path="/dashboard/DashboardInfo/:dashboard_id" component={DashboardInfo} /> */}

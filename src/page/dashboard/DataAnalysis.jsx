@@ -8,7 +8,7 @@ import createPlotlyRenderers from 'react-pivottable/PlotlyRenderers';
 //const Plot = createPlotlyComponent(window.Plotly);
 const PlotlyRenderers = createPlotlyRenderers(Plot);
 //const data = [];
-  
+import ReactDOM from 'react-dom';
 import CubeService from '../../service/CubeService.jsx';
 const _cubeService =new CubeService();
 import { Table, Divider,DatePicker,Modal, Icon, Form, Input, TimePicker, Tag,Select,message, Button, Card, 
@@ -31,11 +31,12 @@ class DataAnalysis extends React.Component {
         this.state = {
               qry_id: this.props.match.params.qry_id,
               class_id:this.props.match.params.class_id,
+              cube_name:this.props.match.params.cube_name,
               inList:[], outlist:[],resultList:[],visible: false,
               pageNumd :1,perPaged : 10, searchDictionary :'',totald:0,
               paramValue:'',paramName:'',selectedRowKeys:[],dictionaryList:[],
               baoTitle:"数据列表",loading: false, dictData:{},tagData:{},expand:false,testData:{},
-              data:[],
+              data:[],colunmlist:[],attt:null
             };
     }
     //组件更新时被调用 
@@ -49,10 +50,11 @@ class DataAnalysis extends React.Component {
             this.setState({
                 qry_id:key,
                 class_id:key2,
+                cube_name:nextProps.match.params.cube_name,
                 inList:[], outlist:[],resultList:[],visible: false,
-                pageNumd :1,perPaged : 10, searchDictionary :'',totald:0,
-                paramValue:'',paramName:'',selectedRowKeys:[],dictionaryList:[],
-                baoTitle:"数据列表",loading: false, dictData:{},tagData:{},expand:false,testData:{},data:[],
+                pageNumd :1,perPaged : 10, searchDictionary :'',totald:0,data:[],
+                paramValue:'',paramName:'',selectedRowKeys:[],dictionaryList:[],colunmlist:[],
+                baoTitle:"数据列表",loading: false, dictData:{},tagData:{},expand:false,testData:{},attt:null
             },function(){
                 this.loadDataAnalysis(this.state.qry_id);
             });
@@ -112,7 +114,9 @@ class DataAnalysis extends React.Component {
                 //输出列进行重新组装显示
                 outColumns.map((item,index)=>{
                     outlist.push(item.out_name);
+                    this.state.colunmlist.push(item.out_id);
                 });
+
                 this.state.resultList.push(outlist);
                 this.setState({inList:inlist},function(){});
         });
@@ -156,14 +160,22 @@ class DataAnalysis extends React.Component {
                    if(null==resList || resList.length==0){
                         this.setState({loading:false,data:d2},function(){}); 
                    }else{
-                       
-                        resList.map((item,index)=>{
-                            let dataArr=[];
-                            for(var key in item){  
-                                dataArr.push(item[key]); //json对象的值  
-                            }  
-                            d2.push(dataArr);
-                        });
+                       let colunmlists=this.state.colunmlist;
+                       if(null!=colunmlists && colunmlists.length>0){
+                            resList.map((item,index)=>{
+                                let dataArr=[];
+                                for(var c=0;c<colunmlists.length;c++){
+                                    for(var key in item){
+                                        if(key==colunmlists[c].toUpperCase()){
+                                            dataArr.push(item[key]); //json对象的值
+                                        }
+                                    }
+                                }  
+                                if(null!=dataArr){
+                                    d2.push(dataArr);
+                                }
+                            });
+                        }
                         this.setState({loading:false,data:d2},function(){});                   
                     }
                }else{
@@ -246,20 +258,22 @@ class DataAnalysis extends React.Component {
        _query.getDictionaryList(dictId,page).then(response=>{
            let optionlist1=[];
            let rlist=response.data;
-           for (let i = 0; i < rlist.length; i++) {
-               if(type=="Select"){
-                   optionlist1.push(<Option key={rlist[i].value_code}>{rlist[i].value_name}</Option>);
-               }else if(type=="TagSelect"){
-                   optionlist1.push(<TagSelect.Option value={rlist[i].value_code} key={rlist[i].value_code}>{rlist[i].value_name}</TagSelect.Option>);
-               }
-           }
-           var objs= this.state.dictData;
-           if(type=="TagSelect"){
-               objs[dictId]=optionlist1;
-           }else{
-               objs[in_id+dictId]=optionlist1;
-           }
-           this.setState({dictData:objs});
+           if(undefined!=rlist){
+                for (let i = 0; i < rlist.length; i++) {
+                    if(type=="Select"){
+                        optionlist1.push(<Option key={rlist[i].value_code}>{rlist[i].value_name}</Option>);
+                    }else if(type=="TagSelect"){
+                        optionlist1.push(<TagSelect.Option value={rlist[i].value_code} key={rlist[i].value_code}>{rlist[i].value_name}</TagSelect.Option>);
+                    }
+                }
+                var objs= this.state.dictData;
+                if(type=="TagSelect"){
+                    objs[dictId]=optionlist1;
+                }else{
+                    objs[in_id+dictId]=optionlist1;
+                }
+                this.setState({dictData:objs});
+            }
        });
     }
     //下拉选中事件
@@ -300,26 +314,6 @@ class DataAnalysis extends React.Component {
        });
      };
     
-
-    componentWillMount() {
-    //   this.setState({
-    //           data:data,
-    //           plotlyOptions: {width: 900, height: 500},
-    //           plotlyConfig: {},
-    //           tableOptions: {
-    //               clickCallback: function(e, value, filters, pivotData) {
-    //                   var names = [];
-    //                   pivotData.forEachMatchingRecord(filters, function(
-    //                       record
-    //                   ) {
-    //                       names.push(record.Meal);
-    //                   });
-    //                   console.log(names.join('\n'));
-    //               },
-
-    //       },
-    //   });
-    }
     render() {
         const { getFieldDecorator } = this.props.form;
         const { selectedRowKeys } = this.state;
@@ -467,21 +461,21 @@ class DataAnalysis extends React.Component {
         });
         return (
             <div>
-                <Card bordered={false} title={this.state.baoTitle} extra={ <div>
+                <Card bordered={false} title={this.state.cube_name} extra={ <div>
                             <a onClick={()=>this.execSelect()}>查询 </a>
                             
                         </div>}>
                         {inColumn}
             </Card>
-            <Card title='消费数据多维分析' bodyStyle={{padding:'0px'}}>
+             <div id="example">
                 <PivotTableUI
                     data={this.state.data}
                     renderers={Object.assign({}, TableRenderers, PlotlyRenderers)}
-                    {...this.state}
-                    onChange={s => this.setState(s)}
+                    {...this.state.attt}
+                    onChange={s => this.setState({attt:s})}
                     unusedOrientationCutoff={Infinity}
                 />
-            </Card>
+            </div>
             <div>
                 <Modal  title="字典查询" visible={this.state.visible}  onOk={this.handleOk} onCancel={this.handleCancel}>
                     <Search

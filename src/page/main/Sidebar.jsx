@@ -60,7 +60,7 @@ export default class SiderBar extends React.Component {
                 {
                     obj.cubeList==null?'':obj.cubeList.map(obj2=>(
                         <Menu.Item key={obj2.cube_name+obj2.cube_id} >
-                        <Link to={'/dashboard/DataAnalysis/'+obj2.qry_id+'/'+obj2.class_id}>
+                        <Link to={'/dashboard/DataAnalysis/'+obj2.qry_id+'/'+obj2.class_id+'/'+obj2.cube_name}>
                         <Icon type={obj2.icon==undefined?'table':obj2.icon} /><span>{obj2.cube_name}</span>
                         </Link></Menu.Item>
                     ))
