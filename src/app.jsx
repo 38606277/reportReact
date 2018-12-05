@@ -5,7 +5,8 @@ import { HashRouter as Router, Switch, Redirect, Route} from 'react-router-dom'
 import Loadable from 'react-loadable';
 import loading from './util/loading.jsx'
 import './App.css'
-
+import  LocalStorge         from './util/LogcalStorge.jsx';
+const localStorge = new LocalStorge();
 
 // import Layout from './page/main/Layout.jsx';
 
@@ -105,36 +106,64 @@ function LoadPage(url){
 //         delay:3000
 //     }));
             
-console.log(UserInfo);
 }
 
 class App extends React.Component {
     render() {
-        let LayoutRouter = (
-            <Layout>
-                <Switch>
-                     <Route exact path="/" component={Home} />
-                     <Route path="/dashboard" component={dashboardRouter}/>
-                     <Route path="/task" component={TaskRouter}/>
-                     <Route path="/user" component={UserRouter}/>
-                     <Route path="/dbs" component={DbsRouter}/>
-                     <Route path="/rule" component={RuleRouter}/>
-                     <Route path="/Auth" component={Auth}/>
-                     <Route path="/role" component={RoleRouter}/>
-                     <Route path="/authType" component={AuthTypeRouter}/>
-                     <Route path="/query" component={QueryRouter}/>
-                     <Route path="/dict" component={DictRouter}/>
-                     <Route path="/function" component={FunctionRouter}/>
-                     <Route path="/cube" component={CubeRouter}/>
 
-                </Switch>
-            </Layout>
-        );
+        // let LayoutRouter = (
+        //     <Layout>
+        //                 <Switch>
+        //                     <Route exact path="/" component={Home} />
+        //                     <Route path="/dashboard" component={dashboardRouter}/>
+        //                     <Route path="/task" component={TaskRouter}/>
+        //                     <Route path="/user" component={UserRouter}/>
+        //                     <Route path="/dbs" component={DbsRouter}/>
+        //                     <Route path="/rule" component={RuleRouter}/>
+        //                     <Route path="/Auth" component={Auth}/>
+        //                     <Route path="/role" component={RoleRouter}/>
+        //                     <Route path="/authType" component={AuthTypeRouter}/>
+        //                     <Route path="/query" component={QueryRouter}/>
+        //                     <Route path="/dict" component={DictRouter}/>
+        //                     <Route path="/function" component={FunctionRouter}/>
+        //                     <Route path="/cube" component={CubeRouter}/>
+    
+        //                 </Switch>
+        //             </Layout>
+        // );
+        let LayoutRouter = (nextState, replace) => {
+            if(undefined!=localStorge.getStorage('userInfo') && ''!=localStorge.getStorage('userInfo')){
+                return (
+                    <Layout>
+                        <Switch>
+                            <Route exact path="/" component={Home} />
+                            <Route path="/dashboard" component={dashboardRouter}/>
+                            <Route path="/task" component={TaskRouter}/>
+                            <Route path="/user" component={UserRouter}/>
+                            <Route path="/dbs" component={DbsRouter}/>
+                            <Route path="/rule" component={RuleRouter}/>
+                            <Route path="/Auth" component={Auth}/>
+                            <Route path="/role" component={RoleRouter}/>
+                            <Route path="/authType" component={AuthTypeRouter}/>
+                            <Route path="/query" component={QueryRouter}/>
+                            <Route path="/dict" component={DictRouter}/>
+                            <Route path="/function" component={FunctionRouter}/>
+                            <Route path="/cube" component={CubeRouter}/>
+    
+                        </Switch>
+                    </Layout>
+                );
+            }else{
+                localStorage.setItem('lasurl', nextState.location.pathname);
+              return (<Redirect to="/login"/>);
+            }
+        }
         return (
             <Router>
                 <Switch>
                     <Route path="/login" component={Login} />
-                    <Route path="/" render={props => LayoutRouter} />
+                    <Route path="/" render={LayoutRouter} />
+                    {/* <Route path="/" render={props=>LayoutRouter} /> */}
                 </Switch>
             </Router>
         )
