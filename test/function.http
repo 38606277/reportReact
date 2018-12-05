@@ -1,6 +1,6 @@
 #语音查询
 
-POST http://localhost:8080/reportServer/ai/getResult/查询电讯盈科的供应商信息 HTTP/1.1
+POST http://localhost:80/reportServer/ai/getResult/查询华为的供应商信息 HTTP/1.1
 content-type: application/json
 method: POST
 credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
