@@ -1,59 +1,10 @@
 [
     {
-        "in": [
-            {
-                "field": "begindate",
-                "value": ""
-            },
-            {
-                "enddate": ""
-            },
-            {
-                "org_id": "4324"
-            },
-            {
-                "po_number": ""
-            },
-            {
-                "vendor_name": ""
-            }
-        ]
-    },
-    {
-        "startIndex": 1,
-        "perPage": 10,
-        "searchResult": ""
-    }
-]
-
-[
-    {
-        "in": [
-            {
-                "segment1": ""
-            },
-            {
-                "tax": ""
-            },
-            {
-                "vendor_attribute12": ""
-            },
-            {
-                "vendor_name": "盈科"
-            }
-        ]
-    }
-]
-
-
-[
-    {
         "in": {
-            "begindate": "",
-            "enddate": "",
-            "org_id": "4329",
-            "po_number": "",
-            "vendor_name": ""
+            "segment1": "",
+            "tax": "",
+            "vendor_attribute12": "",
+            "vendor_name": "????"
         }
     },
     {

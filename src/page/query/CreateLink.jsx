@@ -104,7 +104,7 @@ class CreateLink extends React.Component {
   onQryNameSelectChange(value) {
 
     //查询报表名称
-    HttpService.post("reportServer/query/getQueryParamByFuncID/" + value, '')
+    HttpService.post("reportServer/query/getQueryParam/" + value, '')
       .then(res => {
 
         if (res.resultCode == '1000') {
