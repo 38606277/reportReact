@@ -27,8 +27,11 @@ class Login extends React.Component{
     }
     // 当用户名发生改变
     onInputChange(e){
-        let inputValue  = e.target.value,
-            inputName   = e.target.name;
+        if (!e || !(e.target || e.currentTarget)) {
+            return false;
+        }
+        let inputValue  = e.target.value!== undefined ? e.target.value : e.currentTarget.value,
+            inputName   = e.target.name!== undefined ? e.target.name : e.currentTarget.name;
         this.setState({
             [inputName] : inputValue
         });
