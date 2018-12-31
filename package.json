@@ -47,6 +47,7 @@
     "webpack-dev-server": "3.1.5"
   },
   "dependencies": {
+    "@antv/data-set": "^0.10.1",
     "antd": "^3.9.3",
     "bizcharts": "^3.2.4",
     "bizcharts-plugin-slider": "^2.0.3",
@@ -67,6 +68,7 @@
     "react": "16.4.0",
     "react-codemirror": "^1.0.0",
     "react-dom": "16.4.0",
+    "react-fittext": "^1.0.0",
     "react-html-table-to-excel": "^2.0.0",
     "react-loadable": "^5.5.0",
     "react-pivottable": "^0.9.0",
