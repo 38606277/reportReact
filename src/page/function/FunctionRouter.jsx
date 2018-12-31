@@ -12,7 +12,7 @@ const FunctionClass = Loadable({
 });
 
 const functionList = Loadable({
-    loader: () => import('./functionList.jsx'),
+    loader: () => import(/* webpackChunkName: "functionList" */'./functionList.jsx'),
     loading: loading,
     delay:3000
 });

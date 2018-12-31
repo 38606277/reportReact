@@ -154,9 +154,21 @@ export default class DashboardCreator extends React.Component {
         // mod.incCounter();
     }
     
-    drop(ev,index) {console.log(ev);
+    drop(ev, index) {
+        //console.log(props);
+        // alert(ev.dataTransfer.getData("param"));
+        // ev.preventDefault();
+         //let param = ev.dataTransfer.getData("param");
+        // // let aInput = this.state.in[param];
+        // // let t = ev.target.id;
+        // // this.state.in[1] = aInput;
+        // let aIn = this.state.in[param];
+        // let inLayout = this.state.inLayout;
+        // inLayout[colIndex] = aIn;
+        // //com[key] = <Input value="aa" />;
+        // this.setState({ inLayout: inLayout });
+     
             if(index==1){
-                console.log(index);
                 this.setState({ item: this.state.itemChartCard,list:this.state.list },function(){
                     const obj = {
                         id: 0,
@@ -164,18 +176,7 @@ export default class DashboardCreator extends React.Component {
                         age: 12
                    }
                     const objToStr = JSON.stringify(this.state.item)
-                    // let app = React.createClass({
-                    //     render: function() {
-                    //         return objToStr;
-                    //     }
-                    // });
-                   // console.log(app);
-                //  console.log(this.state.item);
-                //    const strToObj = JSON.parse(objToStr);
-                //     this.setState({item4:strToObj},function(){
-                //         console.log(this.state.item4);
-    
-                //     });
+                    
                 });
             }else if(index==2){
                 this.setState({ item2: this.state.itemXian }); console.log(index);
@@ -187,9 +188,11 @@ export default class DashboardCreator extends React.Component {
             
     
     }
-    drag(ev) {
-        console.log(ev);
+    
+    drag(ev,num) {
+        console.log(num);
         ev.dataTransfer.setData("param", ev.target.id);
+        console.log(ev.dataTransfer.getData("param"));
     }
     getProp(index1) {
         console.log(this.refs.index1.props);
@@ -205,16 +208,16 @@ export default class DashboardCreator extends React.Component {
                         <Button style={{ marginRight: "10px" }} type="primary">新增行</Button>
                         <Button style={{ marginRight: "10px" }} type="primary">保存</Button>
                         <Tooltip placement="top" title="指标卡片">
-                            <Button icon="profile"  draggable="true" onDragStart={(event) => this.drag(event)} />
+                            <Button icon="profile"  draggable="true" onDragStart={(event) => this.drag(event,1)} />
                         </Tooltip>
                         <Tooltip placement="top" title="柱状图">
-                            <Button icon="bar-chart" draggable="true" onDragStart={(event) => this.drag(event)} />
+                            <Button icon="bar-chart" draggable="true" onDragStart={(event) => this.drag(event,2)} />
                         </Tooltip>
                         <Tooltip placement="top" title="拆线图">
-                            <Button icon="line-chart"  draggable="true" onDragStart={(event) => this.drag(event)} />
+                            <Button icon="line-chart"  draggable="true" onDragStart={(event) => this.drag(event,3)} />
                         </Tooltip>
                         <Tooltip placement="top" title="饼图">
-                            <Button icon="pie-chart"  draggable="true" onDragStart={(event) => this.drag(event)} />
+                            <Button icon="pie-chart"  draggable="true" onDragStart={(event) => this.drag(event,4)} />
                         </Tooltip>
                         <Tooltip placement="top" title="地图">
                             <Button icon="global" />

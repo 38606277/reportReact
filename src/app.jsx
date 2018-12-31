@@ -145,7 +145,7 @@ class App extends React.Component {
                             <Route path="/Auth" component={Auth}/>
                             <Route path="/role" component={RoleRouter}/>
                             <Route path="/authType" component={AuthTypeRouter}/>
-                            <Route path="/query" component={QueryRouter}/>
+                             <Route path="/query" component={QueryRouter}/>
                             <Route path="/dict" component={DictRouter}/>
                             <Route path="/function" component={FunctionRouter}/>
                             <Route path="/cube" component={CubeRouter}/>
