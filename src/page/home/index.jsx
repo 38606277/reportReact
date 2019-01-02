@@ -9,22 +9,16 @@ import React        from 'react';
 import { Link }     from 'react-router-dom';
 
 class Home extends React.Component{
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state = {
-            userCount       : '-',
-            productCount    : '-',
-            orderCount      : '-'
-        }
-    }
-
-    render(){
-        return (
-            <div id="page-wrapper">
+       
+      }
+    
      
-            </div>
-        );
-    }
+
+    render() {
+      return   <div>欢迎使用数据填报系统</div>;
+   }
 }
 
 export default Home;

@@ -1,135 +1,161 @@
-/*
-* @Author: Rosen
-* @Date:   2018-01-13 11:26:52
-* @Last Modified by:   Rosen
-* @Last Modified time: 2018-02-07 10:35:01
-*/
-const path              = require('path');
-const webpack           = require('webpack');
+const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const devMode = process.env.NODE_ENV !== 'production'
 
-let WEBPACK_ENV = process.env.WEBPACK_ENV || 'dev';
-console.log(WEBPACK_ENV); 
 module.exports = {
-    devtool: 'source-map',
-    entry: './src/app.jsx',
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-        publicPath: WEBPACK_ENV === 'dev' 
-            ? '/dist/' : '//s.jianliwu.com/admin-v2-fe/dist/',
-        filename: 'js/app.js'
+    mode:'production',
+    // devtool: 'source-map',
+    entry: {
+        bundle: path.resolve(__dirname, './src/app.jsx')
+        // //添加要打包在vendor里面的库
+        // vendors: ['react','react-dom','react-router','antd'],
     },
-    // resolve: {
-    //     // alias : {
-    //     //     page        : path.resolve(__dirname, 'src/page'),
-    //     //     component   : path.resolve(__dirname, 'src/component'),
-    //     //     util        : path.resolve(__dirname, 'src/util'),
-    //     //     service     : path.resolve(__dirname, 'src/service')
-    //     // }
-    // },
+    output: {
+        path: path.resolve(__dirname, './build'),
+        filename: '[name].js'
+    },
+    devServer: {
+        port: 8086
+    },
     module: {
         rules: [
-            // react(jsx)语法的处理
-            // react(jsx)语法的处理
             {
                 test: /\.(js|jsx)$/,
                 exclude: /(node_modules)/,
                 use: {
                     loader: 'babel-loader',
                     options: {
-                        babelrc:false,
-                        presets: ['env', 'react','es2015','stage-0'],
+                        babelrc: false,
+                        presets: ['env', 'react', 'es2015', 'stage-0'],
                         plugins: [
                             'syntax-dynamic-import',
-                            ["import", { libraryName: "antd-mobile", style: "css" }]
+                            "transform-decorators-legacy",
+                            ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": "css" }] // `style: true` 会加载 less 
                         ]
 
                     }
                 }
             },
-            // {
-            //     test: /\.jsx$/,
-            //     exclude: /(node_modules)/,
-            //     use: {
-            //         loader: 'babel-loader',
-            //         options: {
-            //             presets: ['env', 'react']
-            //         }
-            //     }
-            // },
-            // css文件的处理
             {
-                test: /\.css$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: "style-loader",
-                    use: "css-loader"
-                })
-            },
-            // sass文件的处理
-            {
-                test: /\.scss$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: ['css-loader', 'sass-loader']
-                })
-            },
-            // 图片的配置
-            {
-                test: /\.(png|jpg|gif)$/,
+                test: /\.(sa|sc|c)ss$/,
                 use: [
+                  devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
+                  'css-loader',
+                  'postcss-loader',
+                  'sass-loader',
+                ],
+              },
+          {
+            test:/\.less$/,
+            use:[
+                // MiniCssExtractPlugin.loader,
+                {
+                    loader: 'style-loader'
+                }, {
+                        loader: "css-loader",
+                        options: { modules: true }
+                    },
                     {
-                        loader: 'url-loader',
-                        options: {
-                            limit: 8192,
-                            name: 'resource/[name].[ext]'
-                        }
+                        loader: "less-loader",
+                        options: { javascriptEnabled: true }
                     }
-                ]
-            },
-            // 字体图标的配置
-            {
-                test: /\.(eot|svg|ttf|woff|woff2|otf)$/,
-                use: [
-                    {
-                        loader: 'url-loader',
-                        options: {
-                            limit: 8192,
-                            name: 'resource/[name].[ext]'
-                        }
+                 ]
+        },
+         
+        //    {
+        //     test: /\.less$/,
+        //     use:ExtractTextPlugin.extract({
+        //         fallback: 'style-loader',
+        //         use: [
+        //             {
+        //                 loader: "css-loader",
+        //                 options: { modules: true }
+        //             },
+        //             {
+        //                 loader: 'postcss-loader'
+        //             },
+        //             {
+        //                 loader: "less-loader",
+        //                 options: { javascriptEnabled: true }
+        //             }
+        //     ]})
+        // },
+        // 图片的配置
+        {
+            test: /\.(png|jpg|gif)$/,
+            use: [
+                {
+                    loader: 'url-loader',
+                    options: {
+                        limit: 8192,
+                        name: 'resource/[name].[ext]'
                     }
-                ]
-            }
+                }
+            ]
+        },
+        // 字体图标的配置
+        {
+            test: /\.(eot|svg|ttf|woff|woff2|otf)$/,
+            use: [
+                {
+                    loader: 'url-loader',
+                    options: {
+                        limit: 8192,
+                        name: 'resource/[name].[ext]'
+                    }
+                }
+            ]
+        }
         ]
     },
+    performance: {
+        hints: false
+    },
+    optimization: {
+        splitChunks: {
+          cacheGroups: {
+            commons: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendors',
+              chunks: 'all'
+            },
+            styles: {
+                name: 'styles',
+                test: /\.css$/,
+                chunks: 'all',
+                enforce: true
+              }
+          }
+        }
+    },
+    // devtool: 'source-map',
     plugins: [
-        // 处理html文件 
+        new webpack.DefinePlugin({//设置成production去除警告
+            'process.env':{
+                NODE_ENV: JSON.stringify("production")
+            }
+        }),
+        new MiniCssExtractPlugin({
+            // Options similar to the same options in webpackOptions.output
+            // both options are optional
+            filename: devMode ? '[name].css' : '[name].[hash].css',
+            chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+          }),
         new HtmlWebpackPlugin({
             template: './src/index.html',
             favicon: './favicon.ico'
         }),
-        // 独立css文件
-        new ExtractTextPlugin("css/[name].css"),
-        // 提出公共模块
-        new webpack.optimize.CommonsChunkPlugin({
-            name : 'common',
-            filename: 'js/base.js'
+        new CleanWebpackPlugin(['dist',
+            'build'], {
+            root:__dirname,
+            verbose: true,
+            dry: false,
+            exclude: ['jslibs']
         })
-    ],
-    devServer: {
-        port: 8086,
-        historyApiFallback: {
-            index: '/dist/index.html'
-        },
-        proxy : {
-            '/manage' : {
-                target: 'http://admintest.happymmall.com',
-                changeOrigin : true
-            },
-            '/user/logout.do' : {
-                target: 'http://admintest.happymmall.com',
-                changeOrigin : true
-            }
-        }
-    }
+    ]
 };
+

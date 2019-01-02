@@ -1,42 +1,15 @@
 [
     {
-        "in_name": "b",
-        "isformula": "false",
-        "datatype": "varchar",
-        "func_id": 36,
-        "dict": "数据字典/会计科目",
-        "in_id": "period_num"
+        "in": {
+            "segment1": "",
+            "tax": "",
+            "vendor_attribute12": "",
+            "vendor_name": "????"
+        }
     },
     {
-        "in_name": "a",
-        "isformula": "false",
-        "datatype": "varchar",
-        "func_id": 36,
-        "dict": "数据字典/查询公司信息",
-        "in_id": "period_year"
-    },
-    {
-        "in_name": "c",
-        "isformula": "false",
-        "datatype": "varchar",
-        "func_id": 36,
-        "dict": "",
-        "in_id": "segment1"
-    },
-    {
-        "in_name": "d",
-        "isformula": "false",
-        "datatype": "varchar",
-        "func_id": 36,
-        "dict": "数据字典/会计科目",
-        "in_id": "segment3"
-    },
-    {
-        "in_name": "e",
-        "isformula": "false",
-        "datatype": "varchar",
-        "func_id": 36,
-        "dict": "数据字典/部门字典",
-        "in_id": "segment5"
+        "startIndex": 1,
+        "perPage": 10,
+        "searchResult": ""
     }
 ]

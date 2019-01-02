@@ -1,6 +1,5 @@
 
 import   HttpService  from '../util/HttpService.jsx';
-const httpService =new HttpService();
 class User{
     // 用户登录
     login(loginInfo){
@@ -32,10 +31,7 @@ class User{
         }
     }
     encodePwd(pwd){
-        return HttpService.post(
-            '/reportServer/user/encodePwd',
-            JSON.stringify({Pwd:pwd})
-        );
+        return HttpService.post('/reportServer/user/encodePwd',pwd);
     }
     // 退出登录
     logout(){
@@ -47,6 +43,12 @@ class User{
             JSON.stringify(listParam)
          );
     }
+    getUserListRole(listParam){
+        return HttpService.post(
+            '/reportServer/formUser/getUserListRole',
+            JSON.stringify(listParam)
+         );
+    }
     getUserInfo(userId){
         return HttpService.post(
             '/reportServer/formUser/getUserInfoByUserId',
@@ -55,10 +57,24 @@ class User{
     }
     saveUserInfo(userInfo){
         if(userInfo._id=='null'){
-             return HttpService.post('/reportServer/formUser/addUser',JSON.stringify(userInfo));
+            return HttpService.post('/reportServer/formUser/addUser',JSON.stringify(userInfo));
         }else{
             return HttpService.post('/reportServer/formUser/updateUser',JSON.stringify(userInfo));
         }
+    }
+    delUser(id){
+        return HttpService.post('/reportServer/formUser/deleteUser',id);
+    }
+    getRoleList(){
+        let url='/reportServer/rule/getRoleList';
+        return HttpService.post(url,{});
+    }
+    getRoleListByUserId(userid){
+        return HttpService.post('reportServer/auth/getRoleListByUserId',JSON.stringify({'userid':userid}));
+    }
+
+    UpdatePwd(userInfo){
+        return HttpService.post('/reportServer/formUser/updatePwd',JSON.stringify(userInfo));
     }
 }
 

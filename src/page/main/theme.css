@@ -1,0 +1,120 @@
+/*----------------------------------------------
+Author : www.webthemez.com
+License: Commons Attribution 3.0
+http://creativecommons.org/licenses/by/3.0/
+------------------------------------------------*/
+
+
+/*----------------------------------------------
+    COMMON  STYLES    
+------------------------------------------------*/
+body {
+    font-family: 'Open Sans', sans-serif;
+    background: #f3f3f3;
+}
+
+#wrapper {
+    width: 100%;
+}
+
+.top-navbar {
+    position: absolute;
+    width: 100%;
+    z-index: 300;
+    -webkit-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow: 0 3px 3px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.05);
+}
+
+.navbar-side {
+    z-index: 1;
+    position: absolute;
+    /* width: 260px; */
+    top: 50px;
+    bottom: 0;
+    /* overflow-y : auto; */
+    background: #ECECEC;
+}
+
+#page-wrapper {
+    /* position: relative;
+    top: 55px; */
+}
+#page-wrapperNew {
+    margin-left:270px;
+    position: relative;
+    top: 55px;
+}
+
+
+/*----------------------------------------------
+   DASHBOARD STYLES    
+------------------------------------------------*/
+.page-header {
+    padding-bottom: 9px;
+    margin: 10px 0 20px;
+    border-bottom: 1px solid transparent;
+}
+
+
+
+/*----------------------------------------------
+    MENU STYLES    
+------------------------------------------------*/
+
+
+.user-image {
+    margin: 25px auto;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    max-height: 170px;
+    max-width: 170px;
+}
+
+.top-navbar {
+    margin: 0px;
+}
+
+
+.navbar-side {
+    border: none;
+}
+
+.top-navbar {
+    background: #fff;
+    border-bottom: none;
+}
+
+
+/*----------------------------------------------
+    MEDIA QUERIES     
+------------------------------------------------*/
+ 
+@media(max-width:768px) {
+
+    .top-navbar{
+        position: relative;
+    }
+    .top-navbar .navbar-brand{
+        width: 100%;
+    }
+    
+
+    .navbar-side {
+        z-index: 1;
+        width: 100%;
+        position: relative;
+        top: 0;
+    }
+    #page-wrapper {
+        /* margin: 0;
+       
+        top: 0; */
+    }
+    #page-wrapperNew {
+        margin: 0;
+        /* padding: 15px 30px; */
+        top: 0;
+    }
+}

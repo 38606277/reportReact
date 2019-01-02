@@ -1,9 +1,11 @@
 .trigger {
     font-size: 18px;
-    line-height: 64px;
+    // line-height: 64px;
     padding-left: 60px ;
     cursor: pointer;
     transition: color .3s;
+    background:transparent;
+    color: #fff;
   }
 .dropdown {
   position: relative;
@@ -31,7 +33,8 @@ a.dropdown-toggle {
   color: #fff;
   box-shadow: none !important;
   height: 50px;
-  font-size: 18px;
+  font-size: 14px;
+  font-weight: 200;
   height: 34px;
   padding: 6px 12px;
   background-color: #fff;

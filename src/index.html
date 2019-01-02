@@ -4,13 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewPort" content="width=device-width,initial-scale=1">
     <meta name="author" content="Rosen">
-    <title>报表平台</title>
+    <title>report</title>
    
     <script type="text/javascript">
         function getServerUrl()
         {
-            var hostname = "http://"+location.hostname+":"+"8080"+"/";
-            return hostname;
+            if(location.hostname)
+            {
+                return "http://"+location.hostname+":"+"80"+"/";
+            }else
+            {
+                return 'http://localhost:80/';
+            }
             // return 'http://localhost:8080/';
         }
         //  alert(getServerUrl());

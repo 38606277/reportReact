@@ -1,0 +1,19 @@
+SELECT
+	ppa.PROJECT_ID project_id ,
+	ppa. NAME name ,
+	ppa.SEGMENT1  segment1,
+	ppa.PROJECT_TYPE project_type ,
+	DATE_FORMAT(ppa.START_DATE,'%Y-%m-%d')   start_date ,
+	DATE_FORMAT(ppa.COMPLETION_DATE,'%Y-%m-%d') completion_date,
+    DATE_FORMAT(ppa.CLOSED_DATE ,'%Y-%m-%d')     closed_date,
+	ppa.PROJECT_STATUS_CODE project_status_code
+FROM
+	pa_projects_all ppa
+WHERE
+1=1
+    <if test="project_code!='' and  project_code!=null">
+and	ppa.SEGMENT1 = #{project_code}</if>
+     <if test="project_type!='' and  project_type!=null">
+AND ppa.PROJECT_TYPE = #{project_type}</if>
+     <if test="project_state!='' and  project_state!=null">
+AND ppa.PROJECT_STATUS_CODE>=#{project_state}</if>

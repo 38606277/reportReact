@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Table, Input, InputNumber, Popconfirm, Form, Select, Icon } from 'antd';
+import { Table, Input, InputNumber, Popconfirm, Form, Select, Icon,Card } from 'antd';
 import { Button } from 'antd/lib/radio';
-import { Card } from 'antd-mobile';
 
 const data = [];
 for (let i = 0; i < 3; i++) {

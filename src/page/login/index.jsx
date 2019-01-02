@@ -7,29 +7,31 @@
 import React        from 'react';
 import User         from '../../service/user-service.jsx'
 import LocalStorge  from '../../util/LogcalStorge.jsx';
-import {Card,Form}       from 'antd';
 
 const localStorge = new LocalStorge();
 const _user = new User();
 
 import './index.scss';
-
+//localStorge.getUrlParam('redirect')
 class Login extends React.Component{
     constructor(props){
         super(props);
         this.state = {
             userCode: '',
             Pwd: '',
-            redirect: localStorge.getUrlParam('redirect') || '/'
+            redirect: localStorge.getStorage('lasurl') || '/'
         }
     }
     componentWillMount(){
-        document.title = '登录 - MMALL ADMIN';
+        document.title = '登录 - report';
     }
     // 当用户名发生改变
     onInputChange(e){
-        let inputValue  = e.target.value,
-            inputName   = e.target.name;
+        if (!e || !(e.target || e.currentTarget)) {
+            return false;
+        }
+        let inputValue  = e.target.value!== undefined ? e.target.value : e.currentTarget.value,
+            inputName   = e.target.name!== undefined ? e.target.name : e.currentTarget.name;
         this.setState({
             [inputName] : inputValue
         });

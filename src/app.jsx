@@ -1,60 +1,169 @@
-/*
-* @Author: Rosen
-* @Date:   2018-01-13 11:27:21
-* @Last Modified by:   Rosen
-* @Last Modified time: 2018-02-05 14:02:20
-*/
-
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter as Router, Switch, Redirect, Route, Link } from 'react-router-dom'
+import { HashRouter as Router, Switch, Redirect, Route} from 'react-router-dom'
 
-// import Layout from 'component/layout/index.jsx';
-import Layout from './page/main/Layout.jsx';
-// // 页面
-import Home from './page/home/index.jsx';
-import ProductRouter from './page/product/router.jsx';
-import Login from './page/login/index.jsx';
-import UserList from './page/user/index.jsx';
-import UserInfo from './page/user/userInfo.jsx';
-import User1 from './page/user/User1.jsx';
-// import ErrorPage from './page/error/index.jsx';
-import functionCreator from './page/function/functionCreator.jsx';
-import functionList from './page/function/functionList.jsx';
-import QueryList from './page/query/QueryList.jsx';
-import EditableTable from './page/function/EditTable.jsx'
-// import NavSide from './component/nav-side/NavSide.jsx';
-// import './App.css'
+import Loadable from 'react-loadable';
+import loading from './util/loading.jsx'
+import './App.css'
+import  LocalStorge         from './util/LogcalStorge.jsx';
+const localStorge = new LocalStorge();
+
+// import Layout from './page/main/Layout.jsx';
+
+const Layout = Loadable({
+    loader: () => import('./page/main/Layout.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const TaskRouter = Loadable({
+    loader: () => import('./page/task/taskrouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const UserRouter = Loadable({
+    loader: () => import('./page/user/router.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const DbsRouter = Loadable({
+    loader: () => import('./page/system/dbs/dbsrouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+const RuleRouter = Loadable({
+    loader: () => import('./page/system/rule/rulerouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const RoleRouter = Loadable({
+    loader: () => import('./page/system/role/rolerouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const Login = Loadable({
+    loader: () => import('./page/login/index.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const Home = Loadable({
+    loader: () => import('./page/home/index.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+
+
+const Auth = Loadable({
+    loader: () => import('./page/user/Auth.jsx'),
+    loading: loading,
+    delay:3000
+});
+const AuthTypeRouter = Loadable({
+    loader: () => import('./page/system/authType/authTypeRouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+
+const DictRouter = Loadable({
+    loader: () => import('./page/dict/DictRouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+const QueryRouter = Loadable({
+    loader: () => import('./page/query/QueryRouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const FunctionRouter = Loadable({
+    loader: () => import('./page/function/FunctionRouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const dashboardRouter = Loadable({
+    loader: () => import('./page/dashboard/dashboardRouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const CubeRouter = Loadable({
+    loader: () => import('./page/cube/cubeRouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+function LoadPage(url){
+//    console.log(Loadable({
+//         loader: () => import(url),
+//         loading: loading,
+//         delay:3000
+//     }));
+            
+}
 
 class App extends React.Component {
-
     render() {
-        let LayoutRouter = (
-            <Layout>
-                <Switch>
-                    <Route exact path="/" component={Home} />
-                     <Route path="/product" component={ProductRouter}/>
-                    {/* <Route path="/product-category" component={ProductRouter}/>           */}
-                     <Route path="/user/index" component={UserList} />
-                    <Route path="/user/userInfo/:userId" component={UserInfo} />
-                    <Route path="/user/User1" component={User1} />
-                    <Route path="/function/EditableTable" component={EditableTable} />
-                    <Route path="/function/functionCreator/:funcid" component={functionCreator} />
-                    <Route path="/function/functionList" component={functionList} />
-                    <Route path="/query/QueryList" component={QueryList} />
-                    {/* <Redirect exact from="/user" to="/user/index" />
-                    <Route component={ErrorPage} /> */}
-                </Switch>
-            </Layout>
-        );
+
+        // let LayoutRouter = (
+        //     <Layout>
+        //                 <Switch>
+        //                     <Route exact path="/" component={Home} />
+        //                     <Route path="/dashboard" component={dashboardRouter}/>
+        //                     <Route path="/task" component={TaskRouter}/>
+        //                     <Route path="/user" component={UserRouter}/>
+        //                     <Route path="/dbs" component={DbsRouter}/>
+        //                     <Route path="/rule" component={RuleRouter}/>
+        //                     <Route path="/Auth" component={Auth}/>
+        //                     <Route path="/role" component={RoleRouter}/>
+        //                     <Route path="/authType" component={AuthTypeRouter}/>
+        //                     <Route path="/query" component={QueryRouter}/>
+        //                     <Route path="/dict" component={DictRouter}/>
+        //                     <Route path="/function" component={FunctionRouter}/>
+        //                     <Route path="/cube" component={CubeRouter}/>
+    
+        //                 </Switch>
+        //             </Layout>
+        // );
+        let LayoutRouter = (nextState, replace) => {
+            if(undefined!=localStorge.getStorage('userInfo') && ''!=localStorge.getStorage('userInfo')){
+                return (
+                    <Layout>
+                        <Switch>
+                            <Route exact path="/" component={Home} />
+                            <Route path="/dashboard" component={dashboardRouter}/>
+                            <Route path="/task" component={TaskRouter}/>
+                            <Route path="/user" component={UserRouter}/>
+                            <Route path="/dbs" component={DbsRouter}/>
+                            <Route path="/rule" component={RuleRouter}/>
+                            <Route path="/Auth" component={Auth}/>
+                            <Route path="/role" component={RoleRouter}/>
+                            <Route path="/authType" component={AuthTypeRouter}/>
+                             <Route path="/query" component={QueryRouter}/>
+                            <Route path="/dict" component={DictRouter}/>
+                            <Route path="/function" component={FunctionRouter}/>
+                            <Route path="/cube" component={CubeRouter}/>
+    
+                        </Switch>
+                    </Layout>
+                );
+            }else{
+                localStorage.setItem('lasurl', nextState.location.pathname);
+              return (<Redirect to="/login"/>);
+            }
+        }
         return (
             <Router>
                 <Switch>
                     <Route path="/login" component={Login} />
-                    {/* <Route path="/NavSide" component={NavSide} /> */}
-                    {/* <Route path="/functionCreator" component={functionCreator}/> */}
-                    {/* <Route path="/user/User1" component={User1}/> */}
-                    <Route path="/" render={props => LayoutRouter} />
+                    <Route path="/" render={LayoutRouter} />
+                    {/* <Route path="/" render={props=>LayoutRouter} /> */}
                 </Switch>
             </Router>
         )

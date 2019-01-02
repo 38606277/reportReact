@@ -18,21 +18,28 @@ export default class LocalStorage {
     // 获取URL参数
     getUrlParam(name){
         // param=123&param1=456
-        let queryString = window.location.search.split('?')[1] || '',
+        let queryString = window.location.href.split('#')[1] || '',
             reg         = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"),
             result      = queryString.match(reg);
-        return result ? decodeURIComponent(result[2]) : null;
+
+            // console.log("/query/QueryClass");
+        return result ? decodeURIComponent(queryString) : null;
     }
     // 本地存储
-    setStorage(name, data) {
-        let dataType = typeof data;
+    setStorage(name, value) {
+        var curTime = new Date().getTime();
+        //localStorage.setItem(key,JSON.stringify({data:value,time:curTime}));
+
+        let dataType = typeof value;
         // json对象
         if (dataType === 'object') {
-            window.localStorage.setItem(name, JSON.stringify(data));
+            window.localStorage.setItem(name, JSON.stringify({data:value,time:curTime}));
+
+           // window.localStorage.setItem(name, JSON.stringify(data));
         }
         // 基础类型
         else if (['number', 'string', 'boolean'].indexOf(dataType) >= 0) {
-            window.localStorage.setItem(name, data);
+            window.localStorage.setItem(name, JSON.stringify({data:value,time:curTime}));
         }
         // 其他不支持的类型
         else {
@@ -42,12 +49,36 @@ export default class LocalStorage {
     // 取出本地存储内容
     getStorage(name) {
         let data = window.localStorage.getItem(name);
-        if (data) {
-            return JSON.parse(data);
+
+        if (data && name!="lasurl") {
+            let exp=1000*60*5*60;//1000*60*5*60
+            let dataObj = JSON.parse(data);
+            let t=new Date().getTime() - dataObj.time;
+            if (t>exp) {
+                window.localStorage.removeItem(name);
+                let lasturl = window.location.href.split('#')[1] || '';
+                window.localStorage.setItem('lasurl', lasturl);
+                alert('登录信息已过期，请重新登录！');
+                return '';
+            }else{
+                //console.log("data="+dataObj.data);
+                //console.log(JSON.parse(dataObj.data));
+                return dataObj.data;
+            }
+        } else {
+            if(null!=data && 'null'!=data && ''!=data){
+                return data;
+            }else{
+                return '';
+            }
         }
-        else {
-            return '';
-        }
+
+        // if (data) {
+        //     return JSON.parse(data);
+        // }
+        // else {
+        //     return '';
+        // }
     }
     // 删除本地存储
     removeStorage(name) {

@@ -1,0 +1,114 @@
+#语音查询
+
+POST http://localhost:80/reportServer/ai/getResult/查询华为的供应商信息 HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+body: {}
+
+#查询所有的数据库链接
+POST http://localhost:8080/reportServer/DBConnection/ListAll HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+body: {}
+
+###登录请求示例
+POST http://localhost:8080/reportServer/user/login HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{ UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+###查询所有的函数
+POST http://localhost:8080/reportServer/function/getAllFunctionName HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+body: {}
+
+
+
+###查询所有的函数类别
+POST http://localhost:8080/reportServer/function1/getAllFunctionClass HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+body: {}
+
+###查询函数用ID
+POST http://localhost:8080/reportServer/function/getFunctionByID/36 HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    func_id:"37"
+}
+###保存一个函数
+POST http://localhost:8080/reportServer/function/saveUserSql HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+  "comment": {
+    "type": "sql",
+    "desc": "bbbb",
+    "db": "jlerp",
+    "in": [
+      {
+        "id": "period_year",
+        "name": "期间",
+        "datatype": "varchar",
+        "dict": "",
+        "default": "",
+        "isformula": "false"
+      },
+      {
+        "id": "period_num",
+        "name": "period_num",
+        "datatype": "varchar",
+        "dict": "",
+        "default": "",
+        "isformula": "false"
+      },
+      {
+        "id": "segment1",
+        "name": "segment1",
+        "datatype": "varchar",
+        "dict": "",
+        "default": "",
+        "isformula": "false"
+      },
+      {
+        "id": "segment3",
+        "name": "segment3",
+        "datatype": "varchar",
+        "dict": "",
+        "default": "",
+        "isformula": "false"
+      },
+      {
+        "id": "segment5",
+        "name": "segment5",
+        "datatype": "varchar",
+        "dict": "",
+        "default": "",
+        "isformula": "false"
+      }
+    ],
+    "out": [
+      {
+        "id": "net_bal",
+        "name": "net_bal",
+        "datatype": "varchar",
+        "link": {}
+      }
+    ]
+  },
+  "cdata": "SELECT\r\n    ifnull(\r\n        sum(\r\n            gb.PERIOD_NET_DR-gb.PERIOD_NET_CR\r\n        ) ,\r\n        0\r\n    ) net_bal\r\nFROM\r\n    gl_bal_${period_year} gb\r\nWHERE 1=1\r\n     <if test=\"period_num!='' \">\r\n   and gb.PERIOD_NUM=${period_num}\r\n</if>\r\n   AND gb.SEGMENT1 like '${segment1}%'\r\n   and gb.segment3 LIKE '${segment3}%'\r\n     <if test=\"segment5!='' \">\r\n   and gb.segment5 LIKE '${segment5}%'\r\n</if>",
+  "namespace": "总账",
+  "id": "a987"
+}
