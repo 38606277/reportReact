@@ -67,6 +67,7 @@ class functionCreator extends React.Component {
             dbList: [],
             funcClassList: [],
         };
+        this.onSaveClick = this.onSaveClick.bind(this);
     }
     componentDidMount() {
 
@@ -121,50 +122,52 @@ class functionCreator extends React.Component {
     //     this.child = ref
     // }
 
-    onSaveClick() {
+    onSaveClick(e) {
         //this.child.setFormValue(res.data.in);
-        let formInfo = this.props.form.getFieldsValue();
-        this.setState({
-            inData: this.inParam.getFormValue(),
-            outData: this.outParam.getFormValue(),
+        e.preventDefault();
+        this.props.form.validateFieldsAndScroll((err, values) => {
+          if (!err) {
+            let formInfo = this.props.form.getFieldsValue();
+            this.setState({
+                inData: this.inParam.getFormValue(),
+                outData: this.outParam.getFormValue(),
+            });
+            formInfo.qry_type='sql';
+            formInfo.qry_sql = this.refs.editorsql.codeMirror.getValue();
+            formInfo.in = this.state.inData;
+            formInfo.out = this.state.outData;
+            console.log(formInfo);
+    
+            if (this.state.action == 'create') {
+                HttpService.post("reportServer/query/createQuery", JSON.stringify(formInfo))
+                    .then(res => {
+                        if (res.resultCode == "1000") {
+                            message.success('创建成功！');
+                            this.setState({action:'update'});
+                            this.props.form.setFieldsValue({qry_id:res.data});
+                        }
+                        else
+                            message.error(res.message);
+                    });
+    
+            } else if (this.state.action == 'update') {
+                HttpService.post("reportServer/query/updateQuery", JSON.stringify(formInfo))
+                    .then(res => {
+                        if (res.resultCode == "1000") {
+                            message.success(`更新成功！`)
+                        }
+                        else
+                            message.error(res.message);
+                    });
+            }
+          }
         });
-        formInfo.qry_type='sql';
-        formInfo.qry_sql = this.refs.editorsql.codeMirror.getValue();
-        formInfo.in = this.state.inData;
-        formInfo.out = this.state.outData;
-        console.log(formInfo);
-
-        if (this.state.action == 'create') {
-            HttpService.post("reportServer/query/createQuery", JSON.stringify(formInfo))
-                .then(res => {
-                    if (res.resultCode == "1000") {
-                        message.success('创建成功！');
-                        this.setState({action:'update'});
-                        this.props.form.setFieldsValue({qry_id:res.data});
-                    }
-                    else
-                        message.error(res.message);
-
-                });
-
-        } else if (this.state.action == 'update') {
-            HttpService.post("reportServer/query/updateQuery", JSON.stringify(formInfo))
-                .then(res => {
-                    if (res.resultCode == "1000") {
-                        message.success(`更新成功！`)
-                    }
-                    else
-                        message.error(res.message);
-
-                });
-
-
-        }
-
+        
     }
 
 
     onGenerateClick() {
+       
         let aSQL = this.refs.editorsql.codeMirror.getValue();
 
         functionService.getSqlInOut(aSQL)
@@ -263,13 +266,14 @@ class functionCreator extends React.Component {
                             SQL <Icon type="down" />
                         </Button>
                     </Dropdown>}>
-                    <Form layout="inline">
+                    <Form layout="inline" onSubmit={this.onSaveClick}>
                         <Row gutter={0}>
                             <Col span={10}>
                                 <Card bodyStyle={{ padding: '8px' }} >
                                     <div>
                                         <Button type="primary" icon="tool" onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成查询</Button>
-                                        <Button icon="save" onClick={() => this.onSaveClick()} style={{ marginRight: "10px" }} >保存</Button>
+                                        {/* <Button icon="save" onClick={() => this.onSaveClick(e)} style={{ marginRight: "10px" }} >保存</Button> */}
+                                        <Button type="primary" htmlType="submit" style={{ marginRight: "10px" }}>保存</Button>
                                         <Button icon="list" onClick={() => window.location = '#/query/QueryList'} style={{ marginRight: "10px" }}   >退出</Button>
                                     </div>
                                     <Divider style={{ margin: "8px 0 8px 0" }} />
