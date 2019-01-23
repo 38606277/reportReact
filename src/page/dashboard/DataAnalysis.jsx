@@ -360,7 +360,7 @@ class DataAnalysis extends React.Component {
             const rc= item.map((record, index)=> {
                 if(record.render=='Input'){
                     return (
-                        <Col span={12} key={record.qry_id+index}>
+                        <Col xs={24} sm={12} key={record.qry_id+index}>
                         <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name} >
                             {getFieldDecorator(record.in_id, {
                                 rules: [{required: false,message: `参数名是必须的！`,}]
@@ -372,7 +372,7 @@ class DataAnalysis extends React.Component {
                     );
                 }else if(record.render=='InputButton'){
                     return (
-                        <Col span={12} key={record.qry_id+index}>
+                        <Col xs={24} sm={12} key={record.qry_id+index}>
                         <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name} >
                             {getFieldDecorator(record.in_id, {
                                 rules: [{required: false,message: `参数名是必须的！`,}]
@@ -387,7 +387,7 @@ class DataAnalysis extends React.Component {
                     );
                 }else if(record.render=='Select'){
                     return (
-                        <Col span={12} key={record.qry_id+index}>
+                        <Col xs={24} sm={12} key={record.qry_id+index}>
                         <FormItem {...formItemLayout} label={record.in_name}>
                         {getFieldDecorator(record.in_id, {
                             // rules: [{ required: false, message: '请输入参数!', whitespace: true }],
@@ -417,7 +417,7 @@ class DataAnalysis extends React.Component {
                     );      
                 }else if(record.render=='Checkbox'){
                     return (
-                        <Col span={12} key={record.qry_id+index}>
+                        <Col xs={24} sm={12} key={record.qry_id+index}>
                         <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name}>
                         {getFieldDecorator(record.in_id,{
                             initialValue: '0',rules: [{required: false,message: `参数名是必须的！`, }]
@@ -429,7 +429,7 @@ class DataAnalysis extends React.Component {
                     );
                 }else if(record.render=='Datepicker'){
                     return (
-                        <Col span={12} key={record.qry_id+index}>
+                        <Col xs={24} sm={12} key={record.qry_id+index}>
                         <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name}>
                         {getFieldDecorator(record.in_id, {
                             rules: [{required: false,message: `参数名是必须的！`,}]
@@ -442,7 +442,7 @@ class DataAnalysis extends React.Component {
                     );
                 }else{
                     return (
-                        <Col span={12} key={record.qry_id+index}>
+                        <Col xs={24} sm={12} key={record.qry_id+index}>
                         <FormItem style={{ margin: 0 }} {...formItemLayout}  label={record.in_name} >
                             {getFieldDecorator(record.in_id, {
                                 rules: [{required: false,message: `参数名是必须的！`,}]
