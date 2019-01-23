@@ -87,7 +87,7 @@ body {
 }
 
 .top-navbar {
-  background: #fff;
+  background: #2f96e2;
   border-bottom: none;
 }
 
@@ -125,9 +125,9 @@ body {
 }
 @media(max-width:561px) {
 
-  .top-navbar{
-      position: relative;
-  }
+  // .top-navbar{
+  //     position: relative;
+  // }
   .top-navbar .navbar-brand{
       width: 100%;
   }
