@@ -3,7 +3,7 @@ import React from 'react';
 // import 'antd/lib/layout/style/css';        // 加载 CSS
 import Loadable from 'react-loadable';
 import loading from '../../util/loading.jsx'
-import './theme.css';
+import './Layout.scss';
 const SiderBar = Loadable({
     loader: () => import('./SideBar.jsx'),
     loading: loading,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import {  Avatar, Icon, Tooltip, Button, Card, Popover } from 'antd';
-import './Layout.scss';
+//import './Layout.scss';
 import LocalStorge from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
 import logo from '../../asset/logo.png'
@@ -189,7 +189,7 @@ export default class TopBar extends React.Component {
 
                         <a href="javascript:;">
                             <img alt="logo" style={{ width: '30px', height: '30px' }} src={logo} />
-                            <span style={{ marginLeft: "15px", color: "#ffffff", fontSize: "18px", fontWeight: "600" }}>财务报表平台</span>
+                            <span  className="logodiv">财务报表平台</span>
                         </a>
                         {/* <Button type="primary" onClick={this.toggleCollapsed} style={{ marginBottom: 16, marginLeft: 20 }}>
                             <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} />
