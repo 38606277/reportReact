@@ -192,7 +192,7 @@ handleSubmit (e) {
         <Card title={this.state._id=='null' ?'新建用户':'编辑用户'}>
         <Form onSubmit={this.handleSubmit}>
         <Row>
-             <Col span={12}>
+             <Col xs={24} sm={12}>
                   <FormItem {...formItemLayout} label="用户名">
                     {getFieldDecorator('userName', {
                       rules: [{required: true, message: '请输入用户名!'}],
@@ -201,7 +201,7 @@ handleSubmit (e) {
                     )}
                   </FormItem>
               </Col>
-              <Col span={12}>
+              <Col xs={24} sm={12}>
                   <FormItem {...formItemLayout} label='用户编号' >
                     {getFieldDecorator('userId', {
                       rules: [{ required: true, message: '请输入用户编号!', whitespace: true }],
@@ -213,7 +213,7 @@ handleSubmit (e) {
           </Row> 
           <Row>
               
-              <Col span={12}>
+              <Col xs={24} sm={12}>
                   <FormItem  {...formItemLayout}  label="密码" hideRequiredMark='true'>
                     {getFieldDecorator('encryptPwd', {
                       rules: [{
@@ -242,7 +242,7 @@ handleSubmit (e) {
               </Col>
                </Row>
           <Row>
-              <Col span={12}>
+              <Col xs={24} sm={12}>
                   <FormItem {...formItemLayout} label='用户归属' >
                     <Select  name='regisType' value={this.state.regisType.toString()}  style={{ width: 120 }} onChange={(value) =>this.onSelectChange('regisType',value)}>
                         <Option value='erp' >ERP用户</Option>
@@ -253,7 +253,7 @@ handleSubmit (e) {
                   </FormItem>
               </Col>
 
-              <Col span={12}> 
+              <Col xs={24} sm={12}> 
                   <FormItem {...formItemLayout} label='用户角色'>
                         {/* <Select  name='isAdmin' value={this.state.isAdmin.toString()}  style={{ width: 120 }} onChange={(value) =>this.onSelectChange('isAdmin',value)}>
                           <Option value='0' >普通员工</Option>
@@ -277,7 +277,7 @@ handleSubmit (e) {
               </Col>
           </Row>
           <Row>
-              <Col span={12}> 
+              <Col xs={24} sm={12}> 
           <FormItem {...formItemLayout} label='开始时间'>
               {getFieldDecorator('startDate',{
                 rules:[{required: true, message: '请选择开始时间!'}],
@@ -286,7 +286,7 @@ handleSubmit (e) {
               )}
           </FormItem>
         </Col>
-        <Col span={12} > 
+        <Col xs={24} sm={12} > 
         
            <FormItem {...formItemLayout} label='失效时间'>
               {getFieldDecorator('endDate',{
@@ -298,7 +298,7 @@ handleSubmit (e) {
           </Col>
           </Row>
           <Row>
-              <Col span={12}>  
+              <Col xs={24} sm={12}>  
                 <FormItem {...formItemLayout} label='备注'>
                   {getFieldDecorator('description', {
                         rules: [{ required: true, message: '请输入备注!'}],
@@ -307,7 +307,7 @@ handleSubmit (e) {
                   )} 
             </FormItem>
             </Col>
-            <Col span={12}> </Col>
+            <Col xs={24} sm={12}> </Col>
           </Row>
           <FormItem {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">保存</Button>
