@@ -118,7 +118,7 @@ class Auth extends React.Component {
 
 
                         </Col>
-                        <Col span={12}>
+                        <Col xs={24} sm={12}>
                             <Card>
                             <Tree
                                 checkable

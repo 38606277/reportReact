@@ -192,7 +192,7 @@ class CubeInfo extends React.Component{
         <Card title={this.state.cube_id=='null' ?'新建':'编辑'}>
         <Form onSubmit={this.handleSubmit}>
         <Row>
-             <Col span={12}>
+             <Col xs={24} sm={12}>
                   <FormItem {...formItemLayout} label="名称">
                     {getFieldDecorator('cube_name', {
                       rules: [{required: true, message: '请输入名称!'}],
@@ -201,7 +201,7 @@ class CubeInfo extends React.Component{
                     )}
                   </FormItem>
               </Col>
-              <Col span={12}>
+              <Col xs={24} sm={12}>
                 <FormItem {...formItemLayout} label="描述">
                     {getFieldDecorator('cube_desc', {
                       rules: [{required: true, message: '请输入描述!'}],
@@ -212,7 +212,7 @@ class CubeInfo extends React.Component{
               </Col>
           </Row> 
           <Row>
-          <Col span={12}>
+          <Col xs={24} sm={12}>
                 <FormItem {...formItemLayout} label="Qry_ID">
                     {getFieldDecorator('qry_id', {
                       rules: [{required: true, message: '请输入描述!'}],
@@ -222,7 +222,7 @@ class CubeInfo extends React.Component{
                     )}
                   </FormItem>
               </Col>
-              <Col span={12}>
+              <Col xs={24} sm={12}>
                 <FormItem {...formItemLayout} label="class_name">
                     {getFieldDecorator('class_name', {
                      // rules: [{required: true, message: '请输入描述!'}],
@@ -233,7 +233,7 @@ class CubeInfo extends React.Component{
               </Col>
           </Row> 
           <Row>
-            <Col span={12}>
+            <Col xs={24} sm={12}>
                 <FormItem {...formItemLayout} label="SQL">
                     {getFieldDecorator('cube_sql', {
                       rules: [{required: true, message: '请输入SQL!'}],

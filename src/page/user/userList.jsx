@@ -105,7 +105,7 @@ class UserList extends React.Component{
             title: '描述',
             dataIndex: 'description',
             key: 'description',
-            width:'200px'
+            maxWidth:'200px'
           },{
             title:'角色',
             dataIndex:'isAdminText',
@@ -143,7 +143,7 @@ class UserList extends React.Component{
                 <Row>
                     <Col xs={24} sm={12}> 
                     <Search
-                        style={{ width: 300,marginBottom:'10px' }}
+                        style={{ maxWidth: 300,marginBottom:'10px' }}
                         placeholder="请输入..."
                         enterButton="查询"
                         onSearch={value => this.onSearch(value)}

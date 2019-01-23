@@ -107,7 +107,7 @@ handleSubmit (e) {
         <Card title='修改密码'>
         <Form onSubmit={this.handleSubmit}>
         <Row>
-             <Col span={12}>
+             <Col xs={24} sm={12}>
                   <FormItem {...formItemLayout} label="请输入原密码">
                     {getFieldDecorator('oldPwd', {
                       rules: [{required: true, message: '请输入原密码!'}],
@@ -119,7 +119,7 @@ handleSubmit (e) {
           </Row>
           <Row>
               
-              <Col span={12}>
+              <Col xs={24} sm={12}>
                   <FormItem  {...formItemLayout}  label="新密码" hideRequiredMark='true'>
                     {getFieldDecorator('encryptPwd', {
                       rules: [{
@@ -134,7 +134,7 @@ handleSubmit (e) {
               </Col>
          </Row>
          <Row>
-              <Col span={12}> 
+              <Col xs={24} sm={12}> 
                   <FormItem {...formItemLayout}  label="确认新密码" >
                     {getFieldDecorator('confirm', {
                       rules: [{

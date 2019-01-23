@@ -7,7 +7,7 @@
 import React from 'react';
 import { Link }             from 'react-router-dom';
 import Pagination           from 'antd/lib/pagination';
-import {Table,Divider,Button,Card, Tooltip,Input, Form,Spin}  from 'antd';
+import {Table,Divider,Button,Card, Tooltip,Input, Form,Spin,Row,Col}  from 'antd';
 import CubeService from '../../service/CubeService.jsx';
 const _cubeService = new CubeService();
 const Search = Input.Search;
@@ -123,7 +123,7 @@ export default class CubeList extends React.Component {
             <div id="page-wrapper">
             <Spin  spinning={this.state.loading} delay={100}>
             <Card title="多维列表">
-                <Tooltip>
+                {/* <Tooltip>
                      <Search
                         style={{ width: 300,marginBottom:'10px' }}
                         placeholder="请输入..."
@@ -133,8 +133,21 @@ export default class CubeList extends React.Component {
                 </Tooltip>
                 <Tooltip>
                     <Button href="#/cube/cubeInfo/null" style={{ float: "right", marginRight: "30px" }} type="primary">新建</Button>
-                </Tooltip>
-                
+                </Tooltip> */}
+                <Row>
+                    <Col xs={24} sm={12}>
+                    <Search
+                        style={{ maxWidth: 300,marginBottom:'10px' }}
+                        placeholder="请输入..."
+                        enterButton="查询"
+                        onSearch={value => this.onSearch(value)}
+                        />
+                     </Col>
+                     <Col xs={24} sm={12}>
+                     <Button href="#/cube/cubeInfo/null" style={{ float: "right", marginRight: "30px" }} type="primary">新建</Button>
+
+                     </Col> 
+                     </Row>
                 <Table dataSource={dataSource} columns={columns}  pagination={false}/>
                  <Pagination current={this.state.pageNum} 
                     total={this.state.total} 

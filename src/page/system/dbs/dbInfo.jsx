@@ -129,7 +129,7 @@ handleSubmit (e) {
         <Card title={this.state._name=='null' ?'新建连接':'编辑连接'}>
         <Form onSubmit={this.handleSubmit}>
         <Row>
-             <Col span={12}>
+             <Col xs={24} sm={12}>
                   <FormItem {...formItemLayout} label="连接名称">
                     {getFieldDecorator('name', {
                       rules: [{required: true, message: '请输入连接名称!'}],
@@ -138,7 +138,7 @@ handleSubmit (e) {
                     )}
                   </FormItem>
               </Col>
-              <Col span={12}>
+              <Col xs={24} sm={12}>
                   <FormItem {...formItemLayout} label='数据库类型' >
                   {getFieldDecorator('dbtype', {
                           rules: [{ required: true, message: '请选择数据库类型!', whitespace: true }],
@@ -154,7 +154,7 @@ handleSubmit (e) {
               </Col>
           </Row> 
          <Row>
-            <Col span={12}>
+            <Col xs={24} sm={12}>
                       <FormItem {...formItemLayout} label='驱动类型' >
                         {getFieldDecorator('driver', {
                           rules: [{ required: true, message: '请输入驱动类型!', whitespace: true }],
@@ -165,7 +165,7 @@ handleSubmit (e) {
               </Col>
               
 
-              <Col span={12}> 
+              <Col xs={24} sm={12}> 
                   <FormItem {...formItemLayout} label='地址'>
                         {getFieldDecorator('url', {
                           rules: [{ required: true, message: '请输入驱动类型!', whitespace: true }],
@@ -176,7 +176,7 @@ handleSubmit (e) {
               </Col>
           </Row>
           <Row>
-              <Col span={12}> 
+              <Col xs={24} sm={12}> 
                    <FormItem {...formItemLayout} label='用户名'>
                         {getFieldDecorator('username', {
                           rules: [{ required: true, message: '请输入用户名!', whitespace: true }],
@@ -185,7 +185,7 @@ handleSubmit (e) {
                         )}
                       </FormItem>
         </Col>
-        <Col span={12} > 
+        <Col xs={24} sm={12} > 
         
                     <FormItem {...formItemLayout} label='密码'>
                         {getFieldDecorator('password', {

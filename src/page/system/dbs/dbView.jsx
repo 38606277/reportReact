@@ -63,13 +63,13 @@ class DbView extends React.Component{
         <Card title='查看连接'>
         <Form onSubmit={this.handleSubmit}>
         <Row>
-             <Col span={12}>
+             <Col xs={24} sm={12}>
                   <FormItem {...formItemLayout} label="连接名称">
                    
                       {this.state.name}
                   </FormItem>
               </Col>
-              <Col span={12}>
+              <Col xs={24} sm={12}>
                   <FormItem {...formItemLayout} label='连接类型' >
                    
                       {this.state.dbtype}
@@ -77,13 +77,13 @@ class DbView extends React.Component{
               </Col>
           </Row> 
           <Row>
-             <Col span={12}>
+             <Col xs={24} sm={12}>
                   <FormItem {...formItemLayout} label="驱动类型">
                    
                       {this.state.driver}
                   </FormItem>
               </Col>
-              <Col span={12}>
+              <Col xs={24} sm={12}>
                   <FormItem {...formItemLayout} label='地址' >
                    
                       {this.state.url}
@@ -91,13 +91,13 @@ class DbView extends React.Component{
               </Col>
           </Row>
           <Row>
-             <Col span={12}>
+             <Col xs={24} sm={12}>
                   <FormItem {...formItemLayout} label="用户名">
                    
                       {this.state.username}
                   </FormItem>
               </Col>
-              <Col span={12}>
+              <Col xs={24} sm={12}>
                   <FormItem {...formItemLayout} label='密码' >
                    
                       {this.state.password}

@@ -3,7 +3,7 @@ import React                from 'react';
 import { Link }             from 'react-router-dom';
 import Role                 from '../../../service/RoleService.jsx';
 import Pagination           from 'antd/lib/pagination';
-import {Table,Divider,Button,Card, Tooltip,Input, Form}  from 'antd';
+import {Table,Divider,Button,Card, Tooltip,Input, Form,Row,Col}  from 'antd';
 import  LocalStorge         from '../../../util/LogcalStorge.jsx';
 const FormItem = Form.Item;
 const localStorge = new LocalStorge();
@@ -127,7 +127,7 @@ class RoleList extends React.Component{
         return (
             <div id="page-wrapper">
             <Card title="角色列表">
-                <Tooltip>
+                {/* <Tooltip>
                      <Search
                         style={{ width: 300,marginBottom:'10px' }}
                         placeholder="请输入..."
@@ -137,8 +137,21 @@ class RoleList extends React.Component{
                 </Tooltip>
                 <Tooltip>
                     <Button href="#/role/roleInfo/null" style={{ float: "right", marginRight: "30px" }} type="primary">新建角色</Button>
-                </Tooltip>
-                
+                </Tooltip> */}
+                <Row>
+                    <Col xs={24} sm={12}>
+                    <Search
+                        style={{ maxWidth: 300,marginBottom:'10px' }}
+                        placeholder="请输入..."
+                        enterButton="查询"
+                        onSearch={value => this.onSearch(value)}
+                        />
+                     </Col>
+                     <Col xs={24} sm={12}>
+                     <Button href="#/role/roleInfo/null" style={{ float: "right", marginRight: "30px" }} type="primary">新建角色</Button>
+
+                     </Col> 
+                     </Row>    
                 <Table dataSource={dataSource} columns={columns}  pagination={false}/>
                  <Pagination current={this.state.pageNum} 
                     total={this.state.total} 

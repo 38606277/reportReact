@@ -116,7 +116,7 @@ class RoleInfo extends React.Component{
         <Card title={this.state._id=='null' ?'新建角色':'编辑角色'}>
         <Form onSubmit={this.handleSubmit}>
         <Row>
-             <Col span={12}>
+             <Col xs={24} sm={12}>
                   <FormItem {...formItemLayout} label="角色名称">
                     {getFieldDecorator('roleName', {
                       rules: [{required: true, message: '请输入角色名称!'}],
@@ -125,7 +125,7 @@ class RoleInfo extends React.Component{
                     )}
                   </FormItem>
               </Col>
-              <Col span={12}>
+              <Col xs={24} sm={12}>
               <FormItem {...formItemLayout} label='是否启用' >
                     <Select  name='enabled' value={this.state.enabled.toString()}  style={{ width: 120 }} onChange={(value) =>this.onSelectChange('enabled',value)}>
                         <Option value='1' >启用</Option>

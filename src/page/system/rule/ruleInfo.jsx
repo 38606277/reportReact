@@ -648,7 +648,7 @@ class RuleInfo extends React.Component{
             <Card title="角色列表"  style={{float:"left",width:"20%"}}>
                 <Tooltip>
                     <Search
-                        style={{ width: 190,marginBottom:'10px' ,marginLeft: '-20px', marginRight: '-30px', border: '0'}}
+                        style={{ maxWidth: 190,marginBottom:'10px' ,marginLeft: '-20px', marginRight: '-30px', border: '0'}}
                         placeholder={this.state.roleName==''?'请输入...':this.state.roleName}
                         enterButton="查询"
                         onSearch={value => this.onSearch(value)}

@@ -115,7 +115,7 @@ handleSubmit (e) {
         <Card title={this.state.authtype_id=='null' ?'新增权限类型':'编辑权限类型'}>
         <Form onSubmit={this.handleSubmit}>
         <Row>
-             <Col span={12}>
+             <Col xs={24} sm={12}>
                   <FormItem {...formItemLayout} label="权限类型名称">
                     {getFieldDecorator('authtype_name', {
                       rules: [{required: true, message: '请输入权限类型名称!'}],
@@ -124,7 +124,7 @@ handleSubmit (e) {
                     )}
                   </FormItem>
               </Col>
-              <Col span={12}>
+              <Col xs={24} sm={12}>
                   <FormItem {...formItemLayout} label='权限类型描述' >
                        {getFieldDecorator('authtype_desc', {
                           rules: [{ required: true, message: '请输入权限类型描述!', whitespace: true }],
@@ -135,7 +135,7 @@ handleSubmit (e) {
               </Col>
           </Row> 
          <Row>
-            <Col span={12}>
+            <Col xs={24} sm={12}>
                       <FormItem {...formItemLayout} label='权限类型分类' >
                         {getFieldDecorator('authtype_class', {
                           rules: [{ required: true, message: '请输入权限类型分类!', whitespace: true }],
@@ -146,7 +146,7 @@ handleSubmit (e) {
               </Col>
               
 
-              <Col span={12}> 
+              <Col xs={24} sm={12}> 
                   <FormItem {...formItemLayout} label='用户实体'>
                         {getFieldDecorator('use_object', {
                           rules: [{ required: true, message: '请输入用户实体!', whitespace: true }],
@@ -157,7 +157,7 @@ handleSubmit (e) {
               </Col>
           </Row>
           <Row>
-              <Col span={12}> 
+              <Col xs={24} sm={12}> 
                    <FormItem {...formItemLayout} label='数据库'>
                    {getFieldDecorator('auth_db', {
                           rules: [{ required: true, message: '请输入数据库!', whitespace: true }],
@@ -174,7 +174,7 @@ handleSubmit (e) {
                        
                       </FormItem>
         </Col>
-        <Col span={12} > 
+        <Col xs={24} sm={12} > 
         
         <FormItem {...formItemLayout} label='权限名称'>
               {getFieldDecorator('auth_name', {
@@ -186,7 +186,7 @@ handleSubmit (e) {
           </Col>
           </Row>
          <Row>
-           <Col  span={12}>
+           <Col  xs={24} sm={12}>
          <FormItem {...formItemLayout} label='Sql'>
                         {getFieldDecorator('auth_sql', {
                           rules: [{ required: true, message: '请输入Sql!', whitespace: true }],

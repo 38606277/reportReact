@@ -72,13 +72,13 @@ class UserView extends React.Component{
         <Card title='查看用户'>
         <Form onSubmit={this.handleSubmit}>
         <Row>
-             <Col span={12}>
+             <Col xs={24} sm={12}>
                   <FormItem {...formItemLayout} label="用户名">
                    
                       {this.state.userName}
                   </FormItem>
               </Col>
-              <Col span={12}>
+              <Col xs={24} sm={12}>
                   <FormItem {...formItemLayout} label='用户编号' >
                    
                       {this.state.userId}
@@ -87,7 +87,7 @@ class UserView extends React.Component{
           </Row> 
            
           <Row>
-              <Col span={12}>
+              <Col xs={24} sm={12}>
                   <FormItem {...formItemLayout} label='用户归属' >
                     <Select  name='regisType' value={this.state.regisType.toString()}  style={{ width: 120 }} disabled>
                         <Option value='erp' >ERP用户</Option>
@@ -98,7 +98,7 @@ class UserView extends React.Component{
                   </FormItem>
               </Col>
 
-              <Col span={12}> 
+              <Col xs={24} sm={12}> 
                   <FormItem {...formItemLayout} label='用户角色'>
                         <Select  name='isAdmin' value={this.state.isAdmin.toString()}  style={{ width: 120 }} disabled>
                           <Option value='0' >普通员工</Option>
@@ -109,13 +109,13 @@ class UserView extends React.Component{
               </Col>
           </Row>
           <Row>
-              <Col span={12}> 
+              <Col xs={24} sm={12}> 
           <FormItem {...formItemLayout} label='开始时间'>
               
                 {this.state.startDate}
           </FormItem>
         </Col>
-        <Col span={12} > 
+        <Col xs={24} sm={12} > 
         
            <FormItem {...formItemLayout} label='失效时间'>
            {this.state.endDate}
@@ -124,14 +124,14 @@ class UserView extends React.Component{
           </Col>
           </Row>
           <Row>
-              <Col span={12}>  
+              <Col xs={24} sm={12}>  
                 <FormItem {...formItemLayout} label='备注'>
                   
                       <TextArea  type='text' name='description' value={this.state.description} disabled></TextArea>
                   
             </FormItem>
             </Col>
-            <Col span={12}> </Col>
+            <Col xs={24} sm={12}> </Col>
           </Row>
           <FormItem {...tailFormItemLayout}>
           <Button href="#/user/userList"  type="primary">返回</Button>
