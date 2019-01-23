@@ -18,6 +18,29 @@ export default class TopBar extends React.Component {
         };
 
     }
+    componentDidMount() {
+        window.addEventListener('resize', this.handleResize.bind(this)) //监听窗口大小改变
+
+    }
+    componentWillUnmount() { //一定要最后移除监听器，以防多个组件之间导致this的指向紊乱
+        window.removeEventListener('resize', this.handleResize.bind(this))
+    }
+    //监听浏览器窗口大小 
+    handleResize = e => {
+        if(e.target.innerWidth<=561){
+            this.setState({
+                collapsed: true,
+            },function(){
+                this.props.callbackParent(this.state.collapsed);
+            });
+        }else{
+            this.setState({
+                collapsed: false,
+            },function(){
+                this.props.callbackParent(this.state.collapsed);
+            });
+        }
+    }
     hide = () => {
         this.setState({
             visible: false,
