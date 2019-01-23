@@ -3,7 +3,7 @@ import React                from 'react';
 import { Link }             from 'react-router-dom';
 import User                 from '../../service/user-service.jsx';
 import Pagination           from 'antd/lib/pagination';
-import {Table,Divider,Button,Card, Tooltip,Input}  from 'antd';
+import {Table,Divider,Button,Card, Tooltip,Input,Row,Col}  from 'antd';
 import  LocalStorge         from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
 const _user = new User();
@@ -129,7 +129,7 @@ class UserList extends React.Component{
         return (
             <div id="page-wrapper">
             <Card title="用户列表">
-                <Tooltip>
+                {/* <Tooltip>
                      <Search
                         style={{ width: 300,marginBottom:'10px' }}
                         placeholder="请输入..."
@@ -139,8 +139,21 @@ class UserList extends React.Component{
                 </Tooltip>
                 <Tooltip>
                     <Button href="#/user/userInfo/null" style={{ float: "right", marginRight: "30px" }} type="primary">新建用户</Button>
-                </Tooltip>
-                
+                </Tooltip> */}
+                <Row>
+                    <Col xs={24} sm={12}> 
+                    <Search
+                        style={{ width: 300,marginBottom:'10px' }}
+                        placeholder="请输入..."
+                        enterButton="查询"
+                        onSearch={value => this.onSearch(value)}
+                        />
+                    </Col>
+                    <Col xs={24} sm={12}>
+                    <Button href="#/user/userInfo/null" style={{ float: "right", marginRight: "30px" }} type="primary">新建用户</Button>
+
+                    </Col>
+                </Row>
                 <Table dataSource={dataSource} columns={columns}  pagination={false}/>
                  <Pagination current={this.state.pageNum} 
                     total={this.state.total} 
