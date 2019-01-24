@@ -1,0 +1,12 @@
+1---------------antd checkbox 的使用方法-----------------------
+getFieldDecorator('cached', {
+    valuePropName: 'checked'
+})(
+    <Checkbox />
+)
+antd控件返回true,false
+mysql中设置为tinyint
+java中create,update方法设置jsonFunc.getIntValue                                                    
+
+2--------------解决内存溢出的办法-------------------
+ "dev": "node_modules/.bin/webpack-dev-server --max_old_space_size=4096 --progress --colors",

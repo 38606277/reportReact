@@ -7,8 +7,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const devMode = process.env.NODE_ENV !== 'production'
 
 module.exports = {
-    mode:'production',
-    // devtool: 'source-map',
+    mode:'development',
+    devtool: 'source-map',
     entry: {
         bundle: path.resolve(__dirname, './src/app.jsx')
         // //添加要打包在vendor里面的库

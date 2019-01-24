@@ -88,17 +88,17 @@ const FunctionRouter = Loadable({
     delay:3000
 });
 
-const dashboardRouter = Loadable({
-    loader: () => import('./page/dashboard/dashboardRouter.jsx'),
-    loading: loading,
-    delay:3000
-});
+// const dashboardRouter = Loadable({
+//     loader: () => import('./page/dashboard/dashboardRouter.jsx'),
+//     loading: loading,
+//     delay:3000
+// });
 
-const CubeRouter = Loadable({
-    loader: () => import('./page/cube/cubeRouter.jsx'),
-    loading: loading,
-    delay:3000
-});
+// const CubeRouter = Loadable({
+//     loader: () => import('./page/cube/cubeRouter.jsx'),
+//     loading: loading,
+//     delay:3000
+// });
 function LoadPage(url){
 //    console.log(Loadable({
 //         loader: () => import(url),
@@ -137,7 +137,7 @@ class App extends React.Component {
                     <Layout>
                         <Switch>
                             <Route exact path="/" component={Home} />
-                            <Route path="/dashboard" component={dashboardRouter}/>
+                            {/* <Route path="/dashboard" component={dashboardRouter}/> */}
                             <Route path="/task" component={TaskRouter}/>
                             <Route path="/user" component={UserRouter}/>
                             <Route path="/dbs" component={DbsRouter}/>
@@ -148,7 +148,7 @@ class App extends React.Component {
                              <Route path="/query" component={QueryRouter}/>
                             <Route path="/dict" component={DictRouter}/>
                             <Route path="/function" component={FunctionRouter}/>
-                            <Route path="/cube" component={CubeRouter}/>
+                            {/* <Route path="/cube" component={CubeRouter}/> */}
     
                         </Switch>
                     </Layout>

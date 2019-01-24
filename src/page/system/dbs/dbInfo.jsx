@@ -189,7 +189,7 @@ handleSubmit (e) {
         
                     <FormItem {...formItemLayout} label='密码'>
                         {getFieldDecorator('password', {
-                          rules: [{ required: false, message: '请输入密码!', whitespace: true }],
+                          rules: [{ required: false, message: '请输入密码', whitespace: true }],
                         })(
                           <Input  type='text' name='password'  />
                         )}

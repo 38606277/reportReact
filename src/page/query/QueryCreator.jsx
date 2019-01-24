@@ -281,7 +281,7 @@ class functionCreator extends React.Component {
                                     <FormItem label="选择数据库" style={{ marginBottom: "10px" }}>
                                         {
                                             getFieldDecorator('qry_db', {
-                                                rules: [{ required: 'true', message: "必须选择数据库" }]
+                                                rules: [{ required: 'true', message: "必须选择数据库!" }]
                                             })(
                                                 <Select setValue={this.form} style={{ width: '160px' }}>
                                                     {this.state.dbList.map(item => <Option key={item.name} value={item.name}>{item.name}</Option>)}
@@ -342,7 +342,8 @@ class functionCreator extends React.Component {
                                         <Col span={8}>
                                             <FormItem label=" 使用缓存"   >
                                                 {
-                                                    getFieldDecorator('qry_cache', {
+                                                    getFieldDecorator('cached', {
+                                                        valuePropName: 'checked'
                                                     })(
                                                         <Checkbox />
                                                     )
