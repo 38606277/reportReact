@@ -20,7 +20,7 @@ export default class MainLoyout extends React.Component {
         super(props)
         this.state = {
             collapsed: false,
-            windthleft:'265px',
+            windthleft:'250px',
         };
     }
     
