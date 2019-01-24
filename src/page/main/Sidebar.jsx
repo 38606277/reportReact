@@ -40,6 +40,7 @@ export default class SiderBar extends React.Component {
     dashboardformSubmenusChild(obj,index){
         return (<SubMenu key={obj.func_name+obj.func_id} 
                 onTitleClick={this.dashBoardClickMuen.bind(this,obj)} 
+                id='divtitle'
                 title={<span><Icon type={obj.func_icon} />
                 <span>{obj.func_name}</span></span>}>
                 {
@@ -55,7 +56,8 @@ export default class SiderBar extends React.Component {
     cubeformSubmenusChild(obj,index){
         return (<SubMenu key={obj.func_name+obj.func_id} 
                 onTitleClick={this.cubeClickMuen.bind(this,obj)} 
-                title={<span><Icon type={obj.func_icon} />
+                id='divtitle'
+                title={<span ><Icon type={obj.func_icon} />
                 <span>{obj.func_name}</span></span>}>
                 {
                     obj.cubeList==null?'':obj.cubeList.map(obj2=>(
@@ -70,6 +72,7 @@ export default class SiderBar extends React.Component {
     fourformSubmenusChild(obj,index){
     return (<SubMenu key={obj.func_name+obj.func_id} 
             onTitleClick={this.clickMuen.bind(this,obj,index)} 
+            id='divtitle'
             title={<span><Icon type={obj.func_icon} />
             <span>{obj.func_name}</span></span>}>
             {
@@ -110,9 +113,9 @@ export default class SiderBar extends React.Component {
           cHtml = childArray.map((item, index) => {
                 return this.formSubmenusChild(item);
             });
-            return <SubMenu key={obj.func_name} title={<span><Icon type={obj.func_icon} /><span>{obj.func_name}</span></span>}>{cHtml}</SubMenu>
+            return <SubMenu key={obj.func_name}  id='divtitle' title={<span><Icon type={obj.func_icon} /><span>{obj.func_name}</span></span>}>{cHtml}</SubMenu>
         }else{
-            return <Menu.Item key={obj.func_name} ><Link to={obj.func_url}><Icon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>
+            return <Menu.Item key={obj.func_name} ><Link to={obj.func_url}  id='divtitle'><Icon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>
         }
     }
     clickMuen=(obj,index)=>{
@@ -173,12 +176,12 @@ export default class SiderBar extends React.Component {
                     if("undefined"!=typeof(obj.children) &&obj.children.length>0){
                         return this.formSubmenusChild(obj);
                     }else{
-                        return <Menu.Item key={"sub"+index} ><Link to={obj.func_url}><Icon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>
+                        return <Menu.Item key={"sub"+index} id="atitle"><Link to={obj.func_url}><Icon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>
                     }
                 }
             } else {
                 //这里的routeurl是路由地址，是自定义的一个属性
-                return <Menu.Item key={"sub"+index} ><Link to={obj.func_url}><Icon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>
+                return <Menu.Item key={"sub"+index} id="atitle"><Link to={obj.func_url}><Icon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>
             }
         });
          const collapsed=this.props.collapsed;
@@ -196,6 +199,7 @@ export default class SiderBar extends React.Component {
              <Spin spinning={this.state.loading} delay={100}>
                 <Menu theme="light" defaultSelectedKeys={['1']} mode="inline"  >
                          {html}
+                         <Menu.Item  id='atitle' ><Link to="11" ><Icon type="table" /><span>测试</span></Link></Menu.Item>
                 </Menu>
                 </Spin>
             </Sider>
