@@ -190,6 +190,7 @@ export default class SiderBar extends React.Component {
                 collapsed={collapsed}
                 theme="light"
                 width='250px'
+                collapsedWidth='60'
                 style={{ overflow: 'auto', height: '100vh', left: 0 }}
             >
              <Spin spinning={this.state.loading} delay={100}>
