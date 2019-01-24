@@ -92,7 +92,12 @@ body {
     display: none !important;
   }
 }
-
+#divtitle div{
+  padding: 0 17px!important;
+}
+#atitle a{
+  margin-left: -19px !important;
+}
 @media screen and (max-width:561px) {
 
  
@@ -100,10 +105,10 @@ body {
   //   margin-left: -15px !important;
   // }
   #divtitle div{
-    padding: 0 15px!important;
+    padding: 0 17px!important;
   }
   #atitle a{
-    margin-left: -17px !important;
+    margin-left: -19px !important;
   }
   .top-navbar .navbar-brand{
       width: 100%;
