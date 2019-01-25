@@ -92,24 +92,24 @@ body {
     display: none !important;
   }
 }
-#divtitle div{
+#divtitle > div{
   padding: 0 17px!important;
 }
-#atitle a{
-  margin-left: -19px !important;
-}
+// #atitle a{
+//  // margin-left: -19px !important;
+// }
 @media screen and (max-width:561px) {
 
  
   // #divtitle{
   //   margin-left: -15px !important;
   // }
-  #divtitle div{
-    padding: 0 17px!important;
-  }
-  #atitle a{
-    margin-left: -19px !important;
-  }
+  // #divtitle div{
+  //   padding: 0 17px!important;
+  // }
+  // #atitle a{
+  //   margin-left: -19px !important;
+  // }
   .top-navbar .navbar-brand{
       width: 100%;
   }
