@@ -5,12 +5,12 @@ import Loadable from 'react-loadable';
 import loading from '../../util/loading.jsx'
 import './Layout.scss';
 const SiderBar = Loadable({
-    loader: () => import('./SideBar.jsx'),
+    loader: () => import('./Sidebar.jsx'),
     loading: loading,
     delay:3000
 });
 const TopBar = Loadable({
-    loader: () => import('./TopBar.jsx'),
+    loader: () => import('./Topbar.jsx'),
     loading: loading,
     delay:3000
 });
