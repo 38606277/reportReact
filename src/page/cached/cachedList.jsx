@@ -110,9 +110,9 @@ export default class CachedList extends React.Component {
             className:'headerRow',
             render: (text, record) => (
                 <span>
-                  <Link to={ `/cube/cubeInfo/${record.cube_id}` }>编辑</Link>
+                  <Link to={ `/cached/cachedInfo/${record.cached_id}` }>查看</Link>
                   <Divider type="vertical" />
-                  <a onClick={()=>this.deleteCube(`${record.cube_id}`)} href="javascript:;">删除</a>
+                  <a onClick={()=>this.deleteCube(`${record.cached_id}`)} href="javascript:;">删除</a>
                 </span>
               ),
           }];
@@ -120,32 +120,9 @@ export default class CachedList extends React.Component {
         return (
             <div id="page-wrapper">
             <Spin  spinning={this.state.loading} delay={100}>
-            <Card title="多维列表">
-                {/* <Tooltip>
-                     <Search
-                        style={{ width: 300,marginBottom:'10px' }}
-                        placeholder="请输入..."
-                        enterButton="查询"
-                        onSearch={value => this.onSearch(value)}
-                        />
-                </Tooltip>
-                <Tooltip>
-                    <Button href="#/cube/cubeInfo/null" style={{ float: "right", marginRight: "30px" }} type="primary">新建</Button>
-                </Tooltip> */}
-                <Row>
-                    <Col xs={24} sm={12}>
-                    <Search
-                        style={{ maxWidth: 300,marginBottom:'10px' }}
-                        placeholder="请输入..."
-                        enterButton="查询"
-                        onSearch={value => this.onSearch(value)}
-                        />
-                     </Col>
-                     <Col xs={24} sm={12}>
-                     <Button href="#/cube/cubeInfo/null" style={{ float: "right", marginRight: "30px" }} type="primary">新建</Button>
-
-                     </Col> 
-                     </Row>
+            <Card title="缓存列表">
+                
+                
                 <Table dataSource={dataSource} columns={columns}  pagination={false}/>
                  <Pagination current={this.state.pageNum} 
                     total={this.state.total} 
