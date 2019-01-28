@@ -7,7 +7,7 @@
 import React from 'react';
 import { Link }             from 'react-router-dom';
 import Pagination           from 'antd/lib/pagination';
-import {Table,Divider,Button,Card, Tooltip,Input, Form,Spin,Row,Col}  from 'antd';
+import {Table,Divider,Button,Card, List ,Input, Form,Spin,Row,Col}  from 'antd';
 import CubeService from '../../service/CachedService.jsx';
 const _cubeService = new CubeService();
 const Search = Input.Search;
@@ -84,38 +84,11 @@ export default class CachedList extends React.Component {
     }
 
     render(){
-        this.state.list.map((item,index)=>{
-            item.key=index;
-        })
+        // this.state.list.map((item,index)=>{
+        //     item.key=index;
+        // })
         const dataSource = this.state.list;
-        let self = this;
-          const columns = [{
-            title: 'ID',
-            dataIndex: 'cube_id',
-            key: 'cube_id',
-            className:'headerRow',
-          },{
-            title: '名称',
-            dataIndex: 'cube_name',
-            key: 'cube_name',
-            className:'headerRow',
-          },{
-            title: '描述',
-            dataIndex: 'cube_desc',
-            key: 'cube_desc',
-            className:'headerRow',
-          },{
-            title: '操作',
-            dataIndex: '操作',
-            className:'headerRow',
-            render: (text, record) => (
-                <span>
-                  <Link to={ `/cached/cachedInfo/${record.cached_id}` }>查看</Link>
-                  <Divider type="vertical" />
-                  <a onClick={()=>this.deleteCube(`${record.cached_id}`)} href="javascript:;">删除</a>
-                </span>
-              ),
-          }];
+      
        
         return (
             <div id="page-wrapper">
@@ -123,7 +96,18 @@ export default class CachedList extends React.Component {
             <Card title="缓存列表">
                 
                 
-                <Table dataSource={dataSource} columns={columns}  pagination={false}/>
+            <List
+               
+                // pagination={{
+                //     onChange: (page) => {
+                //       console.log(page);
+                //     },
+                //     pageSize: 3,
+                //   }}
+                bordered
+                dataSource={dataSource}
+                renderItem={item => (<List.Item>{item}</List.Item>)}
+            />
                  <Pagination current={this.state.pageNum} 
                     total={this.state.total} 
                     onChange={(pageNum) => this.onPageNumChange(pageNum)}/> 

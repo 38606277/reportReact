@@ -199,6 +199,7 @@ export default class SiderBar extends React.Component {
              <Spin spinning={this.state.loading} delay={100}>
                 <Menu theme="light" defaultSelectedKeys={['1']} mode="inline"  >
                          {html}
+                         <Menu.Item> <Link to="/cached"><Icon type="table" /> 缓存</Link>  </Menu.Item>
                 </Menu>
                 </Spin>
             </Sider>
