@@ -10,3 +10,13 @@ java中create,update方法设置jsonFunc.getIntValue
 
 2--------------解决内存溢出的办法-------------------
  "dev": "node_modules/.bin/webpack-dev-server --max_old_space_size=4096 --progress --colors",
+
+
+3------------- webpack4打包慢的原因，需要指定打包模式，可选的值有：
+development，开发模式
+会将 process.env.NODE_ENV 设置成 development
+启用 NamedChunksPlugin、NamedModulesPlugin 插件
+production，生产模式
+会将 process.env.NODE_ENV 设置成 production
+会启用最大化的优化（模块的压缩、串联等）
+none，这种模式不会进行优化处理 

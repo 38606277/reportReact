@@ -340,7 +340,7 @@ class functionCreator extends React.Component {
                                             </FormItem>
                                         </Col>
                                         <Col span={8}>
-                                            <FormItem label=" 使用缓存"   >
+                                            <FormItem label="使用缓存"   >
                                                 {
                                                     getFieldDecorator('cached', {
                                                         valuePropName: 'checked'
