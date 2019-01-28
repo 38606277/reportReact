@@ -7,7 +7,7 @@
 import React from 'react';
 import { Link }             from 'react-router-dom';
 import Pagination           from 'antd/lib/pagination';
-import {Table,Divider,Button,Card, List ,Input, Form,Spin,Row,Col}  from 'antd';
+import {Skeleton,Avatar,Divider,Button,Card, List ,Input, Form,Spin,Row,Col}  from 'antd';
 import CubeService from '../../service/CachedService.jsx';
 const _cubeService = new CubeService();
 const Search = Input.Search;
@@ -106,7 +106,17 @@ export default class CachedList extends React.Component {
                 //   }}
                 bordered
                 dataSource={dataSource}
-                renderItem={item => (<List.Item>{item}</List.Item>)}
+                // renderItem={item => (<List.Item>{item}</List.Item>)}
+                renderItem={item => (
+                    <List.Item actions={[<a>edit</a>, <a>delete</a>]}>
+                      <Skeleton avatar title={false} loading={item.loading} active>
+                        <List.Item.Meta
+                          title={<a href="https://ant.design">ceshi</a>}
+                          description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                        />
+                      </Skeleton>
+                    </List.Item>
+                  )}
             />
                  <Pagination current={this.state.pageNum} 
                     total={this.state.total} 
