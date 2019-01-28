@@ -88,6 +88,11 @@ const FunctionRouter = Loadable({
     delay:3000
 });
 
+const CachedRouter = Loadable({
+    loader: () => import('./page/cached/CachedRouter.jsx'),
+    loading: loading,
+    delay:3000
+});
 // const dashboardRouter = Loadable({
 //     loader: () => import('./page/dashboard/dashboardRouter.jsx'),
 //     loading: loading,
@@ -148,6 +153,8 @@ class App extends React.Component {
                              <Route path="/query" component={QueryRouter}/>
                             <Route path="/dict" component={DictRouter}/>
                             <Route path="/function" component={FunctionRouter}/>
+                            
+                            <Route path="/cached" component={CachedRouter}/>
                             {/* <Route path="/cube" component={CubeRouter}/> */}
     
                         </Switch>
