@@ -89,9 +89,8 @@ class functionCreator extends React.Component {
 
                         this.refs.editorsql.codeMirror.setValue(res.data.qry_sql);
 
-                        let editorsql = this.refs.editorsql;
-                        editorsql.codeMirror.setSize('100%', '500px');
-                        editorsql.codeMirror.border = "solid  1px";
+                       
+                      
                     }
                     else
                         message.error(res.message);
@@ -99,7 +98,9 @@ class functionCreator extends React.Component {
                 });
 
         }
-
+        let editorsql = this.refs.editorsql;
+        editorsql.codeMirror.setSize('100%', '500px');
+        editorsql.codeMirror.border = "solid  1px";
         //查询DB定义
         dbService.getDbList()
             .then(res => {
