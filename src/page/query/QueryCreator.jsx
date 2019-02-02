@@ -101,6 +101,7 @@ class functionCreator extends React.Component {
         let editorsql = this.refs.editorsql;
         editorsql.codeMirror.setSize('100%', '500px');
         editorsql.codeMirror.border = "solid  1px";
+        editorsql.codeMirror.
         //查询DB定义
         dbService.getDbList()
             .then(res => {

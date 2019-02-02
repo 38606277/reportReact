@@ -77,7 +77,7 @@ const DictRouter = Loadable({
     delay:3000
 });
 const QueryRouter = Loadable({
-    loader: () => import('./page/query/QueryRouter.jsx'),
+    loader: () => import(/* webpackChunkName: "QueryRouter" */ './page/query/QueryRouter.jsx'),
     loading: loading,
     delay:3000
 });

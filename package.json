@@ -10,7 +10,9 @@
     "eject": "react-scripts eject",
     "dev": "node_modules/.bin/webpack-dev-server --max_old_space_size=4096 --progress --colors",
     "dist": "WEBPACK_ENV=online node_modules/.bin/webpack -p  --progress --colors",
-    "dist_win": "set WEBPACK_ENV=online&& node_modules/.bin/webpack -p"
+    "dist_win": "set WEBPACK_ENV=online&& node_modules/.bin/webpack -p",
+    "start": "webpack-dev-server  --progress --colors --mode development --config ./webpack.dev.config.js",
+    "build": "webpack --mode production --config ./webpack.prod.config.js"
   },
   "devDependencies": {
     "babel-core": "6.26.3",
@@ -25,6 +27,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "clean-webpack-plugin": "^1.0.0",
+    "copy-webpack-plugin": "^4.6.0",
     "css-loader": "1.0.0",
     "ess-loader": "^0.4.1",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
@@ -43,6 +46,7 @@
     "style-loader": "0.19.1",
     "url-loader": "1.1.1",
     "webpack": "4.27.1",
+    "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "3.1.2",
     "webpack-dev-server": "3.1.5"
   },

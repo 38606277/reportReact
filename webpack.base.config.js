@@ -1,14 +1,13 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const devMode = process.env.NODE_ENV !== 'production'
 
 module.exports = {
-    mode:'development',
-    devtool: 'source-map',
     entry: {
         bundle: path.resolve(__dirname, './src/app.jsx')
         // //添加要打包在vendor里面的库
@@ -17,9 +16,6 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, './build'),
         filename: '[name].js'
-    },
-    devServer: {
-        port: 8086
     },
     module: {
         rules: [
@@ -138,6 +134,7 @@ module.exports = {
                 NODE_ENV: JSON.stringify("production")
             }
         }),
+
         new MiniCssExtractPlugin({
             // Options similar to the same options in webpackOptions.output
             // both options are optional

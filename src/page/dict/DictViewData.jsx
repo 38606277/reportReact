@@ -26,13 +26,13 @@ export default class DictList extends React.Component {
         };
     }
     componentDidMount() {
-        let param = {};
-        HttpService.post('reportServer/dict/getDictValueByID/'+this.state.dict_id, null)
+        let param = {pageNumd:"1",perPaged:"10",searchDictionary:""};
+        HttpService.post('reportServer/dict/getDictValueByID/'+this.state.dict_id, JSON.stringify(param))
             .then(res => {
-                if (res.resultCode == "1000")
+                // if (res.resultCode == "1000")
                     this.setState({ list: res.data })
-                else
-                    message.error(res.message);
+                // else
+                    // message.error(res.message);
 
             });
     }
