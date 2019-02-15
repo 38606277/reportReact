@@ -18,6 +18,7 @@ class EditIn extends React.Component {
       formData: {},
       dictData: [],
       authData: [],
+      selectedRowKeys: [],
     };
   }
 
@@ -276,6 +277,16 @@ class EditIn extends React.Component {
         );
       }
     }];
+    const rowSelections = {
+      onChange: (selectedRowKeys, selectedRows) => {
+       // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        selectedRowKeys=selectedRows;
+      },
+      // getCheckboxProps: record => ({
+      //   disabled: record.name === 'Disabled User', // Column configuration not to be checked
+      //   name: record.name,
+      // }),
+    };
     return (
       // <Button onClick={() => this.buttonClick()} >显示结果</Button>
       // <Button onClick={() => this.changeColumn()} >字段变更</Button>
@@ -285,6 +296,7 @@ class EditIn extends React.Component {
           dataSource={this.state.data}
           size="small"
           bordered
+          rowSelection={this.props.editable==true?rowSelections:null}
           pagination={false} />
       </Form>
     )
