@@ -17,8 +17,18 @@ const QueryList = Loadable({
     delay:3000
 });
 
-const QueryCreator = Loadable({
-    loader: () => import('./QueryCreator.jsx'),
+const HttpCreator = Loadable({
+    loader: () => import('./HttpCreator.jsx'),
+    loading: loading,
+    delay:3000
+});
+const SqlCreator = Loadable({
+    loader: () => import('./SqlCreator.jsx'),
+    loading: loading,
+    delay:3000
+});
+const ProcedureCreator = Loadable({
+    loader: () => import('./ProcedureCreator.jsx'),
     loading: loading,
     delay:3000
 });
@@ -55,7 +65,10 @@ class QueryRouter extends React.Component{
                  <Route path="/query/CreateTemplate" component={CreateTemplate} />
                  <Route path="/query/QueryData" component={QueryData} />
                  {/* <Route path="/query/Contaier" component={Indexs} /> */}
-                 <Route path="/query/QueryCreator/:action/:id" component={QueryCreator} />
+                 {/* <Route path="/query/QueryCreator/:qry_type/:action/:id" component={QueryCreator} /> */}
+                 <Route path="/query/SqlCreator/:action/:id" component={SqlCreator} />
+                 <Route path="/query/ProcedureCreator/:action/:id" component={ProcedureCreator} />
+                 <Route path="/query/HttpCreator/:action/:id" component={HttpCreator} />
                  <Redirect exact from="/query" to="/query/ExecQuery"/> 
             </Switch>
         )

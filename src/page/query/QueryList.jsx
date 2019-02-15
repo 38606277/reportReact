@@ -6,7 +6,7 @@
 */
 import React from 'react';
 import Table from 'antd/lib/table';
-import { Card, Button, Divider, Input, message,Modal, Form, FormItem, Icon, Row, Col,loading } from 'antd';
+import { Card, Button, Divider, Input, message,Modal, Form, FormItem, Icon, Row, Col,loading,Dropdown,Menu } from 'antd';
 
 import FunctionService from '../../service/FunctionService.jsx'
 import HttpService from '../../util/HttpService.jsx';
@@ -44,7 +44,19 @@ export default class QueryList extends React.Component {
 
     }
 
+   onNewQry(e){
+    if(e.key=='sql')
+    {
+       window.location.href="#/query/SqlCreator/create/0";
+    }else if(e.key=='procedure')
+    {
+        window.location.href="#/query/ProcedureCreator/create/0";
+    }else if(e.key=='http')
+    {
+        window.location.href="#/query/HttpCreator/create/0";
+    }
 
+   }
 
     onDelButtonClick() {
         //  Modal.confirm({
@@ -119,8 +131,19 @@ export default class QueryList extends React.Component {
                         <Col span={10}></Col>
                         <Col span={4}> <Button type="primary" style={{width:"100px"}} onClick={()=>window.location='#/function/functionCreator/creat/0'} >新建</Button></Col>
                     </Row> */}
-                    <Button href="#/query/QueryCreator/create/0" style={{ marginRight: "10px" }} type="primary">新建查询</Button>
-                    <Button href="#/query/QueryClass" style={{ marginRight: "15px" }} type="primary">查询类别管理</Button>
+                    <Dropdown style={{ marginRight: "20px" }} type="primary" overlay={(
+                        <Menu onClick={(e)=>this.onNewQry(e)}>
+                            <Menu.Item key="sql">sql语句</Menu.Item>
+                            <Menu.Item key="procedure">存储过程</Menu.Item>
+                            <Menu.Item key="http">http请求</Menu.Item>
+                        </Menu>
+                    )}>
+                        <Button >
+                        新建查询<Icon type="down" />
+                        </Button>
+                    </Dropdown>
+                    {/* <Button href="#/query/QueryCreator/sql/create/0" style={{ marginRight: "10px" }} type="primary">新建查询</Button> */}
+                    <Button href="#/query/QueryClass" style={{ marginRight: "15px",marginLeft:"15px" }} >查询类别管理</Button>
                     <Button onClick={() => this.onDelButtonClick()} style={{ marginRight: "10px" }} >删除</Button>
                     <Search
                         style={{ maxWidth: 300, marginBottom: '10px', float: "right" }}
@@ -156,7 +179,15 @@ export default class QueryList extends React.Component {
                             title="动作"
                             render={(text, record) => (
                                 <span>
-                                    <a href={`#/query/QueryCreator/update/${record.qry_id}`}>编辑</a>
+                                    <a onClick={()=>{
+                                        if(record.qry_type=='sql'){
+                                            window.location.href="#/query/SqlCreator/update/"+record.qry_id;
+                                        }else if(record.qry_type=='procedure'){
+                                            window.location.href="#/query/ProcedureCreator/update/"+record.qry_id;
+                                        }else if(record.qry_type=='http'){
+                                            window.location.href="#/query/HttpCreator/update/"+record.qry_id;
+                                        }
+                                     }}>编辑</a>
                                     <Divider type="vertical" />
                                     <a href={`#/query/CreateTemplate`}>模板</a>
                                 </span>
