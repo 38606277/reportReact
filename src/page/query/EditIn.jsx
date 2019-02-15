@@ -280,7 +280,7 @@ class EditIn extends React.Component {
     const rowSelections = {
       onChange: (selectedRowKeys, selectedRows) => {
        // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        selectedRowKeys=selectedRows;
+        this.setState({selectedRowKeys:selectedRowKeys});
       },
       // getCheckboxProps: record => ({
       //   disabled: record.name === 'Disabled User', // Column configuration not to be checked
