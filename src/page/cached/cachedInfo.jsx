@@ -11,14 +11,8 @@ class CachedInfo extends React.Component{
         super(props);
         this.state = {
             confirmDirty: false,
-            cube_id:this.props.match.params.cached_id,
-            qry_id:'',
-            cube_name:'',
-            cube_desc:'',
-            visible:false,
-            dictionaryList:[],
-            qry_name:'',
-            cube_sql:'',
+            cached_id:this.props.match.params.cached_id,
+            cachedContent:null,
         };
         
       
@@ -26,9 +20,9 @@ class CachedInfo extends React.Component{
     
  //初始化加载调用方法
     componentDidMount(){
-       if(null!=this.state.cube_id && ''!=this.state.cube_id  && 'null'!=this.state.cube_id){
-        _cubeService.getCubeInfo(this.state.cube_id).then(response => {
-                this.setState(response.data);
+       if(null!=this.state.cached_id && ''!=this.state.cached_id  && 'null'!=this.state.cached_id){
+        _cubeService.getCubeInfo(this.state.cached_id).then(response => {
+                this.setState({cachedContent:response.data});
                 
             }, errMsg => {
                 this.setState({
@@ -41,94 +35,24 @@ class CachedInfo extends React.Component{
 
 
   render() {
-    const { getFieldDecorator } = this.props.form;
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 8 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 16 },
-      },
-    };
-    const tailFormItemLayout = {
-      wrapperCol: {
-        xs: {
-          span: 24,
-          offset: 0,
-        },
-        sm: {
-          span: 16,
-          offset: 8,
-        },
-      },
-    };
+    
    
     return (
         <div id="page-wrapper">
         <Card title='详情'>
-        <Form >
+        
         <Row>
              <Col xs={24} sm={12}>
-                  <FormItem {...formItemLayout} label="名称">
-                    {getFieldDecorator('cube_name', {
-                      rules: [{required: true, message: '请输入名称!'}],
-                    })(
-                      <Input type='text' name='cube_name'  onChange={(e) => this.onValueChange(e)}/>
-                    )}
-                  </FormItem>
+                  {this.state.cachedContent}
               </Col>
-              <Col xs={24} sm={12}>
-                <FormItem {...formItemLayout} label="描述">
-                    {getFieldDecorator('cube_desc', {
-                      rules: [{required: true, message: '请输入描述!'}],
-                    })(
-                      <Input type='text' name='cube_desc'  onChange={(e) => this.onValueChange(e)}/>
-                    )}
-                  </FormItem>
-              </Col>
-          </Row> 
-          <Row>
-          <Col xs={24} sm={12}>
-                <FormItem {...formItemLayout} label="Qry_ID">
-                    {getFieldDecorator('qry_id', {
-                      rules: [{required: true, message: '请输入描述!'}],
-                    })(
-                      <Input readOnly onChange={e=>this.onValueChange(e)} 
-                      addonAfter={<Icon type="ellipsis" theme="outlined" onClick={e=>this.openModelClick()}/>} />
-                    )}
-                  </FormItem>
-              </Col>
-              <Col xs={24} sm={12}>
-                <FormItem {...formItemLayout} label="class_name">
-                    {getFieldDecorator('class_name', {
-                     // rules: [{required: true, message: '请输入描述!'}],
-                    })(
-                      <Input readOnly />
-                    )}
-                  </FormItem>
-              </Col>
-          </Row> 
-          <Row>
-            <Col xs={24} sm={12}>
-                <FormItem {...formItemLayout} label="SQL">
-                    {getFieldDecorator('cube_sql', {
-                      rules: [{required: true, message: '请输入SQL!'}],
-                    })(
-                      <Input  onChange={(e) => this.onValueChange(e)}/>
-                    )}
-                  </FormItem>
-              </Col>
-          </Row> 
-          <FormItem {...tailFormItemLayout}>
-            <Button href="#/cached/cachedList"  type="primary" style={{marginLeft:'30px'}}>返回</Button>
-          </FormItem>
-      </Form>
+              
+        </Row> 
+          
+          
       </Card>
       
       </div>
     );
   }
 }
-export default Form.create()(CachedInfo);
+export default CachedInfo;

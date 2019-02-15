@@ -14,18 +14,16 @@ export default class CachedService {
         return HttpService.post(url,JSON.stringify(param));
     }
 
-    getCubeInfo(cube_id){
-        return HttpService.post('/reportServer/cube/getCubeByID/'+cube_id,{});
+    getCubeInfo(cached_id){
+        let param=[{cached_id:cached_id}];
+        return HttpService.post('/reportServer/cacheds/getElementValuesByKey',JSON.stringify(param));
     }
 
     
     delCube(id){
-        let param=[{cube_id:id}];
-        return HttpService.post('/reportServer/cube/deleteCube',JSON.stringify(param));
+        let param=[{cached_id:cached_id}];
+        return HttpService.post('/reportServer/cacheds/deleteCube',JSON.stringify(param));
     }
 
-    getDataAndalysisByqryId(qryid){
-        let param={};
-        return HttpService.post('/reportServer/cube/getCubeValueByID/'+qryid,JSON.stringify(param));
-    }
+    
 }

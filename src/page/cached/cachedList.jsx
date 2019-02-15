@@ -82,7 +82,9 @@ export default class CachedList extends React.Component {
             });
         }
     }
-
+    onclickview(key){
+        console.log(key);
+    }
     render(){
         // this.state.list.map((item,index)=>{
         //     item.key=index;
@@ -108,11 +110,12 @@ export default class CachedList extends React.Component {
                 dataSource={dataSource}
                 // renderItem={item => (<List.Item>{item}</List.Item>)}
                 renderItem={item => (
-                    <List.Item actions={[<a>edit</a>, <a>delete</a>]}>
+                  
+                    <List.Item actions={[ <a  href={`#/cached/cachedInfo/${item}`}>view</a>, <a>delete</a>]}>
                       <Skeleton avatar title={false} loading={item.loading} active>
                         <List.Item.Meta
-                          title={<a href="https://ant.design">ceshi</a>}
-                          description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                          title={<a href={`#/cached/cachedInfo/${item}`}>ceshi</a>}
+                          description={item}
                         />
                       </Skeleton>
                     </List.Item>
