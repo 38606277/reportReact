@@ -19,6 +19,7 @@ class EditIn extends React.Component {
       dictData: [],
       authData: [],
       selectedRowKeys: [],
+      rowCount:0,
     };
   }
 
@@ -66,6 +67,7 @@ class EditIn extends React.Component {
     let formValue = this.ArrayToFormValue(this.state.data);
     this.props.form.setFieldsValue(formValue);
   }
+  
   getFormValue() {
     //转换formValue到数组
     // let arrayValue=this.FormValueToArray(this.props.form.getFieldsValue());
@@ -158,11 +160,59 @@ class EditIn extends React.Component {
   }
 
 
+  //数据字典选中事件
+  onSelectChangeTab = (selectedRowKeys) => {
+    this.setState({ selectedRowKeys });
+  }
 
+  onSelectChangeTab = (selectedRowKeys) => {
+    this.setState({ selectedRowKeys });
+  }
+  deleteRowsTwo(key) {
+    const { data } = this.state;
+    const newData = data.map(item => ({ ...item }));
+    const index = newData.findIndex(item => key === item.key);
+    //const item = newData[index];
+    newData.splice(index, 1);
+    this.setState({ data: newData });
+  }
+  deleteRows() {
+    const { data,selectedRowKeys } = this.state;
+    if(selectedRowKeys.length>0 && selectedRowKeys!=null){
+        const newData = data.map(item => ({ ...item }));
+        for(let i = selectedRowKeys.length - 1; i >= 0; i--) {
+          const index = newData.findIndex(item => selectedRowKeys[i] === item.key);
+          newData.splice(index, 1);
+        }
+        this.setState({ data: newData ,selectedRowKeys:[]},function(){
+          let formValue = this.ArrayToFormValue(this.state.data);
+          this.props.form.setFieldsValue(formValue);
+        });
+       
+    }
+  }
+  addRows(){
+    const { data,rowCount } = this.state;
+    const newData = data.map(item => ({ ...item }));
+    let aIn = {
+          key: rowCount,
+          "qry_id": "",
+          "in_id": "",
+          "in_name": undefined,
+          "datatype": undefined,
+          "dict_id": undefined,
+          "dict_name": undefined,
+          "authtype_id": undefined,
+          "authtype_desc": undefined,
+          "validate": ""
+        };
+    newData.push(aIn);
+    this.setState({ data: newData, rowCount: rowCount + 1 },function(){
+        let formValue = this.ArrayToFormValue(this.state.data);
+        this.props.form.setFieldsValue(formValue);
+    });
 
-
-
-
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
     let columns = [{
@@ -276,16 +326,16 @@ class EditIn extends React.Component {
           </Form.Item>
         );
       }
-    }];
+    }
+    // ,{
+    //   title: 'Action', dataIndex: '', key: 'x', render:(text, record) => ( <a  onClick={()=>this.deleteRows(record.key)} href="javascript:;">Delete</a>
+    //   )}
+    ];
+    
+    const { selectedRowKeys } = this.state;
     const rowSelections = {
-      onChange: (selectedRowKeys, selectedRows) => {
-       // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        this.setState({selectedRowKeys:selectedRowKeys});
-      },
-      // getCheckboxProps: record => ({
-      //   disabled: record.name === 'Disabled User', // Column configuration not to be checked
-      //   name: record.name,
-      // }),
+      selectedRowKeys,
+      onChange:this.onSelectChangeTab,
     };
     return (
       // <Button onClick={() => this.buttonClick()} >显示结果</Button>

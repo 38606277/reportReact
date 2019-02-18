@@ -58,6 +58,7 @@ class ProcedureCreator extends React.Component {
             //定义下拉查找的数据
             dbList: [],
             funcClassList: [],
+            activeKey:"1",
         };
         this.onSaveClick = this.onSaveClick.bind(this);
     }
@@ -120,13 +121,13 @@ class ProcedureCreator extends React.Component {
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
+                console.log(this.inParam.getFormValue());
                 let formInfo = this.props.form.getFieldsValue();
                 this.setState({
                     inData: this.inParam.getFormValue(),
                     outData: this.outParam.getFormValue(),
                 });
-                formInfo.qry_type = 'sql';
-                formInfo.qry_sql = this.refs.editorsql.codeMirror.getValue();
+                
                 formInfo.in = this.state.inData;
                 formInfo.out = this.state.outData;
                 console.log(formInfo);
@@ -213,29 +214,45 @@ class ProcedureCreator extends React.Component {
 
     }
     onAddRowClick() {
+        const activeKey=this.state.activeKey;
+        if(activeKey=="1"){
+            this.inParam.addRows();
+        }else{
+            this.outParam.addRows();
+        }
         //  alert('add');
-        let aIn = {
-            "qry_id": "1",
-            "in_id": "2",
-            "in_name": undefined,
-            "datatype": undefined,
-            "dict_id": undefined,
-            "dict_name": undefined,
-            "authtype_id": undefined,
-            "authtype_desc": undefined,
-            "validate": ""
-        };
-        let ins = [];
-        ins.push(aIn);
-        this.state.inData.push(aIn);
-        // this.setState({inData:ins});
-        this.inParam.setFormValue(this.state.inData);
+        // let indexs=this.state.inData.length;
+        // let aIn = {
+        //     "qry_id": indexs,
+        //     "in_id": indexs,
+        //     "in_name": undefined,
+        //     "datatype": undefined,
+        //     "dict_id": undefined,
+        //     "dict_name": undefined,
+        //     "authtype_id": undefined,
+        //     "authtype_desc": undefined,
+        //     "validate": ""
+        // };
+        // let ins = [];
+        // ins.push(aIn);
+        // this.state.inData.push(aIn);
+        // // this.setState({inData:ins});
+        // this.inParam.getFormValue()
+        // this.inParam.setFormValue(this.state.inData);
 
     }
     onDelRowClick() {
-        alert('del');
+        const activeKey=this.state.activeKey;
+        if(activeKey=="1"){
+            this.inParam.deleteRows();
+        }else{
+            this.outParam.deleteRows();
+        }
     }
-
+    tabOnChange = (activeKey) => {
+        this.setState({ activeKey:activeKey },function () { });
+             
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -385,10 +402,10 @@ class ProcedureCreator extends React.Component {
                                         tabBarExtraContent={<span><Button icon="plus" onClick={() => this.onAddRowClick()} />
                                             <Button icon="minus" onClick={() => this.onDelRowClick()} /></span>}>
                                         <TabPane tab="输入参数" key="1" >
-                                            <EditIn onRef={(ref) => this.inParam = ref} />
+                                            <EditIn onRef={(ref) => this.inParam = ref} editable={true}/>
                                         </TabPane>
                                         <TabPane tab="输出参数" key="2" forceRender>
-                                            <EditOut onRef={(ref) => this.outParam = ref} action={this.state.action} />
+                                            <EditOut onRef={(ref) => this.outParam = ref} action={this.state.action} editable={true} />
                                         </TabPane>
                                     </Tabs>
 

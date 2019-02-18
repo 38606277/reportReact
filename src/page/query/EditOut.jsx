@@ -22,6 +22,7 @@ class EditOut extends React.Component {
       formData: {},
       dictData: [],
       authData: [],
+      rowCount:0,
     };
   }
   componentDidMount() {
@@ -49,8 +50,55 @@ class EditOut extends React.Component {
   getFormValue() {
     return this.state.data;
   }
+  onSelectChangeTab = (selectedRowKeys) => {
+    this.setState({ selectedRowKeys });
+  }
+  deleteRows() {
+    const { data,selectedRowKeys } = this.state;
+    if(selectedRowKeys.length>0 && selectedRowKeys!=null){
+        const newData = data.map(item => ({ ...item }));
+        for(let i =0; i<selectedRowKeys.length; i ++) {
+          const index = newData.findIndex(item => selectedRowKeys[i] === item.key);
+          newData.splice(index, 1);
+        }
+        this.setState({ data: newData ,selectedRowKeys:[]},function(){
+          let formValue = this.ArrayToFormValue(this.state.data);
+          this.props.form.setFieldsValue(formValue);
+        });
+    }
+  }
+  addRows(){
+    const { data,rowCount } = this.state;
+    const newData = data.map(item => ({ ...item }));
+    let aIn = {
+          key: rowCount,
+          "qry_id": "",
+          "out_id": "",
+          "out_name": undefined,
+          "datatype": undefined,
+          "width": undefined,
+          "render": undefined,
+          "link": undefined
+        };
+    newData.push(aIn);
+    this.setState({ data: newData, rowCount: rowCount + 1 },function(){
+      let formValue = this.ArrayToFormValue(this.state.data);
+      this.props.form.setFieldsValue(formValue);
+    });
 
-
+  }
+  ArrayToFormValue(dataArray) {
+    let formValue = {};
+    for (var i = 0; i < dataArray.length; i++) {
+      let rowObject = dataArray[i];
+      let keys = Object.getOwnPropertyNames(rowObject);
+      for (var field of keys) {
+        let fieldName = i + '-' + field;
+        formValue[fieldName] = dataArray[i][field];
+      }
+    }
+    return formValue;
+  }
   changeEvent(e) {
     // record.age=e.target.value; 
     console.log(e.target.id, e.target.value);
@@ -244,12 +292,16 @@ class EditOut extends React.Component {
 
 
   render() {
-
+    const { selectedRowKeys } = this.state;
+    const rowSelections = {
+      selectedRowKeys,
+      onChange:this.onSelectChangeTab,
+    };
     return (
       // <Button onClick={() => this.buttonClick()} >显示结果</Button>
       <div>
 
-        <Table ref="table" columns={this.columns}
+        <Table ref="table" columns={this.columns} rowSelection={this.props.editable==true?rowSelections:null}
           dataSource={this.state.data} size="small" bordered scroll={{ x: '600px' }} pagination={false} />
       
         <Modal
