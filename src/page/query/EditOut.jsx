@@ -163,6 +163,21 @@ class EditOut extends React.Component {
     dataIndex: 'out_id',
     key: 'out_id',
     width: '150px',
+    render: (text, record, index) => {
+      return (
+        <Form>
+          <Form.Item  style={{ margin: 0 }}>
+          {this.props.form.getFieldDecorator(index + '-' + 'out_id', {
+            rules: [{
+              required: true,
+              message: `Please Input !`,
+            }],
+          })(<Input onChange={e => this.changeEvent(e)} />)}
+        </Form.Item>
+        </Form>
+      );
+
+    }
   }, {
     title: '列名',
     dataIndex: 'out_name',

@@ -221,7 +221,19 @@ class EditIn extends React.Component {
       key: 'in_id',
       width: '100px',
       className: 'headerRow',
-      align: 'left'
+      align: 'left',
+      render: (text, record, index) => {
+        return (
+          <FormItem style={{ margin: 0 }}>
+            {getFieldDecorator(index + '-' + 'in_id', {
+              rules: [{
+                required: true,
+                message: `Please Input !`,
+              }],
+            })(<Input onChange={e => this.handleFieldChange(e.target.value, 'in_id', index)} />)}
+          </FormItem>
+        );
+      }
     }, {
       title: '列名',
       dataIndex: 'in_name',
