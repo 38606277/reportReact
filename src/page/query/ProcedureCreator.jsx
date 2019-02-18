@@ -311,7 +311,7 @@ class ProcedureCreator extends React.Component {
 
                                     <FormItem label="存储过程名称"  {...formItemLayout}>
                                         {
-                                            getFieldDecorator('qry_name', {
+                                            getFieldDecorator('qry_sql', {
                                                 rules: [{ required: true, message: '函数名称是必须的', whitespace: true }],
                                             })(
                                                 <Input style={{ minWidth: '300px' }} />
@@ -320,7 +320,7 @@ class ProcedureCreator extends React.Component {
                                     </FormItem>
                                     <FormItem label="游标名称" {...formItemLayout}>
                                         {
-                                            getFieldDecorator('qry_name', {
+                                            getFieldDecorator('qry_cursor_name', {
                                                 rules: [{ required: true, message: '函数名称是必须的', whitespace: true }],
                                             })(
                                                 <Input style={{ minWidth: '300px' }} />
