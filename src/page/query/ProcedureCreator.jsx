@@ -123,13 +123,13 @@ class ProcedureCreator extends React.Component {
             if (!err) {
                 console.log(this.inParam.getFormValue());
                 let formInfo = this.props.form.getFieldsValue();
-                this.setState({
-                    inData: this.inParam.getFormValue(),
-                    outData: this.outParam.getFormValue(),
-                });
+                // this.setState({
+                //     inData: this.inParam.getFormValue(),
+                //     outData: this.outParam.getFormValue(),
+                // });
                 
-                formInfo.in = this.state.inData;
-                formInfo.out = this.state.outData;
+                formInfo.in = this.inParam.getFormValue();
+                formInfo.out = this.outParam.getFormValue();
                 console.log(formInfo);
 
                 if (this.state.action == 'create') {
