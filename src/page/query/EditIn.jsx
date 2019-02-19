@@ -1,6 +1,5 @@
 import React from 'react'
 import { Table, Divider, Tag, Form, Input, Select, Button, Card, Checkbox } from 'antd';
-
 import HttpService from '../../util/HttpService.jsx';
 import './query.scss';
 const Option = Select.Option;
@@ -67,20 +66,25 @@ class EditIn extends React.Component {
     let formValue = this.ArrayToFormValue(this.state.data);
     this.props.form.setFieldsValue(formValue);
   }
-  
+ 
   getFormValue() {
     //转换formValue到数组
     // let arrayValue=this.FormValueToArray(this.props.form.getFieldsValue());
     // this.setState({data:arrayValue});
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        return this.state.data;
-      } else {
-        alert(err);
-      }
-    })
+    var that=this;
+    var p = new Promise(function(resolve, reject){
+      that.props.form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+           resolve(that.state.data);
+        } else {
+          reject(err);
+        }
+      })
+    });
+    return p;   
   }
 
+  
   ArrayToFormValue(dataArray) {
     let formValue = {};
     for (var i = 0; i < dataArray.length; i++) {
@@ -161,10 +165,6 @@ class EditIn extends React.Component {
 
 
   //数据字典选中事件
-  onSelectChangeTab = (selectedRowKeys) => {
-    this.setState({ selectedRowKeys });
-  }
-
   onSelectChangeTab = (selectedRowKeys) => {
     this.setState({ selectedRowKeys });
   }

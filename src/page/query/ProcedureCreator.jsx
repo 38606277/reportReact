@@ -11,7 +11,7 @@ import EditIn from './EditIn.jsx';
 import EditOut from './EditOut.jsx';
 import FunctionService from '../../service/FunctionService.jsx'
 import HttpService from '../../util/HttpService.jsx';
-
+import "babel-polyfill";
 import DbService from '../../service/DbService.jsx'
 import './query.scss';
 
@@ -50,8 +50,8 @@ class ProcedureCreator extends React.Component {
         // alert(this.props.match.params.funcid);
         this.state = {
             //定义窗体参数
-            action: this.props.action,
-            qry_id: this.props.id,
+            action: this.props.match.params.action,
+            qry_id: this.props.match.params.id,
             //定义状态
             inData: [],
             outData: [],
@@ -116,20 +116,38 @@ class ProcedureCreator extends React.Component {
     //     this.child = ref
     // }
 
-    onSaveClick(e) {
+    getparmam(parmam){
+       return new Promise(parmam);
+    }
+    async onSaveClick(e) {
         //this.child.setFormValue(res.data.in);
+        let results=null,resultstwo=null;
+        try{
+            await this.inParam.getFormValue().then(function(result){
+                results=result;
+            });
+            await this.outParam.getFormValue().then(function(result){
+                resultstwo=result;
+            });
+         }catch(err){
+             console.log(err); 
+         }
+         if(results==null || resultstwo==null){
+            return false;
+        }
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
-                console.log(this.inParam.getFormValue());
                 let formInfo = this.props.form.getFieldsValue();
-                // this.setState({
-                //     inData: this.inParam.getFormValue(),
-                //     outData: this.outParam.getFormValue(),
-                // });
                 
-                formInfo.in = this.inParam.getFormValue();
-                formInfo.out = this.outParam.getFormValue();
+                // new Promise(this.inParam.getFormValue()).then(function(result){
+                //      return formInfo.in=result;
+                // }).catch(function (reason) {
+                //     console.log('失败：' + reason);
+                // });
+                formInfo.qry_type='procedure';
+                formInfo.in = results;
+                formInfo.out = resultstwo;
                 console.log(formInfo);
 
                 if (this.state.action == 'create') {

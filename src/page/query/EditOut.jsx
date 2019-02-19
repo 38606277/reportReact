@@ -22,6 +22,7 @@ class EditOut extends React.Component {
       formData: {},
       dictData: [],
       authData: [],
+      selectedRowKeys: [],
       rowCount:0,
     };
   }
@@ -48,7 +49,17 @@ class EditOut extends React.Component {
   }
 
   getFormValue() {
-    return this.state.data;
+    var that=this;
+    var p = new Promise(function(resolve, reject){
+      that.props.form.validateFieldsAndScroll((err, values) => {
+        if (!err) {
+           resolve(that.state.data);
+        } else {
+          reject(err);
+        }
+      })
+    });
+    return p;   
   }
   onSelectChangeTab = (selectedRowKeys) => {
     this.setState({ selectedRowKeys });
