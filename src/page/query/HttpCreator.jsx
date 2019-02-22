@@ -327,7 +327,7 @@ class HttpCreator extends React.Component {
 
                   <FormItem label="HTTP查询Url" {...formItemLayout}  >
                     {
-                      getFieldDecorator('qry_name', {
+                      getFieldDecorator('qry_http_url', {
                         rules: [{ required: true, message: 'HTTP查询Url是必须的' }],
                       })(
                         <Input style={{ minWidth: '350px' }} />
@@ -337,7 +337,7 @@ class HttpCreator extends React.Component {
                 
                   <FormItem label="HTTP查询头"   {...formItemLayout} >
                     {
-                      getFieldDecorator('qry_name', {
+                      getFieldDecorator('qry_http_header', {
                         rules: [{ }],
                       })(
                         <TextArea placeholder="头部放置内容..." rows={4}  style={{minWidth:"365px" }} />

@@ -332,7 +332,7 @@ class ProcedureCreator extends React.Component {
                                             getFieldDecorator('qry_sql', {
                                                 rules: [{ required: true, message: '函数名称是必须的', whitespace: true }],
                                             })(
-                                                <Input style={{ minWidth: '300px' }} />
+                                                <TextArea style={{ minWidth: '300px',height:'100px' }} />
                                             )
                                         }
                                     </FormItem>
