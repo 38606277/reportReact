@@ -14,6 +14,7 @@ import HttpService from '../../util/HttpService.jsx';
 
 import DbService from '../../service/DbService.jsx'
 import './query.scss';
+import "babel-polyfill";
 import { black } from 'ansi-colors';
 import { red } from 'ansi-colors';
 
@@ -131,8 +132,21 @@ class SqlCreator extends React.Component {
     //     this.child = ref
     // }
 
-    handleSubmit(e){
-        //this.child.setFormValue(res.data.in);
+  async  handleSubmit(e){
+        let results=null,resultstwo=null;
+        try{
+            await this.inParam.getFormValue().then(function(result){
+                results=result;
+            });
+            await this.outParam.getFormValue().then(function(result){
+                resultstwo=result;
+            });
+         }catch(err){
+             console.log(err); 
+         }
+         if(results==null || resultstwo==null){
+            return false;
+        }
         e.preventDefault();
         this.props.form.validateFieldsAndScroll((err, values) => {
             if (!err) {
@@ -143,8 +157,8 @@ class SqlCreator extends React.Component {
                 // });
                 formInfo.qry_type = 'sql';
                 formInfo.qry_sql = this.refs.editorsql.codeMirror.getValue();
-                formInfo.in = this.inParam.getFormValue();
-                formInfo.out = this.state.outData;
+                formInfo.in = results;
+                formInfo.out = resultstwo;
                 console.log(formInfo);
 
                 if (this.state.action == 'create') {
@@ -153,7 +167,7 @@ class SqlCreator extends React.Component {
                             if (res.resultCode == "1000") {
                                 message.success('创建成功！');
                                 this.setState({ action: 'update' });
-                                this.props.form.setFieldsValue({ qry_id: res.data });
+                                this.props.form.setFieldsValue({ qry_id: res.data.qry_id });
                             }
                             else
                                 message.error(res.message);
@@ -196,6 +210,7 @@ class SqlCreator extends React.Component {
                                 "datatype": item.datatype,
                                 "dict_id": undefined,
                                 "dict_name": undefined,
+                                "render": "Input",
                                 "authtype_id": undefined,
                                 "authtype_desc": undefined,
                                 "validate": ""
@@ -207,7 +222,7 @@ class SqlCreator extends React.Component {
                                 "out_id": item.id,
                                 "out_name": item.name,
                                 "datatype": item.datatype,
-                                "render": undefined,
+                                "render": "Input",
                                 "width": 100,
                                 "link": {},
                             };

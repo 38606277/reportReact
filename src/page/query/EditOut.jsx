@@ -265,11 +265,6 @@ class EditOut extends React.Component {
         <Form>
           <Form.Item style={{ margin: 0 }}>
             {this.props.form.getFieldDecorator(index + '-' + 'render', {
-              rules: [{
-                required: true,
-                message: `参数名是必须的！`,
-              }]
-
             })(<Input onChange={e => this.changeEvent(e)} />)}
           </Form.Item>
         </Form>
