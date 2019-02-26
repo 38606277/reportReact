@@ -192,6 +192,7 @@ class ProcedureCreator extends React.Component {
                     for (var item of res.data) {
                         if (item.type == 'in') {
                             let aIn = {
+                                key: item.id,
                                 "qry_id": "",
                                 "in_id": item.id,
                                 "in_name": item.name,
@@ -203,8 +204,9 @@ class ProcedureCreator extends React.Component {
                                 "validate": ""
                             };
                             ins.push(aIn);
-                        } else if (item.type == 'out') {
+                            } else if (item.type == 'out') {
                             let aOut = {
+                                key: item.id,
                                 "qry_id": "",
                                 "out_id": item.id,
                                 "out_name": item.name,
