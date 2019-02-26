@@ -1,10 +1,11 @@
 [
     {
         "in": {
-            "segment1": "",
-            "tax": "",
-            "vendor_attribute12": "",
-            "vendor_name": "????"
+            "begindate": "",
+            "enddate": "",
+            "org_id": "4322",
+            "po_number": "",
+            "vendor_name": ""
         }
     },
     {

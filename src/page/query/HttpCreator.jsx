@@ -344,6 +344,17 @@ class HttpCreator extends React.Component {
                       )
                     }
                   </FormItem>
+
+
+                  <FormItem label="HTTP响应中数组命名空间"   {...formItemLayout} >
+                    {
+                      getFieldDecorator('qry_http_res_body_ArrayName', {
+                        rules: [{ }],
+                      })(
+                        <Input placeholder="data"  style={{ minWidth: '350px' }}  />
+                      )
+                    }
+                  </FormItem>
                   <Tabs type="card" tabBarExtraContent={<Button icon="bars">生成输入输出</Button>}>
                     <TabPane tab="请求" key="1">
                       <CodeMirror ref="editorsql" value='' style={{ height: '300px', width: '450px', border: "1px" }} options={options} />
