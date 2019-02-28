@@ -17,7 +17,8 @@ export default class SiderBar extends React.Component {
         this.state = {
             categoryList:[],
             loading: false,
-            userId:0
+            userId:0,
+            categoryList2:[],
         };
 
     }
@@ -28,15 +29,15 @@ export default class SiderBar extends React.Component {
             param= localStorge.getStorage('userInfo').id;
             this.setState({userId:param});
         }
-      _query.getQueryClassTree(param).then(response => {
-          this.setState({categoryList:response.data});
-      }, errMsg => {
-          this.setState({
-              categoryList : []
-          });
-      });
-      
+        _query.getQueryClassTree(param).then(response => {
+            this.setState({categoryList:response.data});
+        }, errMsg => {
+            this.setState({
+                categoryList : []
+            });
+        });
     }
+     //数据图标分析透视导航分解   
     dashboardformSubmenusChild(obj,index){
         return (<SubMenu key={obj.func_name+obj.func_id} 
                 onTitleClick={this.dashBoardClickMuen.bind(this,obj)} 
@@ -53,6 +54,7 @@ export default class SiderBar extends React.Component {
                 }
             </SubMenu>);
         }
+     //数据透视导航分解   
     cubeformSubmenusChild(obj,index){
         return (<SubMenu key={obj.func_name+obj.func_id} 
                 onTitleClick={this.cubeClickMuen.bind(this,obj)} 
@@ -69,8 +71,9 @@ export default class SiderBar extends React.Component {
                 }
             </SubMenu>);
         }
+    //数据查询获取导航2    
     fourformSubmenusChild(obj,index){
-    return (<SubMenu key={obj.func_name+obj.func_id} 
+        return (<SubMenu key={obj.func_name+obj.func_id} 
             onTitleClick={this.clickMuen.bind(this,obj,index)} 
             id='divtitle'
             title={<span><Icon type={obj.func_icon} />
@@ -94,18 +97,7 @@ export default class SiderBar extends React.Component {
             }
         </SubMenu>);
     }
-    // threeformSubmenusChild(obj,index,indexs){
-    //     let cHtml=<div></div>;
-    //     let childArray=obj.children;
-    //     if("undefined"!=typeof(childArray)&&childArray.length>0) {
-    //         cHtml = childArray.map((item, index) => {
-    //             return this.threeformSubmenusChild(item,obj.value,index);
-    //         });
-    //         return <SubMenu key={obj.name==undefined?obj.func_name+(indexs):obj.name+(indexs)} title={<span><Icon type={obj.func_icon!=undefined?obj.func_icon:'folder'} /><span>{obj.name==undefined?obj.func_name:obj.name}</span></span>}>{cHtml}</SubMenu>
-    //     }else{
-    //         return <Menu.Item key={obj.name+index} ><Link to={'/query/ExecQuery/'+obj.value+'/'+index+'/'+obj.name+'/null'}><Icon type={childArray==undefined?'table':'folder'} /><span>{obj.name==undefined?obj.func_name:obj.name}</span></Link></Menu.Item>
-    //     }
-    // }
+    //固定循环设置导航
     formSubmenusChild(obj){
         let cHtml=<div></div>;
         let childArray=obj.children;
@@ -118,6 +110,7 @@ export default class SiderBar extends React.Component {
             return <Menu.Item key={obj.func_name} ><Link to={obj.func_url}  id='divtitle'><Icon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>
         }
     }
+    //数据查询
     clickMuen=(obj,index)=>{
         if(undefined==obj.shujuList){
             this.setState({loading:true});
@@ -133,6 +126,7 @@ export default class SiderBar extends React.Component {
             });
         }
     }
+    //数据查询获取数据
     clickQryName=(obj)=>{
         if(undefined==obj.shuJuChildren){
             this.setState({loading:true});
@@ -143,6 +137,7 @@ export default class SiderBar extends React.Component {
             });
         }
     }
+    //点击数据映射获取数据导航
     cubeClickMuen=(obj)=>{
         if(undefined==obj.cubeList){
             this.setState({loading:true});
@@ -153,6 +148,7 @@ export default class SiderBar extends React.Component {
             });
         }
     }
+    //点击数据图标分析获取数据导航
     dashBoardClickMuen=(obj)=>{
         if(undefined==obj.dashboardList){
             this.setState({loading:true});
@@ -161,6 +157,45 @@ export default class SiderBar extends React.Component {
                obj['dashboardList']=response.data;
                this.setState({categoryList:this.state.categoryList});
              });
+        }
+    }
+    //点击我的报表获取后台数据
+    clickMuenBao=(obj)=>{
+        if(undefined==obj.baobiaoList){
+            _query.getMyReports().then(response => {
+                obj['baobiaoList']=response;
+              this.setState({categoryList2:response});
+          }, errMsg => {
+             
+          });
+        }
+    }
+    //我的报表导航
+    baoBiaoSubmenus(obj,index){
+        return (<SubMenu key={obj.func_name+obj.func_id} 
+            onTitleClick={this.clickMuenBao.bind(this,obj,index)} 
+            id='divtitle'
+            title={<span><Icon type={obj.func_icon} />
+            <span>{obj.func_name}</span></span>}>
+            {
+                obj.baobiaoList==null?'':obj.baobiaoList.map(obj2=>(
+                 this.baoBiaoSubmenusChild(obj2)
+                ))
+                
+            }
+        </SubMenu>);
+    }
+    //我的报表详细导航
+    baoBiaoSubmenusChild(obj){
+        let cHtml=<div></div>;
+        let childArray=obj.children;
+        if("undefined"!=typeof(childArray)&&childArray.length>0) {
+          cHtml = childArray.map((item, index) => {
+                return this.baoBiaoSubmenusChild(item);
+            });
+            return <SubMenu key={obj.name}  id='' title={<span><Icon type={"table"} /><span>{obj.name}</span></span>}>{cHtml}</SubMenu>
+        }else{
+            return <Menu.Item key={obj.name} ><Link to={"/query/web/"+obj.path}  id='divtitle'><Icon type={"table"} /><span>{obj.name}</span></Link></Menu.Item>
         }
     }
     render() {
@@ -172,6 +207,8 @@ export default class SiderBar extends React.Component {
                     return this.cubeformSubmenusChild(obj,index);
                 }else if(obj.func_id=='1007'){
                     return this.dashboardformSubmenusChild(obj,index);
+                }else if(obj.func_id=='1008'){
+                    return this.baoBiaoSubmenus(obj,index);
                 }else{
                     if("undefined"!=typeof(obj.children) &&obj.children.length>0){
                         return this.formSubmenusChild(obj);
@@ -184,7 +221,7 @@ export default class SiderBar extends React.Component {
                 return <Menu.Item key={"sub"+index} id="atitle"><Link to={obj.func_url}><Icon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>
             }
         });
-         const collapsed=this.props.collapsed;
+        const collapsed=this.props.collapsed;
         return (
             <div className="navbar-side">
             <Sider
@@ -207,5 +244,3 @@ export default class SiderBar extends React.Component {
         )
     }
 }
-
-

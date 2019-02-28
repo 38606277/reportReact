@@ -49,6 +49,11 @@ const QueryData = Loadable({
     loading: loading,
     delay:3000
 });
+const WebTemplate = Loadable({
+    loader: () => import('./WebTemplate.jsx'),
+    loading: loading,
+    delay:3000
+});
 // const Indexs = Loadable({
 //     loader: () => import('./Indexs.jsx'),
 //     loading: loading,
@@ -69,6 +74,7 @@ class QueryRouter extends React.Component{
                  <Route path="/query/SqlCreator/:action/:id" component={SqlCreator} />
                  <Route path="/query/ProcedureCreator/:action/:id" component={ProcedureCreator} />
                  <Route path="/query/HttpCreator/:action/:id" component={HttpCreator} />
+                 <Route path="/query/web/:path" component={WebTemplate} />
                  <Redirect exact from="/query" to="/query/ExecQuery"/> 
             </Switch>
         )

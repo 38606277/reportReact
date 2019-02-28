@@ -18,6 +18,16 @@ export default class QueryService {
         let param = {userId:userId};  
         return HttpService.post(url,JSON.stringify(param));
     }
+    //获取staticReport目录下的文件目录
+    getMyReports(){
+        let url = "reportServer/web/getDirectory";
+        return HttpService.post(url,null);
+    }
+    //获取需要进行替换的访问目录路径
+    MyReportUrl(){
+        let url = "reportServer/web/MyReportUrl";
+        return HttpService.post(url,null);
+    }
     getReportNameList(name){
         let url="reportServer/select/getSelectName/"+name;
         return HttpService.post(url,{});
