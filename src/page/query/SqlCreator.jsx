@@ -268,7 +268,16 @@ class SqlCreator extends React.Component {
     onDelRowClick() {
         alert('del');
     }
-
+    
+    sqlFormat(){
+        let aSQL = this.refs.editorsql.codeMirror.getValue();
+        if(null!=aSQL && ""!=aSQL){
+            HttpService.post("reportServer/query/sqlFormat", aSQL)
+            .then(res => {
+                this.refs.editorsql.codeMirror.setValue(res.data);
+            });
+        }
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -330,7 +339,7 @@ class SqlCreator extends React.Component {
                                         <span style={{color:"black" ,fontWeight:"400",position:"absolute",bottom:"2px"}}><span class="ant-form-item-required"></span>输入查询SQL</span>
                                         <span style={{ float: "right", }}>
                                             <Button icon="tool" loading={this.state.loading} onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成查询</Button>
-                                            <Button icon="bars">格式化</Button>
+                                            <Button icon="bars" onClick={() => this.sqlFormat()} style={{ marginRight: "10px" }}> 格式化</Button>
                                         </span>
                                     </Row>
                                     <CodeMirror ref="editorsql" value='' style={{ height: '600px', width: '450px', border: "2px solid red" }} options={options} />
@@ -403,14 +412,20 @@ class SqlCreator extends React.Component {
                                             </FormItem>
                                         </Col>
                                     </Row>
-                                    <Tabs type="card" style={{ marginTop: '15px' }} >
+                                    <Card title="输入参数" bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}>
+                                        <EditIn onRef={(ref) => this.inParam = ref}/>
+                                    </Card>
+                                    <Card title="输出参数"bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}>
+                                        <EditOut onRef={(ref) => this.outParam = ref} action={this.state.action}/>
+                                    </Card>
+                                    {/* <Tabs type="card" style={{ marginTop: '15px' }} >
                                         <TabPane tab="输入参数" key="1" >
                                             <EditIn onRef={(ref) => this.inParam = ref} />
                                         </TabPane>
                                         <TabPane tab="输出参数" key="2" forceRender>
                                             <EditOut onRef={(ref) => this.outParam = ref} action={this.state.action} />
                                         </TabPane>
-                                    </Tabs>
+                                    </Tabs> */}
 
                                 </Card>
                             </Col>
