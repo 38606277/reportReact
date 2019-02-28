@@ -1,6 +1,12 @@
 .ant-table-thead .headerRow{
     text-align: center;
 }
+
+.ant-table-thead .headerRowWidth > div{
+    text-align: center;
+    width: '90px';
+    min-width: '90px';
+}
 .ant-table-tbody .headerRow{
     text-align: center;
 }
