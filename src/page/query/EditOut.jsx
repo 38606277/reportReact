@@ -42,7 +42,7 @@ class EditOut extends React.Component {
         f[fieldName] = this.state.data[i][field];
       }
     }
-    console.log(f);
+   // console.log(f);
     this.setState({ formData: f });
     this.props.form.setFieldsValue(this.state.formData);
     //this.props.form.setFieldsValue(this.state.formData);
@@ -112,7 +112,7 @@ class EditOut extends React.Component {
   }
   changeEvent(e) {
     // record.age=e.target.value; 
-    console.log(e.target.id, e.target.value);
+   // console.log(e.target.id, e.target.value);
     let id = e.target.id;
     let index = id.split('-')[0];
     let field = id.split('-')[1]
@@ -131,7 +131,7 @@ class EditOut extends React.Component {
   }
 
   handleOk = (e) => {
-    console.log(e);
+   // console.log(e);
     //保存到服务端
 
 
@@ -141,7 +141,7 @@ class EditOut extends React.Component {
   }
 
   handleCancel = (e) => {
-    console.log(e);
+  //  console.log(e);
    
     this.setState({
       linkFormVisible: false,
@@ -150,8 +150,8 @@ class EditOut extends React.Component {
 
 
   buttonClick() {
-    console.log(this.props.form.getFieldsValue());
-    console.log(this.state.data);
+   // console.log(this.props.form.getFieldsValue());
+   // console.log(this.state.data);
   }
   changeColumn() {
     this.refs.table.columns = this.columns1;
@@ -181,7 +181,7 @@ class EditOut extends React.Component {
           {this.props.form.getFieldDecorator(index + '-' + 'out_id', {
             rules: [{
               required: true,
-              message: `Please Input !`,
+              message: `列ID是必须的！`,
             }],
           })(<Input onChange={e => this.changeEvent(e)}  className='resultColumnsDiv' style={{minWidth:'100px'}}/>)}
         </Form.Item>
@@ -201,7 +201,7 @@ class EditOut extends React.Component {
             {this.props.form.getFieldDecorator(index + '-' + 'out_name', {
               rules: [{
                 required: true,
-                message: `参数名是必须的！`,
+                message: `列名是必须的！`,
               }]
 
             })(<Input onChange={e => this.changeEvent(e)}  className='resultColumnsDiv' style={{minWidth:'100px'}}/>)}

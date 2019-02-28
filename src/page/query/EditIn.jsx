@@ -129,7 +129,7 @@ class EditIn extends React.Component {
 
   changeEvent(e) {
     // record.age=e.target.value; 
-    console.log(e.target.id, e.target.value);
+    //console.log(e.target.id, e.target.value);
     let id = e.target.id;
     let index = id.split('-')[0];
     let field = id.split('-')[1]
@@ -152,8 +152,8 @@ class EditIn extends React.Component {
     //this.props.form.setFieldsValue(this.state.FormData);
   }
   buttonClick() {
-    console.log(this.props.form.getFieldsValue());
-    console.log(this.state.data);
+   // console.log(this.props.form.getFieldsValue());
+   // console.log(this.state.data);
   }
   changeColumn() {
     this.refs.table.columns = this.columns1;
@@ -228,7 +228,7 @@ class EditIn extends React.Component {
             {getFieldDecorator(index + '-' + 'in_id', {
               rules: [{
                 required: true,
-                message: `Please Input !`,
+                message: `列ID是必须的！`,
               }],
             })(<Input onChange={e => this.handleFieldChange(e.target.value, 'in_id', index)} className='resultColumnsDiv'  style={{minWidth:'100px'}}/>)}
           </FormItem>
@@ -246,7 +246,7 @@ class EditIn extends React.Component {
             {getFieldDecorator(index + '-' + 'in_name', {
               rules: [{
                 required: true,
-                message: `Please Input !`,
+                message: `列名是必须的！`,
               }],
             })(<Input onChange={e => this.handleFieldChange(e.target.value, 'in_name', index)}  className='resultColumnsDiv'  style={{minWidth:'100px'}}/>)}
           </FormItem>
