@@ -350,7 +350,7 @@ class HttpCreator extends React.Component {
 
                   <FormItem label="HTTP响应中数组命名空间"   {...formItemLayout} >
                     {
-                      getFieldDecorator('qry_http_res_body_ArrayName', {
+                      getFieldDecorator('qry_http_res_body_arrayname', {
                         rules: [{ }],
                       })(
                         <Input placeholder="data"  style={{ minWidth: '350px' }}  />
