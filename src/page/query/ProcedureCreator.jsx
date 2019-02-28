@@ -418,17 +418,16 @@ class ProcedureCreator extends React.Component {
                                             </FormItem>
                                         </Col>
                                     </Row>
-                                    <Tabs type="card" style={{ marginTop: '15px' }} onChange={this.tabOnChange}
-                                        tabBarExtraContent={<span><Button icon="plus" onClick={() => this.onAddRowClick()} />
-                                            <Button icon="minus" onClick={() => this.onDelRowClick()} /></span>}>
-                                        <TabPane tab="输入参数" key="1" >
-                                            <EditIn onRef={(ref) => this.inParam = ref} editable={true}/>
-                                        </TabPane>
-                                        <TabPane tab="输出参数" key="2" forceRender>
-                                            <EditOut onRef={(ref) => this.outParam = ref} action={this.state.action} editable={true} />
-                                        </TabPane>
-                                    </Tabs>
-
+                                    <Card title="输入参数" bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}>
+                                        <Button icon="plus" onClick={() => this.onAddRowClick("1")} />
+                                        <Button icon="minus" onClick={() => this.onDelRowClick("1")} />
+                                        <EditIn onRef={(ref) => this.inParam = ref} editable={true}/>
+                                    </Card>
+                                    <Card title="输出参数"bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}>
+                                        <Button icon="plus" onClick={() => this.onAddRowClick("2")} />
+                                        <Button icon="minus" onClick={() => this.onDelRowClick("2")} />
+                                        <EditOut onRef={(ref) => this.outParam = ref} action={this.state.action} editable={true}/>
+                                    </Card>
                                 </Card>
                             </Col>
                         </Row>

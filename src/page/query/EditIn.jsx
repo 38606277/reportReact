@@ -230,7 +230,7 @@ class EditIn extends React.Component {
                 required: true,
                 message: `Please Input !`,
               }],
-            })(<Input onChange={e => this.handleFieldChange(e.target.value, 'in_id', index)} />)}
+            })(<Input onChange={e => this.handleFieldChange(e.target.value, 'in_id', index)} className='resultColumnsDiv'  style={{minWidth:'100px'}}/>)}
           </FormItem>
         );
       }
@@ -239,6 +239,7 @@ class EditIn extends React.Component {
       dataIndex: 'in_name',
       key: 'in_name',
       className: 'headerRow',
+      width: '100px',
       render: (text, record, index) => {
         return (
           <FormItem style={{ margin: 0 }}>
@@ -247,7 +248,7 @@ class EditIn extends React.Component {
                 required: true,
                 message: `Please Input !`,
               }],
-            })(<Input onChange={e => this.handleFieldChange(e.target.value, 'in_name', index)} />)}
+            })(<Input onChange={e => this.handleFieldChange(e.target.value, 'in_name', index)}  className='resultColumnsDiv'  style={{minWidth:'100px'}}/>)}
           </FormItem>
         );
 
@@ -266,7 +267,7 @@ class EditIn extends React.Component {
                 message: `数据类型是必须的！`,
               }],
             })(
-              <Select tyle={{ minWidth: '80px' }}
+              <Select  className='resultColumnsDiv' style={{minWidth:'100px'}}
                 onChange={value => this.handleFieldChange(value, 'datatype', index)} >
                 <Option value="varchar">字符串</Option>
                 <Option value="number">数字</Option>
@@ -286,7 +287,7 @@ class EditIn extends React.Component {
           <Form.Item style={{ margin: 0 }}>
             {this.props.form.getFieldDecorator(index + '-' + 'dict_id', {
             })(
-              <Select style={{ minWidth: '100px' }}
+              <Select className='resultColumnsDiv' style={{minWidth:'100px'}}
                 onChange={value => this.handleFieldChange(value, 'dict_id', index)} >
                 {this.state.dictData.map(item => <Option value={item.dict_id}>{item.dict_name}</Option>)}
               </Select>
@@ -305,7 +306,7 @@ class EditIn extends React.Component {
           <Form.Item style={{ margin: 0 }}>
             {this.props.form.getFieldDecorator(index + '-' + 'render', {
             })(
-              <Select style={{ minWidth: '100px' }}
+              <Select className='resultColumnsDiv' style={{minWidth:'100px'}}
                 onChange={value => this.handleFieldChange(value, 'render', index)} >
                 <Option value="Input">输入框</Option>
                 <Option value="Datepicker">日期选择</Option>
@@ -328,7 +329,7 @@ class EditIn extends React.Component {
         return (
           <Form.Item style={{ margin: 0 }}>
             {this.props.form.getFieldDecorator(index + '-' + 'authtype_id', {})(
-              <Select style={{ minWidth: '100px' }}
+              <Select  className='resultColumnsDiv' style={{minWidth:'100px'}}
                 onChange={value => this.handleFieldChange(value, 'authtype_id', index)} >
                 {this.state.authData.map(item =>
                   <Option key={item.value} value={item.value}>{item.name}
@@ -359,7 +360,7 @@ class EditIn extends React.Component {
           size="small"
           bordered
           rowSelection={this.props.editable==true?rowSelections:null}
-          pagination={false} />
+          pagination={false} scroll={{x:true}}/>
       </Form>
     )
   }

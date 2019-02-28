@@ -183,7 +183,7 @@ class EditOut extends React.Component {
               required: true,
               message: `Please Input !`,
             }],
-          })(<Input onChange={e => this.changeEvent(e)} />)}
+          })(<Input onChange={e => this.changeEvent(e)}  className='resultColumnsDiv' style={{minWidth:'100px'}}/>)}
         </Form.Item>
         </Form>
       );
@@ -204,7 +204,7 @@ class EditOut extends React.Component {
                 message: `参数名是必须的！`,
               }]
 
-            })(<Input onChange={e => this.changeEvent(e)} />)}
+            })(<Input onChange={e => this.changeEvent(e)}  className='resultColumnsDiv' style={{minWidth:'100px'}}/>)}
           </Form.Item>
         </Form>
       );
@@ -225,7 +225,7 @@ class EditOut extends React.Component {
                 message: `数据类型是必须的！`,
               }],
             })(
-              <Select tyle={{ minWidth: '80px' }} >
+              <Select  className='resultColumnsDiv' style={{minWidth:'100px'}} >
                 <Option value="string">字符串</Option>
                 <Option value="number">数字</Option>
                 <Option value="date">日期</Option>
@@ -250,7 +250,7 @@ class EditOut extends React.Component {
                 message: `参数名是必须的！`,
               }]
 
-            })(<Input onChange={e => this.changeEvent(e)} />)}
+            })(<Input onChange={e => this.changeEvent(e)} className='resultColumnsDiv' style={{minWidth:'100px'}} />)}
           </Form.Item>
         </Form>
       );
@@ -265,7 +265,7 @@ class EditOut extends React.Component {
         <Form>
           <Form.Item style={{ margin: 0 }}>
             {this.props.form.getFieldDecorator(index + '-' + 'render', {
-            })(<Input onChange={e => this.changeEvent(e)} />)}
+            })(<Input onChange={e => this.changeEvent(e)}  className='resultColumnsDiv' style={{minWidth:'100px'}}/>)}
           </Form.Item>
         </Form>
       );
@@ -323,7 +323,7 @@ class EditOut extends React.Component {
       <div>
 
         <Table ref="table" columns={this.columns} rowSelection={this.props.editable==true?rowSelections:null}
-          dataSource={this.state.data} size="small" bordered scroll={{ x: '600px' }} pagination={false} />
+          dataSource={this.state.data} size="small" bordered scroll={{ x: true }} pagination={false} />
       
         <Modal
           title="创建数据链接"
