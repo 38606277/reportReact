@@ -352,14 +352,14 @@ class ProcedureCreator extends React.Component {
                                             </FormItem>
                                         </Col>
                                     </Row>
-                                    <Card title="输入参数" bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}>
-                                        <Button icon="plus" onClick={() => this.onAddRowClick("1")} />
-                                        <Button icon="minus" onClick={() => this.onDelRowClick("1")} />
+                                    <Card title="输入参数" bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}
+                                         extra={<span><Button icon="plus" onClick={() => this.onAddRowClick("1")} />
+                                                        <Button icon="minus" onClick={() => this.onDelRowClick("1")} /></span>}>
                                         <EditIn onRef={(ref) => this.inParam = ref} editable={true}/>
                                     </Card>
-                                    <Card title="输出参数"bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}>
-                                        <Button icon="plus" onClick={() => this.onAddRowClick("2")} />
-                                        <Button icon="minus" onClick={() => this.onDelRowClick("2")} />
+                                    <Card title="输出参数"bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}
+                                        extra={<span><Button icon="plus" onClick={() => this.onAddRowClick("1")} />
+                                                     <Button icon="minus" onClick={() => this.onDelRowClick("1")} /></span>}>
                                         <EditOut onRef={(ref) => this.outParam = ref} action={this.state.action} editable={true}/>
                                     </Card>
                                 </Card>
