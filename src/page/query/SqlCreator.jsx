@@ -412,20 +412,20 @@ class SqlCreator extends React.Component {
                                             </FormItem>
                                         </Col>
                                     </Row>
-                                    <Card title="输入参数" bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}>
+                                    {/* <Card title="输入参数" bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}>
                                         <EditIn onRef={(ref) => this.inParam = ref}/>
                                     </Card>
                                     <Card title="输出参数"bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}>
                                         <EditOut onRef={(ref) => this.outParam = ref} action={this.state.action}/>
-                                    </Card>
-                                    {/* <Tabs type="card" style={{ marginTop: '15px' }} >
+                                    </Card> */}
+                                    <Tabs type="card" style={{ marginTop: '15px' }} >
                                         <TabPane tab="输入参数" key="1" >
                                             <EditIn onRef={(ref) => this.inParam = ref} />
                                         </TabPane>
                                         <TabPane tab="输出参数" key="2" forceRender>
                                             <EditOut onRef={(ref) => this.outParam = ref} action={this.state.action} />
                                         </TabPane>
-                                    </Tabs> */}
+                                    </Tabs>
 
                                 </Card>
                             </Col>

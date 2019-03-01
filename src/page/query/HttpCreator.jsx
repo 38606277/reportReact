@@ -68,10 +68,12 @@ class HttpCreator extends React.Component {
       //定义下拉查找的数据
       dbList: [],
       funcClassList: [],
+      activeKey:'1',
     };
     this.onSaveClick = this.onSaveClick.bind(this);
   }
   componentDidMount() {
+
     if (this.state.action == 'update') {
       //查询函数定义
       let param = {};
@@ -85,16 +87,24 @@ class HttpCreator extends React.Component {
             this.props.form.setFieldsValue(res.data);
             this.inParam.setFormValue(this.state.inData);
             this.outParam.setFormValue(this.state.outData);
+
+
+
             this.refs.editorsql.codeMirror.setValue(res.data.qry_sql);
+
+
+
           }
           else
             message.error(res.message);
+
         });
 
     }
 
     let editorsql = this.refs.editorsql;
     editorsql.codeMirror.setSize('100%', '300px');
+
     //查询DB定义
     dbService.getDbList()
       .then(res => {
@@ -104,6 +114,7 @@ class HttpCreator extends React.Component {
     //查询查询类别定义
     HttpService.post("reportServer/query/getAllQueryClass", '')
       .then(res => {
+       // console.log(JSON.stringify(res));
         if (res.resultCode == '1000') {
           this.setState({ funcClassList: res.data });
         }
@@ -112,7 +123,12 @@ class HttpCreator extends React.Component {
       });
   }
 
+  // onRef = (ref) => {
+  //     this.child = ref
+  // }
+
   async onSaveClick(e) {
+    //this.child.setFormValue(res.data.in);
     let results=null,resultstwo=null;
         try{
             await this.inParam.getFormValue().then(function(result){
@@ -131,10 +147,15 @@ class HttpCreator extends React.Component {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         let formInfo = this.props.form.getFieldsValue();
+        // this.setState({
+        //   inData: this.inParam.getFormValue(),
+        //   outData: this.outParam.getFormValue(),
+        // });
         formInfo.qry_type = 'http';
         formInfo.qry_sql = this.refs.editorsql.codeMirror.getValue();
         formInfo.in = results;
         formInfo.out = resultstwo;
+       // console.log(formInfo);
 
         if (this.state.action == 'create') {
           HttpService.post("reportServer/query/createQuery", JSON.stringify(formInfo))
@@ -160,10 +181,14 @@ class HttpCreator extends React.Component {
         }
       }
     });
+
   }
 
+
   onGenerateClick() {
+
     let aSQL = this.refs.editorsql.codeMirror.getValue();
+
     functionService.getSqlInOut(aSQL)
       .then(res => {
         if (res.resultCode = 1000) {
@@ -215,22 +240,47 @@ class HttpCreator extends React.Component {
 
 
   }
-  onAddRowClick(param) {
-      if(param=="1"){
+  onAddRowClick() {
+      const activeKey=this.state.activeKey;
+      if(activeKey=="1"){
           this.inParam.addRows();
       }else{
           this.outParam.addRows();
       }
-      
+      //  alert('add');
+      // let indexs=this.state.inData.length;
+      // let aIn = {
+      //     "qry_id": indexs,
+      //     "in_id": indexs,
+      //     "in_name": undefined,
+      //     "datatype": undefined,
+      //     "dict_id": undefined,
+      //     "dict_name": undefined,
+      //     "authtype_id": undefined,
+      //     "authtype_desc": undefined,
+      //     "validate": ""
+      // };
+      // let ins = [];
+      // ins.push(aIn);
+      // this.state.inData.push(aIn);
+      // // this.setState({inData:ins});
+      // this.inParam.getFormValue()
+      // this.inParam.setFormValue(this.state.inData);
+
   }
-  onDelRowClick(param) {
-      if(param=="1"){
+  onDelRowClick() {
+      const activeKey=this.state.activeKey;
+      if(activeKey=="1"){
           this.inParam.deleteRows();
       }else{
           this.outParam.deleteRows();
       }
   }
- 
+  tabOnChange = (activeKey) => {
+      this.setState({ activeKey:activeKey },function () { });
+          
+  }
+
   render() {
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -259,6 +309,7 @@ class HttpCreator extends React.Component {
     const rowObject = {
       minRows: 4, maxRows: 600
     }
+
 
     return (
       <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px' }}>
@@ -373,16 +424,17 @@ class HttpCreator extends React.Component {
                       </FormItem>
                     </Col>
                   </Row>
-                  <Card title="输入参数" bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}
-                      extra={<span><Button icon="plus" onClick={() => this.onAddRowClick("1")} />
-                                   <Button icon="minus" onClick={() => this.onDelRowClick("1")} /></span>}>
+                  <Tabs type="card" style={{ marginTop: '15px' }} onChange={this.tabOnChange}
+                    tabBarExtraContent={<span><Button icon="plus" onClick={() => this.onAddRowClick()} />
+                      <Button icon="minus" onClick={() => this.onDelRowClick()} /></span>}>
+                    <TabPane tab="输入参数" key="1" >
                       <EditIn onRef={(ref) => this.inParam = ref} editable={true}/>
-                  </Card>
-                  <Card title="输出参数"bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}
-                       extra={<span><Button icon="plus" onClick={() => this.onAddRowClick("2")} />
-                                    <Button icon="minus" onClick={() => this.onDelRowClick("2")} /></span>}>
+                    </TabPane>
+                    <TabPane tab="输出参数" key="2" forceRender>
                       <EditOut onRef={(ref) => this.outParam = ref} action={this.state.action} editable={true}/>
-                  </Card>
+                    </TabPane>
+                  </Tabs>
+
                 </Card>
               </Col>
             </Row>
