@@ -275,11 +275,10 @@ class EditOut extends React.Component {
     dataIndex: 'link',
     key: 'link',
     className: 'headerRowWidth',
-    width:'90px',
     render: (text, record, index) => {
       return (
         record.link!=null?
-        <Fragment style={{minWidth:'90px'}}>
+        <div style={{minWidth:'80px'}}><Fragment>
         <a  disabled={this.props.action=='create'?true:false} onClick={() => {
           this.setState({
             linkFormVisible: true,
@@ -292,8 +291,8 @@ class EditOut extends React.Component {
         </a>
         <Divider type="vertical" />
         <a>删除</a>
-        </Fragment>:
-        <Fragment style={{minWidth:'90px'}}>
+        </Fragment></div>:
+        <div style={{minWidth:'80px'}}><Fragment>
         <a  disabled={this.props.action=='create'?true:false} onClick={() => {
           this.setState({
             linkFormVisible: true,
@@ -305,7 +304,7 @@ class EditOut extends React.Component {
         } }>
         创建
         </a>
-        </Fragment>
+        </Fragment></div>
       );
     }
   }];
