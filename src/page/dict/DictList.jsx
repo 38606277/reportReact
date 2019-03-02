@@ -135,7 +135,7 @@ export default class DictList extends React.Component {
                             title="动作"
                             render={(text, record) => (
                                 <span>
-                                    <a href={`#/dict/DictViewData/${record.dict_id}`}>查看数据</a>
+                                    <a href={`#/dict/DictValueList/${record.dict_id}`}>查看数据</a>
                                     <Divider type="vertical" />
                                     <a href={`#/dict/DictCreator/update/${record.dict_id}`}>数据同步</a>
                                     <Divider type="vertical" />

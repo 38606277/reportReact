@@ -25,6 +25,20 @@ const DictViewData = Loadable({
     delay:3000
 });
 
+const DictValueList = Loadable({
+    loader: () => import('./DictValueList.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+
+const DictValueInfo = Loadable({
+    loader: () => import('./DictValueInfo.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+
 export default class DictRouter extends React.Component{
     render(){
         return (
@@ -32,6 +46,8 @@ export default class DictRouter extends React.Component{
                  <Route path="/dict/DictList" component={DictList} />
                  <Route path="/dict/DictCreator/:action/:id" component={DictCreator} />
                  <Route path="/dict/DictViewData/:id" component={DictViewData} />
+                 <Route path="/dict/DictValueList/:dictId" component={DictValueList} />
+                 <Route path="/dict/DictValueInfo/:dictId/:value_code" component={DictValueInfo} />
                  <Redirect exact from="/dict" to="/dict/DictList"/> 
             </Switch>
         )
