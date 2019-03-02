@@ -63,7 +63,6 @@ class ProcedureCreator extends React.Component {
         this.onSaveClick = this.onSaveClick.bind(this);
     }
     componentDidMount() {
-
         if (this.state.action == 'update') {
             //查询函数定义
             let param = {};
@@ -77,23 +76,13 @@ class ProcedureCreator extends React.Component {
                         this.props.form.setFieldsValue(res.data);
                         this.inParam.setFormValue(this.state.inData);
                         this.outParam.setFormValue(this.state.outData);
-
-
-
-
-
-
-
+                        this.refs.editorsql.codeMirror.setValue(res.data.qry_sql);
                     }
                     else
                         message.error(res.message);
 
                 });
-
         }
-
-
-
         //查询DB定义
         dbService.getDbList()
             .then(res => {
@@ -144,7 +133,7 @@ class ProcedureCreator extends React.Component {
                 formInfo.qry_type='procedure';
                 formInfo.in = results;
                 formInfo.out = resultstwo;
-               // console.log(formInfo);
+                formInfo.qry_sql = this.refs.editorsql.codeMirror.getValue();
 
                 if (this.state.action == 'create') {
                     HttpService.post("reportServer/query/createQuery", JSON.stringify(formInfo))
@@ -313,7 +302,7 @@ class ProcedureCreator extends React.Component {
                                     </div>
                                     <Divider style={{ margin: "8px 0 8px 0" }} />
 
-                                    <FormItem label="选择数据库" {...formItemLayout} style={{ marginBottom: "5px", textAlign: "left" }}>
+                                    <FormItem label="选择数据库"  style={{ marginBottom: "5px" }}>
                                         {
                                             getFieldDecorator('qry_db', {
                                                 rules: [{ required: 'true', message: "必须选择数据库" }]
@@ -325,7 +314,7 @@ class ProcedureCreator extends React.Component {
                                         }
                                     </FormItem>
 
-                                    <FormItem label="存储过程名称"  {...formItemLayout}>
+                                    {/* <FormItem label="存储过程名称"  {...formItemLayout}>
                                         {
                                             getFieldDecorator('qry_sql', {
                                                 rules: [{ required: true, message: '函数名称是必须的', whitespace: true }],
@@ -333,7 +322,12 @@ class ProcedureCreator extends React.Component {
                                                 <TextArea style={{ minWidth: '300px',height:'100px' }} />
                                             )
                                         }
-                                    </FormItem>
+                                    </FormItem> */}
+                                    <Row style={{marginBottom:"5px",marginTop:'15px'}}>
+                                        <span style={{color:"black" ,fontWeight:"400",position:"absolute",bottom:"2px"}}><span class="ant-form-item-required"></span>存储过程</span>
+                                    </Row>
+                                    <CodeMirror ref="editorsql" value='' style={{ height: '600px', width: '450px', border: "2px solid red" }} options={options} />
+
                                     <FormItem label="游标名称" {...formItemLayout}>
                                         {
                                             getFieldDecorator('qry_cursor_name', {
