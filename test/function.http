@@ -1,6 +1,6 @@
 #语音查询
 
-POST http://localhost:80/reportServer/ai/getResult/查询华为的供应商信息 HTTP/1.1
+POST http://localhost:80/reportServer/nlp/getResult/查询亚信的采购订单 HTTP/1.1
 content-type: application/json
 method: POST
 credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
@@ -22,7 +22,7 @@ credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
 { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
 
 ###查询所有的函数
-POST http://localhost:8080/reportServer/function/getAllFunctionName HTTP/1.1
+POST http://localhost:80/reportServer/function/getAllFunctionName HTTP/1.1
 content-type: application/json
 method: POST
 credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
