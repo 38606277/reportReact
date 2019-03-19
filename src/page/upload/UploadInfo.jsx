@@ -1,6 +1,7 @@
 import React        from 'react';
+import { Link, Redirect } from 'react-router-dom';
 import DictService         from '../../service/DictService.jsx'
-import { Form, Input, message,Button, Upload,Card,Row, Icon } from 'antd';
+import { Form, Col, message,Button, Upload,Card,Row, Icon } from 'antd';
 import LocalStorge  from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
 const FormItem = Form.Item;
@@ -51,10 +52,10 @@ class UploadInfo extends React.Component{
       }
       if (info.file.status === 'done') {
         // Get this url from response in real world.
-        getBase64(info.file.originFileObj, imageUrl => this.setState({
-          imageUrl,
-          loading: false,
-        }));
+        // getBase64(info.file.originFileObj, imageUrl => this.setState({
+        //   imageUrl,
+        //   loading: false,
+        // }));
       }
     }
   
@@ -64,23 +65,42 @@ class UploadInfo extends React.Component{
     }
    render() {
     const fileList=this.state.fileList;
+    const formItemLayout = {
+      labelCol: {
+        xs: { span: 24 },
+        sm: { span: 8 },
+      },
+      wrapperCol: {
+        xs: { span: 24 },
+        sm: { span: 16 },
+      },
+    };
     return (
       <div id="page-wrapper">
-        <Upload 
-            accept={"image/*"}
-            listType='picture'
-            beforeUpload={beforeUpload}
-            action={url}
-            headers={{
-              credentials: JSON.stringify(localStorge.getStorage("userInfo") || "")}
-            }
-            defaultFileList={[...fileList]}
-            onChange={this.handleChange}
-        >
-          <Button>
-            <Icon type="upload" /> Upload
-          </Button>
-        </Upload>
+      <Row>
+        <Col xs={24} sm={24}>
+        <Link to="/upload">返回</Link>
+        </Col>
+      </Row>
+      <Row>
+        <Col xs={24} sm={24}>
+          <Upload 
+              accept={"image/*"}
+              listType='picture'
+              beforeUpload={beforeUpload}
+              action={url}
+              headers={{
+                credentials: JSON.stringify(localStorge.getStorage("userInfo") || "")}
+              }
+              defaultFileList={[...fileList]}
+              onChange={this.handleChange}
+          >
+            <Button>
+              <Icon type="upload" /> Upload
+            </Button>
+          </Upload>
+          </Col>
+        </Row>
       </div>
     );
   }
