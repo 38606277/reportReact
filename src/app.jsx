@@ -104,6 +104,12 @@ const CubeRouter = Loadable({
     loading: loading,
     delay:3000
 });
+const UploadRouter = Loadable({
+    loader: () => import('./page/upload/uploadRouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+
 function LoadPage(url){
 //    console.log(Loadable({
 //         loader: () => import(url),
@@ -156,6 +162,9 @@ class App extends React.Component {
                             
                             <Route path="/cached" component={CachedRouter}/>
                          <Route path="/cube" component={CubeRouter}/> 
+                         <Route path="/upload" component={UploadRouter}/> 
+
+                         
     
                         </Switch>
                     </Layout>
