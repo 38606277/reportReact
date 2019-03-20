@@ -2,14 +2,22 @@ import React                from 'react';
 import { Link }             from 'react-router-dom';
 import DictService                 from '../../service/DictService.jsx';
 import Pagination           from 'antd/lib/pagination';
-import {Table,Divider,Button,Card, Tooltip,Input, Form,Row,Col}  from 'antd';
+import {Avatar,Divider,Button,Card, List,Input, Form,Row,Col,Icon}  from 'antd';
 import  LocalStorge         from '../../util/LogcalStorge.jsx';
 import HttpService from '../../util/HttpService.jsx';
-const FormItem = Form.Item;
+const Item = List.Item;
 const localStorge = new LocalStorge();
 const _dict = new DictService();
 const Search = Input.Search;
 import './../dict/Dict.scss';
+
+const IconText = ({ type, text }) => (
+    <span>
+      <Icon type={type} style={{ marginRight: 8 }} />
+      {text}
+    </span>
+  );
+  const url=window.getServerUrl();
 class UploadList extends React.Component{
     constructor(props){
         super(props);
@@ -87,39 +95,37 @@ class UploadList extends React.Component{
             item.key=index;
         })
         const dataSource = this.state.list;
-          const columns = [{
-            title: '编码',
-            dataIndex: 'id',
-            key: 'id',
-            className:'headerRow',
-          },{
-            title: '名称',
-            dataIndex: 'fileoriginname',
-            key: 'fileoriginname',
-            className:'headerRow',
-          },{
-            title: '路径',
-            dataIndex: 'filepath',
-            key: 'filepath',
-            className:'headerRow',
-          },{
-            title: '操作',
-            dataIndex: '操作',
-            className:'headerRow',
-            render: (text, record) => (
-                <span>
-                   <a onClick={()=>this.deleteUpload(`${record.id}`)} href="javascript:;">删除</a>
-                </span>
-              ),
-          }];
-       
+        
         return (
             <div id="page-wrapper">
             <Card title="图片列表">
                 <Row>
                     <Button href={"#/upload/uploadInfo/null"} style={{ float: "right", marginRight: "30px" }} type="primary">Upload</Button>
                 </Row>
-                <Table dataSource={dataSource} columns={columns}  pagination={false}/>
+                <List
+                    itemLayout="horizontal"
+                    size="large"
+                    // pagination={{
+                    // onChange: (page) => {
+                    //     console.log(page);
+                    // },
+                    // pageSize: 10,
+                    // }}
+                    dataSource={dataSource}
+                    renderItem={item => (
+                        <List.Item actions={[<Button onClick={()=>this.deleteUpload(item.id)}>delete</Button>]}>
+                            <List.Item.Meta
+                                avatar={<Avatar src={url+"/report/"+item.usefilepath} />}
+                                title={item.fileoriginname}
+                                description={item.filepath}
+                            />
+                            <div>{item.filename}</div>
+                        </List.Item>
+                        )}
+                    />
+                    
+                
+                {/* <Table dataSource={dataSource} columns={columns}  pagination={false}/> */}
                  <Pagination current={this.state.pageNum} 
                     total={this.state.total} 
                     onChange={(pageNum) => this.onPageNumChange(pageNum)}/> 
