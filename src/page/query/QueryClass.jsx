@@ -3,12 +3,15 @@ import React                from 'react';
 import { Link }             from 'react-router-dom';
 import Query                 from '../../service/QueryService.jsx';
 import Pagination           from 'antd/lib/pagination';
-import {Table,Divider,Button,Card,Popconfirm, Tooltip,Input, Form,Icon,message}  from 'antd';
+import {Table,Divider,Button,Card,Popconfirm,Avatar,List, Modal,Tooltip,Input, Form,Icon,message}  from 'antd';
 import  LocalStorge         from '../../util/LogcalStorge.jsx';
+import HttpService from '../../util/HttpService.jsx';
+
 const FormItem = Form.Item;
 const Search = Input.Search;
 const localStorge = new LocalStorge();
 const _query = new Query();
+const url=window.getServerUrl();
 
 const EditableContext = React.createContext();
 
@@ -69,7 +72,7 @@ class QueryClass extends React.Component{
             perPage         : 10,
             listType        :'list',
             className:'',
-            editingKey: ''
+            editingKey: '',actityKeys:''
         };
         this.columns = [{
             title: 'ID',
@@ -114,6 +117,10 @@ class QueryClass extends React.Component{
                       <div><a onClick={() => this.edit(record.key)}>编辑</a>
                         <Divider type="vertical" />
                         <a onClick={()=>this.deleteQueryClss(`${record.key}`)} href="javascript:;">删除</a>
+                        <Divider type="vertical" />
+                        <a onClick={() => this.openImage(record.key)}>上传图片</a>
+                        <Divider type="vertical" />
+                        {record.img_file==null?'':<Avatar src={url+"/report/"+record.img_file}/>}
                         </div>
                     )}
                   </div>
@@ -121,6 +128,9 @@ class QueryClass extends React.Component{
               },
             },
           ];
+    }
+    clickImg(key){
+      
     }
     componentDidMount(){
         this.loadQueryClassList();
@@ -227,7 +237,60 @@ class QueryClass extends React.Component{
       cancel = () => {
         this.setState({ editingKey: '' });
       };
-    
+      openImage=(key)=>{
+        this.setState({
+            visible: true,
+            imgList: [],
+            totald: 0,actityKeys:key
+        }, function () {
+            this.loadModelData();
+        });
+    }
+    //调用模式窗口内的数据查询
+    loadModelData() {
+        let page = {};
+        page.pageNum = this.state.pageNumd;
+        page.perPage = this.state.perPaged;
+        HttpService.post("/reportServer/uploadFile/getAll",JSON.stringify(page)).then(response => {
+            this.setState({imgList:response.data.list,totald:response.data.total});
+        }, errMsg => {
+            this.setState({
+                imgList : []
+            });
+        });
+    }
+    // 字典页数发生变化的时候
+    onPageNumdChange(pageNumd) {
+        this.setState({
+            pageNumd: pageNumd
+        }, () => {
+            this.loadModelData();
+        });
+    }
+    clickimg(id,name){
+      let param={calssid:this.state.actityKeys,img_file:id}
+          HttpService.post("/reportServer/query/uploadImg",JSON.stringify(param)).then(response => {
+              this.loadQueryClassList();
+          }, errMsg => {
+              this.setState({
+                  imgList : []
+              });
+          });
+        this.setState({
+            visible: false,
+        });
+    }
+    //模式窗口点击取消
+    handleCancel = (e) => {
+        this.setState({
+            visible: false
+        });
+    }
+    handleOk = (e) => {
+        this.setState({
+            visible: false
+        });
+    }
     render(){
         this.state.list.map((item,index)=>{
             item.key=item.class_id;
@@ -275,7 +338,26 @@ class QueryClass extends React.Component{
                     total={this.state.total} 
                     onChange={(pageNum) => this.onPageNumChange(pageNum)}/>  */}
             </Card>
-                
+            <div>
+                    <Modal title="图片选择" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel}>
+                        <List
+                            itemLayout="horizontal"
+                            dataSource={this.state.imgList}
+                            renderItem={item => (
+                            <List.Item>
+                                <List.Item.Meta
+                                avatar={<Avatar src={url+"/report/"+item.usefilepath}  />}
+                                description={<a onClick={()=>this.clickimg(item.usefilepath,item.filename)} >{item.filename}</a>}
+                                />
+                            </List.Item>
+                            )}
+                        />
+                        
+                        <Pagination current={this.state.pageNumd}
+                            total={this.state.totald} 
+                            onChange={(pageNumd) => this.onPageNumdChange(pageNumd)} />
+                    </Modal>
+                </div> 
             </div>
         )
     }
