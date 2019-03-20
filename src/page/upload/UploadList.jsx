@@ -98,10 +98,10 @@ class UploadList extends React.Component{
         
         return (
             <div id="page-wrapper">
-            <Card title="图片列表">
-                <Row>
-                    <Button href={"#/upload/uploadInfo/null"} style={{ float: "right", marginRight: "30px" }} type="primary">Upload</Button>
-                </Row>
+            <Card title="图片列表"
+             extra={<Button href={"#/upload/uploadInfo/null"} style={{ float: "right", marginRight: "30px" }} type="primary">Upload</Button>}
+            >
+     
                 <List
                     itemLayout="horizontal"
                     size="large"
