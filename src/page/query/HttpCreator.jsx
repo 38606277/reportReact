@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Button, Table, Form, Input, Divider, Checkbox, Dropdown, Select, Radio, Icon, message, Modal, DatePicker, InputNumber, Switch, Row, Col, Tabs, Menu } from 'antd'
+import { Card, Button, Table, Form, Input, Divider, Avatar,List,Pagination,Checkbox, Dropdown, Select, Radio, Icon, message, Modal, DatePicker, InputNumber, Switch, Row, Col, Tabs, Menu } from 'antd'
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 import "babel-polyfill";
@@ -50,7 +50,7 @@ const formItemLayout = {
 
 
 
-// moment.locales('zh-cn');
+const url=window.getServerUrl();
 class HttpCreator extends React.Component {
 
   state = {};
@@ -68,7 +68,8 @@ class HttpCreator extends React.Component {
       //定义下拉查找的数据
       dbList: [],
       funcClassList: [],
-      activeKey:'1',
+      activeKey:'1',visible: false,
+      pageNumd:1,perPaged:10,totald:0,qry_file:null
     };
     this.onSaveClick = this.onSaveClick.bind(this);
   }
@@ -82,24 +83,17 @@ class HttpCreator extends React.Component {
           if (res.resultCode == "1000") {
             this.setState({
               inData: res.data.in,
-              outData: res.data.out
+              outData: res.data.out,
+              qry_file:res.data.qry_file
             });
             this.props.form.setFieldsValue(res.data);
             this.inParam.setFormValue(this.state.inData);
             this.outParam.setFormValue(this.state.outData);
-
-
-
             this.refs.editorsql.codeMirror.setValue(res.data.qry_sql);
-
-
-
           }
           else
             message.error(res.message);
-
         });
-
     }
 
     let editorsql = this.refs.editorsql;
@@ -155,7 +149,7 @@ class HttpCreator extends React.Component {
         formInfo.qry_sql = this.refs.editorsql.codeMirror.getValue();
         formInfo.in = results;
         formInfo.out = resultstwo;
-       // console.log(formInfo);
+        formInfo.qry_file=this.state.qry_file;
 
         if (this.state.action == 'create') {
           HttpService.post("reportServer/query/createQuery", JSON.stringify(formInfo))
@@ -280,7 +274,54 @@ class HttpCreator extends React.Component {
       this.setState({ activeKey:activeKey },function () { });
           
   }
-
+  openImage=()=>{
+      this.setState({
+          visible: true,
+          imgList: [],
+          totald: 0
+      }, function () {
+          this.loadModelData();
+      });
+  }
+  //调用模式窗口内的数据查询
+  loadModelData() {
+      let page = {};
+      page.pageNum = this.state.pageNumd;
+      page.perPage = this.state.perPaged;
+      HttpService.post("/reportServer/uploadFile/getAll",JSON.stringify(page)).then(response => {
+          this.setState({imgList:response.data.list,totald:response.data.total});
+      }, errMsg => {
+          this.setState({
+              imgList : []
+          });
+      });
+  }
+  // 字典页数发生变化的时候
+  onPageNumdChange(pageNumd) {
+      this.setState({
+          pageNumd: pageNumd
+      }, () => {
+          this.loadModelData();
+      });
+  }
+  clickimg(id,name){
+      this.props.form.setFieldsValue({ qry_file: id });
+      this.setState({
+          visible: false,
+          qry_file:id
+      });
+  }
+  //模式窗口点击取消
+  handleCancel = (e) => {
+      this.setState({
+          visible: false
+      });
+  }
+  handleOk = (e) => {
+      this.setState({
+          visible: false
+      });
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -424,6 +465,16 @@ class HttpCreator extends React.Component {
                       </FormItem>
                     </Col>
                   </Row>
+                  <Row>
+                      <Col span={24}>
+                          <FormItem label="关联图片" style={{ marginLeft: '14px' }}  >
+                              
+                              <Input style={{ minWidth: '300px' }} name="qry_file" id="qry_file" value={this.state.qry_file} onClick={this.openImage}/>
+                              {this.state.qry_file==null?'':<Avatar src={url+"/report/"+this.state.qry_file}/>}
+
+                          </FormItem>
+                      </Col>
+                  </Row>
                   <Tabs type="card" style={{ marginTop: '15px' }} onChange={this.tabOnChange}
                     tabBarExtraContent={<span><Button icon="plus" onClick={() => this.onAddRowClick()} />
                       <Button icon="minus" onClick={() => this.onDelRowClick()} /></span>}>
@@ -440,6 +491,26 @@ class HttpCreator extends React.Component {
             </Row>
           </Form>
         </Card>
+        <div>
+                    <Modal title="图片选择" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel}>
+                        <List
+                            itemLayout="horizontal"
+                            dataSource={this.state.imgList}
+                            renderItem={item => (
+                            <List.Item>
+                                <List.Item.Meta
+                                avatar={<Avatar src={url+"/report/"+item.usefilepath}  />}
+                                description={<a onClick={()=>this.clickimg(item.usefilepath,item.filename)} >{item.filename}</a>}
+                                />
+                            </List.Item>
+                            )}
+                        />
+                        
+                        <Pagination current={this.state.pageNumd}
+                            total={this.state.totald} 
+                            onChange={(pageNumd) => this.onPageNumdChange(pageNumd)} />
+                    </Modal>
+                </div>
       </div >
     );
   }
