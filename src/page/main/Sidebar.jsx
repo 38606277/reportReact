@@ -237,7 +237,7 @@ export default class SiderBar extends React.Component {
                 <Menu theme="light" defaultSelectedKeys={['1']} mode="inline"  >
                          {html}
                          <Menu.Item> <Link to="/cached"><Icon type="table" /> 缓存</Link>  </Menu.Item>
-                         <Menu.Item> <Link to="/upload"><Icon type="table" /> upload</Link>  </Menu.Item>
+                         <Menu.Item> <Link to="/query/nlpCreator"><Icon type="table" /> 表定义</Link>  </Menu.Item>
 
                 </Menu>
                 </Spin>
