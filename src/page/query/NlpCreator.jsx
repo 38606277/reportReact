@@ -136,7 +136,10 @@ class NlpCreator extends React.Component {
     }
     dbChange(e){
         this.setState({
-            dbname:e
+            dbname:e,
+            columnList:[],
+            columnList:[],
+            tableName:""
         })
         HttpService.post("reportServer/nlp/getTable", e)
         .then(res => {
@@ -149,8 +152,9 @@ class NlpCreator extends React.Component {
         });
     }
     tableChange(e){
+        
+        this.setState({tableName:e, columnList:[]});
         let param={'dbname':this.state.dbname,'tableName':e}
-        this.setState({tableName:e});
         HttpService.post("reportServer/nlp/getColumnList",JSON.stringify(param))
         .then(res => {
             if (res.resultCode == "1000") {
@@ -260,7 +264,7 @@ class NlpCreator extends React.Component {
                             <Col  xs={24} sm={12}>
                                 <FormItem label="表名"   {...formItemLayout}  >
                                     {
-                                        <Select style={{ minWidth: '300px' }}  onChange={(e)=>this.tableChange(e)}>
+                                        <Select style={{ minWidth: '300px' }} name="tableName" onChange={(e)=>this.tableChange(e)}>
                                                 {this.state.tableData==null?null:this.state.tableData.map(item => <Option key={item} value={item}>{item}</Option>)}
                                         </Select>
                                     }
