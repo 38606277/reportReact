@@ -54,6 +54,9 @@ export default class QueryList extends React.Component {
     }else if(e.key=='http')
     {
         window.location.href="#/query/HttpCreator/create/0";
+    }else if(e.key=='table')
+    {
+        window.location.href="#/query/TableCreator/create/0";
     }
 
    }
@@ -136,6 +139,7 @@ export default class QueryList extends React.Component {
                             <Menu.Item key="sql">sql语句</Menu.Item>
                             <Menu.Item key="procedure">存储过程</Menu.Item>
                             <Menu.Item key="http">http请求</Menu.Item>
+                            <Menu.Item key="table">数据库表</Menu.Item>
                         </Menu>
                     )}>
                         <Button >

@@ -1,16 +1,130 @@
-[
-    {
-        "in": {
-            "begindate": "",
-            "enddate": "",
-            "org_id": "4322",
-            "po_number": "",
-            "vendor_name": ""
+{
+    "qry_db": "jlerp",
+    "class_id": 2,
+    "qry_id": 95,
+    "qry_name": "查询供应商信息123",
+    "cached": 0,
+    "qry_desc": "撒饭斯蒂芬森的放声大哭发水电费款式大方；枯霜打客服介绍的；进哥发烧大嫁风尚",
+    "qry_type": "sql",
+    "qry_sql": "SELECT\n\tpv.VENDOR_ID  ,\n\tpv.VENDOR_NAME vendor_name,\n\tpv.SEGMENT1  ,\n\tpv.ATTRIBUTE10  attribute10,\n\tpv.ATTRIBUTE12  attribute12,\n\tpv.VENDOR_TYPE_LOOKUP_CODE vendor_type_lookup_code ,\n     DATE_FORMAT(pv.creation_date,'%Y-%m-%d') creation_date \nFROM\n\tpo_vendors pv\nwhere \n1=1\nand pv.SEGMENT1 like '%${segment1}%'\nand pv.VENDOR_NAME like '%${vendor_name}%'\n<if test=\"vendor_attribute12!='' and  vendor_attribute12!=null\">\nand pv.ATTRIBUTE12=#{vendor_attribute12}\n</if>\n<if test=\"tax!='' and  tax!=null\">\nand pv.ATTRIBUTE10=#{tax}\n</if>",
+    "in": [
+        {
+            "qry_id": 95,
+            "dict_id": 16,
+            "authtype_id": null,
+            "in_name": "公司名称",
+            "dict_name": "分公司",
+            "authtype_desc": null,
+            "datatype": "string",
+            "dict_multiple": null,
+            "render": "Input",
+            "in_id": "segment1",
+            "validate": ""
+        },
+        {
+            "qry_id": 95,
+            "dict_id": null,
+            "authtype_id": null,
+            "in_name": "税",
+            "dict_name": null,
+            "authtype_desc": null,
+            "datatype": "string",
+            "dict_multiple": null,
+            "render": null,
+            "in_id": "tax",
+            "validate": ""
+        },
+        {
+            "qry_id": 95,
+            "dict_id": null,
+            "authtype_id": null,
+            "in_name": "供应商编码",
+            "dict_name": null,
+            "authtype_desc": null,
+            "datatype": "string",
+            "dict_multiple": null,
+            "render": null,
+            "in_id": "vendor_attribute12",
+            "validate": ""
+        },
+        {
+            "qry_id": 95,
+            "dict_id": null,
+            "authtype_id": null,
+            "in_name": "供应商名称",
+            "dict_name": null,
+            "authtype_desc": null,
+            "datatype": "string",
+            "dict_multiple": null,
+            "render": null,
+            "in_id": "vendor_name",
+            "validate": ""
         }
-    },
-    {
-        "startIndex": 1,
-        "perPage": 10,
-        "searchResult": ""
-    }
-]
+    ],
+    "out": [
+        {
+            "qry_id": 95,
+            "datatype": "varchar",
+            "out_name": "编码",
+            "link": null,
+            "width": 100,
+            "out_id": "attribute10",
+            "render": "input"
+        },
+        {
+            "qry_id": 95,
+            "datatype": "varchar",
+            "out_name": "attribute12",
+            "link": null,
+            "width": 100,
+            "out_id": "attribute12",
+            "render": "input"
+        },
+        {
+            "qry_id": 95,
+            "datatype": "varchar",
+            "out_name": "创建日期",
+            "link": null,
+            "width": 100,
+            "out_id": "creation_date",
+            "render": "input"
+        },
+        {
+            "qry_id": 95,
+            "datatype": "varchar",
+            "out_name": "公司",
+            "link": null,
+            "width": 100,
+            "out_id": "segment1",
+            "render": "input"
+        },
+        {
+            "qry_id": 95,
+            "datatype": "varchar",
+            "out_name": "ID",
+            "link": null,
+            "width": 100,
+            "out_id": "vendor_id",
+            "render": "input"
+        },
+        {
+            "qry_id": 95,
+            "datatype": "varchar",
+            "out_name": "供应商名称",
+            "link": null,
+            "width": 100,
+            "out_id": "vendor_name",
+            "render": "input"
+        },
+        {
+            "qry_id": 95,
+            "datatype": "varchar",
+            "out_name": "供应商类型",
+            "link": null,
+            "width": 100,
+            "out_id": "vendor_type_lookup_code",
+            "render": "input"
+        }
+    ],
+    "qry_file": "upload/20190320/165609/FL_cucoh8DrKNo9JBpAM.png"
+}

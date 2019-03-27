@@ -160,6 +160,7 @@ class App extends React.Component {
                             <Route path="/dict" component={DictRouter}/>
                             <Route path="/function" component={FunctionRouter}/>
                             
+                            
                             <Route path="/cached" component={CachedRouter}/>
                          <Route path="/cube" component={CubeRouter}/> 
                          <Route path="/upload" component={UploadRouter}/> 
