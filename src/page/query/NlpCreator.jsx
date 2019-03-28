@@ -188,7 +188,11 @@ class NlpCreator extends React.Component {
               sm: { span: 16 },
             },
           };
-       
+          if (null != this.state.columnList) {
+            this.state.columnList.map((item, index) => {
+                item.key = index;
+            });
+        }
         const dictionaryColumns = [{
             title: '字段名',
             dataIndex: 'COLUMN_NAME',
@@ -209,7 +213,6 @@ class NlpCreator extends React.Component {
             title: '字段注释',
             dataIndex: 'COMMENTS',
             key: 'COMMENTS',
-            editable: true,
         }, {
             title: '自然语言一',
             dataIndex: 'FIELD_NLP1',
