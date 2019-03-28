@@ -128,7 +128,8 @@ class NlpCreator extends React.Component {
         HttpService.post("reportServer/nlp/updateColumn", JSON.stringify(formInfo))
             .then(res => {
                 if (res.resultCode == "1000") {
-                    message.success(`更新成功！`)
+                    message.success(`更新成功！`);
+                   // window.location.reload();
                 }
                 else
                     message.error(res.message);
@@ -138,7 +139,7 @@ class NlpCreator extends React.Component {
         this.setState({
             dbname:e,
             columnList:[],
-            columnList:[],
+            tableData:[],
             tableName:""
         })
         HttpService.post("reportServer/nlp/getTable", e)
@@ -187,7 +188,11 @@ class NlpCreator extends React.Component {
               sm: { span: 16 },
             },
           };
-       
+          if (null != this.state.columnList) {
+            this.state.columnList.map((item, index) => {
+                item.key = index;
+            });
+        }
         const dictionaryColumns = [{
             title: '字段名',
             dataIndex: 'COLUMN_NAME',
@@ -196,21 +201,37 @@ class NlpCreator extends React.Component {
             title: '字段类型',
             dataIndex: 'DATA_TYPE',
             key: 'DATA_TYPE',
-            editable: true,
         }, {
             title: '字段长度',
             dataIndex: 'COLUMN_SIZE',
             key: 'COLUMN_SIZE',
-            editable: true,
         }, {
             title: '是否允许为空',
             dataIndex: 'NULLABLE',
             key: 'NULLABLE',
-            editable: true,
         }, {
             title: '字段注释',
             dataIndex: 'COMMENTS',
             key: 'COMMENTS',
+        }, {
+            title: '自然语言一',
+            dataIndex: 'FIELD_NLP1',
+            key: 'FIELD_NLP1',
+            editable: true,
+        }, {
+            title: '自然语言二',
+            dataIndex: 'FIELD_NLP2',
+            key: 'FIELD_NLP2',
+            editable: true,
+        }, {
+            title: '自然语言三',
+            dataIndex: 'FIELD_NLP3',
+            key: 'FIELD_NLP3',
+            editable: true,
+        }, {
+            title: '自然语言四',
+            dataIndex: 'FIELD_NLP4',
+            key: 'FIELD_NLP4',
             editable: true,
         }, {
             title: '是否主键',
@@ -264,7 +285,7 @@ class NlpCreator extends React.Component {
                             <Col  xs={24} sm={12}>
                                 <FormItem label="表名"   {...formItemLayout}  >
                                     {
-                                        <Select style={{ minWidth: '300px' }} name="tableName" onChange={(e)=>this.tableChange(e)}>
+                                        <Select style={{ minWidth: '300px' }} id="tableName" name="tableName" onChange={(e)=>this.tableChange(e)}>
                                                 {this.state.tableData==null?null:this.state.tableData.map(item => <Option key={item} value={item}>{item}</Option>)}
                                         </Select>
                                     }
