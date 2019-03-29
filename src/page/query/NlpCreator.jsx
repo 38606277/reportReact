@@ -25,7 +25,8 @@ class EditableCell extends React.Component {
   }
 
   toggleEdit = () => {
-    const editing = !this.state.editing;
+     const editing = !this.state.editing;
+    //const editing =true;
     this.setState({ editing }, () => {
       if (editing) {
         this.input.focus();
@@ -39,7 +40,7 @@ class EditableCell extends React.Component {
       if (error && error[e.currentTarget.id]) {
         return;
       }
-      this.toggleEdit();
+      //this.toggleEdit();
       handleSave({ ...record, ...values });
     });
   }
