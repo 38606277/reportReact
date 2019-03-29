@@ -96,20 +96,18 @@ class EditableCell extends React.Component {
   }
 }
 class NlpCreator extends React.Component {
-
-    state = {};
-    func_data = {};
     constructor(props) {
         super(props);
         this.state = {
-            //定义状态
-            tableData: [],
-            columnData: [],
-            //定义下拉查找的数据
+            tid:this.props.match.params.tid,
             dbList: [],
-            funcClassList: [],
-            dbname:'',
-            tableName:''
+            dbname:"",
+            tableData: [],
+            tableName:"",
+            table_nlp1: "",
+            table_nlp2: "",
+            table_nlp3: "",
+            table_nlp4: ""       
         };
     }
     componentDidMount() {
@@ -118,29 +116,67 @@ class NlpCreator extends React.Component {
             .then(res => {
                 this.setState({ dbList: res });
             });
+        if(this.state.tid!=null  && this.state.tid!="" ){
+          let pinfo={table_id:this.state.tid}
+          HttpService.post("reportServer/nlp/getInfoByTableId", JSON.stringify(pinfo))
+          .then(res=>{
+              this.setState({
+                dbname:res.data.db.table_db,
+                tableData:res.data.tableList,
+                tableName:res.data.db.table_name,
+                table_nlp1: res.data.db.table_nlp1,
+                table_nlp2: res.data.db.table_nlp2,
+                table_nlp3: res.data.db.table_nlp3,
+                table_nlp4: res.data.db.table_nlp4   
+              });
+
+              let param={'dbname':res.data.db.table_db,'tableName':res.data.db.table_name}
+              HttpService.post("reportServer/nlp/getColumnList",JSON.stringify(param))
+              .then(res => {
+                  if (res.resultCode == "1000") {
+                      this.setState({columnList: res.data});
+                      message.success(`查询成功！`)
+                  }else{
+                    message.error(res.message);
+                  }
+              });
+          })
+        }
     }
 
    
     onSaveClick=()=> {
-        //this.child.setFormValue(res.data.in);
-        console.log(this.state.columnList);
-        let formInfo={"dbname":this.state.dbname,"tableName":this.state.tableName,"columnList":this.state.columnList}
-        HttpService.post("reportServer/nlp/updateColumn", JSON.stringify(formInfo))
+        let formInfo={"dbname":this.state.dbname,
+                      "tableName":this.state.tableName,
+                      "table_nlp1": this.state.table_nlp1,
+                      "table_nlp2": this.state.table_nlp2,
+                      "table_nlp3": this.state.table_nlp3,
+                      "table_nlp4": this.state.table_nlp4,   
+                      "columnList":this.state.columnList}
+        if(this.state.dbname!="" && this.state.tableName!=""){              
+            HttpService.post("reportServer/nlp/updateColumn", JSON.stringify(formInfo))
             .then(res => {
                 if (res.resultCode == "1000") {
                     message.success(`更新成功！`);
-                   // window.location.reload();
+                    window.location.href="#/query/NlpList";
                 }
                 else
                     message.error(res.message);
             });
+        }else{
+          alert("数据库与表名都不能为空");
+        }    
     }
     dbChange(e){
         this.setState({
             dbname:e,
             columnList:[],
             tableData:[],
-            tableName:""
+            tableName:"",
+            table_nlp1: "",
+            table_nlp2: "",
+            table_nlp3: "",
+            table_nlp4: ""    
         })
         HttpService.post("reportServer/nlp/getTable", e)
         .then(res => {
@@ -153,8 +189,13 @@ class NlpCreator extends React.Component {
         });
     }
     tableChange(e){
-        
-        this.setState({tableName:e, columnList:[]});
+        this.setState({tableName:e, 
+                      columnList:[], 
+                      table_nlp1: "",
+                      table_nlp2: "",
+                      table_nlp3: "",
+                      table_nlp4: ""
+                  });
         let param={'dbname':this.state.dbname,'tableName':e}
         HttpService.post("reportServer/nlp/getColumnList",JSON.stringify(param))
         .then(res => {
@@ -176,6 +217,13 @@ class NlpCreator extends React.Component {
         });
         this.setState({ columnList: newData });
       }
+     
+      onChangeV(e) {
+        let id=e.target.id;
+        let v=e.target.value;
+        this.state[id]=v;
+        this.setState({[id]:v});
+    }
     render() {
        
         const formItemLayout = {
@@ -273,8 +321,10 @@ class NlpCreator extends React.Component {
                                 <FormItem label="选择数据库" {...formItemLayout}  style={{ marginBottom: "5px" }}>
                                     {
                                         
-                                            <Select setValue={this.form} style={{ minWidth: '300px' }} onChange={(e)=>this.dbChange(e)}>
-                                                {this.state.dbList==null?null:this.state.dbList.map(item => <Option key={item.name} value={item.name}>{item.name}</Option>)}
+                                            <Select setValue={this.form}  value={this.state.dbname} style={{ minWidth: '300px' }} onChange={(e)=>this.dbChange(e)}>
+                                                {this.state.dbList==null?null:this.state.dbList.map(item => 
+                                                <Option key={item.name} value={item.name} >{item.name}</Option>
+                                                )}
                                             </Select>
                                         
                                     }
@@ -285,13 +335,53 @@ class NlpCreator extends React.Component {
                             <Col  xs={24} sm={12}>
                                 <FormItem label="表名"   {...formItemLayout}  >
                                     {
-                                        <Select style={{ minWidth: '300px' }} id="tableName" name="tableName" onChange={(e)=>this.tableChange(e)}>
+                                      <div>
+                                        <Select style={{ minWidth: '300px' }} id="tableName" name="tableName" value={this.state.tableName} onChange={(e)=>this.tableChange(e)}>
                                                 {this.state.tableData==null?null:this.state.tableData.map(item => <Option key={item} value={item}>{item}</Option>)}
                                         </Select>
+                                        
+                                        </div>
                                     }
                                 </FormItem>
                             </Col>
                         </Row>
+                        
+                            
+                        {this.state.tableName==""?null:
+                        <div>
+                            <Row>
+                                <Col  xs={24} sm={12}>
+                                <FormItem label="自然语言一"   {...formItemLayout}  >
+                                        {
+                                          <Input style={{ minWidth: '300px' }}  id="table_nlp1" name="table_nlp1" value={this.state.table_nlp1} onChange={(v)=>this.onChangeV(v)} placeholder="请输入自然语言一"/>
+                                
+                                  } </FormItem>
+                                
+                              </Col>
+                                <Col  xs={24} sm={12}>
+                                <FormItem label="自然语言二"   {...formItemLayout}  >
+                                        {
+                                          <Input style={{ minWidth: '300px' }}  id="table_nlp2" name="table_nlp2" value={this.state.table_nlp2} onChange={(v)=>this.onChangeV(v)} placeholder="请输入自然语言二"/>
+                                          }</FormItem>
+                                </Col>
+                            </Row>  
+                            
+                            <Row>
+                                <Col  xs={24} sm={12}>
+                                <FormItem label="自然语言三"   {...formItemLayout}  >
+                                {
+                                    <Input style={{ minWidth: '300px' }}  id="table_nlp3" name="table_nlp3" value={this.state.table_nlp3} onChange={(v)=>this.onChangeV(v)} placeholder="请输入自然语言三"/>
+                                  }</FormItem>
+                              </Col>
+                                <Col  xs={24} sm={12}>
+                                <FormItem label="自然语言四"   {...formItemLayout}  >
+                                {
+                                    <Input style={{ minWidth: '300px' }}  id="table_nlp4" name="table_nlp4" value={this.state.table_nlp4} onChange={(v)=>this.onChangeV(v)} placeholder="请输入自然语言四"/>
+                                  }</FormItem>
+                                </Col>
+                            </Row>  
+                        </div>
+                       }   
                            <Row>
                                <Col>
                                <Table ref="diction" columns={columns} components={components}

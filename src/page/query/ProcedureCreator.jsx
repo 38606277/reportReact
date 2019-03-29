@@ -463,8 +463,10 @@ class ProcedureCreator extends React.Component {
                                         <Col span={24}>
                                             <FormItem label="关联图片" style={{ marginLeft: '14px' }}  >
                                                 
-                                                <Input style={{ minWidth: '300px' }} name="qry_file" id="qry_file" value={this.state.qry_file} onClick={this.openImage}/>
-                                                {this.state.qry_file==null?'':<Avatar src={url+"/report/"+this.state.qry_file}/>}
+                                                <Input style={{ minWidth: '300px',display:'none' }} name="qry_file" id="qry_file" value={this.state.qry_file} onClick={this.openImage}/>
+{this.state.qry_file==null?
+    <Avatar src={require("./../../asset/logo.png")} onClick={this.openImage}/>
+    :<Avatar src={url+"/report/"+this.state.qry_file} onClick={this.openImage}/>}
 
                                             </FormItem>
                                         </Col>
