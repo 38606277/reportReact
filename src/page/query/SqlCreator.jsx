@@ -467,7 +467,7 @@ class SqlCreator extends React.Component {
                                     <Row>
                                         <Col span={24}>
                                             <FormItem label="关联图片" style={{ marginLeft: '14px' }}  >
-                                                <Input style={{ minWidth: '300px',dispaly:'none' }} name="qry_file" id="qry_file" value={this.state.qry_file} onClick={this.openImage}/>
+                                                <Input style={{ minWidth: '300px',display:'none' }} name="qry_file" id="qry_file" value={this.state.qry_file} onClick={this.openImage}/>
 {this.state.qry_file==null?
     <Avatar src={require("./../../asset/logo.png")} onClick={this.openImage}/>
     :<Avatar src={url+"/report/"+this.state.qry_file} onClick={this.openImage}/>}
