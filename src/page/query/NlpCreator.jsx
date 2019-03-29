@@ -21,7 +21,7 @@ const EditableFormRow = Form.create()(EditableRow);
 
 class EditableCell extends React.Component {
   state = {
-    editing: false,
+    editing: true,
   }
 
   toggleEdit = () => {
