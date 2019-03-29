@@ -59,6 +59,12 @@ const NlpCreator = Loadable({
     loading: loading,
     delay:3000
 });
+
+const NlpList = Loadable({
+    loader: () => import('./NlpList.jsx'),
+    loading: loading,
+    delay:3000
+});
 // const Indexs = Loadable({
 //     loader: () => import('./Indexs.jsx'),
 //     loading: loading,
@@ -80,8 +86,9 @@ class QueryRouter extends React.Component{
                  <Route path="/query/ProcedureCreator/:action/:id" component={ProcedureCreator} />
                  <Route path="/query/HttpCreator/:action/:id" component={HttpCreator} />
                  <Route path="/query/web/:path" component={WebTemplate} />
-                 <Route path="/query/nlpCreator" component={NlpCreator} />
-
+                 <Route path="/query/nlpCreator/:tid" component={NlpCreator} />
+                 <Route path="/query/NlpList" component={NlpList} />
+                 
                  <Redirect exact from="/query" to="/query/ExecQuery"/> 
             </Switch>
         )
