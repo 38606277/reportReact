@@ -381,3 +381,26 @@ a.list-group-item:hover {
   cursor: not-allowed;
   background-color: #eee;
 }
+
+// .rcw-widget-container {
+//  // top: 0;
+//   margin: 0;
+// }
+// .rcw-widget-container .rcw-launcher{
+//   //top: 0;
+//   // margin: 0; 
+//   // height: 30px;
+//   // margin-top: 0px;
+//   // width: 30px;
+// }
+.rcw-conversation-container >.rcw-header {
+ 
+   padding: 0 0 1px !important; 
+}
+
+.rcw-conversation-container > .rcw-header > .rcw-title {
+  padding: 0 0 1px;
+}
+.rcw-client, .rcw-response {
+  padding: 0 5px!important;
+}
