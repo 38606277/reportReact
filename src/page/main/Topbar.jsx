@@ -6,6 +6,7 @@ import { Widget, addResponseMessage,toggleWidget,dropMessages,addLinkSnippet, ad
 import 'react-chat-widget/lib/styles.css';
 import ai from '../../asset/ai.png';
 import my from '../../asset/chart.png';
+import down from '../../asset/down.png';
 import "babel-polyfill";
 import HttpService from '../../util/HttpService.jsx';
 import LocalStorge from '../../util/LogcalStorge.jsx';
@@ -26,7 +27,8 @@ export default class TopBar extends React.Component {
             to_userId:'0',
             pageNumd: 1, 
             perPaged: 1000,
-            userIcon:''
+            userIcon:'',
+            fileIcon:'../../asset/down.png'
         };
 
     }
@@ -52,13 +54,18 @@ export default class TopBar extends React.Component {
       let list=res.data;
       for(var i=0;i<list.length;i++){
           if(user_id==list[i].from_userId){
-            addUserMessage(list[i].post_message);
+                addUserMessage(list[i].post_message);
           }else{
             if(list[i].message_type=='json'){
-              let ress=JSON.parse(list[i].post_message);
-              renderCustomComponent(this.FormD, {data: ress.data.list, out: ress.data.out }); 
+                let ress=JSON.parse(list[i].post_message);
+                renderCustomComponent(this.FormD, {data: ress.data.list, out: ress.data.out }); 
+            }else if(list[i].message_type=="file"){
+                let ress=JSON.parse(list[i].post_message);
+                renderCustomComponent(this.FormFile, {data: "改为文件名", file:"http://localhost:8080/report/upload/20190404/093729/FL_edqibyQgGF4dYX00O.jpg" }); 
+            }else if(list[i].message_type=="text"){
+                addResponseMessage(list[i].post_message);
             }else{
-              addResponseMessage(list[i].post_message);
+                addResponseMessage(list[i].post_message);
             }
           }
       }
@@ -81,7 +88,6 @@ export default class TopBar extends React.Component {
             multipleLine
             onClick={() => this.onClassClick(val.class_id)}
           >
-             {/* {JSON.stringify(this.state.out)} */}
              {out.map((item) => {
                return <div  style={{fontSize:'14px',fontFamily:'微软雅黑',backgroundColor:'#F4F7F9'}}>
                 {item.out_name}:{val[item.out_id.toUpperCase()]}
@@ -93,7 +99,27 @@ export default class TopBar extends React.Component {
       </List>
     </Card>
   }
-
+  FormFile = ({ data, file }) => {
+    let fileIcon=this.state.fileIcon;
+    var fileExtension = file.substring(file.lastIndexOf('.') + 1);
+    fileExtension=fileExtension.toUpperCase();
+    if(fileExtension=='DOC' || fileExtension=='DOCX'){
+      fileIcon="./../src/asset/word.png";
+    }else  if(fileExtension=='XLS' || fileExtension=='XLSX'){
+      fileIcon="./../src/asset/excel.png";
+    }else  if(fileExtension=='PPT' || fileExtension=='PPTX'){
+      fileIcon="./../src/asset/ppt.png";
+    }
+    return <div  style={{backgroundColor:'#f4f7f9',maxWidth:'370px'}}>
+                <List.Item>
+                    <List.Item.Meta
+                    avatar={<Avatar src={fileIcon}   style={{marginLeft: '5px'}}/>}
+                    title={<a href={file} target="_black" style={{marginRight:'5px'}}>{data}</a>}
+                    description={<a href={file} target="_black" style={{marginRight:'5px'}}>点击下载</a>}
+                    />
+                </List.Item>
+             </div>
+  }
   //发送消息
   async sendMessage(newMessage){ 
     var ist=true; 
@@ -115,29 +141,39 @@ export default class TopBar extends React.Component {
       await HttpService.post('/reportServer/nlp/getResult/' + newMessage, null)
         .then(res => {
           if (res.resultCode == "1000") {
-            // this.setState({ data: res.data.list, out: res.data.out })
-            //数据保存到数据库
-            let responseInfo={'from_userId':this.state.to_userId,
-                  'to_userId':this.state.userid,
-                  'post_message':res,
-                  'message_type':'json',
-                  'message_state':'0'
-                }
-           HttpService.post('/reportServer/chat/createChat', JSON.stringify(responseInfo))
-            .then(res => {
-              if (res.resultCode != "1000") {
-               // console.log(res);
+              if(undefined== res.filetype){
+                res.filetype="json";
               }
-            })
-            return renderCustomComponent(this.FormD, {data: res.data.list, out: res.data.out }); 
+               //数据保存到数据库
+               let responseInfo={'from_userId':this.state.to_userId,
+               'to_userId':this.state.userid,
+               'post_message':res,
+               'message_type':res.filetype,
+               'message_state':'0'
+               }
+                HttpService.post('/reportServer/chat/createChat', JSON.stringify(responseInfo))
+                    .then(res => {
+                    if (res.resultCode != "1000") {
+                    // console.log(res);
+                    }
+                })
+                if(res.filetype=="json"){
+                    return renderCustomComponent(this.FormD, {data: res.data.list, out: res.data.out }); 
+                }else if(res.filetype=="file"){
+                    return renderCustomComponent(this.FormFile, {data: "改为文件名称", file:"http://localhost:8080/report/upload/20190404/093729/FL_edqibyQgGF4dYX00O.jpg" }); 
+                }else if(res.filetype=="text"){
+                    return addResponseMessage(res.data);
+                }
           } else {
 
           }
-        })
+        }
+    
+        )
         .catch((error) => {
           // Toast.fail(error);
         });
-  
+    
     
       var that = this
       fetch('http://www.tuling123.com/openapi/api?key=f0d11b6cae4647b2bd810a6a3df2136f&info=' + newMessage, {
@@ -159,6 +195,8 @@ export default class TopBar extends React.Component {
                // console.log(res);
               }
             })
+        //  renderCustomComponent(that.FormFile, {data: "改为文件名", file:"http://localhost:8080/report/upload/PRC02 利润表.xlsx" }); 
+
           return addResponseMessage(detail.text);
         } else {
         }
