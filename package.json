@@ -80,6 +80,7 @@
     "react-router-dom": "4.2.2",
     "react-sortablejs": "^1.3.4",
     "react-trend": "^1.2.4",
+    "react-chat-widget": "^2.1.4-1",
     "simditor": "^2.3.6",
     "sortablejs": "^1.6.1",
     "umi": "^2.0.0-beta.10",
