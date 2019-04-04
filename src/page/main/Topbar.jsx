@@ -27,7 +27,8 @@ export default class TopBar extends React.Component {
             to_userId:'0',
             pageNumd: 1, 
             perPaged: 1000,
-            userIcon:''
+            userIcon:'',
+            fileIcon:'../../asset/down.png'
         };
 
     }
@@ -99,10 +100,20 @@ export default class TopBar extends React.Component {
     </Card>
   }
   FormFile = ({ data, file }) => {
+    let fileIcon=this.state.fileIcon;
+    var fileExtension = file.substring(file.lastIndexOf('.') + 1);
+    fileExtension=fileExtension.toUpperCase();
+    if(fileExtension=='DOC' || fileExtension=='DOCX'){
+      fileIcon="./../src/asset/word.png";
+    }else  if(fileExtension=='XLS' || fileExtension=='XLSX'){
+      fileIcon="./../src/asset/excel.png";
+    }else  if(fileExtension=='PPT' || fileExtension=='PPTX'){
+      fileIcon="./../src/asset/ppt.png";
+    }
     return <div  style={{backgroundColor:'#f4f7f9',maxWidth:'370px'}}>
                 <List.Item>
                     <List.Item.Meta
-                    avatar={<Avatar src={down}   style={{marginLeft: '5px'}}/>}
+                    avatar={<Avatar src={fileIcon}   style={{marginLeft: '5px'}}/>}
                     title={<a href={file} target="_black" style={{marginRight:'5px'}}>{data}</a>}
                     description={<a href={file} target="_black" style={{marginRight:'5px'}}>点击下载</a>}
                     />
@@ -184,6 +195,8 @@ export default class TopBar extends React.Component {
                // console.log(res);
               }
             })
+        //  renderCustomComponent(that.FormFile, {data: "改为文件名", file:"http://localhost:8080/report/upload/PRC02 利润表.xlsx" }); 
+
           return addResponseMessage(detail.text);
         } else {
         }
