@@ -4,7 +4,8 @@ import  LocalStorge  from '../../util/LogcalStorge.jsx';
 import {Card}   from 'antd';
 const localStorge = new LocalStorge();
 const _product      = new Task();
-
+ import Script from 'react-load-script';
+import "babel-polyfill";
 
 class TaskInfo extends React.Component{
     constructor(props){
@@ -23,16 +24,18 @@ class TaskInfo extends React.Component{
     }
    
     loadtaksInfo(){
-        _product.getTaskTemplate(this.state.taskId).then(response => {
-          
+        
+        _product.getTaskTemplate(this.state.taskId).then(response=>{
+           
             this.setState(response.data);
             
-        }, errMsg => {
-            this.setState({
-                
+            },errMsg => {
+             console.log(errMsg);
+            
+            }).catch(response=>{
+                console.log(response);
+            // this.setState(response.data);
             });
-            localStorge.errorTips(errMsg);
-        });
     }
     onSubmit(){
         console.log(this.state.项目经理);
@@ -42,6 +45,8 @@ class TaskInfo extends React.Component{
        
         return (
         <div id="page-wrapper">
+         <Script url="../../src/js/common.js"/> 
+         <Script url="../../src/js/jquery.min.js"/>
         <Card title='报表' >
                 <div className="form-horizontal">
                     

@@ -275,7 +275,6 @@ export default class TopBar extends React.Component {
         // );
 
         const ss = this.state.ishow;
-        console.log(ss);
         let contsss = null;
         let showwei = 'bottom';
         if (ss == '1') {
