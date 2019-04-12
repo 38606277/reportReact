@@ -321,6 +321,28 @@ class EditIn extends React.Component {
       }
 
     }, {
+      title: '验证规则',
+      dataIndex: 'validate',
+      key: 'validate',
+      className: 'headerRow',
+      render: (text, record, index) => {
+        return (
+          <Form.Item style={{ margin: 0 }}>
+            {this.props.form.getFieldDecorator(index + '-' + 'validate', {
+            })(
+              <Select className='resultColumnsDiv' style={{minWidth:'100px'}}
+                onChange={value => this.handleFieldChange(value, 'validate', index)} >
+                <Option value="required">必须输入</Option>
+                <Option value="number">数字</Option>
+                <Option value="date">日期</Option>
+                <Option value="model">模式匹配</Option>
+              </Select>
+            )}
+          </Form.Item>
+        );
+      }
+
+    }, {
       title: '数据权限',
       key: 'authtype_id',
       width: '16%',
