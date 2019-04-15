@@ -222,6 +222,7 @@ class ExecQuery extends React.Component {
     //执行查询 
     execSelect(startIn) {
         this.props.form.validateFieldsAndScroll((error, fieldsValue) => {
+           if(!error){
             // let arrd=this.state.data;
             for (var kname in fieldsValue) {//遍历json对象的每个key/value对,p为key
                 //处理日期类型
@@ -253,30 +254,32 @@ class ExecQuery extends React.Component {
                 // this.state.data.push(nv);
                 this.state.testData[kname] = value;
             }
-        })
-        this.setState({ baoTitle: this.state.paramv3, loading: true }, function () { });
-        // if(null!=this.state.testData){
-        if (startIn == '1') {
-            startIn = 1;
-        } else {
-            startIn = this.state.startIndex;
-        }
-        let param = [{ in: this.state.testData }, { startIndex: startIn, perPage: 10, searchResult: this.state.searchResult }];
-        _query.execSelect(this.state.paramv, this.state.paramv2, param).then(response => {
-            if (response.resultCode != '3000') {
-                this.setState({ loading: false, resultList: response.data.list, totalR: response.data.totalSize });
+        
+            this.setState({ baoTitle: this.state.paramv3, loading: true }, function () { });
+            // if(null!=this.state.testData){
+            if (startIn == '1') {
+                startIn = 1;
             } else {
-                this.setState({ loading: false });
-                message.error(response.message);
+                startIn = this.state.startIndex;
             }
-        }).catch(error => {
-            this.setState({ loading: false });
-            message.error(error);
-        });
-        // }
-        const tableCon = ReactDOM.findDOMNode(this.refs['resultTable'])//利用reactdom.finddomnode()来获取真实DOM节点
-        const table = tableCon.querySelector('table')
-        table.setAttribute('id', 'table-to-xls')
+            let param = [{ in: this.state.testData }, { startIndex: startIn, perPage: 10, searchResult: this.state.searchResult }];
+            _query.execSelect(this.state.paramv, this.state.paramv2, param).then(response => {
+                if (response.resultCode != '3000') {
+                    this.setState({ loading: false, resultList: response.data.list, totalR: response.data.totalSize });
+                } else {
+                    this.setState({ loading: false });
+                    message.error(response.message);
+                }
+            }).catch(error => {
+                this.setState({ loading: false });
+                message.error(error);
+            });
+            // }
+            const tableCon = ReactDOM.findDOMNode(this.refs['resultTable'])//利用reactdom.finddomnode()来获取真实DOM节点
+            const table = tableCon.querySelector('table')
+                table.setAttribute('id', 'table-to-xls')
+            }
+        })
     }
     //打开模式窗口
     openModelClick(name, param) {
@@ -548,11 +551,16 @@ class ExecQuery extends React.Component {
         const inColumn = this.state.inList.map((item, index) => {
             const rc = item.map((record, index) => {
                 if (record.render == 'Input') {
+                    let requireds=record.validate;
+                    let isRui=false;
+                    if(null!=requireds && ""!=requireds){
+                        isRui=true;
+                    }
                     return (
                         <Col xs={24} sm={12} key={record.qry_id + index}>
                             <FormItem style={{ margin: 0 }} {...formItemLayout} label={record.in_name} >
                                 {getFieldDecorator(record.in_id, {
-                                    rules: [{ required: false, message: `参数名是必须的！`, }]
+                                    rules: [{ required: isRui, message: `参数名是必须的！`, }]
                                 })(
                                     <Input onChange={e => this.changeEvent(e)} />
                                 )}
@@ -560,11 +568,16 @@ class ExecQuery extends React.Component {
                         </Col>
                     );
                 } else if (record.render == 'InputButton') {
+                    let requireds=record.validate;
+                    let isRui=false;
+                    if(null!=requireds && ""!=requireds){
+                        isRui=true;
+                    }
                     return (
                         <Col xs={24} sm={12} key={record.qry_id + index}>
                             <FormItem style={{ margin: 0 }} {...formItemLayout} label={record.in_name} >
                                 {getFieldDecorator(record.in_id, {
-                                    rules: [{ required: false, message: `参数名是必须的！`, }]
+                                    rules: [{ required: isRui, message: `参数名是必须的！`, }]
                                 })(
                                     <Input onChange={e => this.changeEvent(e)}
                                         addonAfter={record.dict_id == null ? '' :
@@ -575,11 +588,16 @@ class ExecQuery extends React.Component {
                         </Col>
                     );
                 } else if (record.render == 'Select') {
+                    let requireds=record.validate;
+                    let isRui=false;
+                    if(null!=requireds && ""!=requireds){
+                        isRui=true;
+                    }
                     return (
                         <Col xs={24} sm={12} key={record.qry_id + index}>
                             <FormItem {...formItemLayout} label={record.in_name}>
                                 {getFieldDecorator(record.in_id, {
-                                    // rules: [{ required: false, message: '请输入参数!', whitespace: true }],
+                                     rules: [{ required: isRui, message: '请选择参数!', whitespace: true }],
                                 })(
                                     <Select allowClear={true} style={{ width: '280px' }}
                                         placeholder="请选择" name={record.in_id}
@@ -617,11 +635,16 @@ class ExecQuery extends React.Component {
                         </Col>
                     );
                 } else if (record.render == 'Datepicker') {
+                    let requireds=record.validate;
+                    let isRui=false;
+                    if(null!=requireds && ""!=requireds){
+                        isRui=true;
+                    }
                     return (
                         <Col xs={24} sm={12} key={record.qry_id + index}>
                             <FormItem style={{ margin: 0 }} {...formItemLayout} label={record.in_name}>
                                 {getFieldDecorator(record.in_id, {
-                                    rules: [{ required: false, message: `参数名是必须的！`, }]
+                                    rules: [{ required: isRui, message: `参数名是必须的！`, }]
                                 })(
                                     <DatePicker format={'YYYY-MM-DD'} name={record.in_id} style={{ width: '280px' }}
                                         onChange={(date, dateString) => this.onChangeDate(record.in_id, date, dateString)} locale={locale} />
@@ -630,11 +653,16 @@ class ExecQuery extends React.Component {
                         </Col>
                     );
                 } else {
+                    let requireds=record.validate;
+                    let isRui=false;
+                    if(null!=requireds && ""!=requireds){
+                        isRui=true;
+                    }
                     return (
                         <Col xs={24} sm={12} key={record.qry_id + index}>
                             <FormItem style={{ margin: 0 }} {...formItemLayout} label={record.in_name} >
                                 {getFieldDecorator(record.in_id, {
-                                    rules: [{ required: false, message: `参数名是必须的！`, }]
+                                    rules: [{ required: isRui, message: `参数名是必须的！`, }]
                                 })(
                                     <Input onChange={e => this.changeEvent(e)}
                                         addonAfter={record.dict_id == null ? '' :
