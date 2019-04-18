@@ -3,10 +3,29 @@ import Questionserver                 from '../../service/QuestionsService.jsx';
 import { Form, Input, Select,Button, DatePicker,Card,Row, Col } from 'antd';
 import LocalStorge  from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
+import Script from 'react-load-script';
+let recorder;
+let audio_context;
+import { Recorder } from './index.js';
 const FormItem = Form.Item;
 const _ques = new Questionserver();
 const Option = Select.Option;
 
+function playaudio(url) {
+  var audio = document.querySelector('audio');
+  audio.autoplay=true;
+  audio.src =url;  
+}
+window.onload =function init() {
+  try {
+      window.AudioContext = window.AudioContext || window.webkitAudioContext;
+      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+      window.URL = window.URL || window.webkitURL;
+      audio_context = new AudioContext;
+  } catch (e) {
+      alert('No web audio support in this browser!');
+  }   
+}
 class AnswerInfo extends React.Component{
     constructor(props){
         super(props);
@@ -16,6 +35,7 @@ class AnswerInfo extends React.Component{
             question_id:this.props.match.params.qId,
             current:'',
             answer:'',
+            fileDataBlob:'',
             creat_by:localStorge.getStorage('userInfo').userId
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -34,6 +54,7 @@ class AnswerInfo extends React.Component{
                     current:response.data.current,
                     answer:response.data.answer,
                     creat_by:response.data.creat_by,
+                    fileDataBlob:response.data.fileDataBlob,
                     confirm:''
                 });
             }, errMsg => {
@@ -43,6 +64,47 @@ class AnswerInfo extends React.Component{
             });
         }
         
+        let getUserMedia_1 = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia)
+        getUserMedia_1.call(navigator,{audio: true}, this.startUserMedia, function(e) {
+            console.log('No live audio input: ' + e)
+        });
+        document.getElementById("stop").disabled=true;
+    }
+    // 初始化录音功能
+    startUserMedia = (stream) => {
+        audio_context = new AudioContext;
+        var input = audio_context.createMediaStreamSource(stream);
+        recorder = new Recorder(input);
+    }
+    // 开始录音
+    startRecording = () => {
+        recorder && recorder.record();
+        document.getElementById("stop").disabled=false;
+    }
+    // 停止录音
+    stopRecording = () => {
+        recorder && recorder.stop();
+
+        this.createDownloadLink();
+        recorder.clear(); // 清楚录音，如果不清除，可以继续录音
+        document.getElementById("stop").disabled=true;
+    }
+    // 生成文件
+    createDownloadLink = () => {
+        recorder && recorder.exportWAV((blob) => {
+            console.log(blob)
+            this.setState({
+                fileDataBlob: blob
+            });
+            if(!blob){
+                console.log('无录音文件');
+                return false;
+            }else{
+                var url = URL.createObjectURL(blob); // 生成的录音文件路径，可直接播放
+                playaudio(url);
+               
+            }
+        });
     }
 
     
@@ -135,8 +197,16 @@ class AnswerInfo extends React.Component{
                   
                   </FormItem>
               </Col>
-          </Row> 
-          
+          </Row>
+          <Row>
+             <Col xs={24} sm={12}> 
+                <audio controls autoplay></audio>
+                <Button type="primary" onClick={this.startRecording} inline size="small">开始录音</Button>
+                <Button type="primary" onClick={this.stopRecording} id="stop" style={{marginLeft:'5px'}} size="small">停止录音</Button>
+
+              </Col>
+
+          </Row>    
           <FormItem {...tailFormItemLayout}>
             <Button type="primary" htmlType="submit">保存</Button>
             <Button href={"#/chat/answerList/"+this.state.question_id}  type="primary" style={{marginLeft:'30px'}}>返回</Button>

@@ -136,7 +136,7 @@ class AnswerList extends React.Component{
                      </Row>    
                 <Table dataSource={dataSource} columns={columns}  pagination={false}/>
                  <Pagination current={this.state.pageNum} 
-                    total={this.state.total} 
+                    total={this.state.totald} 
                     onChange={(pageNum) => this.onPageNumChange(pageNum)}/> 
             </Card>
                 
