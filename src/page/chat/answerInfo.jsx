@@ -128,8 +128,8 @@ class AnswerInfo extends React.Component{
               <Col xs={24} sm={12}>
               <FormItem {...formItemLayout} label='是否默认' >
                     <Select  name='current' value={this.state.current.toString()}  style={{ width: 120 }} onChange={(value) =>this.onSelectChange('current',value)}>
-                        <Option value='1' >启用</Option>
-                        <Option value='0' >禁用</Option>
+                        <Option value='1' >是</Option>
+                        <Option value='0' >否</Option>
                         
                       </Select>
                   

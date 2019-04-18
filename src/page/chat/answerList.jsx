@@ -117,7 +117,9 @@ class AnswerList extends React.Component{
        
         return (
             <div id="page-wrapper">
-            <Card title="回答列表">
+            <Card title="回答列表"
+                extra={ <Button href={"#/chat/QuestionsList"}  type="primary" >返回问题列表</Button>}
+            >
                 <Row>
                     <Col xs={24} sm={12}>
                     <Search
