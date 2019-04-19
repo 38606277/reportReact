@@ -1,9 +1,9 @@
 import React        from 'react';
 import Questionserver                 from '../../service/QuestionsService.jsx';
 import { Form, Input, Select,Button, DatePicker,Card,Row, Col } from 'antd';
+import HttpService from '../../util/HttpService.jsx';
 import LocalStorge  from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
-import Script from 'react-load-script';
 let recorder;
 let audio_context;
 import { Recorder } from './index.js';
@@ -35,7 +35,7 @@ class AnswerInfo extends React.Component{
             question_id:this.props.match.params.qId,
             current:'',
             answer:'',
-            fileDataBlob:'',
+            //fileDataBlob:null,
             creat_by:localStorge.getStorage('userInfo').userId
         };
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -54,7 +54,7 @@ class AnswerInfo extends React.Component{
                     current:response.data.current,
                     answer:response.data.answer,
                     creat_by:response.data.creat_by,
-                    fileDataBlob:response.data.fileDataBlob,
+                    //fileDataBlob:response.data.fileDataBlob,
                     confirm:''
                 });
             }, errMsg => {
@@ -92,10 +92,27 @@ class AnswerInfo extends React.Component{
     // 生成文件
     createDownloadLink = () => {
         recorder && recorder.exportWAV((blob) => {
-            console.log(blob)
-            this.setState({
-                fileDataBlob: blob
-            });
+            console.log(1,blob);
+            // var newblob=blob.slice(0,1);
+            // var reader = new FileReader();
+            // reader.readAsBinaryString(newblob);
+            // console.log(reader);
+            let formData = new FormData();
+            formData.append("file", blob);
+            // this.setState({
+            //     fileDataBlob: formData
+            // });
+            HttpService.post("reportServer/questions/saveAnswerAudio/"+this.state.answer_id+"/"+this.state.question_id,
+              formData).then(response=>{
+                if(response.resultCode=="1000"){
+                  console.log(response.data);
+                  this.setState({
+                    answer_id: response.data
+                  });
+                 // window.location.href="#chat/answer/"+response.data+"/"+this.state.question_id;
+
+                }
+              });
             if(!blob){
                 console.log('无录音文件');
                 return false;
@@ -202,7 +219,7 @@ class AnswerInfo extends React.Component{
              <Col xs={24} sm={12}> 
                 <audio controls autoplay></audio>
                 <Button type="primary" onClick={this.startRecording} inline size="small">开始录音</Button>
-                <Button type="primary" onClick={this.stopRecording} id="stop" style={{marginLeft:'5px'}} size="small">停止录音</Button>
+                <Button type="primary" onClick={this.stopRecording} id="stop" style={{marginLeft:'5px'}} size="small">停止录音并保存</Button>
 
               </Col>
 
