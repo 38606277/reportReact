@@ -101,6 +101,7 @@ class AnswerInfo extends React.Component{
     // 开始录音
     startRecording = () => {
         recorder && recorder.record();
+        document.getElementById("start").disabled=true;
         document.getElementById("stop").disabled=false;
     }
     // 停止录音
@@ -109,6 +110,7 @@ class AnswerInfo extends React.Component{
 
         this.createDownloadLink();
         recorder.clear(); // 清楚录音，如果不清除，可以继续录音
+        document.getElementById("start").disabled=false;
         document.getElementById("stop").disabled=true;
     }
     // 生成文件
@@ -240,7 +242,7 @@ class AnswerInfo extends React.Component{
           <Row>
              <Col xs={24} sm={12}> 
                 <audio controls autoplay></audio>
-                <Button type="primary" onClick={this.startRecording} inline size="small">开始录音</Button>
+                <Button type="primary" onClick={this.startRecording} id="start" inline size="small">开始录音</Button>
                 <Button type="primary" onClick={this.stopRecording} id="stop" style={{marginLeft:'5px'}} size="small">停止录音并保存</Button>
 
               </Col>
