@@ -54,6 +54,7 @@ class Questions extends React.Component{
                 });
                 localStorge.errorTips(errMsg);
             });
+            this.getAudioBlob();
         }
         let getUserMedia_1 = (navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia)
         getUserMedia_1.call(navigator,{audio: true}, this.startUserMedia, function(e) {
@@ -113,7 +114,27 @@ class Questions extends React.Component{
           }
       });
     }
-    
+    getAudioBlob(){
+      fetch(window.getServerUrl()+'reportServer/questions/getQuestionAduioBlob', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'credentials': JSON.stringify(localStorge.getStorage('userInfo') || '')
+        },
+        body:this.state.ai_question_id
+      }).then(function (response) {
+        if (response.ok) {
+          response.blob().then((blob) => {
+            if(blob.size>0){
+              const downUrl = window.URL.createObjectURL(blob);// 获取 blob 本地文件连接 (blob 为纯二进制对象，不能够直接保存到磁盘上)
+              playaudio(downUrl);
+            }else{
+              console.log("文件已丢失，请重新导出下载！");
+            }
+          });
+        }
+      });
+    }
     //编辑字段对应值
     onValueChange(e){
         let name = e.target.name,
