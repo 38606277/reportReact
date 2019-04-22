@@ -17,11 +17,21 @@ function playaudio(url) {
   audio.src =url;  
 }
 window.onload =function init() {
+  var constraints = { audio: true};
   try {
       window.AudioContext = window.AudioContext || window.webkitAudioContext;
-      navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+      navigator.getUserMedia=(navigator.getUserMedia || navigator.webkitGetUserMedia || 
+        navigator.mozGetUserMedia || navigator.msGetUserMedia);
+      navigator.mediaDevices.getUserMedia({audio: true}).
+        then((stream) => {
+          const microphone = context.createMediaStreamSource(stream);
+          const filter = context.createBiquadFilter();
+          // microphone -> filter -> destination
+          microphone.connect(filter);
+          filter.connect(context.destination);
+      });
       window.URL = window.URL || window.webkitURL;
-      audio_context = new AudioContext;
+      audio_context = new AudioContext();
   } catch (e) {
       alert('No web audio support in this browser!');
   }   
