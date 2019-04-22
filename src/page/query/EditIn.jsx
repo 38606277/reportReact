@@ -267,7 +267,7 @@ class EditIn extends React.Component {
                 message: `数据类型是必须的！`,
               }],
             })(
-              <Select  className='resultColumnsDiv' style={{minWidth:'100px'}}
+              <Select  allowClear className='resultColumnsDiv' style={{minWidth:'100px'}}
                 onChange={value => this.handleFieldChange(value, 'datatype', index)} >
                 <Option value="varchar">字符串</Option>
                 <Option value="number">数字</Option>
@@ -287,7 +287,7 @@ class EditIn extends React.Component {
           <Form.Item style={{ margin: 0 }}>
             {this.props.form.getFieldDecorator(index + '-' + 'dict_id', {
             })(
-              <Select className='resultColumnsDiv' style={{minWidth:'100px'}}
+              <Select allowClear  className='resultColumnsDiv' style={{minWidth:'100px'}}
                 onChange={value => this.handleFieldChange(value, 'dict_id', index)} >
                 {this.state.dictData.map(item => <Option value={item.dict_id}>{item.dict_name}</Option>)}
               </Select>
@@ -306,7 +306,7 @@ class EditIn extends React.Component {
           <Form.Item style={{ margin: 0 }}>
             {this.props.form.getFieldDecorator(index + '-' + 'render', {
             })(
-              <Select className='resultColumnsDiv' style={{minWidth:'100px'}}
+              <Select allowClear className='resultColumnsDiv' style={{minWidth:'100px'}}
                 onChange={value => this.handleFieldChange(value, 'render', index)} >
                 <Option value="Input">输入框</Option>
                 <Option value="Datepicker">日期选择</Option>
@@ -330,7 +330,7 @@ class EditIn extends React.Component {
           <Form.Item style={{ margin: 0 }}>
             {this.props.form.getFieldDecorator(index + '-' + 'validate', {
             })(
-              <Select className='resultColumnsDiv' style={{minWidth:'100px'}}
+              <Select allowClear className='resultColumnsDiv' style={{minWidth:'100px'}}
                 onChange={value => this.handleFieldChange(value, 'validate', index)} >
                 <Option value="required">必须输入</Option>
                 <Option value="number">数字</Option>
