@@ -560,7 +560,7 @@ class ExecQuery extends React.Component {
                         <Col xs={24} sm={12} key={record.qry_id + index}>
                             <FormItem style={{ margin: 0 }} {...formItemLayout} label={record.in_name} >
                                 {getFieldDecorator(record.in_id, {
-                                    rules: [{ required: isRui, message: `参数名是必须的！`, }]
+                                    rules: [{ required: isRui, message: record.in_name+`是必须的！`, }]
                                 })(
                                     <Input onChange={e => this.changeEvent(e)} />
                                 )}
@@ -577,7 +577,7 @@ class ExecQuery extends React.Component {
                         <Col xs={24} sm={12} key={record.qry_id + index}>
                             <FormItem style={{ margin: 0 }} {...formItemLayout} label={record.in_name} >
                                 {getFieldDecorator(record.in_id, {
-                                    rules: [{ required: isRui, message: `参数名是必须的！`, }]
+                                    rules: [{ required: isRui, message: record.in_name+`是必须的！`, }]
                                 })(
                                     <Input onChange={e => this.changeEvent(e)}
                                         addonAfter={record.dict_id == null ? '' :
@@ -597,7 +597,7 @@ class ExecQuery extends React.Component {
                         <Col xs={24} sm={12} key={record.qry_id + index}>
                             <FormItem {...formItemLayout} label={record.in_name}>
                                 {getFieldDecorator(record.in_id, {
-                                     rules: [{ required: isRui, message: '请选择参数!', whitespace: true }],
+                                     rules: [{ required: isRui, message: '请选择'+record.in_name+'!', whitespace: true }],
                                 })(
                                     <Select allowClear={true} style={{ width: '280px' }}
                                         placeholder="请选择" name={record.in_id}
@@ -627,7 +627,7 @@ class ExecQuery extends React.Component {
                         <Col xs={24} sm={12} key={record.qry_id + index}>
                             <FormItem style={{ margin: 0 }} {...formItemLayout} label={record.in_name}>
                                 {getFieldDecorator(record.in_id, {
-                                    initialValue: '0', rules: [{ required: false, message: `参数名是必须的！`, }]
+                                    initialValue: '0', rules: [{ required: false, message: record.in_name+`是必须的！`, }]
                                 })(
                                     <Checkbox onChange={(value) => this.onChangeCheckbox(record.in_id, value)}>是</Checkbox>
                                 )}
@@ -644,7 +644,7 @@ class ExecQuery extends React.Component {
                         <Col xs={24} sm={12} key={record.qry_id + index}>
                             <FormItem style={{ margin: 0 }} {...formItemLayout} label={record.in_name}>
                                 {getFieldDecorator(record.in_id, {
-                                    rules: [{ required: isRui, message: `参数名是必须的！`, }]
+                                    rules: [{ required: isRui, message: record.in_name+`是必须的！`, }]
                                 })(
                                     <DatePicker format={'YYYY-MM-DD'} name={record.in_id} style={{ width: '280px' }}
                                         onChange={(date, dateString) => this.onChangeDate(record.in_id, date, dateString)} locale={locale} />
@@ -662,7 +662,7 @@ class ExecQuery extends React.Component {
                         <Col xs={24} sm={12} key={record.qry_id + index}>
                             <FormItem style={{ margin: 0 }} {...formItemLayout} label={record.in_name} >
                                 {getFieldDecorator(record.in_id, {
-                                    rules: [{ required: isRui, message: `参数名是必须的！`, }]
+                                    rules: [{ required: isRui, message: record.in_name+`是必须的！`, }]
                                 })(
                                     <Input onChange={e => this.changeEvent(e)}
                                         addonAfter={record.dict_id == null ? '' :
