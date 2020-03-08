@@ -4,13 +4,17 @@ import { HashRouter as Router, Switch, Redirect, Route, Link } from 'react-route
 // 页面
 import CachedList from './cachedList.jsx';
 import CachedInfo from './cachedInfo.jsx';
+import temp from './temp.jsx';
+import templist from './templist.jsx';
 class CachedRouter extends React.Component{
     render(){
         return (
             <Switch>
                  <Route path="/cached/cachedList" component={CachedList} />
                  <Route path="/cached/cachedInfo/:cached_id" component={CachedInfo} />
-                 <Redirect exact from="/cached" to="/cached/cachedList"/> 
+                 <Route path="/temp/templist" component={templist} />
+                 <Route path="/temp/temp" component={temp} />
+                 <Redirect exact from="/temp" to="/temp/temp"/> 
             </Switch>
         )
     }

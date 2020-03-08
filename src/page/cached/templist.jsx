@@ -16,7 +16,7 @@ const functionService = new FunctionService();
 const { Column, ColumnGroup } = Table;
 const Search = Input.Search;
 
-export default class QueryList extends React.Component {
+export default class templist extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -32,7 +32,7 @@ export default class QueryList extends React.Component {
     }
     getAllQueryName() {
         let param = {};
-        HttpService.post('reportServer/query/getAllQueryName', null)
+        HttpService.post('reportServer/temp/getAll', null)
             .then(res => {
                 if (res.resultCode == "1000")
                     this.setState({ list: res.data })
@@ -43,19 +43,9 @@ export default class QueryList extends React.Component {
     }
 
    onNewQry(e){
-    if(e.key=='sql')
-    {
-       window.location.href="#/query/SqlCreator/create/0";
-    }else if(e.key=='procedure')
-    {
-        window.location.href="#/query/ProcedureCreator/create/0";
-    }else if(e.key=='http')
-    {
-        window.location.href="#/query/HttpCreator/create/0";
-    }else if(e.key=='table')
-    {
-        window.location.href="#/query/TableCreator/create/0";
-    }
+   
+       window.location.href="#/temp/temp";
+    
 
    }
 
@@ -73,7 +63,7 @@ export default class QueryList extends React.Component {
         //       },
         //   });
         if(confirm('确认删除吗？')){
-            HttpService.post('reportServer/query/deleteQuery', JSON.stringify(this.state.selectedRows))
+            HttpService.post('reportServer/temp/getAll', JSON.stringify(this.state.selectedRows))
             .then(res => {
                 if (res.resultCode == "1000") {
                     message.success("删除成功！");
@@ -125,7 +115,7 @@ export default class QueryList extends React.Component {
 
         return (
             <div>
-                <Card title="查询列表" bodyStyle={{ padding: "10px" }}>
+                <Card title="人员登记表" bodyStyle={{ padding: "10px" }}>
                     {/* <Row style={{marginBottom:"10px"}}>
                         <Col span={6}> <Input prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="输入函数名称" /></Col>
                         <Col span={4}></Col>
@@ -134,19 +124,15 @@ export default class QueryList extends React.Component {
                     </Row> */}
                     <Dropdown style={{ marginRight: "20px" }} type="primary" overlay={(
                         <Menu onClick={(e)=>this.onNewQry(e)}>
-                            <Menu.Item key="sql">sql语句</Menu.Item>
-                            <Menu.Item key="procedure">存储过程</Menu.Item>
-                            <Menu.Item key="http">http请求</Menu.Item>
-                            <Menu.Item key="table">数据库表</Menu.Item>
+                            <Menu.Item key="sql">员工进出</Menu.Item>
+                           
                         </Menu>
                     )}>
                         <Button >
-                        新建查询<Icon type="down" />
+                        新建<Icon type="down" />
                         </Button>
                     </Dropdown>
-                    {/* <Button href="#/query/QueryCreator/sql/create/0" style={{ marginRight: "10px" }} type="primary">新建查询</Button> */}
-                    <Button href="#/query/QueryClass" style={{ marginRight: "15px",marginLeft:"15px" }} >查询类别管理</Button>
-                    <Button onClick={() => this.onDelButtonClick()} style={{ marginRight: "10px" }} >删除</Button>
+                    {/* <Button href="#/query/QueryCreator/sql/create/0" style={{ marginRight: "10px" }} type="primary">新增</Button> */}
                     <Search
                         style={{ maxWidth: 300, marginBottom: '10px', float: "right" }}
                         placeholder="请输入..."
@@ -156,28 +142,35 @@ export default class QueryList extends React.Component {
 
                     <Table dataSource={this.state.list} rowKey={"qry_id"} rowSelection={rowSelection} ref="qryTable" >
                         <Column
-                            title="查询ID"
-                            dataIndex="qry_id"
-                            sorter={(a, b) => a.qry_id - b.qry_id}
+                            title="姓名"
+                            dataIndex="name"
                         />
                         <Column
-                            title="查询名称"
-                            dataIndex="qry_name"
+                            title="访问时间"
+                            dataIndex="vist_date"
+                        />
+                         <Column
+                            title="身份证号"
+                            dataIndex="id_number"
                         />
                         <Column
-                            title="查询描述"
-                            dataIndex="qry_desc"
+                            title="联系方式"
+                            dataIndex="contact"
+                        />
+                         <Column
+                            title="所属部门"
+                            dataIndex="corp"
                         />
                         <Column
-                            title="查询类别"
-                            dataIndex="class_name"
-                            sorter={(a, b) => a.class_name.length - b.class_name.length}
+                            title="办公地点"
+                            dataIndex="workplace"
                         />
                         <Column
-                            title="调用方式"
-                            dataIndex="qry_type"
+                            title="温度"
+                            dataIndex="temp"
                         />
-                        <Column
+                       
+                        {/* <Column
                             title="动作"
                             render={(text, record) => (
                                 <span>
@@ -194,7 +187,7 @@ export default class QueryList extends React.Component {
                                     <a href={`#/query/CreateTemplate`}>模板</a>
                                 </span>
                             )}
-                        />
+                        /> */}
                     </Table>
                 </Card>
             </div >

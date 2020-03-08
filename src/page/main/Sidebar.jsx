@@ -213,7 +213,7 @@ export default class SiderBar extends React.Component {
                     if("undefined"!=typeof(obj.children) &&obj.children.length>0){
                         return this.formSubmenusChild(obj);
                     }else{
-                        return <Menu.Item key={"sub"+index} id="atitle"><Link to={obj.func_url}><Icon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>
+                        return <Menu.Item key={"sub"+index} id="atitle"><Link  target="_blank" to={obj.func_url}><Icon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>
                     }
                 }
             } else {
@@ -236,7 +236,7 @@ export default class SiderBar extends React.Component {
              <Spin spinning={this.state.loading} delay={100}>
                 <Menu theme="light" defaultSelectedKeys={['1']} mode="inline"  >
                          {html}
-                         <Menu.Item> <Link to="/cached"><Icon type="table" /> 缓存</Link>  </Menu.Item>
+                         {/* <Menu.Item> <Link to="/temp/temp"><Icon type="table" /> 缓存</Link>  </Menu.Item> */}
                          
                 </Menu>
                 </Spin>

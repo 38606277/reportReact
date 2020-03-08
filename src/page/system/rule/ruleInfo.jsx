@@ -657,7 +657,7 @@ class RuleInfo extends React.Component{
                         />
                 </Tooltip>
                 <Table dataSource={dataSource} columns={columns}  pagination={false} 
-                showHeader={false} style={{marginLeft: '-30px', marginRight: '-30px', border: '0'}}/>
+                showHeader={false} style={{ border: '0'}}/>
                  <Pagination current={this.state.pageNum} 
                     total={this.state.total} 
                     onChange={(pageNum) => this.onPageNumChange(pageNum)}/> 

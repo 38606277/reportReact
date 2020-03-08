@@ -6,7 +6,7 @@
 */
 import React from 'react';
 import Table from 'antd/lib/table';
-import { Card, Button, Tooltip, Divider, Icon, Input, message, Form, FormItem, Avatar, Row, Col } from 'antd';
+import { Card, Button, Tooltip, Divider, Icon, Input, Select, Form, FormItem, Menu, Row, Col } from 'antd';
 
 import HttpService from '../../util/HttpService.jsx';
 const { Column, ColumnGroup } = Table;
@@ -16,6 +16,8 @@ import Trend from '../../components/Trend/index.jsx';
 import numeral from 'numeral';
 import Yuan from '../../util/Yuan';
 import styles from './Analysis.less';
+
+const Option = Select.Option;
 
 
 class Hello extends React.Component {
@@ -50,7 +52,7 @@ export default class DashboardCreator extends React.Component {
         item3: <div>3</div>,
         item4: <div>4</div>,
         item: <div>1</div>,
-        item1: <ChartCard
+        item1:<ChartCard
             bordered={false}
             title="总销售额"
             action={
@@ -207,6 +209,8 @@ export default class DashboardCreator extends React.Component {
                     <Card bodyStyle={{ padding: "5px" }}>
                         <Button style={{ marginRight: "10px" }} type="primary">新增行</Button>
                         <Button style={{ marginRight: "10px" }} type="primary">保存</Button>
+                       
+
                         <Tooltip placement="top" title="指标卡片">
                             <Button icon="profile"  draggable="true" onDragStart={(event) => this.drag(event,1)} />
                         </Tooltip>
@@ -222,6 +226,10 @@ export default class DashboardCreator extends React.Component {
                         <Tooltip placement="top" title="地图">
                             <Button icon="global" />
                         </Tooltip>
+                        <Select setValue={this.form} style={{ minWidth: '300px' }}>
+                             <Option kye="1" value="1">一行一列</Option>
+                             <Option key="2" value="2">一行二列</Option>
+                        </Select>
                     </Card>
                     <Card>
                         <Row gutter={5}>
@@ -231,27 +239,7 @@ export default class DashboardCreator extends React.Component {
                                         onDragOver={(ev) => ev.preventDefault()}
                                         span={8} style={{ backgroundColor: '#ecc' }} >
                                          {this.state.item4}
-                                        {/* <ChartCard ref='index1' onClick={() => this.getProp('index1')}
-                                            bordered={false}
-                                            title="总销售额"
-                                            action={
-                                                <Tooltip
-                                                    title="总销售额">
-                                                    <Icon type="info-circle-o" />
-                                                </Tooltip>
-                                            }
-
-                                            total={() => <Yuan>126560</Yuan>}
-                                            footer={
-                                                <Field
-                                                    label={"日销售额"}
-                                                    value={`￥${numeral(12423).format('0,0')}`}
-                                                />
-                                            }
-                                            contentHeight={46}
-                                        >
-
-                                        </ChartCard> */}
+                                       
                                     </Col>
                                     <Col
                                         onDrop={(ev) => this.drop(ev, 1)}
@@ -270,13 +258,9 @@ export default class DashboardCreator extends React.Component {
                                 <Row gutter={16} style={{ lineHeight: '200px' }}>
                                     <Col  onDrop={(ev) => this.drop(ev, 3)}
                                         onDragOver={(ev) => ev.preventDefault()}
-                                        span={12} className="col">
-                                        {/* <Bar
-                                            height={295}
-                                            title={"Sales Trend"}
-                                            data={salesData}
-                                        /> */}
-                                         {this.state.item3}
+                                        span={12} className="col"  style={{ backgroundColor: '#ecc',border:'solid 1px' }}>
+                                       {this.state.item3}
+                                         
                                     </Col>
                                     <Col  onDrop={(ev) => this.drop(ev, 4)}
                                         onDragOver={(ev) => ev.preventDefault()}

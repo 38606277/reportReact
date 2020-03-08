@@ -1,6 +1,7 @@
 import React from 'react'
-import { Card, Button, Table, Form, Input, Divider,Avatar , Checkbox,List, Dropdown, Pagination,Select, Radio, Icon, message, Modal, DatePicker, InputNumber, Switch, Row, Col, Tabs, Menu } from 'antd'
+import { Card, Button, Table, Form, Input, Divider, Avatar, Checkbox, List, Dropdown, Pagination, Select, Radio, Icon, message, Modal, DatePicker, InputNumber, Switch, Row, Col, Tabs, Menu } from 'antd'
 import moment from 'moment';
+import {SplitPane} from 'react-split-pane';
 import 'moment/locale/zh-cn';
 
 import CodeMirror from 'react-codemirror';
@@ -53,7 +54,7 @@ const formItemLayout = {
 
 
 
-const url=window.getServerUrl();
+const url = window.getServerUrl();
 class SqlCreator extends React.Component {
 
     state = {};
@@ -72,8 +73,8 @@ class SqlCreator extends React.Component {
             dbList: [],
             funcClassList: [],
             loading: false,
-            visible: false,qry_file:null,
-            pageNumd:1,perPaged:10,totald:0
+            visible: false, qry_file: null,
+            pageNumd: 1, perPaged: 10, totald: 0
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         // this.onSaveClick = this.onSaveClick.bind(this);
@@ -89,7 +90,7 @@ class SqlCreator extends React.Component {
                         this.setState({
                             inData: res.data.in,
                             outData: res.data.out,
-                            qry_file:res.data.qry_file
+                            qry_file: res.data.qry_file
                         });
                         this.props.form.setFieldsValue(res.data);
                         this.inParam.setFormValue(this.state.inData);
@@ -135,19 +136,19 @@ class SqlCreator extends React.Component {
     //     this.child = ref
     // }
 
-  async  handleSubmit(e){
-        let results=null,resultstwo=null;
-        try{
-            await this.inParam.getFormValue().then(function(result){
-                results=result;
+    async  handleSubmit(e) {
+        let results = null, resultstwo = null;
+        try {
+            await this.inParam.getFormValue().then(function (result) {
+                results = result;
             });
-            await this.outParam.getFormValue().then(function(result){
-                resultstwo=result;
+            await this.outParam.getFormValue().then(function (result) {
+                resultstwo = result;
             });
-         }catch(err){
-             console.log(err); 
-         }
-         if(results==null || resultstwo==null){
+        } catch (err) {
+            console.log(err);
+        }
+        if (results == null || resultstwo == null) {
             return false;
         }
         e.preventDefault();
@@ -162,7 +163,7 @@ class SqlCreator extends React.Component {
                 formInfo.qry_sql = this.refs.editorsql.codeMirror.getValue();
                 formInfo.in = results;
                 formInfo.out = resultstwo;
-                formInfo.qry_file=this.state.qry_file;
+                formInfo.qry_file = this.state.qry_file;
                 console.log(formInfo);
 
                 if (this.state.action == 'create') {
@@ -194,14 +195,14 @@ class SqlCreator extends React.Component {
 
 
     onGenerateClick() {
-        this.setState({loading:true});
+        this.setState({ loading: true });
         let aSQL = this.refs.editorsql.codeMirror.getValue();
 
         functionService.getSqlInOut(aSQL)
             .then(res => {
                 if (res.resultCode = 1000) {
                     // alert(JSON.stringify(res.data));
-                    this.setState({loading:false});
+                    this.setState({ loading: false });
                     message.success('生成成功!');
                     let ins = [];
                     let outs = [];
@@ -242,7 +243,7 @@ class SqlCreator extends React.Component {
                     // this.setState({ inData: res.data });
                 } else {
                     message.error(res.message);
-                    this.setState({loading:false});
+                    this.setState({ loading: false });
                 }
             });
 
@@ -272,17 +273,17 @@ class SqlCreator extends React.Component {
     onDelRowClick() {
         alert('del');
     }
-    
-    sqlFormat(){
+
+    sqlFormat() {
         let aSQL = this.refs.editorsql.codeMirror.getValue();
-        if(null!=aSQL && ""!=aSQL){
+        if (null != aSQL && "" != aSQL) {
             HttpService.post("reportServer/query/sqlFormat", aSQL)
-            .then(res => {
-                this.refs.editorsql.codeMirror.setValue(res.data);
-            });
+                .then(res => {
+                    this.refs.editorsql.codeMirror.setValue(res.data);
+                });
         }
     }
-    openImage=()=>{
+    openImage = () => {
         this.setState({
             visible: true,
             imgList: [],
@@ -296,11 +297,11 @@ class SqlCreator extends React.Component {
         let page = {};
         page.pageNum = this.state.pageNumd;
         page.perPage = this.state.perPaged;
-        HttpService.post("/reportServer/uploadFile/getAll",JSON.stringify(page)).then(response => {
-            this.setState({imgList:response.data.list,totald:response.data.total});
+        HttpService.post("/reportServer/uploadFile/getAll", JSON.stringify(page)).then(response => {
+            this.setState({ imgList: response.data.list, totald: response.data.total });
         }, errMsg => {
             this.setState({
-                imgList : []
+                imgList: []
             });
         });
     }
@@ -312,11 +313,11 @@ class SqlCreator extends React.Component {
             this.loadModelData();
         });
     }
-    clickimg(id,name){
+    clickimg(id, name) {
         this.props.form.setFieldsValue({ qry_file: id });
         this.setState({
             visible: false,
-            qry_file:id
+            qry_file: id
         });
     }
     //模式窗口点击取消
@@ -366,12 +367,16 @@ class SqlCreator extends React.Component {
                     extra={<span>类型：SQL语句</span>}>
                     <Form layout="inline" onSubmit={this.handleSubmit}>
                         <Row gutter={0}>
+                     
+     
                             <Col span={10}>
+                           
+
                                 <Card bodyStyle={{ padding: '8px' }} >
                                     <div>
 
                                         {/* <Button icon="save" onClick={() => this.onSaveClick(e)} style={{ marginRight: "10px" }} >保存</Button> */}
-                                        <Button type="primary" htmlType="submit" style={{ marginRight: "10px" }}>保存</Button> 
+                                        <Button type="primary" htmlType="submit" style={{ marginRight: "10px" }}>保存</Button>
                                         <Button icon="list" onClick={() => window.location = '#/query/QueryList'} style={{ marginRight: "10px" }}   >退出</Button>
                                     </div>
                                     <Divider style={{ margin: "8px 0 8px 0" }} />
@@ -387,8 +392,8 @@ class SqlCreator extends React.Component {
                                             )
                                         }
                                     </FormItem>
-                                    <Row style={{marginBottom:"5px"}}>
-                                        <span style={{color:"black" ,fontWeight:"400",position:"absolute",bottom:"2px"}}><span class="ant-form-item-required"></span>输入查询SQL</span>
+                                    <Row style={{ marginBottom: "5px" }}>
+                                        <span style={{ color: "black", fontWeight: "400", position: "absolute", bottom: "2px" }}><span class="ant-form-item-required"></span>输入查询SQL</span>
                                         <span style={{ float: "right", }}>
                                             <Button icon="tool" loading={this.state.loading} onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成查询</Button>
                                             <Button icon="bars" onClick={() => this.sqlFormat()} style={{ marginRight: "10px" }}> 格式化</Button>
@@ -467,10 +472,10 @@ class SqlCreator extends React.Component {
                                     <Row>
                                         <Col span={24}>
                                             <FormItem label="关联图片" style={{ marginLeft: '14px' }}  >
-                                                <Input style={{ minWidth: '300px',display:'none' }} name="qry_file" id="qry_file" value={this.state.qry_file} onClick={this.openImage}/>
-{this.state.qry_file==null?
-    <Avatar src={require("./../../asset/logo.png")} onClick={this.openImage}/>
-    :<Avatar src={url+"/report/"+this.state.qry_file} onClick={this.openImage}/>}
+                                                <Input style={{ minWidth: '300px',display:'none' }} name="qry_file" id="qry_file" value={this.state.qry_file} onClick={this.openImage} />
+                                                {this.state.qry_file == null ?
+                                                    <Avatar src={require("./../../asset/logo.png")} onClick={this.openImage} />
+                                                    : <Avatar src={url + "/report/" + this.state.qry_file} onClick={this.openImage} />}
                                             </FormItem>
                                         </Col>
                                     </Row>
@@ -491,6 +496,7 @@ class SqlCreator extends React.Component {
 
                                 </Card>
                             </Col>
+                       
                         </Row>
                     </Form>
                 </Card>
@@ -500,17 +506,17 @@ class SqlCreator extends React.Component {
                             itemLayout="horizontal"
                             dataSource={this.state.imgList}
                             renderItem={item => (
-                            <List.Item>
-                                <List.Item.Meta
-                                avatar={<Avatar src={url+"/report/"+item.usefilepath}  />}
-                                description={<a onClick={()=>this.clickimg(item.usefilepath,item.filename)} >{item.filename}</a>}
-                                />
-                            </List.Item>
+                                <List.Item>
+                                    <List.Item.Meta
+                                        avatar={<Avatar src={url + "/report/" + item.usefilepath} />}
+                                        description={<a onClick={() => this.clickimg(item.usefilepath, item.filename)} >{item.filename}</a>}
+                                    />
+                                </List.Item>
                             )}
                         />
-                        
+
                         <Pagination current={this.state.pageNumd}
-                            total={this.state.totald} 
+                            total={this.state.totald}
                             onChange={(pageNumd) => this.onPageNumdChange(pageNumd)} />
                     </Modal>
                 </div>

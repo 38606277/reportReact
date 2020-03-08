@@ -264,7 +264,7 @@ handleSubmit (e) {
                         })(
                         <Select
                             mode="multiple"
-                            style={{ width: '120px' }}
+                            style={{ }}
                             placeholder="请选择"
                             name='isAdminText' 
                            
@@ -301,7 +301,7 @@ handleSubmit (e) {
               <Col xs={24} sm={12}>  
                 <FormItem {...formItemLayout} label='备注'>
                   {getFieldDecorator('description', {
-                        rules: [{ required: true, message: '请输入备注!'}],
+                        rules: [],
                   })(
                       <TextArea  type='text' name='description'   onChange={(e) => this.onValueChange(e)}></TextArea>
                   )} 

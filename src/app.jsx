@@ -114,6 +114,19 @@ const QaRouter = Loadable({
     loading: loading,
     delay:3000
 });
+
+const MyRoportRouter = Loadable({
+    loader: () => import('./page/report/MyReportRouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const assetmap = Loadable({
+    loader: () => import('./page/map/assetmap.jsx'),
+    loading: loading,
+    delay:3000
+});
+
 function LoadPage(url){
 //    console.log(Loadable({
 //         loader: () => import(url),
@@ -163,10 +176,13 @@ class App extends React.Component {
                              <Route path="/query" component={QueryRouter}/>
                             <Route path="/dict" component={DictRouter}/>
                             <Route path="/function" component={FunctionRouter}/>
-                            <Route path="/cached" component={CachedRouter}/>
+                            <Route path="/temp" component={CachedRouter}/>
                             <Route path="/cube" component={CubeRouter}/> 
                             <Route path="/upload" component={UploadRouter}/> 
                             <Route path="/chat" component={QaRouter}/> 
+                            <Route path="/report" component={MyRoportRouter}/> 
+                            <Route path="/assetmap" component={assetmap}/> 
+                            
                          
     
                         </Switch>

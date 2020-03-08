@@ -61,7 +61,8 @@ class DbsList extends React.Component{
             render: (text, record) => (
                 <span>
                   <Link to={ `/dbs/dbInfo/${record.name}` }>编辑</Link><Divider type="vertical" />
-                  {record.name!='system' && record.name!='form' ?<a onClick={()=>this.deleteDb(`${record.name}`)} href="javascript:;">删除</a>:""}
+                  {record.name!='system' && record.name!='form' ?
+                  <a onClick={()=>this.deleteDb(`${record.name}`)} href="javascript:;">删除</a>:"系统数据库"}
                 </span>
               ),
           }];
