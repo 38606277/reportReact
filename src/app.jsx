@@ -11,36 +11,36 @@ const localStorge = new LocalStorge();
 // import Layout from './page/main/Layout.jsx';
 
 const Layout = Loadable({
-    loader: () => import('./page/main/Layout.jsx'),
+    loader: () => import(/* webpackChunkName: "Layout" */ './page/main/Layout.jsx'),
     loading: loading,
     delay:3000
 });
 
 const TaskRouter = Loadable({
-    loader: () => import('./page/task/taskrouter.jsx'),
+    loader: () => import(/* webpackChunkName: "TaskRouter" */ './page/task/taskrouter.jsx'),
     loading: loading,
     delay:3000
 });
 
 const UserRouter = Loadable({
-    loader: () => import('./page/user/router.jsx'),
+    loader: () => import(/* webpackChunkName: "UserRouter" */ './page/user/router.jsx'),
     loading: loading,
     delay:3000
 });
 
 const DbsRouter = Loadable({
-    loader: () => import('./page/system/dbs/dbsrouter.jsx'),
+    loader: () => import(/* webpackChunkName: "DbsRouter" */ './page/system/dbs/dbsrouter.jsx'),
     loading: loading,
     delay:3000
 });
 const RuleRouter = Loadable({
-    loader: () => import('./page/system/rule/rulerouter.jsx'),
+    loader: () => import(/* webpackChunkName: "RuleRouter" */ './page/system/rule/rulerouter.jsx'),
     loading: loading,
     delay:3000
 });
 
 const RoleRouter = Loadable({
-    loader: () => import('./page/system/role/rolerouter.jsx'),
+    loader: () => import(/* webpackChunkName: "RoleRouter" */ './page/system/role/rolerouter.jsx'),
     loading: loading,
     delay:3000
 });
@@ -52,7 +52,7 @@ const Login = Loadable({
 });
 
 const Home = Loadable({
-    loader: () => import('./page/home/index.jsx'),
+    loader: () => import(/* webpackChunkName: "Home" */ './page/home/index.jsx'),
     loading: loading,
     delay:3000
 });
@@ -60,19 +60,19 @@ const Home = Loadable({
 
 
 const Auth = Loadable({
-    loader: () => import('./page/user/Auth.jsx'),
+    loader: () => import( /* webpackChunkName: "Auth" */ './page/user/Auth.jsx'),
     loading: loading,
     delay:3000
 });
 const AuthTypeRouter = Loadable({
-    loader: () => import('./page/system/authType/authTypeRouter.jsx'),
+    loader: () => import(/* webpackChunkName: "AuthTypeRouter" */ './page/system/authType/authTypeRouter.jsx'),
     loading: loading,
     delay:3000
 });
 
 
 const DictRouter = Loadable({
-    loader: () => import('./page/dict/DictRouter.jsx'),
+    loader: () => import(/* webpackChunkName: "DictRouter" */ './page/dict/DictRouter.jsx'),
     loading: loading,
     delay:3000
 });
@@ -83,49 +83,49 @@ const QueryRouter = Loadable({
 });
 
 const FunctionRouter = Loadable({
-    loader: () => import('./page/function/FunctionRouter.jsx'),
+    loader: () => import(/* webpackChunkName: "FunctionRouter" */ './page/function/FunctionRouter.jsx'),
     loading: loading,
     delay:3000
 });
 
 const CachedRouter = Loadable({
-    loader: () => import('./page/cached/CachedRouter.jsx'),
+    loader: () => import(/* webpackChunkName: "CachedRouter" */ './page/cached/CachedRouter.jsx'),
     loading: loading,
     delay:3000
 });
-const dashboardRouter = Loadable({
-    loader: () => import('./page/dashboard/dashboardRouter.jsx'),
-    loading: loading,
-    delay:3000
-});
+// const dashboardRouter = Loadable({
+//     loader: () => import(/* webpackChunkName: "dashboardRouter" */ './page/dashboard/dashboardRouter.jsx'),
+//     loading: loading,
+//     delay:3000
+// });
 
-const CubeRouter = Loadable({
-    loader: () => import('./page/cube/cubeRouter.jsx'),
-    loading: loading,
-    delay:3000
-});
+// const CubeRouter = Loadable({
+//     loader: () => import(/* webpackChunkName: "CubeRouter" */ './page/cube/cubeRouter.jsx'),
+//     loading: loading,
+//     delay:3000
+// });
 const UploadRouter = Loadable({
-    loader: () => import('./page/upload/uploadRouter.jsx'),
+    loader: () => import(/* webpackChunkName: "UploadRouter" */ './page/upload/uploadRouter.jsx'),
     loading: loading,
     delay:3000
 });
 const QaRouter = Loadable({
-    loader: () => import('./page/chat/qaRouter.jsx'),
+    loader: () => import(/* webpackChunkName: "QaRouter" */ './page/chat/qaRouter.jsx'),
     loading: loading,
     delay:3000
 });
 
 const MyRoportRouter = Loadable({
-    loader: () => import('./page/report/MyReportRouter.jsx'),
+    loader: () => import(/* webpackChunkName: "MyReportRouter" */ './page/report/MyReportRouter.jsx'),
     loading: loading,
     delay:3000
 });
 
-const assetmap = Loadable({
-    loader: () => import('./page/map/assetmap.jsx'),
-    loading: loading,
-    delay:3000
-});
+// const assetmap = Loadable({
+//     loader: () => import(/* webpackChunkName: "assetmap" */ './page/map/assetmap.jsx'),
+//     loading: loading,
+//     delay:3000
+// });
 
 function LoadPage(url){
 //    console.log(Loadable({
@@ -165,7 +165,7 @@ class App extends React.Component {
                     <Layout>
                         <Switch>
                             <Route exact path="/" component={Home} />
-                            <Route path="/dashboard" component={dashboardRouter}/> 
+                            {/* <Route path="/dashboard" component={dashboardRouter}/>  */}
                             <Route path="/task" component={TaskRouter}/>
                             <Route path="/user" component={UserRouter}/>
                             <Route path="/dbs" component={DbsRouter}/>
@@ -177,11 +177,11 @@ class App extends React.Component {
                             <Route path="/dict" component={DictRouter}/>
                             <Route path="/function" component={FunctionRouter}/>
                             <Route path="/temp" component={CachedRouter}/>
-                            <Route path="/cube" component={CubeRouter}/> 
+                            {/* <Route path="/cube" component={CubeRouter}/>  */}
                             <Route path="/upload" component={UploadRouter}/> 
                             <Route path="/chat" component={QaRouter}/> 
                             <Route path="/report" component={MyRoportRouter}/> 
-                            <Route path="/assetmap" component={assetmap}/> 
+                            {/* <Route path="/assetmap" component={assetmap}/>  */}
                             
                          
     

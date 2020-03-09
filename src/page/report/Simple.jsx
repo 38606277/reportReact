@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { Table, Divider, Button, Card, Tooltip, Input, Row, Col,Tree } from 'antd';
 import {SpreadSheets, Worksheet, Column} from '@grapecity/spread-sheets-react';
 import './Style.css'
 import dataService from './dataService.jsx';
@@ -297,6 +298,7 @@ class DataBingingCon extends Component {
           </form>
         </div>
         <div className="spreadContainer" style={this.hostStyle}>
+        <Card>
           <SpreadSheets
             backColor="white"
             hostStyle={{ width: `${tableWidth}px`, height: '600px' }}
@@ -310,6 +312,7 @@ class DataBingingCon extends Component {
               )): null}
             </Worksheet>
           </SpreadSheets>
+          </Card>
         </div>
       </div>
 

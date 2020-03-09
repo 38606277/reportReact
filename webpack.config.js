@@ -12,9 +12,9 @@ module.exports = {
     mode: 'development',
     devtool: 'source-map',
     entry: {
-        bundle: path.resolve(__dirname, './src/app.jsx')
+        bundle: path.resolve(__dirname, './src/app.jsx'),
         // //添加要打包在vendor里面的库
-        // vendors: ['react','react-dom','react-router','antd'],
+        //  vendors: ['react','react-dom','react-router','antd']
     },
     output: {
         path: path.resolve(__dirname, './build'),
@@ -130,17 +130,45 @@ module.exports = {
     optimization: {
         splitChunks: {
             cacheGroups: {
-                commons: {
-                    test: /[\\/]node_modules[\\/]/,
-                    name: 'vendors',
-                    chunks: 'all'
-                },
                 styles: {
                     name: 'styles',
                     test: /\.css$/,
                     chunks: 'all',
                     enforce: true
-                }
+                },
+                vendor: {
+                    name: 'vendor',
+                    test: /[\\/]node_modules[\\/]/,
+                    chunks: 'all',
+                    priority: 10,
+                    enforce: true,
+                },
+                react: {
+                    name: 'react',
+                    test: module => /react|redux/.test(module.context),
+                    chunks: 'initial',
+                    priority: 11,
+                    enforce: true,
+                },
+                antd: {
+                    name: 'antd',
+                    test: (module) => {
+                        return /ant/.test(module.context);
+                    },
+                    chunks: 'initial',
+                    priority: 11,
+                    enforce: true,
+                },
+                moment: {
+                    name: 'moment',
+                    test: (module) => {
+                        return /moment/.test(module.context);
+                    },
+                    chunks: 'initial',
+                    priority: 13,
+                    enforce: true,
+                },
+
             }
         }
     },

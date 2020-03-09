@@ -12,7 +12,7 @@
     "dist": "WEBPACK_ENV=online node_modules/.bin/webpack -p  --progress --colors",
     "dist_win": "set WEBPACK_ENV=online&& node_modules/.bin/webpack -p",
     "start": "webpack-dev-server  --progress --colors --mode development --config ./webpack.dev.config.js",
-    "build": "webpack --mode production --config ./webpack.prod.config.js"
+    "build": "webpack --mode production --config ./webpack.prod.config.js --progress --colors"
   },
   "devDependencies": {
     "babel-core": "6.26.3",
@@ -52,11 +52,18 @@
   },
   "dependencies": {
     "@antv/data-set": "^0.10.1",
+    "@grapecity/spread-excelio": "^12.0.9",
+    "@grapecity/spread-sheets": "^11.2.2",
+    "@grapecity/spread-sheets-react": "^11.2.2",
+    "@grapecity/spread-sheets-resources-zh": "^11.2.2",
     "antd": "^3.9.3",
     "bizcharts": "^3.2.4",
     "bizcharts-plugin-slider": "^2.0.3",
+    "browserslist": "^4.9.1",
+    "caniuse-lite": "^1.0.30001033",
     "classnames": "^2.2.6",
     "echarts": "^4.2.0-rc.1",
+    "file-saver": "^2.0.1",
     "immutability-helper": "^2.7.1",
     "js-export-excel": "^1.1.2",
     "less": "^3.8.1",
@@ -86,11 +93,6 @@
     "simditor": "^2.3.6",
     "sortablejs": "^1.6.1",
     "umi": "^2.0.0-beta.10",
-    "whatwg-fetch": "^2.0.4",
-    "@grapecity/spread-excelio": "^12.0.9",
-    "@grapecity/spread-sheets": "^11.2.2",
-    "@grapecity/spread-sheets-react": "^11.2.2",
-    "@grapecity/spread-sheets-resources-zh": "^11.2.2",
-    "file-saver": "^2.0.1"
+    "whatwg-fetch": "^2.0.4"
   }
 }

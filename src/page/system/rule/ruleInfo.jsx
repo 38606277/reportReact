@@ -664,8 +664,14 @@ class RuleInfo extends React.Component{
             </Card>
            
             <Card title="权限列表" style={{float:"left",width:"80%"}}>
-                <Tabs defaultActiveKey="select" onChange={this.onChangeTab} tabPosition={this.state.tabPosition}>
-                <TabPane tab="查询" key="select">
+                <Tabs defaultActiveKey="webFunc" onChange={this.onChangeTab} tabPosition={this.state.tabPosition}>
+                <TabPane tab="功能菜单" key="webFunc">
+                    {contents}
+                </TabPane>
+                <TabPane tab="Excel功能" key="func">
+                     {contents}
+                </TabPane>
+                <TabPane tab="数据查询" key="select">
                     {contents}
                 </TabPane>
                 <TabPane tab="函数" key="function">
@@ -680,12 +686,8 @@ class RuleInfo extends React.Component{
                 <TabPane tab="模板" key="template">
                      {contents}
                 </TabPane>
-                <TabPane tab="功能" key="func">
-                     {contents}
-                </TabPane>
-                <TabPane tab="网站菜单" key="webFunc">
-                    {contents}
-                </TabPane>
+               
+               
                 <TabPane tab="数据权限" key="table">
                     {contents}
                     {/* <Tabs  onChange={this.onChangeTab} tabPosition={this.state.tabPosition}>

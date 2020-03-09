@@ -685,11 +685,11 @@ class ExecQuery extends React.Component {
                 onSearch={value => this.onResultSearch(value)}
                 /> */}
                     <Card  bordered={false} title={this.state.paramv3} extra={<div>
-                        <a onClick={() => this.execSelect('1')}>查询 </a>
+                        <Button onClick={() => this.execSelect('1')} type="primary" icon="thunderbolt">执行查询</Button>
                         <Divider type="vertical" />
-                        <a onClick={this.downloadExcel}>保存到excel</a>
+                        <Button onClick={this.downloadExcel}>保存到excel</Button>
                         <Divider type="vertical" />
-                        <a onClick={() => this.printResultList()}>打印</a>
+                        <Button onClick={() => this.printResultList()}>打印</Button>
                     </div>}
                    >
                         {inColumn}

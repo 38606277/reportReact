@@ -125,7 +125,7 @@ export default class QueryList extends React.Component {
 
         return (
             <div>
-                <Card title="查询列表" bodyStyle={{ padding: "10px" }}>
+                <Card title="数据查询" bodyStyle={{ padding: "10px" }}>
                     {/* <Row style={{marginBottom:"10px"}}>
                         <Col span={6}> <Input prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="输入函数名称" /></Col>
                         <Col span={4}></Col>
@@ -140,7 +140,7 @@ export default class QueryList extends React.Component {
                             <Menu.Item key="table">数据库表</Menu.Item>
                         </Menu>
                     )}>
-                        <Button >
+                        <Button icon="file-search" type="primary" >
                         新建查询<Icon type="down" />
                         </Button>
                     </Dropdown>
