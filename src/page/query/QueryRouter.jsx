@@ -6,72 +6,72 @@ import loading from '../../util/loading.jsx';
 // 页面
 
 const ExecQuery = Loadable({
-    loader:()=>import('./ExecQuery.jsx'),
+    loader:()=>import(/* webpackChunkName: "ExecQuery" */ './ExecQuery.jsx'),
     loading:loading,
     delay:3000
 });
 
 const QueryList = Loadable({
-    loader: () => import('./QueryList.jsx'),
+    loader: () => import(/* webpackChunkName: "QueryList" */ './QueryList.jsx'),
     loading: loading,
     delay:3000
 });
 
 const HttpCreator = Loadable({
-    loader: () => import('./HttpCreator.jsx'),
+    loader: () => import(/* webpackChunkName: "HttpCreator" */ './HttpCreator.jsx'),
     loading: loading,
     delay:3000
 });
 const SqlCreator = Loadable({
-    loader: () => import('./SqlCreator.jsx'),
+    loader: () => import(/* webpackChunkName: "SqlCreator" */ './SqlCreator.jsx'),
     loading: loading,
     delay:3000
 });
 const ProcedureCreator = Loadable({
-    loader: () => import('./ProcedureCreator.jsx'),
+    loader: () => import(/* webpackChunkName: "ProcedureCreator" */ './ProcedureCreator.jsx'),
     loading: loading,
     delay:3000
 });
 const TableCreator = Loadable({
-    loader: () => import('./TableCreator.jsx'),
+    loader: () => import(/* webpackChunkName: "TableCreator" */ './TableCreator.jsx'),
     loading: loading,
     delay:3000
 });
 const QueryClass = Loadable({
-    loader: () => import('./QueryClass.jsx'),
+    loader: () => import(/* webpackChunkName: "QueryClass" */ './QueryClass.jsx'),
     loading: loading,
     delay:3000
 });
 
 const CreateTemplate = Loadable({
-    loader: () => import('./CreateTemplate.jsx'),
+    loader: () => import(/* webpackChunkName: "CreateTemplate" */ './CreateTemplate.jsx'),
     loading: loading,
     delay:3000
 });
 
 const QueryData = Loadable({
-    loader: () => import('./QueryData.jsx'),
+    loader: () => import(/* webpackChunkName: "QueryData" */ './QueryData.jsx'),
     loading: loading,
     delay:3000
 });
 const WebTemplate = Loadable({
-    loader: () => import('./WebTemplate.jsx'),
+    loader: () => import(/* webpackChunkName: "WebTemplate" */ './WebTemplate.jsx'),
     loading: loading,
     delay:3000
 });
 const NlpCreator = Loadable({
-    loader: () => import('./NlpCreator.jsx'),
+    loader: () => import(/* webpackChunkName: "NlpCreator" */ './NlpCreator.jsx'),
     loading: loading,
     delay:3000
 });
 
 const NlpList = Loadable({
-    loader: () => import('./NlpList.jsx'),
+    loader: () => import(/* webpackChunkName: "NlpList" */ './NlpList.jsx'),
     loading: loading,
     delay:3000
 });
 // const Indexs = Loadable({
-//     loader: () => import('./Indexs.jsx'),
+//     loader: () => import(/* webpackChunkName: "DictList" */ './Indexs.jsx'),
 //     loading: loading,
 //     delay:3000
 // });

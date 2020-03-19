@@ -5,8 +5,7 @@
 * @Last Modified time: 2018-01-31 14:34:10
 */
 import React from 'react';
-import Table from 'antd/lib/table';
-import { Card, Button, Tooltip, Divider, Icon, Input, Select, Form, FormItem, Menu, Row, Col } from 'antd';
+import { Card, Button, Tooltip, DiviTableder, Icon, Input, Select, Form, FormItem, Menu, Row, Col } from 'antd';
 
 import HttpService from '../../util/HttpService.jsx';
 const { Column, ColumnGroup } = Table;

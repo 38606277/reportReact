@@ -10,23 +10,24 @@
         body{height:100%;margin:0px;padding:0px}  
         #container{height:100%}  
         </style>
-    <!-- <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=y5S6vt7YA4TBGDCuBXE5YyL8gZ6T2szk"> -->
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=y5S6vt7YA4TBGDCuBXE5YyL8gZ6T2szk">
    </script>
     <script type="text/javascript">
         function getServerUrl()
         {
             if(location.hostname)
             {
-                return "http://"+location.hostname+":"+location.port+"/";
+                return "http://"+location.hostname+":"+'80'+"/";
             }else
             {
-                return 'http://localhost:'+location.port+'/';
+                return 'http://localhost:'+'80'+'/';
             }
         }
         //  alert(getServerUrl());
     </script>
 </head>
 <body>
+    <!-- <img src="%PUBLIC_URL%/assets/bike.jpg" alt=""> -->
     <div id="app"></div>
     <!-- <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script> -->
   

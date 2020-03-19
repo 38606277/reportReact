@@ -5,8 +5,7 @@
 * @Last Modified time: 2018-01-31 14:34:10
 */
 import React from 'react';
-import Table from 'antd/lib/table';
-import { Card, Button, Divider, Input, message,Modal, Form, FormItem, Icon, Row, Col,loading,Dropdown,Menu } from 'antd';
+import { Card, Button, Table, Input, message,Modal, Form, FormItem, Icon, Row, Col,loading,Dropdown,Menu } from 'antd';
 
 import FunctionService from '../../service/FunctionService.jsx'
 import HttpService from '../../util/HttpService.jsx';

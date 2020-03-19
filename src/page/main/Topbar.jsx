@@ -19,7 +19,7 @@ export default class TopBar extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            title:"数据中台",
+            title: "数据中台",
             collapsed: false,
             visible: false,
             ishow: '0',
@@ -53,9 +53,9 @@ export default class TopBar extends React.Component {
             pageNumd: this.state.pageNumd, perPaged: this.state.perPaged
         }
 
-       // /reportServer/appConfig
-        HttpService.post('/reportServer/appConfig/getWebAppTitle',null).then(res=>{
-            this.setState({title:res.data});
+        // /reportServer/appConfig
+        HttpService.post('/reportServer/appConfig/getWebAppTitle', null).then(res => {
+            this.setState({ title: res.data });
         });
         HttpService.post('/reportServer/chat/getChatByuserID', JSON.stringify(mInfo))
             .then(res => {
@@ -266,6 +266,25 @@ export default class TopBar extends React.Component {
         localStorge.removeStorage('lasurl');
         this.setState({ redirect: true });
     }
+    //下载客户端
+    onDownloadExcel() {
+        HttpService.getFile('reportServer/file/downExcelInstall').then(res => res.blob().then(blob => {
+            let a = document.createElement('a');
+            let url = window.URL.createObjectURL(blob);
+            let filename ='ibas.msi'; //res.headers.get('Content-Disposition');
+            if (filename) {
+                // filename = filename.match(/\"(.*)\"/)[1]; //提取文件名
+                a.href = url;
+                a.download = filename; //给下载下来的文件起个名字
+                a.click();
+                window.URL.revokeObjectURL(url);
+                a = null;
+            }
+        }));
+
+
+    }
+
 
     linkUserInfo() {
         this.props.history.push("/user/userView/" + this.state.userid);
@@ -291,7 +310,7 @@ export default class TopBar extends React.Component {
         if (ss == '1') {
             contsss = <ul className="nav navbar-nav navbar-right pull-right"><li className="dropdown">
                 <ul className="dropdown-menu">
-                    <li ><a href=""><i className="md md-file-download">插件下载</i></a></li>
+                    <li ><a onClick={() => { this.onDownloadExcel() }} ><i className="md md-file-download">Excel插件下载</i></a></li>
                 </ul>
             </li></ul>;
             showwei = 'bottomLeft';
@@ -358,16 +377,16 @@ export default class TopBar extends React.Component {
             </li>
             </ul>;
         } else if (ss == '4') {
-            contsss = <ul className="nav navbar-nav navbar-right pull-right"  style={{width:'150px'}}><li className="dropdown">
+            contsss = <ul className="nav navbar-nav navbar-right pull-right" style={{ width: '150px' }}><li className="dropdown">
                 <ul className="dropdown-menu">
                     <li style={{ margin: '10px' }}>
                         <Link to={"/user/userView/" + this.state.userid}>
-                            <Icon type="user" theme="outlined" style={{  color: '#0a0a0a' }} />
-                            <span style={{  marginLeft: '5px', color: '#0a0a0a' }}>个人信息</span>
+                            <Icon type="user" theme="outlined" style={{ color: '#0a0a0a' }} />
+                            <span style={{ marginLeft: '5px', color: '#0a0a0a' }}>个人信息</span>
                         </Link>
                     </li>
                     <li style={{ margin: '10px' }}><Link to={"/user/UpdatePwd/" + this.state.userid}>
-                        <Icon type="key" theme="outlined" style={{  color: '#0a0a0a' }} />
+                        <Icon type="key" theme="outlined" style={{ color: '#0a0a0a' }} />
                         <span style={{ marginLeft: '5px', color: '#0a0a0a' }}>密码修改</span></Link>
                     </li>
                     <li style={{ margin: '10px' }} ><a href="javascript:void(0)"><Icon type="setting" theme="outlined" style={{ color: '#0a0a0a' }} />

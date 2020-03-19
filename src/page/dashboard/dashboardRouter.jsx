@@ -7,12 +7,18 @@ import loading from '../../util/loading.jsx';
 import monitor from './monitor.jsx';
 import DataAnalysis  from './DataAnalysis.jsx';
 import DashboardList from './DashboardList.jsx';
+
 const DashboardCreator = Loadable({
-    loader: () => import('./DashboardCreator.jsx'),
+    loader: () => import(/* webpackChunkName: "DashboardCreator" */ './DashboardCreator.jsx'),
     loading: loading,
     delay:3000
 });
 
+const FormCreator = Loadable({
+    loader: () => import(/* webpackChunkName: "FormCreator" */ './FormCreator.jsx'),
+    loading: loading,
+    delay:3000
+});
 
 export default class DashboardRouter extends React.Component {
     render() {
@@ -21,7 +27,7 @@ export default class DashboardRouter extends React.Component {
                 <Route path="/dashboard/analysis" component={analysis} />
                 <Route path="/dashboard/monitor" component={monitor} />
                 <Route path="/dashboard/DataAnalysis/:qry_id/:class_id/:cube_name" component={DataAnalysis}/>
-                <Route path="/dashboard/DashboardCreator" component={DashboardCreator}/>
+                <Route path="/dashboard/DashboardCreator" component={FormCreator}/>
                 <Route path="/dashboard/DashboardList" component={DashboardList}/>
                 
             </Switch>

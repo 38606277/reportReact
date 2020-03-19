@@ -33,7 +33,21 @@ export default class HttpService {
         }
     }
 
-    get(){
+    static getFile(url){
+        if((undefined==localStorge.getStorage('userInfo') && url!='/reportServer/user/encodePwd' && url!='/reportServer/user/Reactlogin') || (''==localStorge.getStorage('userInfo')  && url!='/reportServer/user/encodePwd' && url!='/reportServer/user/Reactlogin')){
+            window.location.href='#login';
+            return  new Promise((resolve, reject) => {});
+        }else{
+            const fullUrl = HttpService.getBaseUrl() + url;
+            let opts = {
+                method: 'GET',
+                headers: {
+                    credentials: JSON.stringify(localStorge.getStorage('userInfo') || '')
+                },
+             };
+
+            return fetch(fullUrl, opts);
+        }
 
     }
 

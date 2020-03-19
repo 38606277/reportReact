@@ -7,33 +7,33 @@ import loading from '../../util/loading.jsx';
 
 
 const DictList = Loadable({
-    loader: () => import('./DictList.jsx'),
+    loader: () => import(/* webpackChunkName: "DictList" */ './DictList.jsx'),
     loading: loading,
     delay:3000
 });
 
 const DictCreator = Loadable({
-    loader: () => import('./DictCreator.jsx'),
+    loader: () => import(/* webpackChunkName: "DictCreator" */ './DictCreator.jsx'),
     loading: loading,
     delay:3000
 });
 
 
 const DictViewData = Loadable({
-    loader: () => import('./DictViewData.jsx'),
+    loader: () => import(/* webpackChunkName: "DictViewData" */ './DictViewData.jsx'),
     loading: loading,
     delay:3000
 });
 
 const DictValueList = Loadable({
-    loader: () => import('./DictValueList.jsx'),
+    loader: () => import(/* webpackChunkName: "DictValueList" */ './DictValueList.jsx'),
     loading: loading,
     delay:3000
 });
 
 
 const DictValueInfo = Loadable({
-    loader: () => import('./DictValueInfo.jsx'),
+    loader: () => import(/* webpackChunkName: "DictValueInfo" */ './DictValueInfo.jsx'),
     loading: loading,
     delay:3000
 });

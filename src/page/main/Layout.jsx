@@ -5,12 +5,12 @@ import Loadable from 'react-loadable';
 import loading from '../../util/loading.jsx'
 import './Layout.scss';
 const SiderBar = Loadable({
-    loader: () => import('./Sidebar.jsx'),
+    loader: () => import(/* webpackChunkName: "Topbar" */ './Sidebar.jsx'),
     loading: loading,
     delay:3000
 });
 const TopBar = Loadable({
-    loader: () => import('./Topbar.jsx'),
+    loader: () => import(/* webpackChunkName: "Topbar" */ './Topbar.jsx'),
     loading: loading,
     delay:3000
 });

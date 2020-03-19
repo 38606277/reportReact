@@ -1,22 +1,13 @@
-/*
-* @Author: Rosen
-* @Date:   2018-01-26 16:48:16
-* @Last Modified by:   Rosen
-* @Last Modified time: 2018-01-31 14:34:10
-*/
 import React from 'react';
+import { Card, Button, Table, Input, message,Modal, Form, FormItem, Icon, Row, Col,Divider,Dropdown,Menu } from 'antd';
 
-import { Card, Button, Divider, Input, message,Table, Form, FormItem, Icon, Row, Col,loading,Dropdown,Menu } from 'antd';
-
-import FunctionService from '../../service/FunctionService.jsx'
 import HttpService from '../../util/HttpService.jsx';
 
 
-const functionService = new FunctionService();
 const { Column, ColumnGroup } = Table;
 const Search = Input.Search;
 
-export default class QueryList extends React.Component {
+export default class reportlist extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -28,11 +19,11 @@ export default class QueryList extends React.Component {
         selectedRowKeys: []
       };
     componentDidMount() {
-        this.getAllQueryName();
+        this.getAll();
     }
-    getAllQueryName() {
+    getAll() {
         let param = {};
-        HttpService.post('reportServer/query/getAllQueryName', null)
+        HttpService.post('reportServer/report/getAll', null)
             .then(res => {
                 if (res.resultCode == "1000")
                     this.setState({ list: res.data })
@@ -43,19 +34,9 @@ export default class QueryList extends React.Component {
     }
 
    onNewQry(e){
-    if(e.key=='sql')
-    {
-       window.location.href="#/query/SqlCreator/create/0";
-    }else if(e.key=='procedure')
-    {
-        window.location.href="#/query/ProcedureCreator/create/0";
-    }else if(e.key=='http')
-    {
-        window.location.href="#/query/HttpCreator/create/0";
-    }else if(e.key=='table')
-    {
-        window.location.href="#/query/TableCreator/create/0";
-    }
+   
+       window.location.href="#/report/reportCreate";
+    
 
    }
 
@@ -73,7 +54,7 @@ export default class QueryList extends React.Component {
         //       },
         //   });
         if(confirm('确认删除吗？')){
-            HttpService.post('reportServer/query/deleteQuery', JSON.stringify(this.state.selectedRows))
+            HttpService.post('reportServer/report/getAll', JSON.stringify(this.state.selectedRows))
             .then(res => {
                 if (res.resultCode == "1000") {
                     message.success("删除成功！");
@@ -125,7 +106,7 @@ export default class QueryList extends React.Component {
 
         return (
             <div>
-                <Card title="数据查询" bodyStyle={{ padding: "10px" }}>
+                <Card title="报表模板" bodyStyle={{ padding: "10px" }}>
                     {/* <Row style={{marginBottom:"10px"}}>
                         <Col span={6}> <Input prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="输入函数名称" /></Col>
                         <Col span={4}></Col>
@@ -134,19 +115,15 @@ export default class QueryList extends React.Component {
                     </Row> */}
                     <Dropdown style={{ marginRight: "20px" }} type="primary" overlay={(
                         <Menu onClick={(e)=>this.onNewQry(e)}>
-                            <Menu.Item key="sql">sql语句</Menu.Item>
-                            <Menu.Item key="procedure">存储过程</Menu.Item>
-                            <Menu.Item key="http">http请求</Menu.Item>
-                            <Menu.Item key="table">数据库表</Menu.Item>
+                            <Menu.Item key="sql">员工进出</Menu.Item>
+                           
                         </Menu>
                     )}>
-                        <Button icon="file-search" type="primary" >
-                        新建查询<Icon type="down" />
+                        <Button >
+                        新建<Icon type="down" />
                         </Button>
                     </Dropdown>
-                    {/* <Button href="#/query/QueryCreator/sql/create/0" style={{ marginRight: "10px" }} type="primary">新建查询</Button> */}
-                    <Button href="#/query/QueryClass" style={{ marginRight: "15px",marginLeft:"15px" }} >查询类别管理</Button>
-                    <Button onClick={() => this.onDelButtonClick()} style={{ marginRight: "10px" }} >删除</Button>
+                    {/* <Button href="#/query/QueryCreator/sql/create/0" style={{ marginRight: "10px" }} type="primary">新增</Button> */}
                     <Search
                         style={{ maxWidth: 300, marginBottom: '10px', float: "right" }}
                         placeholder="请输入..."
@@ -156,27 +133,34 @@ export default class QueryList extends React.Component {
 
                     <Table dataSource={this.state.list} rowKey={"qry_id"} rowSelection={rowSelection} ref="qryTable" >
                         <Column
-                            title="查询ID"
-                            dataIndex="qry_id"
-                            sorter={(a, b) => a.qry_id - b.qry_id}
+                            title="报表ID"
+                            dataIndex="rpt_id"
                         />
                         <Column
-                            title="查询名称"
-                            dataIndex="qry_name"
+                            title="报表名称"
+                            dataIndex="rpt_name"
+                        />
+                         <Column
+                            title="报表类别"
+                            dataIndex="rpt_class"
                         />
                         <Column
-                            title="查询描述"
-                            dataIndex="qry_desc"
+                            title="创建人"
+                            dataIndex="create_by"
+                        />
+                         <Column
+                            title="创建时间"
+                            dataIndex="create_time"
                         />
                         <Column
-                            title="查询类别"
-                            dataIndex="class_name"
-                            sorter={(a, b) => a.class_name.length - b.class_name.length}
+                            title="修改人"
+                            dataIndex="update_by"
                         />
                         <Column
-                            title="调用方式"
-                            dataIndex="qry_type"
+                            title="修改时是"
+                            dataIndex="update_time"
                         />
+                       
                         <Column
                             title="动作"
                             render={(text, record) => (
@@ -189,7 +173,7 @@ export default class QueryList extends React.Component {
                                         }else if(record.qry_type=='http'){
                                             window.location.href="#/query/HttpCreator/update/"+record.qry_id;
                                         }
-                                     }}>编辑</a>
+                                     }}>编辑模板</a>
                                     <Divider type="vertical" />
                                     <a href={`#/query/CreateTemplate`}>模板</a>
                                 </span>
