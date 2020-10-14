@@ -2,7 +2,7 @@ import React from 'react'
 import { Card, Button, Table, Form, Input, Divider, Avatar,List,Pagination,Checkbox, Dropdown, Select, Radio, Icon, message, Modal, DatePicker, InputNumber, Switch, Row, Col, Tabs, Menu } from 'antd'
 import moment from 'moment';
 import 'moment/locale/zh-cn';
-import "babel-polyfill";
+import "@babel/polyfill";
 import CodeMirror from 'react-codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/sql/sql';

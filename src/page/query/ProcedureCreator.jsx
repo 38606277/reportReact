@@ -11,7 +11,7 @@ import EditIn from './EditIn.jsx';
 import EditOut from './EditOut.jsx';
 import FunctionService from '../../service/FunctionService.jsx'
 import HttpService from '../../util/HttpService.jsx';
-import "babel-polyfill";
+import "@babel/polyfill";
 import DbService from '../../service/DbService.jsx'
 import './query.scss';
 

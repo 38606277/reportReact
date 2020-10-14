@@ -14,7 +14,7 @@ import HttpService from '../../util/HttpService.jsx';
 
 import DbService from '../../service/DbService.jsx'
 import './query.scss';
-import "babel-polyfill";
+import "@babel/polyfill";
 import { black } from 'ansi-colors';
 import { red } from 'ansi-colors';
 

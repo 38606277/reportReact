@@ -5,7 +5,7 @@ import {Card}   from 'antd';
 const localStorge = new LocalStorge();
 const _product      = new Task();
  import Script from 'react-load-script';
-import "babel-polyfill";
+ import "@babel/polyfill";
 
 class TaskInfo extends React.Component{
     constructor(props){

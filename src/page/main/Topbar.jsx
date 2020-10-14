@@ -7,7 +7,8 @@ import 'react-chat-widget/lib/styles.css';
 import ai from '../../asset/ai.png';
 import my from '../../asset/chart.png';
 import down from '../../asset/down.png';
-import "babel-polyfill";
+// import "babel-polyfill";
+import "@babel/polyfill";
 import HttpService from '../../util/HttpService.jsx';
 import LocalStorge from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
@@ -19,7 +20,7 @@ export default class TopBar extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            title: "数据中台",
+            title: "数据中台1",
             collapsed: false,
             visible: false,
             ishow: '0',
