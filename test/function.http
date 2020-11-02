@@ -13,6 +13,27 @@ method: POST
 credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
 body: {}
 
+###hive
+POST http://localhost:80/reportServer/finance/getStudents HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    
+}
+
+###hbase
+POST http://localhost:80/reportServer/finance/gethbase HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    
+}
+
+
 ###登录请求示例
 POST http://localhost:8080/reportServer/user/login HTTP/1.1
 content-type: application/json
@@ -36,6 +57,18 @@ content-type: application/json
 method: POST
 credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
 body: {}
+
+
+###查询所有的函数类别
+POST http://localhost:80/reportServer/hive/get HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    func_id:"37"
+}
+
 
 ###查询函数用ID
 POST http://localhost:80/reportServer/function/getFunctionByID/36 HTTP/1.1

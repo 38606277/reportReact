@@ -79,7 +79,7 @@ class Login extends React.Component{
                 <div className="panel panel-color panel-primary panel-pages">
                 <div className="panel-heading bg-img"> 
                     <div className="bg-overlay"></div>
-                    <h3 className="text-center m-t-10 text-white">登录报表平台<strong></strong> </h3>
+                    <h3 className="text-center m-t-10 text-white">登录大数据平台<strong></strong> </h3>
                 </div> 
 
 

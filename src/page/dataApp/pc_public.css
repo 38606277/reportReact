@@ -1,0 +1,154 @@
+@charset "utf-8";
+/* CSS Document */
+/*
++-----------------------------------------------------------------------+
+|	WordPress Plugin: WP-DownloadManager 								|
+|	Copyright: 2016 in Industry Research Institut              			|
+|																		|
+|	File Written By:													|
+|	- ranbo												                |
+|																		|
+|	File Information:													|
+|	- CSS pc_public Style				               					|
++-----------------------------------------------------------------------+
+*/
+*{ font-size:1em; font-family:Roboto,San Francisco,"Helvetica Neue",Helvetica,Arial,PingFangSC-Light,"Hiragina Sans GB","WenQuanYi Micro Hei",'microsoft yahei ui','microsoft yahei',sans-serif;margin:0 auto; padding:0; color:#39424f;}
+html,body{margin:0; padding:0px;min-height: 100%; background:#ededed;}
+h1,h2,h3,h4,h5,h6,ol,ul,dl,dd,p{margin:0px;}
+ol,ul,li,th,td {padding:0;list-style:none;}
+i { font-style:normal}
+p{ text-indent:2em; color:#555;}
+a{ text-decoration:none; color:#f04b00; outline: none;}
+a:hover{ text-decoration:none; color:#f63c3c;}
+.fl {float:left;}
+.fr {float:right;}
+.flb { float:left; border:0px;}
+.rlb { float:right; border:0px;}
+.clear{ clear:both;}
+.tl { text-align: left;}
+.tc { text-align: center}
+.tr { text-align: right;}
+img { border:0px; vertical-align: middle;}
+.clearfix:after { content: ".";width: 0; height: 0;visibility: hidden;display: block; clear: both; overflow:hidden;}
+.inline{ display: inline-block; *display: inline;  *zoom: 1;}
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block;}
+
+/*输入框属性  START*/
+input, textarea, select {font-family:inherit;font-size:inherit;font-weight:inherit;/* -webkit-appearance:none;*/}
+/*输入框属性  END*/
+
+.ov_slwhole {overflow-y:scroll; overflow-x:scroll;}
+.ov_sl_y {overflow-y:scroll; overflow-x:hidden;}
+.ov_sl_x {overflow-y:hidden; overflow-x:scroll;}
+
+
+/*文字溢出处理 START*/
+.ellipse_one { overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.ellipse_two { overflow :hidden;text-overflow:ellipsis;display:-webkit-box;-o-line-clamp:2;-moz-line-clamp:2;-webkit-line-clamp:2;-o-box-orient: vertical;-moz-box-orient: vertical;-webkit-box-orient: vertical;}
+/*文字溢出处理 END*/
+
+/*浮动定位属性 START*/
+.position_rel { position:relative;}
+.position_abl { position:absolute;}
+.position_fxd { position:fixed;}
+/*浮动定位属性END*/
+
+/*--background属性 START--*/
+.bakg01 { background:#fff;}
+.bakg02 {background:#f4f5f7;}
+.bakg03 {background:#f4f4f4;}
+.bakg04 {background:#e2e2e2;}
+.bakg05 {background:#f04b00;}
+.bakg06 {background:#1bc5bb;}
+.bakg07 {background:#26a2de;}
+.bakg08 {background:#008fd6;}
+.bakg09 {background:#1c2b36;}
+.bakg10 {background:#0d1923;}
+.bakg11 {background:#1c2b36;}
+.bakg12 {background:#1a729e;}
+/*--background属性 END--*/
+
+/*内边距属性 START*/
+.mg_tone { margin-top:40px;}
+.mg_ttwo { margin-top:20px;}
+.mg_ttheer { margin-top:28px;}
+.mg_tfour { margin-top:38px;}
+.mg_tfover { margin-top:16px;}
+
+.mg_rone {margin-right:20px; *margin-right:16px;position: relative;}
+.mg_rtwo { margin-right:24px;}
+.mg_rtheer { margin-right:28px;}
+.mg_rfour { margin-right:38px;}
+
+
+.mg_bone { margin-bottom:20px;}
+.mg_btwo { margin-bottom:24px;}
+.mg_btheer { margin-bottom:28px;}
+.mg_bfour { margin-bottom:38px;}
+
+.mg_lone { margin-left:20px;}
+.mg_ltwo { margin-left:24px;}
+.mg_ltheer { margin-left:28px;}
+.mg_lfour { margin-left:38px;}
+.mg_lfive { margin-left:5%; *margin-left:4.6%;}
+.mg_lsix { margin-left:16px;}
+
+
+/*内边距属性 END*/
+
+/*外边距属性 START*/
+.pdi_tone { padding-top:20px;}
+.pdi_ttwo { padding-top:24px;}
+.pdi_ttheer { padding-top:28px;}
+.pdi_tfour { padding-top:38px;}
+
+.pdi_rone { padding-right:20px;}
+.pdi_rtwo { padding-right:24px;}
+.pdi_rtheer { padding-right:28px;}
+.pdi_rfour { padding-right:38px;}
+.pdi_r8 { padding-right:8px;}
+
+
+.pdi_bone { padding-bottom:20px;}
+.pdi_btwo { padding-bottom:24px;}
+.pdi_btheer { padding-bottom:28px;}
+.pdi_bfour { padding-bottom:38px;}
+
+.pdi_lone { padding-left:20px;}
+.pdi_ltwo { padding-left:24px;}
+.pdi_ltheer { padding-left:28px;}
+.pdi_lfour { padding-left:38px;}
+/*外边距属性 END*/
+
+/*border属性 START*/
+.bder_one {border:1px solid #ff635d;}
+.bder_two {border:1px solid #ff7131;}
+.bder_three {border:1px solid #7fb50c;}
+.bder_four {border:1px solid #1bc5bb;}
+.bder_fw {border:1px solid #f8b615;}
+.bder_six {border:1px solid #32afed;}
+/*border属性 END*/
+
+/*强制执行color属性 START*/
+.cr_one { color:#26a2de !important;}
+.cr_two { color:#17c7be !important;}
+.cr_three { color:#f63c3c !important;}
+/*强制执行color属 END*/
+
+/*CSS3 缓冲时间  START*/
+.tm { transition: all 0.4s linear 0s; cursor:pointer;}
+/*CSS3 缓冲时间  START*/
+
+/*border属性 END*/
+.bgone { background:url(http://image1.askci.com/s_dataimages/images/data-icon-2017-11-09000000011.png) center center no-repeat;}
+.bgtwo { background:#f4f5f7 url(http://image1.askci.com/s_dataimages/images/data-icon-2017-11-09000000012.png) center center no-repeat;}
+.bgtheer { background:url(http://image1.askci.com/s_dataimages/images/data-icon-2017-11-09000000022.png) center center no-repeat;}
+.bgfour { background:url(http://image1.askci.com/s_dataimages/images/data-icon-2017-11-09000000023.png) center center no-repeat;}
+
+
+
+
+
+
+
+

@@ -2,10 +2,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from 'antd/lib/pagination';
-import { Table, Divider, Button, Card, Tree, Input, Form, Spin, Row, Col, Select, Tooltip, Modal } from 'antd';
-import CubeService from '../../service/CubeService.jsx';
-import HttpService from '../../util/HttpService.jsx';
-import { forInRight } from 'lodash';
+import { Table, Divider, Button, Card, Tree, Input, Form, Spin, Row, Col, Select, Tooltip } from 'antd';
+import CubeService from '../../../service/CubeService.jsx';
+import HttpService from '../../../util/HttpService.jsx';
 const _cubeService = new CubeService();
 const Search = Input.Search;
 const FormItem = Form.Item;
@@ -73,7 +72,7 @@ function onSearch(val) {
     console.log('search:', val);
 }
 
-export default class dataAssetList extends React.Component {
+export default class charts extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -84,11 +83,7 @@ export default class dataAssetList extends React.Component {
             cube_name: '',
             loading: false,
             treeData: [],
-            buttontype: ['primary', 'default', 'default', 'default'],
-            visible: false,
-            tableData: [],
-            tableColumn: [],
-            activeButton:0
+            buttontype: ['primary', 'default', 'default', 'default']
         };
     }
     componentDidMount() {
@@ -99,7 +94,7 @@ export default class dataAssetList extends React.Component {
 
     loadCubeList() {
         let param = {
-            FLEX_VALUE_SET_ID: 4
+            FLEX_VALUE_SET_ID: 6
         };
 
         HttpService.post('/reportServer/FlexValue/getFlexValuesTree', JSON.stringify(param)).then(res => {
@@ -122,7 +117,7 @@ export default class dataAssetList extends React.Component {
             FLEX_VALUE_SET_ID: 4
         };
 
-        HttpService.post('/reportServer/dataAsset/getDataList', JSON.stringify(param)).then(res => {
+        HttpService.post('/reportServer/index/getIndexValue', JSON.stringify(param)).then(res => {
             if (res.resultCode == "1000") {
                 this.setState({
                     list: res.data,
@@ -191,45 +186,9 @@ export default class dataAssetList extends React.Component {
         this.setState({ checkedKeys });
     };
 
-
-    //树节点选中时
     onSelect = (selectedKeys, info) => {
         console.log('onSelect', info);
         this.setState({ selectedKeys });
-        let param= {};
-        let url = "";
-        if(this.state.activeButton==0)
-        {
-             param = { catalog_id: info.node.props.dataRef.id };
-             url = "/reportServer/dataAsset/getTablesByCatalog";
-
-        }else if(this.state.activeButton==1){
-            param = { source_id: info.node.props.dataRef.name };
-            url = "/reportServer/dataAsset/getTablesBySource";
-
-        }else if(this.state.activeButton==2){
-           
-
-             param = { dbtype_id: info.node.props.dataRef.name };
-             url = "/reportServer/dataAsset/getTablesByDbType";
-
-        }else if(this.state.activeButton==3){
-             param = { host_id: info.node.props.dataRef.name };
-             url = "/reportServer/dataAsset/getTablesByHost";
-        }
-        HttpService.post(url, JSON.stringify(param)).then(res => {
-            this.setState({ list: res.data });
-            // alert(JSON.stringify(this.state.treeData));
-            // 设置高亮
-            //   this.activeButton(buttontype);
-        }, errMsg => {
-            this.setState({
-                list: []
-            });
-        });
-
-
-
     };
 
     onViewClick = (viewID, buttontype) => {
@@ -275,21 +234,6 @@ export default class dataAssetList extends React.Component {
 
 
     }
-    viewData(record) {
-
-        let param = { host_id: record.host_id, table_name: record.table_name };
-        let url = "/reportServer/dataAsset/getValueByHostAndTable";
-        HttpService.post(url, JSON.stringify(param)).then(res => {
-            this.setState({ list: res.data });
-            // 设置高亮
-        }, errMsg => {
-            this.setState({
-                list: []
-            });
-        });
-    }
-
-
 
     activeButton = i => {
 
@@ -302,7 +246,7 @@ export default class dataAssetList extends React.Component {
                 aButtonType[j] = 'default';
             }
         }
-        this.setState({ buttontype: aButtonType,activeButton:i });
+        this.setState({ buttontype: aButtonType });
     }
 
 
@@ -312,68 +256,13 @@ export default class dataAssetList extends React.Component {
         data.map(item => {
             if (item.children) {
                 return (
-                    <TreeNode title={item.name} key={item.key} dataRef={item}>
+                    <TreeNode title={item.value} key={item.key} dataRef={item}>
                         {this.renderTreeNodes(item.children)}
                     </TreeNode>
                 );
             }
-            return <TreeNode title={item.name} key={item.key} dataRef={item} />;
+            return <TreeNode title={item.value} key={item.key} dataRef={item} />;
         });
-
-    showModal = (record) => {
-        this.setState({
-            visible: true,
-            tableColumn: [], 
-            tableData: []
-        });
-        //查询表格数据 
-        let param = { host_id: record.host_id, 
-                    table_name: record.table_name,
-                    dbtype_id:record.dbtype_id };
-        let url = "/reportServer/dataAsset/getValueByHostAndTable";
-        HttpService.post(url, JSON.stringify(param)).then(res => {
-
-            //生成列信息
-            let cols = [];
-            let columns = res.data[0];
-            for (var key in columns) {
-
-                cols.push({
-                    title: key,
-                    dataIndex: key
-                })
-
-            }
-            // for (j = 0, len = columns.length; j < len; j++) {
-            //     cols.push({
-            //         title: columns[j],
-            //         dataIndex: columns[j]
-            //     })
-            // }
-            this.setState({ tableColumn: cols, tableData: res.data });
-
-            // 设置高亮
-        }, errMsg => {
-            this.setState({
-                list: []
-            });
-        });
-
-    };
-
-    handleOk = e => {
-        console.log(e);
-        this.setState({
-            visible: false,
-        });
-    };
-
-    handleCancel = e => {
-        console.log(e);
-        this.setState({
-            visible: false,
-        });
-    };
 
 
     render() {
@@ -383,23 +272,23 @@ export default class dataAssetList extends React.Component {
         const dataSource = this.state.list;
         let self = this;
         const columns = [{
-            title: '数据名称',
-            dataIndex: 'table_name',
+            title: '年',
+            dataIndex: 'year',
             key: 'table_name',
             className: 'headerRow',
         }, {
-            title: '数据描述',
-            dataIndex: 'table_desc',
+            title: '月',
+            dataIndex: 'month',
             key: 'table_desc',
             className: 'headerRow',
         }, {
-            title: '数据目录',
-            dataIndex: 'catalog_value',
+            title: '数量',
+            dataIndex: 'amount',
             key: 'catalog_value',
             className: 'headerRow',
         }, {
             title: '数据类型',
-            dataIndex: 'dbtype_id',
+            dataIndex: 'cube_desc',
             key: 'cube_desc',
             className: 'headerRow',
         }, {
@@ -410,7 +299,7 @@ export default class dataAssetList extends React.Component {
                 <span>
                     <Link to={`/dataAsset/dataAssetInfo/${record.cube_id}`}>编辑</Link>
                     <Divider type="vertical" />
-                    <a onClick={() => this.showModal(record)} href="javascript:;">浏览数据</a>
+                    <Link to={`/cube/cubeInfo/${record.cube_id}`}>浏览</Link>
                     <Divider type="vertical" />
                     <Link to={`/cube/cubeInfo/${record.cube_id}`}>分析</Link>
                     <Divider type="vertical" />
@@ -423,26 +312,10 @@ export default class dataAssetList extends React.Component {
         return (
             <div id="page-wrapper">
                 <Spin spinning={this.state.loading} delay={100}>
-                    <Card title="数据资产目录">
+                    <Card title="统计指标查询">
                         <Row>
                             <Col sm={4}>
-                                <Card bodyStyle={{ padding: "5px", backgroundColor: '#fafafa' }}>
-
-                                    <Tooltip placement="top" title="目录视图">
-                                        <Button type={this.state.buttontype[0]} icon="profile" onClick={() => this.onViewClick(4, 0)} />
-                                    </Tooltip>
-                                    <Tooltip placement="top" title="数据来源视图" >
-                                        <Button type={this.state.buttontype[1]} icon="bar-chart" onClick={() => this.onViewClick(3, 1)} />
-                                    </Tooltip>
-                                    <Tooltip placement="top" title="数据类型视图">
-                                        <Button type={this.state.buttontype[2]} icon="line-chart" onClick={() => this.onViewClick(2, 2)} />
-                                    </Tooltip>
-                                    <Tooltip placement="top" title="数据源视图">
-                                        <Button type={this.state.buttontype[3]} icon="pie-chart" onClick={() => this.onViewClick(4, 3)} />
-                                    </Tooltip>
-
-
-                                </Card>
+                                
                                 <Tree
                                     // onExpand={this.onExpand}
                                     // expandedKeys={this.state.expandedKeys}
@@ -457,20 +330,9 @@ export default class dataAssetList extends React.Component {
                             </Col>
                             <Col sm={20}>
                                 <Card bodyStyle={{ padding: "8px", backgroundColor: '#fafafa' }}>
-
-                                    <Row>
-                                        <Col xs={24} sm={12}>
-                                            <Search
-                                                style={{ maxWidth: 300, marginBottom: '10px' }}
-                                                placeholder="请输入..."
-                                                enterButton="查询"
-                                                onSearch={value => this.onSearch(value)}
-                                            />
-                                        </Col>
-                                        <Col xs={24} sm={12}>
-                                            <Button href={"#/dict/DictValueInfo/" + this.state.dictId + "/null"} style={{ float: "right", marginRight: "30px" }} type="primary">新建数据资产</Button>
-                                        </Col>
-                                    </Row>
+                                    <Button href={"#/dict/DictValueInfo/" + this.state.dictId + "/null"} style={{ float: "right", marginRight: "20px" }} type="primary">列表</Button>
+                                    <Button href={"#/dict/DictValueInfo/" + this.state.dictId + "/null"} style={{ float: "right", marginRight: "20px" }} type="default">柱图</Button>
+                                    <Button href={"#/dict/DictValueInfo/" + this.state.dictId + "/null"} style={{ float: "right", marginRight: "20px" }} type="default">线图</Button>
 
                                 </Card>
                                 <Table dataSource={this.state.list} columns={columns} pagination={false} />
@@ -482,26 +344,6 @@ export default class dataAssetList extends React.Component {
 
                     </Card>
                 </Spin>
-
-                <Button type="primary" onClick={this.showModal}>
-                    Open Modal
-             </Button>
-                <Modal
-                    title="Basic Modal"
-                    width='900px'
-                    visible={this.state.visible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                >
-                    <Card>
-                    <Table  dataSource={this.state.tableData} columns={this.state.tableColumn} 
-                     scroll={{ x: 900 }} 
-                    pagination={true} />
-                    <Pagination current={this.state.pageNum}
-                        total={this.state.total}
-                        onChange={(pageNum) => this.onPageNumChange(pageNum)} />
-                        </Card>
-                </Modal>
             </div>
         )
     }

@@ -13,7 +13,7 @@ class Login extends React.Component {
             <div id="b">
                 <Row>
                     <Col span={8}>col-8</Col>
-                    <Col span={8}><Card title="登录报表平台">
+                    <Col span={8}><Card title="登录大数据平台">
                         <Form className="login-form">
                             <FormItem>
                                 {getFieldDecorator('username', {

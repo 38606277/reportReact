@@ -113,6 +113,12 @@ const dataAssetRouter = Loadable({
     loading: loading,
     delay:3000
 });
+
+const dataAppRouter = Loadable({
+    loader: () => import(/* webpackChunkName: "dataAppRouter" */ './page/dataApp/dataAppRouter.jsx'),
+    loading: loading,
+    delay:3000
+});
 const UploadRouter = Loadable({
     loader: () => import(/* webpackChunkName: "UploadRouter" */ './page/upload/uploadRouter.jsx'),
     loading: loading,
@@ -169,6 +175,7 @@ class App extends React.Component {
                             <Route path="/temp" component={CachedRouter} />
                             <Route path="/cube" component={CubeRouter} />
                             <Route path="/dataAsset" component={dataAssetRouter} />
+                            <Route path="/dataApp" component={dataAppRouter} />
                             <Route path="/upload" component={UploadRouter} />
                             <Route path="/chat" component={QaRouter} />
                             <Route path="/report" component={ReportRouter} />
