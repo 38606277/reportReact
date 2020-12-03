@@ -125,7 +125,7 @@ export default class QueryList extends React.Component {
 
         return (
             <div>
-                <Card title="数据查询" bodyStyle={{ padding: "10px" }}>
+                <Card title="数据服务" bodyStyle={{ padding: "10px" }}>
                     {/* <Row style={{marginBottom:"10px"}}>
                         <Col span={6}> <Input prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="输入函数名称" /></Col>
                         <Col span={4}></Col>
@@ -141,11 +141,11 @@ export default class QueryList extends React.Component {
                         </Menu>
                     )}>
                         <Button icon="file-search" type="primary" >
-                        新建查询<Icon type="down" />
+                        新建数据服务<Icon type="down" />
                         </Button>
                     </Dropdown>
                     {/* <Button href="#/query/QueryCreator/sql/create/0" style={{ marginRight: "10px" }} type="primary">新建查询</Button> */}
-                    <Button href="#/query/QueryClass" style={{ marginRight: "15px",marginLeft:"15px" }} >查询类别管理</Button>
+                    <Button href="#/query/QueryClass" style={{ marginRight: "15px",marginLeft:"15px" }} >服务类别管理</Button>
                     <Button onClick={() => this.onDelButtonClick()} style={{ marginRight: "10px" }} >删除</Button>
                     <Search
                         style={{ maxWidth: 300, marginBottom: '10px', float: "right" }}

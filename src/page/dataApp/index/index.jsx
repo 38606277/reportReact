@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from 'antd/lib/pagination';
-import { Table, Divider, Button, Card, Tree, Input, Form, Spin, Row, Col, Select, Radio, Tooltip } from 'antd';
+import { Table, Divider, Button, Card, Tree, Input, Form, Spin, Row, Col, Select, Radio, Modal } from 'antd';
 import CubeService from '../../../service/CubeService.jsx';
 import HttpService from '../../../util/HttpService.jsx';
 const _cubeService = new CubeService();
@@ -83,6 +83,7 @@ export default class index extends React.Component {
         super(props);
         this.state = {
             list: [],
+            chartRow: [],
             pageNum: 1,
             perPage: 10,
             listType: 'list',
@@ -96,7 +97,7 @@ export default class index extends React.Component {
     }
     componentDidMount() {
         this.loadCubeList();
-        // this.loadDataList();
+        this.loadDataList();
     }
 
     getBarChart() {
@@ -116,10 +117,10 @@ export default class index extends React.Component {
             },
             xAxis: [{
                 type: 'category',
-                data: this.state.list.map(function (item) {
-                    return item.year;
-                }),
-                // ['2014', '2015', '2016', '2017', '2018', '2019'],
+                data: ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2016', '2018', '2019'],
+                // this.state.list.map(function (item) {
+                //     return item.year;
+                // }),
                 axisLine: {
                     lineStyle: {
                         color: '#8FA3B7',//y轴颜色
@@ -154,7 +155,7 @@ export default class index extends React.Component {
             series: [
 
                 {
-                    name: 'a',
+                    name: '',
                     type: 'bar',
                     barWidth: '40%',
                     itemStyle: {
@@ -163,9 +164,10 @@ export default class index extends React.Component {
                         }
                     },
                     stack: '信息',
-                    data: this.state.list.map(function (item) {
-                        return item.amount;
-                    })
+                    data: this.state.chartRow
+                    //  this.state.list.map(function (item) {
+                    //     return item.amount;
+                    // })
 
                     // [320, 132, 101, 134, 90, 30]
                 }
@@ -174,6 +176,20 @@ export default class index extends React.Component {
         return option;
     }
 
+    showModal = (record) => {
+        //将record转换为值
+        let aRow = [];
+        for (var key in record) {
+            if ((key != 'index_name') || (key != 'unit') || (key != 'key'))
+                aRow.push(record[key]); //获取对应的value值
+        }
+
+        this.setState({
+            visible: true,
+            chartTitle: record.index_name,
+            chartRow: aRow
+        });
+    };
 
     getLineChart() {
         const option = {
@@ -265,7 +281,7 @@ export default class index extends React.Component {
     }
     loadDataList() {
         let param = {
-            FLEX_VALUE_SET_ID: 4
+            index_catalog_id: 2
         };
 
         HttpService.post('/reportServer/index/getIndexValue', JSON.stringify(param)).then(res => {
@@ -342,8 +358,9 @@ export default class index extends React.Component {
         //数据源
         console.log('selectedKeys', selectedKeys);
         console.log('info', info.node.props.dataRef.id);
-        let param = { index_id: info.node.props.dataRef.id };
-        let url = "/reportServer/index/getIndexValue";
+
+        let param = { index_catalog_id: info.node.props.dataRef.id };
+        let url = "/reportServer/index/getIndexValueWithColumn";
         HttpService.post(url, JSON.stringify(param)).then(res => {
             if (res.resultCode == "1000") {
                 this.setState({
@@ -419,45 +436,72 @@ export default class index extends React.Component {
         }
         this.setState({ buttontype: aButtonType });
     }
+    handleOk = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
+
+    handleCancel = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
 
 
 
-    columns = [{
-        title: '年',
-        dataIndex: 'year',
-        key: 'table_name',
-        className: 'headerRow',
-        // }, {
-        //     title: '月',
-        //     dataIndex: 'month',
-        //     key: 'table_desc',
-        //     className: 'headerRow',
-    }, {
-        title: '数量',
-        dataIndex: 'amount',
-        key: 'catalog_value',
-        className: 'headerRow',
-    }, {
-        title: '数据类型',
-        dataIndex: 'cube_desc',
-        key: 'cube_desc',
-        className: 'headerRow',
-    }, {
-        title: '操作',
-        dataIndex: '操作',
-        className: 'headerRow',
-        render: (text, record) => (
-            <span>
-                <Link to={`/dataAsset/dataAssetInfo/${record.cube_id}`}>编辑</Link>
-                <Divider type="vertical" />
-                <Link to={`/cube/cubeInfo/${record.cube_id}`}>浏览</Link>
-                <Divider type="vertical" />
-                <Link to={`/cube/cubeInfo/${record.cube_id}`}>分析</Link>
-                <Divider type="vertical" />
-                <a onClick={() => this.deleteCube(`${record.cube_id}`)} href="javascript:;">删除</a>
-            </span>
-        ),
-    }];
+    columns = [
+
+        {
+            title: '指标',
+            dataIndex: 'index_name',
+            width: 150,
+            fixed: 'left',
+            render: (text, record) => (
+                <span>
+                    <a onClick={() => this.showModal(record)} href="javascript:;">{text}({record.unit})</a>
+                </span>
+            ),
+        },
+        {
+            title: '2010年',
+            dataIndex: '2010',
+        },
+        {
+            title: '2011年',
+            dataIndex: '2012',
+        },
+        {
+            title: '2013年',
+            dataIndex: '2013',
+        },
+        {
+            title: '2014年',
+            dataIndex: '2014',
+        },
+        {
+            title: '2015年',
+            dataIndex: '2015',
+        },
+        {
+            title: '2016年',
+            dataIndex: '2016',
+        },
+        {
+            title: '2017年',
+            dataIndex: '2017',
+        },
+        {
+            title: '2018年',
+            dataIndex: '2018',
+        },
+        {
+            title: '2019年',
+            dataIndex: '2019',
+        }
+    ];
 
 
     renderTreeNodes = data =>
@@ -474,7 +518,7 @@ export default class index extends React.Component {
 
     renderView = () => {
         if (this.state.iView == 'list')
-            return (<Table dataSource={this.state.list} columns={this.columns} pagination={false} />);
+            return (<Table dataSource={this.state.list} columns={this.columns} pagination={false} scroll={{ x: 1300 }} />);
         else if (this.state.iView == 'column')
             return (
                 <ReactEcharts
@@ -542,9 +586,10 @@ export default class index extends React.Component {
 
                     <Card bodyStyle={{ backgroundColor: '#ececec', padding: '15px' }} >
                         <Card style={{ boxShadow: '0 2px 3px 0 rgba(0,0,0,.2)' }}>
-                        <i className='public_tltie_one'></i>
-                        <label style={{ fontFamily: 'Roboto,San Francisco', fontSize: '16px', height: '22px', lineHeight: '22px', color: 'black' }}>统计指标分析</label>
-                                    <Divider dashed style={{ marginTop: '12px' }} />
+                            <img style={{ height: '16px', width: '16px', marginRight: '10px' }} src={require('../../../asset/data-icon.png')} />
+                            <label style={{ fontFamily: 'Roboto,San Francisco', fontSize: '16px', height: '22px', lineHeight: '22px', color: 'black' }}>统计指标分析</label>
+
+                            <Divider dashed style={{ marginTop: '12px' }} />
                             <Row>
                                 <Col sm={4}>
                                     <Tree
@@ -574,6 +619,19 @@ export default class index extends React.Component {
                         </Card>
                     </Card>
                 </Spin>
+                <Modal
+                    title={this.state.chartTitle}
+                    width='900px'
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                >
+                    <ReactEcharts
+                        option={this.getBarChart()}
+                        notMerge={true}
+                        lazyUpdate={true}
+                        style={{ width: '100%', height: '350px' }} />
+                </Modal>
             </div>
         )
     }

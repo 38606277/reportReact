@@ -1,10 +1,11 @@
 import React from 'react';
-import { Form, Input, Table, Button, Modal, Card, Row, Col, Select, Pagination, message, Tabs, Divider,Radio, Tag } from 'antd';
+import { Form, Input, Table, Button, Modal, Card, Row, Col, Select, Pagination, message, Tabs, Divider, Radio, Tag } from 'antd';
 import LocalStorge from '../../util/LogcalStorge.jsx';
 import { Link } from 'react-router-dom';
 import CubeService from '../../service/CubeService.jsx';
 import QueryService from '../../service/QueryService.jsx';
 import HttpService from '../../util/HttpService.jsx';
+import DuBang from './finance/dubang.jsx';
 
 import ReactEcharts from 'echarts-for-react';
 const _cubeService = new CubeService();
@@ -13,7 +14,8 @@ const _query = new QueryService();
 const FormItem = Form.Item;
 const Search = Input.Search;
 // import G6 from '@antv/g6';
-import demo from './g6.jsx';
+// import demo from './gg.jsx';
+
 
 
 const { Option } = Select;
@@ -399,21 +401,7 @@ export function getBarChart() {
 const { TabPane } = Tabs;
 
 
-const columns = [
 
-    {
-        title: '指标名称',
-        dataIndex: 'address',
-        key: 'address',
-    },
-    {
-        title: '指标名称',
-        dataIndex: 'address',
-        key: 'address',
-
-    }
-
-];
 
 const data = [
     {
@@ -461,7 +449,14 @@ class finance extends React.Component {
         super(props);
         this.state = {
             confirmDirty: false,
-            corp: this.props.match.params.corp,
+            corp_code: this.props.match.params.corp_code,
+            corp_name: this.props.match.params.corp_name,
+            financeReport: [],
+            zcfzb: [],
+            lrb: [],
+            xjllb: [],
+            zycwzb: [],
+            chartRow: [],
             qry_id: '',
             cube_name: '',
             cube_desc: '',
@@ -474,38 +469,217 @@ class finance extends React.Component {
         this.handleSubmit = this.handleSubmit.bind(this);
 
     }
+    columns = [
 
+        {
+            title: '指标',
+            dataIndex: 'item',
+            width: 150,
+            fixed: 'left',
+            render: (text, record) => (
+                <span>
+                    <a onClick={() => this.showModal(record)} href="javascript:;">{text}</a>
+                </span>
+            ),
+        },
+        {
+            title: '2010年',
+            dataIndex: '2010年',
+        },
+        {
+            title: '2011年',
+            dataIndex: '2011年',
+        },
+        {
+            title: '2012年',
+            dataIndex: '2012年',
+        },
+        {
+            title: '2013年',
+            dataIndex: '2013年',
+        },
+        {
+            title: '2014年',
+            dataIndex: '2014年',
+        },
+        {
+            title: '2015年',
+            dataIndex: '2015年',
+        },
+        {
+            title: '2016年',
+            dataIndex: '2016年',
+        },
+        {
+            title: '2017年',
+            dataIndex: '2017年',
+        },
+        {
+            title: '2018年',
+            dataIndex: '2018年',
+        },
+        {
+            title: '2019年',
+            dataIndex: '2019年',
+        }
+    ];
+
+    columns1 = [
+
+        {
+            title: '指标',
+            dataIndex: 'item',
+            width: 150,
+            fixed: 'left',
+            render: (text, record) => (
+                <span>
+                    <a onClick={() => this.showModal(record)} href="javascript:;">{text}</a>
+                </span>
+            ),
+        },
+       
+        {
+            title: '2016年',
+            dataIndex: '2016年',
+        },
+        {
+            title: '2017年',
+            dataIndex: '2017年',
+        },
+        {
+            title: '2018年',
+            dataIndex: '2018年',
+        },
+        {
+            title: '2019年',
+            dataIndex: '2019年',
+        }
+    ];
     //初始化加载调用方法
     componentDidMount() {
-        if (null != this.state.cube_id && '' != this.state.cube_id && 'null' != this.state.cube_id) {
-            _cubeService.getCubeInfo(this.state.cube_id).then(response => {
-                this.setState(response.data);
-                this.props.form.setFieldsValue({
-                    cube_name: response.data.cube_name,
-                    cube_desc: response.data.cube_desc,
-                    qry_id: response.data.qry_id,
-                    class_name: response.data.class_name,
-                    cube_sql: response.data.cube_sql,
-                });
-            }, errMsg => {
-                this.setState({
-                });
-                localStorge.errorTips(errMsg);
-            });
-        }
+        this.handleTabChange("1");
 
     }
-    handleTabChange = key => {
 
+    getBarChart() {
+        //  alert('aa');
+        const option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                    type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [{
+                type: 'category',
+                data: ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2016', '2018', '2019'],
+                // this.state.list.map(function (item) {
+                //     return item.year;
+                // }),
+                axisLine: {
+                    lineStyle: {
+                        color: '#8FA3B7',//y轴颜色
+                    }
+                },
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        color: '#6D6D6D',
+                    }
+                },
+                axisTick: { show: false }
+            }],
+            yAxis: [{
+                type: 'value',
+                splitLine: { show: false },
+                //max: 700,
+                splitNumber: 3,
+                axisTick: { show: false },
+                axisLine: {
+                    lineStyle: {
+                        color: '#8FA3B7',//y轴颜色
+                    }
+                },
+                axisLabel: {
+                    show: true,
+                    textStyle: {
+                        color: '#6D6D6D',
+                    }
+                },
+            }],
+            series: [
 
-        let param = {
-            FLEX_VALUE_SET_ID: 4
+                {
+                    name: '',
+                    type: 'bar',
+                    barWidth: '40%',
+                    itemStyle: {
+                        normal: {
+                            color: '#4DB3F5'
+                        }
+                    },
+                    stack: '信息',
+                    data: this.state.chartRow
+                    //  this.state.list.map(function (item) {
+                    //     return item.amount;
+                    // })
+
+                    // [320, 132, 101, 134, 90, 30]
+                }
+            ]
         };
+        return option;
+    }
+    showModal = (record) => {
+        console.log(record);
+        //将record转换为值
+        let aRow = [];
+        for (var key in record) {
+            if (key != 'item')
+                aRow.push(record[key]); //获取对应的value值
+        }
 
+        this.setState({
+            visible: true,
+            chartTitle: record.index_name,
+            chartRow: aRow
+        });
+    };
+    handleTabChange = key => {
+        console.log(key);
+        let reportName = '';
+        let dataName = '';
+        if (key == '1') {
+            reportName = '主要财务指标';
+            dataName = 'zycwzb';
+        }
+        else if (key == '2') {
+            reportName = '资产负债表';
+            dataName = 'zcfzb';
+        } else if (key == '3') {
+            reportName = '利润表';
+            dataName = 'lrb';
+        } else if (key == '4') {
+            reportName = '现金流量表';
+            dataName = 'xjllb';
+        }
+        //资产负债表
+        let param = {
+            corp_code: this.state.corp_code,
+            report_name: reportName
+
+        };
         HttpService.post('/reportServer/finance/getFinReport', JSON.stringify(param)).then(res => {
             if (res.resultCode == "1000") {
+
                 this.setState({
-                    assetsDataSource: res.data,
+                    [dataName]: res.data,
                 });
             }
             else {
@@ -516,8 +690,6 @@ class finance extends React.Component {
                 list: [], loading: false
             });
         });
-
-
 
     };
 
@@ -615,6 +787,8 @@ class finance extends React.Component {
             this.loadModelData();
         });
     }
+
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -662,22 +836,23 @@ class finance extends React.Component {
         }
         return (
             <div id="page-wrapper">
-
                 <Card bodyStyle={{ backgroundColor: '#ececec', padding: '15px' }} >
 
                     <Card style={{ boxShadow: '0 2px 3px 0 rgba(0,0,0,.2)' }}>
                         <Form onSubmit={this.handleSubmit}>
-                            <i className='public_tltie_one'></i>
-                            <label style={{ fontFamily: 'Roboto,San Francisco', fontSize: '20px', height: '22px', lineHeight: '22px', color: 'black' }}>{this.state.corp}</label>
+                            <img style={{ height: '16px', width: '16px', marginRight: '10px' }} src={require('../../asset/data-icon.png')} />
+                            <label style={{ fontFamily: 'Roboto,San Francisco', fontSize: '16px', height: '22px', lineHeight: '22px', color: 'black' }}>{this.state.corp_name}({this.state.corp_code})</label>
                             <Divider dashed style={{ marginTop: '12px' }} />
+                            <corp />
                             <Row>
                                 <Tabs defaultActiveKey="1" onChange={this.handleTabChange}>
-
                                     <TabPane tab="财务指标分析" key="1">
-                                        
                                         <Row>
                                             <Col sm={12}>
-                                                <Table columns={columns} dataSource={data} pagination={false} />
+
+                                                <Table columns={this.columns1}
+                                                    dataSource={this.state.zycwzb} pagination={false}>
+                                                </Table>
                                             </Col>
                                             <Col sm={12}>
                                                 <ReactEcharts
@@ -692,88 +867,41 @@ class finance extends React.Component {
 
                                     </TabPane>
 
-                                    <TabPane tab="资产负债分析" key="2">
+                                    <TabPane tab="资产负债分析" key="2" >
 
-                                    <Card  bodyStyle={{ padding: "8px", backgroundColor: '#fafafa' }}>
-                                           
-                                    <Radio.Group defaultValue="list" buttonStyle="solid" onChange={(e) => { this.setState({ iView: e.target.value }) }}>
-                                            <Radio.Button value="list">按年度</Radio.Button>
-                                            <Radio.Button value="column">按报告期</Radio.Button>
-                                           
-                                        </Radio.Group>
-                                           
-                                            {/* 选择日期：<Select
-                                                showSearch
-                                                style={{ width: 200 }}
-                                                placeholder=""
-                                                optionFilterProp="children" >
+                                        <Card bodyStyle={{ padding: "8px", backgroundColor: '#fafafa' }}>
 
-                                                <Option value="jack">2017</Option>
-                                                <Option value="lucy">2018</Option>
-                                                <Option value="tom">2019</Option>
-                                            </Select> */}
+                                            <Radio.Group defaultValue="list" buttonStyle="solid" onChange={(e) => { this.setState({ iView: e.target.value }) }}>
+                                                <Radio.Button value="list">按年度</Radio.Button>
+                                                <Radio.Button value="column">按报告期</Radio.Button>
+
+                                            </Radio.Group>
 
                                         </Card>
-                                        <Table
-                                            dataSource={this.state.assetsDataSource} pagination={false}>
-                                            <Table.Column title="序号" dataIndex="id" key="age" />
-                                            <Table.Column title="项目" dataIndex="item" key="address"
-                                                render={(text, record) => {
-                                                    return <Link to={`/dataApp/finance/${record.company_name}`}>{text}</Link>;
-
-                                                }
-                                                } />
-
-
-                                            <Table.Column title="金额" dataIndex="amount" key="age" />
+                                        <Table columns={this.columns}
+                                            dataSource={this.state.zcfzb} pagination={false}>
                                         </Table>
                                     </TabPane>
                                     <TabPane tab="利润分析" key="3">
-                                    <ReactEcharts
-                                            option={getBarChart()}
-                                            notMerge={true}
-                                            lazyUpdate={true}
-                                            style={{ width: '100%', height: '200px' }}
-                                        />
-                                        <Table
-                                            dataSource={this.state.assetsDataSource} pagination={false}>
-                                            <Table.Column title="序号" dataIndex="id" key="age" />
-                                            <Table.Column title="项目" dataIndex="item" key="address"
-                                                render={(text, record) => {
-                                                    return <Link to={`/dataApp/finance/${record.company_name}`}>{text}</Link>;
 
-                                                }
-                                                } />
+                                        <Table columns={this.columns}
+                                            dataSource={this.state.lrb} pagination={false}>
 
-
-                                            <Table.Column title="金额" dataIndex="amount" key="age" />
                                         </Table>
                                     </TabPane>
                                     <TabPane tab="现金流量分析" key="4">
-                                    <ReactEcharts
+                                        <ReactEcharts
                                             option={getBarChart()}
                                             notMerge={true}
                                             lazyUpdate={true}
                                             style={{ width: '100%', height: '200px' }}
                                         />
-                                       <Table
-                                            dataSource={this.state.assetsDataSource} pagination={false}>
-                                            <Table.Column title="序号" dataIndex="id" key="age" />
-                                            <Table.Column title="项目" dataIndex="item" key="address"
-                                                render={(text, record) => {
-                                                    return <Link to={`/dataApp/finance/${record.company_name}`}>{text}</Link>;
-
-                                                }
-                                                } />
-
-
-                                            <Table.Column title="金额" dataIndex="amount" key="age" />
+                                        <Table columns={this.columns}
+                                            dataSource={this.state.xjllb} pagination={false}>
                                         </Table>
                                     </TabPane>
                                     <TabPane tab="杜邦分析" key="5">
-                                       <div style={{height:'400px'}}>
-                                        <demo/>
-                                        </div>
+                                        <DuBang />
                                     </TabPane>
                                 </Tabs>
                             </Row>
@@ -781,7 +909,19 @@ class finance extends React.Component {
                         </Form>
                     </Card>
                 </Card>
-
+                <Modal
+                    title={this.state.chartTitle}
+                    width='900px'
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                >
+                    <ReactEcharts
+                        option={this.getBarChart()}
+                        notMerge={true}
+                        lazyUpdate={true}
+                        style={{ width: '100%', height: '350px' }} />
+                </Modal>
             </div>
         );
     }

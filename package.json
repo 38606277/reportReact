@@ -59,6 +59,8 @@
     "@grapecity/spread-sheets": "^11.2.2",
     "@grapecity/spread-sheets-react": "^11.2.2",
     "@grapecity/spread-sheets-resources-zh": "^11.2.2",
+    "@ant-design/icons": "4.3.0",
+    "@ant-design/pro-table": "2.11.4",
     "antd": "^3.9.3",
     "bizcharts": "^3.2.4",
     "bizcharts-plugin-slider": "^2.0.3",

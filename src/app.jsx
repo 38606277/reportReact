@@ -4,7 +4,7 @@ import { HashRouter as Router, Switch, Redirect, Route } from 'react-router-dom'
 
 import Loadable from 'react-loadable';
 import loading from './util/loading.jsx'
-import 'antd/dist/antd.less';
+import 'antd/dist/antd.css';
 import './App.css'
 import LocalStorge from './util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
@@ -142,6 +142,18 @@ const assetmap = Loadable({
     delay:3000
 });
 
+const dataAnalysisRouter = Loadable({
+    loader: () => import(/* webpackChunkName: "dataAnalysisRouter" */ './page/dataAnalysis/dataAnalysisRouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+
+const dataComputeRouter = Loadable({
+    loader: () => import(/* webpackChunkName: "dataComputeRouter" */ './page/dataCompute/dataComputeRouter.jsx'),
+    loading: loading,
+    delay:3000
+});
 
 
 function LoadPage(url) {
@@ -176,6 +188,8 @@ class App extends React.Component {
                             <Route path="/cube" component={CubeRouter} />
                             <Route path="/dataAsset" component={dataAssetRouter} />
                             <Route path="/dataApp" component={dataAppRouter} />
+                            <Route path="/dataAnalysis" component={dataAnalysisRouter} />
+                            <Route path="/dataCompute" component={dataComputeRouter} />
                             <Route path="/upload" component={UploadRouter} />
                             <Route path="/chat" component={QaRouter} />
                             <Route path="/report" component={ReportRouter} />

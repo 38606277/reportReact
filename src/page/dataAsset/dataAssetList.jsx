@@ -88,7 +88,7 @@ export default class dataAssetList extends React.Component {
             visible: false,
             tableData: [],
             tableColumn: [],
-            activeButton:0
+            activeButton: 0
         };
     }
     componentDidMount() {
@@ -196,26 +196,25 @@ export default class dataAssetList extends React.Component {
     onSelect = (selectedKeys, info) => {
         console.log('onSelect', info);
         this.setState({ selectedKeys });
-        let param= {};
+        let param = {};
         let url = "";
-        if(this.state.activeButton==0)
-        {
-             param = { catalog_id: info.node.props.dataRef.id };
-             url = "/reportServer/dataAsset/getTablesByCatalog";
+        if (this.state.activeButton == 0) {
+            param = { catalog_id: info.node.props.dataRef.id };
+            url = "/reportServer/dataAsset/getTablesByCatalog";
 
-        }else if(this.state.activeButton==1){
+        } else if (this.state.activeButton == 1) {
             param = { source_id: info.node.props.dataRef.name };
             url = "/reportServer/dataAsset/getTablesBySource";
 
-        }else if(this.state.activeButton==2){
-           
+        } else if (this.state.activeButton == 2) {
 
-             param = { dbtype_id: info.node.props.dataRef.name };
-             url = "/reportServer/dataAsset/getTablesByDbType";
 
-        }else if(this.state.activeButton==3){
-             param = { host_id: info.node.props.dataRef.name };
-             url = "/reportServer/dataAsset/getTablesByHost";
+            param = { dbtype_id: info.node.props.dataRef.name };
+            url = "/reportServer/dataAsset/getTablesByDbType";
+
+        } else if (this.state.activeButton == 3) {
+            param = { host_id: info.node.props.dataRef.name };
+            url = "/reportServer/dataAsset/getTablesByHost";
         }
         HttpService.post(url, JSON.stringify(param)).then(res => {
             this.setState({ list: res.data });
@@ -302,7 +301,7 @@ export default class dataAssetList extends React.Component {
                 aButtonType[j] = 'default';
             }
         }
-        this.setState({ buttontype: aButtonType,activeButton:i });
+        this.setState({ buttontype: aButtonType, activeButton: i });
     }
 
 
@@ -323,13 +322,15 @@ export default class dataAssetList extends React.Component {
     showModal = (record) => {
         this.setState({
             visible: true,
-            tableColumn: [], 
+            tableColumn: [],
             tableData: []
         });
         //查询表格数据 
-        let param = { host_id: record.host_id, 
-                    table_name: record.table_name,
-                    dbtype_id:record.dbtype_id };
+        let param = {
+            host_id: record.host_id,
+            table_name: record.table_name,
+            dbtype_id: record.dbtype_id
+        };
         let url = "/reportServer/dataAsset/getValueByHostAndTable";
         HttpService.post(url, JSON.stringify(param)).then(res => {
 
@@ -340,7 +341,8 @@ export default class dataAssetList extends React.Component {
 
                 cols.push({
                     title: key,
-                    dataIndex: key
+                    dataIndex: key,
+                    width: 100
                 })
 
             }
@@ -401,6 +403,12 @@ export default class dataAssetList extends React.Component {
             title: '数据类型',
             dataIndex: 'dbtype_id',
             key: 'cube_desc',
+            className: 'headerRow',
+        },
+        {
+            title: '数据行',
+            dataIndex: 'data_count',
+            key: 'data_count',
             className: 'headerRow',
         }, {
             title: '操作',
@@ -494,13 +502,13 @@ export default class dataAssetList extends React.Component {
                     onCancel={this.handleCancel}
                 >
                     <Card>
-                    <Table  dataSource={this.state.tableData} columns={this.state.tableColumn} 
-                     scroll={{ x: 900 }} 
-                    pagination={true} />
-                    <Pagination current={this.state.pageNum}
-                        total={this.state.total}
-                        onChange={(pageNum) => this.onPageNumChange(pageNum)} />
-                        </Card>
+                        <Table dataSource={this.state.tableData} columns={this.state.tableColumn}
+                            scroll={{ x: 1300 }}
+                            pagination={true} />
+                        <Pagination current={this.state.pageNum}
+                            total={this.state.total}
+                            onChange={(pageNum) => this.onPageNumChange(pageNum)} />
+                    </Card>
                 </Modal>
             </div>
         )

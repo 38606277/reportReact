@@ -20,14 +20,14 @@ export default class MainLoyout extends React.Component {
         super(props)
         this.state = {
             collapsed: false,
-            windthleft:'250px',
+            windthleft:'220px',
         };
     }
     
     onChildChanged=(newState)=>{
         this.setState({
             collapsed: newState,
-            windthleft:newState==true?'60px':'250px'
+            windthleft:newState==true?'60px':'220px'
         });
     }
     render() {

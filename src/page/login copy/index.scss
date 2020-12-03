@@ -1,0 +1,289 @@
+  .wrapper-page {
+    width: 420px;
+    margin: 7.5% auto;
+  }
+
+  .panel-pages .panel-body{
+    padding: 30px;
+  }
+  .panel-pages {
+    border-radius: 6px;
+  }
+  .panel-pages .panel-heading {
+    padding: 40px 20px;
+    border-radius: 6px 6px 0px 0px;
+    -moz-border-radius: 6px 6px 0px 0px;
+    -webkit-border-radius: 6px 6px 0px 0px;
+    position: relative;
+  }
+  .panel-pages .panel-heading  h3 {
+    z-index: 999;
+    position: relative;
+  }
+
+  .panel{
+    border: none;
+    border-radius: 0px;
+    margin-bottom: 20px;
+    -webkit-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.1);
+    box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.1);
+  }
+
+  .panel-heading {
+    border-radius: 0;
+    border: none !important;
+    padding: 10px 20px;
+  }
+  
+  .panel-title {
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+ 
+  .panel-color .panel-title {
+    color: #ffffff;
+  }
+  .panel-primary>.panel-heading {
+    background-color: #1e88e5;
+  }
+  
+  .panel-border {
+    border-radius: 3px;
+  }
+  .panel-border .panel-heading {
+    background-color: #ffffff;
+    border-top: 3px solid #ccc !important;
+    border-radius: 3px;
+    padding: 10px 20px 0px;
+  }
+  .panel-border .panel-body {
+    padding: 15px 20px 20px 20px;
+  }
+  .panel-border.panel-primary .panel-heading{
+    border-color: #1e88e5 !important;
+    color: #1e88e5 !important;
+  }
+  
+  .bg-img {
+    background: url(./bg.jpg) center;
+  }
+  .bg-overlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(49, 126, 235, 0.4);
+    top: 0px;
+    left: 0px;
+    border-radius: 6px 6px 0px 0px;
+    -moz-border-radius: 6px 6px 0px 0px;
+    -webkit-border-radius: 6px 6px 0px 0px;
+  }
+
+.text-center {
+  text-align: center;
+}
+.bg-primary {
+  color: #fff;
+  background-color: #337ab7;
+}
+a.bg-primary:hover,
+a.bg-primary:focus {
+  background-color: #286090;
+}
+
+.page-headerpage-header {
+  padding-bottom: 9px;
+  margin: 40px 0 20px;
+  border-bottom: 1px solid #eee;
+}
+/* Padding - Margin */
+
+.m-t-10 {
+    margin-top: 10px !important;
+}
+.m-t-20 {
+    margin-top: 20px;
+}
+.m-t-40 {
+    margin-top: 40px !important;
+}
+/* ---- Width-Sizes ---*/
+
+.w-lg {
+    min-width: 140px;
+}
+/* Extra */
+
+.font-light {
+    font-weight: 300;
+}
+
+.no-border {
+    border: none;
+}
+.bx-shadow {
+    -webkit-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.1);
+  -moz-box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.1);
+  box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.1);
+}
+.mx-box {
+    max-height: 380px;
+    min-height: 380px;
+}
+/* 2.5 text color*/
+.text-white {
+    color: #ffffff;
+  }
+ 
+  .text-primary {
+    color: #1e88e5;
+  }
+
+  /*2.6 text input*/
+  .form-control {
+    background-color: #fafafa;
+    color: rgba(0,0,0,0.6);
+    font-size: 14px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    -webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+    border: 1px solid #eee;
+    box-shadow: none;
+  }
+  .form-control:focus {
+    border: 1px solid #e0e0e0;
+    background: #FFF;
+    box-shadow: none;
+  }
+  input[type="search"] {
+    -webkit-appearance: none;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .checkbox {
+    position: relative;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .radio label,
+  .checkbox label {
+    min-height: 20px;
+    padding-left: 20px;
+    margin-bottom: 0;
+    font-weight: normal;
+    cursor: pointer;
+  }
+  .checkbox input[type="checkbox"],
+  .checkbox-inline input[type="checkbox"] {
+    position: absolute;
+    margin-top: 4px \9;
+    margin-left: -20px;
+  }
+  .radio + .radio,
+  .checkbox + .checkbox {
+    margin-top: -5px;
+  }
+  .radio-inline,
+  .checkbox-inline {
+    position: relative;
+    display: inline-block;
+    padding-left: 20px;
+    margin-bottom: 0;
+    font-weight: normal;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+  .radio-inline + .radio-inline,
+  .checkbox-inline + .checkbox-inline {
+    margin-top: 0;
+    margin-left: 10px;
+  }
+  
+  .input-lg {
+    width: 100%;
+    height: 46px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.3333333;
+    border-radius: 6px;
+  }
+  
+  .input-lg + .form-control-feedback,
+  .input-group-lg + .form-control-feedback,
+  .form-group-lg .form-control + .form-control-feedback {
+    width: 46px;
+    height: 46px;
+    line-height: 46px;
+  }
+  .input-sm + .form-control-feedback,
+  .input-group-sm + .form-control-feedback,
+  .form-group-sm .form-control + .form-control-feedback {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .a_bg_color{background-color:#B5B5B5;}
+.panel_border{border:1px solid #B5B5B5}
+body{background: #ffffff;}
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+        touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+  }
+  .btn-primary {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+  }
+  .btn-primary:focus,
+  .btn-primary.focus {
+    color: #fff;
+    background-color: #286090;
+    border-color: #122b40;
+  }
+  .btn-primary:hover {
+    color: #fff;
+    background-color: #286090;
+    border-color: #204d74;
+  }
+  .btn-group > .btn-lg + .dropdown-toggle {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+  .btn-group-lg>.btn,.btn-lg{padding:10px 16px;font-size:18px;line-height:1.3333333;border-radius:6px}
+  h3{
+    line-height: 30px;
+    font-size: 24px;
+  }
+  strong {
+    font-weight: bold;
+  }
+  

@@ -6,7 +6,9 @@ import CubeService from '../../service/CubeService.jsx';
 import QueryService from '../../service/QueryService.jsx';
 import HttpService from '../../util/HttpService.jsx';
 import ReactEcharts from 'echarts-for-react';
-import './corp.css'
+import './corp.css';
+import './pc_public.css';
+import './data_index.css';
 const _cubeService = new CubeService();
 const localStorge = new LocalStorge();
 const _query = new QueryService();
@@ -40,20 +42,20 @@ const indataSource = [
 const outdataSource = [
     {
         no: '1',
-        name: '海螺水泥',
-        income: 32,
-        address: '西湖区湖底公园1号',
+        corp_code: '600585',
+        corp_name: '海螺水泥',
+        main_bussiness_income: '1570(亿)',
     },
     {
-        no: '1',
-        name: '冀东水泥',
-        income: 32,
-        address: '西湖区湖底公园1号',
+        no: '2',
+        corp_code: '000401',
+        corp_name: '冀东水泥',
+        main_bussiness_income: '345（亿）',
     },
 ];
 
 
-class corp extends React.Component {
+class financeList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -66,14 +68,14 @@ class corp extends React.Component {
             dictionaryList: [],
             qry_name: '',
             cube_sql: '',
-            list:[]
+            list: []
         };
 
     }
 
     //初始化加载调用方法
     componentDidMount() {
-       this.loadDataList();
+        this.loadDataList();
 
 
     }
@@ -103,26 +105,29 @@ class corp extends React.Component {
     render() {
 
         return (
-            <div id="page-wrapper" style={{ backgroundColor: '#ededed' }}>
+            <div style={{ backgroundColor: '#ededed' }}>
                 <Form >
-                    <Card bodyStyle={{ backgroundColor: '#ececec', padding: '15px' }} >
-                        <Row>
+                    <Card bodyStyle={{ backgroundColor: '#ececec', padding: '10px' }} >
+
+
+                        <Row style={{ marginTop: '20px' }}>
                             <Col sm={24}>
                                 <Card style={{ boxShadow: '0 2px 3px 0 rgba(0,0,0,.2)' }}>
-                                <i className='public_tltie_one'></i>
-                                    <label style={{ fontFamily: 'Roboto,San Francisco', fontSize: '20px', height: '22px', lineHeight: '22px', color: 'black' }}>企业财务分析</label>
+                                    <img style={{height:'16px',width:'16px',marginRight:'10px'}} src={require('../../asset/data-icon.png')} />
+                                    <label style={{ fontFamily: 'Roboto,San Francisco', fontSize: '18px', height: '18px', lineHeight: '18px', color: 'black' }}>企业财务分析</label>
                                     <Divider dashed style={{ marginTop: '12px' }} />
 
                                     <Row gutter={32} >
                                         <Col sm={12}>
+
                                             <label style={{ fontFamily: 'Roboto,San Francisco', fontSize: '15px', height: '22px', lineHeight: '22px', color: 'black' }}>内部企业</label>
                                             <Divider style={{ marginTop: '12px' }} />
                                             <Table
                                                 dataSource={this.state.list} pagination={false} >
-                                                <Table.Column title="序号" dataIndex="serial_number" key="age" />
-                                                <Table.Column title="企业名称" dataIndex="company_name" key="address"
+                                                <Table.Column title="股票代码" dataIndex="corp_code" key="age" />
+                                                <Table.Column title="企业名称" dataIndex="corp_name" key="address"
                                                     render={(text, record) => {
-                                                        return <Link to={`/dataApp/finance/${record.company_name}`}>{text}</Link>;
+                                                        return <Link to={`/dataApp/finance/${record.corp_code}/${record.corp_name}`}>{text}</Link>;
 
                                                     }} />
                                                 <Table.Column title="收入" dataIndex="main_bussiness_income" key="age" />
@@ -132,17 +137,14 @@ class corp extends React.Component {
                                             <label style={{ fontFamily: 'Roboto,San Francisco', fontSize: '16px', height: '22px', lineHeight: '22px', color: 'black' }}>外部企业</label>
                                             <Divider style={{ marginTop: '12px' }} />
                                             <Table
-                                                dataSource={outdataSource} pagination={false}>
-                                                <Table.Column title="序号" dataIndex="no" key="age" />
-                                                <Table.Column title="企业名称" dataIndex="name" key="address"
+                                                dataSource={outdataSource} pagination={false} >
+                                                <Table.Column title="股票代码" dataIndex="corp_code" key="age" />
+                                                <Table.Column title="企业名称" dataIndex="corp_name" key="address"
                                                     render={(text, record) => {
-                                                        return <Link to={`/dataApp/finance/${record.company_name}`}>{text}</Link>;
+                                                        return <Link to={`/dataApp/finance/${record.corp_code}/${record.corp_name}`}>{text}</Link>;
 
-                                                    }
-                                                    } />
-
-
-                                                <Table.Column title="收入" dataIndex="income" key="age" />
+                                                    }} />
+                                                <Table.Column title="收入" dataIndex="main_bussiness_income" key="age" />
                                             </Table>
                                         </Col>
 
@@ -160,4 +162,4 @@ class corp extends React.Component {
         );
     }
 }
-export default Form.create()(corp);
+export default Form.create()(financeList);

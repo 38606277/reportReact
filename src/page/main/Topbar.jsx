@@ -272,7 +272,7 @@ export default class TopBar extends React.Component {
         HttpService.getFile('reportServer/file/downExcelInstall').then(res => res.blob().then(blob => {
             let a = document.createElement('a');
             let url = window.URL.createObjectURL(blob);
-            let filename ='ibas.msi'; //res.headers.get('Content-Disposition');
+            let filename = 'ibas.msi'; //res.headers.get('Content-Disposition');
             if (filename) {
                 // filename = filename.match(/\"(.*)\"/)[1]; //提取文件名
                 a.href = url;
@@ -404,16 +404,12 @@ export default class TopBar extends React.Component {
         // const contenttwo = ({contsss});
 
         return (
-            <div className="top-navbar" style={{ lineHeight: '50px', background: '#2f96e2' }}>
-                <div style={{ float: 'left', background: '#2f96e2' }} >
-
-                    <a href="javascript:;">
-                        <img alt="logo" style={{ width: '30px', height: '30px' }} src={logo} />
-                        <span className="logodiv">{this.state.title}</span>
-                    </a>
-                    {/* <Button type="primary" onClick={this.toggleCollapsed} style={{ marginBottom: 16, marginLeft: 20 }}>
-                            <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} />
-                        </Button>  */}
+            <div className="top-navbar" style={{ lineHeight: '50px', background: '#fafafa' }}>
+                {/* #2f96e2  'rgb(112 107 125)' */}
+                <div style={{display:'flex', height: '50px', lineHeight: '50px', float: 'left',alignItems:'center'}} >
+               
+                    <img style={{ paddingLeft: '10px', width: '32px', height: '22px', lineHeight: '30px', verticalAlign: 'middle' }} src={logo} />
+                    <span className="logodiv" style={{ color: '#000' }}>{this.state.title}</span>
                     <Tooltip title='缩回'>
                         <Icon
                             className="trigger"
@@ -421,16 +417,12 @@ export default class TopBar extends React.Component {
                             onClick={this.toggle}
                         />
                     </Tooltip>
-                    {/* <Tooltip>
-                            <input type='text' className='search-bar' placeholder='查找...' />
-                            <button className="btn-search" type="submit"><i className="fa fa-search"></i></button>
-                        </Tooltip> */}
                 </div>
-                <div style={{ float: 'right', background: '#2f96e2' }} >
+                <div style={{display:'flex',alignItems:'center', float: 'right' }} >
                     {
                         this.state.userCode
-                            ? <span style={{ color: 'white' }}>欢迎，{this.state.userCode}</span>
-                            : <span style={{ color: 'white' }}>请登录</span>
+                            ? <span style={{ color: '#000' }}>欢迎，{this.state.userCode}</span>
+                            : <span style={{ color: '#000' }}>请登录</span>
                     }
                     <Tooltip>
                         <Popover
@@ -440,17 +432,14 @@ export default class TopBar extends React.Component {
                             visible={this.state.visible}
                             onVisibleChange={this.handleVisibleChange}
                         >
-                            <Button type="primary" style={{ color: '#ffffff', background: 'transparent', borderColor: 'transparent' }} onClick={() => this.onselect('1')}>
-                                <Icon type="setting" style={{ fontSize: '18px', color: '#ffffff', background: 'transparent', borderColor: 'transparent' }} />
+                            <Button style={{ background: 'transparent', borderColor: 'transparent' }} onClick={() => this.onselect('1')}>
+                                <Icon type="setting" style={{ fontSize: '20px', color: '#7f6d6d', background: 'transparent', borderColor: 'transparent' }} />
                             </Button>
-                            <Button type="primary" style={{ background: 'transparent', borderColor: 'transparent' }} onClick={() => this.onselect('2')}>
-                                <Icon type="bell" style={{ fontSize: '18px', color: '#ffffff', background: 'transparent' }} />
+                            <Button style={{ background: 'transparent', borderColor: 'transparent' }} onClick={() => this.onselect('2')}>
+                                <Icon type="bell" style={{ fontSize: '20px', color: '#7f6d6d' }} />
                             </Button>
-                            {/* <Button type="primary" style={{ background: 'transparent', borderColor: 'transparent' }} onClick={() => this.openChat()}>
-                                    <Icon type="bell" style={{ fontSize: '18px', color: '#ffffff', background: 'transparent' }} />
-                                </Button>                        */}
-                            <Button type="primary" onClick={() => this.onselect('4')} style={{ background: 'transparent', borderColor: 'transparent' }}>
-                                <Avatar size="{32}" icon="user" />
+                            <Button onClick={() => this.onselect('4')} style={{ background: 'transparent', borderColor: 'transparent' }}>
+                                <Icon type="user" style={{ fontSize: '20px', color: '#7f6d6d' }} />
                             </Button>
                         </Popover>
                         {/* <Widget

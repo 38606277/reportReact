@@ -79,6 +79,14 @@ credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
 {
     func_id:"37"
 }
+
+#统计指标
+GET https://data.stats.gov.cn/easyquery.htm  HTTP/1.1
+
+
+###保存一个函数
+https://data.stats.gov.cn/easyquery.htm?m=QueryData&dbcode=hgnd&rowcode=zb&colcode=sj&wds=%5B%5D&dfwds=%5B%5D&k1=1604300866921&h=1
+
 ###保存一个函数
 POST http://localhost:8080/reportServer/function/saveUserSql HTTP/1.1
 content-type: application/json
