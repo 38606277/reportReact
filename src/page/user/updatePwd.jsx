@@ -1,6 +1,8 @@
 import React        from 'react';
 import User         from '../../service/user-service.jsx'
-import { Form, Input, Select,Button, DatePicker,Card,Row, Col } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Select, Button, DatePicker, Card, Row, Col } from 'antd';
 const FormItem = Form.Item;
 const _user = new User();
 

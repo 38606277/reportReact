@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { Row, Col, Input, Button, Form } from 'antd';
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Row, Col, Input, Button } from 'antd';
 import 'antd/dist/antd.css';
 const FormItem = Form.Item;
 const { TextArea } = Input;
- 
+
 export default class Cor extends Component {
  
   constructor(props) {
@@ -52,13 +55,13 @@ export default class Cor extends Component {
   }
   render() {
     return (
-       <div >
-             {/* 通过map对数组进行呈现 */
-              this.arr.map(v => v)
-             }
-            <Button icon="plus" size="small" type="primary" ghost onClick={this.handlePlus.bind(this)} />
-            <Button icon="minus" size="small" type="primary" ghost onClick={this.handleMinus.bind(this)} />
-       </div>
+      <div >
+            {/* 通过map对数组进行呈现 */
+             this.arr.map(v => v)
+            }
+           <Button icon={<PlusOutlined />} size="small" type="primary" ghost onClick={this.handlePlus.bind(this)} />
+           <Button icon={<MinusOutlined />} size="small" type="primary" ghost onClick={this.handleMinus.bind(this)} />
+      </div>
     );
   }
 }

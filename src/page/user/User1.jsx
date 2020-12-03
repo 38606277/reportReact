@@ -1,7 +1,22 @@
 import React from 'react'
-import { Card, Button, Table, Form, Input, Checkbox, Select, Radio, Icon, message, Modal, DatePicker, InputNumber, Switch } from 'antd'
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+    Card,
+    Button,
+    Table,
+    Input,
+    Checkbox,
+    Select,
+    Radio,
+    message,
+    Modal,
+    DatePicker,
+    InputNumber,
+    Switch,
+} from 'antd';
 import moment from 'moment';
-import 'moment/locale/zh-cn'; 
+import 'moment/locale/zh-cn';
 
 const FormItem = Form.Item;
 const Option = Select.Option;

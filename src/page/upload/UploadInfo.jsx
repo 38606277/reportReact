@@ -1,7 +1,10 @@
 import React        from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import DictService         from '../../service/DictService.jsx'
-import { Form, Col, message,Button, Upload,Card,Row, Icon } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Col, message, Button, Upload, Card, Row } from 'antd';
 import LocalStorge  from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
 const FormItem = Form.Item;
@@ -96,7 +99,7 @@ class UploadInfo extends React.Component{
               onChange={this.handleChange}
           >
             <Button>
-              <Icon type="upload" /> Upload
+              <UploadOutlined /> Upload
             </Button>
           </Upload>
           </Col>

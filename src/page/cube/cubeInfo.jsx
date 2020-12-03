@@ -1,5 +1,8 @@
 import React        from 'react';
-import { Form, Input, Table,Button, Modal,Card,Row, Col,Icon ,Pagination,message} from 'antd';
+import { EllipsisOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Table, Button, Modal, Card, Row, Col, Pagination, message } from 'antd';
 import LocalStorge  from '../../util/LogcalStorge.jsx';
 import CubeService from '../../service/CubeService.jsx';
 import QueryService from '../../service/QueryService.jsx';
@@ -188,82 +191,82 @@ class CubeInfo extends React.Component{
         });
     }
     return (
-        <div id="page-wrapper">
-        <Card title={this.state.cube_id=='null' ?'新建':'编辑'}>
-        <Form onSubmit={this.handleSubmit}>
-        <Row>
-             <Col xs={24} sm={12}>
-                  <FormItem {...formItemLayout} label="名称">
-                    {getFieldDecorator('cube_name', {
-                      rules: [{required: true, message: '请输入名称!'}],
-                    })(
-                      <Input type='text' name='cube_name'  onChange={(e) => this.onValueChange(e)}/>
-                    )}
-                  </FormItem>
-              </Col>
-              <Col xs={24} sm={12}>
-                <FormItem {...formItemLayout} label="描述">
-                    {getFieldDecorator('cube_desc', {
-                      rules: [{required: true, message: '请输入描述!'}],
-                    })(
-                      <Input type='text' name='cube_desc'  onChange={(e) => this.onValueChange(e)}/>
-                    )}
-                  </FormItem>
-              </Col>
-          </Row> 
-          <Row>
-          <Col xs={24} sm={12}>
-                <FormItem {...formItemLayout} label="Qry_ID">
-                    {getFieldDecorator('qry_id', {
-                      rules: [{required: true, message: '请输入描述!'}],
-                    })(
-                      <Input readOnly onChange={e=>this.onValueChange(e)} 
-                      addonAfter={<Icon type="ellipsis" theme="outlined" onClick={e=>this.openModelClick()}/>} />
-                    )}
-                  </FormItem>
-              </Col>
-              <Col xs={24} sm={12}>
-                <FormItem {...formItemLayout} label="class_name">
-                    {getFieldDecorator('class_name', {
-                     // rules: [{required: true, message: '请输入描述!'}],
-                    })(
-                      <Input readOnly />
-                    )}
-                  </FormItem>
-              </Col>
-          </Row> 
-          <Row>
+      <div id="page-wrapper">
+      <Card title={this.state.cube_id=='null' ?'新建':'编辑'}>
+      <Form onSubmit={this.handleSubmit}>
+      <Row>
+           <Col xs={24} sm={12}>
+                <FormItem {...formItemLayout} label="名称">
+                  {getFieldDecorator('cube_name', {
+                    rules: [{required: true, message: '请输入名称!'}],
+                  })(
+                    <Input type='text' name='cube_name'  onChange={(e) => this.onValueChange(e)}/>
+                  )}
+                </FormItem>
+            </Col>
             <Col xs={24} sm={12}>
-                <FormItem {...formItemLayout} label="SQL">
-                    {getFieldDecorator('cube_sql', {
-                      rules: [{required: true, message: '请输入SQL!'}],
-                    })(
-                      <Input  onChange={(e) => this.onValueChange(e)}/>
-                    )}
-                  </FormItem>
-              </Col>
-          </Row> 
-          <FormItem {...tailFormItemLayout}>
-            <Button type="primary" htmlType="submit">保存</Button>
-            <Button href="#/cube/cubeList"  type="primary" style={{marginLeft:'30px'}}>返回</Button>
-          </FormItem>
-      </Form>
-      </Card>
-      <div>
-                <Modal  title="字典查询" visible={this.state.visible}  onOk={this.handleOk} onCancel={this.handleCancel}>
-                    <Search
-                        style={{ width: 300,marginBottom:'10px' }}
-                        placeholder="请输入..." enterButton="查询"
-                        onSearch={value => this.onDictionarySearch(value)}
-                        />
-                        <Table ref="diction" rowSelection={rowSelectionDictionary} columns={dictionaryColumns} 
-                        dataSource={this.state.dictionaryList} size="small" bordered  pagination={false}/>
-                        <Pagination current={this.state.pageNumd} 
-                        total={this.state.totald}  showTotal={total => `共 ${this.state.totald} 条`}
-                        onChange={(pageNumd) => this.onPageNumdChange(pageNumd)}/> 
-                </Modal>
-            </div>
-      </div>
+              <FormItem {...formItemLayout} label="描述">
+                  {getFieldDecorator('cube_desc', {
+                    rules: [{required: true, message: '请输入描述!'}],
+                  })(
+                    <Input type='text' name='cube_desc'  onChange={(e) => this.onValueChange(e)}/>
+                  )}
+                </FormItem>
+            </Col>
+        </Row> 
+        <Row>
+        <Col xs={24} sm={12}>
+              <FormItem {...formItemLayout} label="Qry_ID">
+                  {getFieldDecorator('qry_id', {
+                    rules: [{required: true, message: '请输入描述!'}],
+                  })(
+                    <Input readOnly onChange={e=>this.onValueChange(e)} 
+                    addonAfter={<EllipsisOutlined onClick={e=>this.openModelClick()} />} />
+                  )}
+                </FormItem>
+            </Col>
+            <Col xs={24} sm={12}>
+              <FormItem {...formItemLayout} label="class_name">
+                  {getFieldDecorator('class_name', {
+                   // rules: [{required: true, message: '请输入描述!'}],
+                  })(
+                    <Input readOnly />
+                  )}
+                </FormItem>
+            </Col>
+        </Row> 
+        <Row>
+          <Col xs={24} sm={12}>
+              <FormItem {...formItemLayout} label="SQL">
+                  {getFieldDecorator('cube_sql', {
+                    rules: [{required: true, message: '请输入SQL!'}],
+                  })(
+                    <Input  onChange={(e) => this.onValueChange(e)}/>
+                  )}
+                </FormItem>
+            </Col>
+        </Row> 
+        <FormItem {...tailFormItemLayout}>
+          <Button type="primary" htmlType="submit">保存</Button>
+          <Button href="#/cube/cubeList"  type="primary" style={{marginLeft:'30px'}}>返回</Button>
+        </FormItem>
+    </Form>
+    </Card>
+    <div>
+              <Modal  title="字典查询" visible={this.state.visible}  onOk={this.handleOk} onCancel={this.handleCancel}>
+                  <Search
+                      style={{ width: 300,marginBottom:'10px' }}
+                      placeholder="请输入..." enterButton="查询"
+                      onSearch={value => this.onDictionarySearch(value)}
+                      />
+                      <Table ref="diction" rowSelection={rowSelectionDictionary} columns={dictionaryColumns} 
+                      dataSource={this.state.dictionaryList} size="small" bordered  pagination={false}/>
+                      <Pagination current={this.state.pageNumd} 
+                      total={this.state.totald}  showTotal={total => `共 ${this.state.totald} 条`}
+                      onChange={(pageNumd) => this.onPageNumdChange(pageNumd)}/> 
+              </Modal>
+          </div>
+    </div>
     );
   }
 }

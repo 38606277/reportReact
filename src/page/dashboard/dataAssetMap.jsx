@@ -1,6 +1,7 @@
 import React        from 'react';
 import { Link }     from 'react-router-dom';
-import {  Row,  Col,  Icon,  Card,  Tabs,  Table,  Radio,  DatePicker,  Tooltip,  Menu,  Dropdown,} from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { Row, Col, Card, Tabs, Table, Radio, DatePicker, Tooltip, Menu, Dropdown } from 'antd';
 import {  ChartCard,  MiniArea,  MiniBar,  MiniProgress,  Field,  Bar,  Pie, TimelineChart,} from '../../components/Charts';
 import Trend from '../../components/Trend/index.jsx';
 import NumberInfo from '../../components/NumberInfo';
@@ -257,207 +258,207 @@ const radarData=[{"name":"个人","label":"引用","value":10},{"name":"个人",
               </Row>
             );
     return (
-        <GridContent>
-        {/* 第三部分 */}
-        <Row gutter={24}>
-            <Col {...topColResponsiveProps}>
-                <ChartCard
-                bordered={false}
-                title="数据总量"
-                action={
-                    <Tooltip
-                    title="数据总量"> 
-                        <Icon type="info-circle-o" />
-                    </Tooltip>
-                }
-                
-                total={<Link style={{color:'rgba(0, 0, 0, 0.65)'}} to='/dataAsset/dataAssetList'>8,846</Link>}
-                footer={
-                    <Field
-                    label={"日新增"}
-                    value={`￥${numeral(12423).format('0,0')}`}
-                    />
-                }
-                contentHeight={46}
-                >
-                <Trend flag="up" style={{ marginRight: 16 }}>
-                {"周同比" }
-                    <span className={styles.trendText}>12%</span>
-                </Trend>
-                <Trend flag="down">
-                    {"日同比"}
-                    <span className={styles.trendText}>11%</span>
-                </Trend>
-                </ChartCard>
-            </Col>
-            <Col {...topColResponsiveProps}>
-            <ChartCard
-              bordered={false}
-              title={"数据源数量"}
-              action={
-                <Tooltip
-                  title={ "introduce" }
-                >
-                  <Icon type="info-circle-o" />
-                </Tooltip>
-              }
-              total={<Link style={{color:'rgba(0, 0, 0, 0.65)'}} to='/dbs/dbsList'>18</Link>}
-              footer={
-                <Field
-                  label={ "日访问量"}
-                  value={numeral(1234).format('0,0')}
-                />
-              }
-              contentHeight={46}
-            >
-              <MiniArea color="#975FE4" data={visitData} />
-            </ChartCard>
-          </Col>
+      <GridContent>
+      {/* 第三部分 */}
+      <Row gutter={24}>
           <Col {...topColResponsiveProps}>
-            <ChartCard
+              <ChartCard
               bordered={false}
-            
-              title={"访问量"}
+              title="数据总量"
               action={
-                <Tooltip
-                  title={"Introduce"}
-                >
-                  <Icon type="info-circle-o" />
-                </Tooltip>
+                  <Tooltip
+                  title="数据总量"> 
+                      <InfoCircleOutlined />
+                  </Tooltip>
               }
-              total={numeral(6560).format('0,0')}
+              
+              total={<Link style={{color:'rgba(0, 0, 0, 0.65)'}} to='/dataAsset/dataAssetList'>8,846</Link>}
               footer={
-                <Field
-                  label={"本周增加"}
-                  value="60%"
-                />
-              }
-              contentHeight={46}
-            >
-              <MiniBar data={visitData} />
-            </ChartCard>
-          </Col>
-          <Col {...topColResponsiveProps}>
-            <ChartCard
-             
-              bordered={false}
-              title={"存储空间"}
-              action={
-                <Tooltip
-                  title={"introduce"}
-                >
-                  <Icon type="info-circle-o" />
-                </Tooltip>
-              }
-              total="78%"
-              footer={
-                <div style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
-                  <Trend flag="up" style={{ marginRight: 16 }}>
-                    {"已使用"}
-                    <span className={styles.trendText}>830G</span>
-                  </Trend>
-                  <Trend>
-                    {"总空间"}
-                    <span className={styles.trendText}>1000G</span>
-                  </Trend>
-                </div>
-              }
-              contentHeight={46}
-            >
-              <MiniProgress percent={78} strokeWidth={8} target={80} color="#13C2C2" />
-            </ChartCard>
-          </Col>
-        </Row>
-        
-      
-        {/* 第三部分 */}
-        <Row gutter={24}>
-          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-            <Card
-             
-              bordered={false}
-              title={"数据表访问排行"}
-              // extra={iconGroup}
-              style={{ marginTop: 24 }}
-            >
-             <Table
-                rowKey={record => record.index}
-                size="small"
-                columns={columns}
-                dataSource={searchData}
-                pagination={{
-                  style: { marginBottom: 0 },
-                  pageSize: 5,
-                }}
-              />
-            </Card>
-          </Col>
-          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-            <Card
-              className={styles.salesCard}
-              bordered={false}
-              title={"数据分布情况" }
-              bodyStyle={{ padding: 24 }}
-              extra={
-                <div className={styles.salesCardExtra}>
-                  {iconGroup}
-                  <div className={styles.salesTypeRadio}>
-                    <Radio.Group value={salesType} onChange={this.handleChangeSalesType}>
-                      <Radio.Button value="catalog">
-                        {"数据目录" }
-                      </Radio.Button>
-                      <Radio.Button value="source">
-                        {"数据来源"}
-                      </Radio.Button>
-                      <Radio.Button value="dbtype">
-                        {"存储类型" }
-                      </Radio.Button>
-                      <Radio.Button value="online">
-                        {"数据源"}
-                      </Radio.Button>
-                    </Radio.Group>
-                  </div>
-                </div>
-              }
-              style={{ marginTop: 24, minHeight: 509 }}
-            >
-             
-              <Pie
-                hasLegend
-                subTitle={"Tables"}
-                total={400}
-                data={salesPieData}
-                height={248}
-                lineWidth={4}
-              />
-            </Card>
-          </Col>
-        </Row>
-     <Card
-          className={styles.offlineCard}
-          bordered={false}
-          bodyStyle={{ padding: '0 0 32px 0' }}
-          style={{ marginTop: 32 }}
-        >
-          <Tabs activeKey={activeKey} onChange={this.handleTabChange}>
-            {offlineData.map(shop => (
-              <TabPane tab={<CustomTab data={shop} currentTabKey={activeKey} />} key={shop.name}>
-                <div style={{ padding: '0 24px' }}>
-                  <TimelineChart
-                    height={400}
-                    data={offlineChartData}
-                    titleMap={{
-                      y1: 'traffic',
-                      y2: 'payments',
-                    }}
+                  <Field
+                  label={"日新增"}
+                  value={`￥${numeral(12423).format('0,0')}`}
                   />
+              }
+              contentHeight={46}
+              >
+              <Trend flag="up" style={{ marginRight: 16 }}>
+              {"周同比" }
+                  <span className={styles.trendText}>12%</span>
+              </Trend>
+              <Trend flag="down">
+                  {"日同比"}
+                  <span className={styles.trendText}>11%</span>
+              </Trend>
+              </ChartCard>
+          </Col>
+          <Col {...topColResponsiveProps}>
+          <ChartCard
+            bordered={false}
+            title={"数据源数量"}
+            action={
+              <Tooltip
+                title={ "introduce" }
+              >
+                <InfoCircleOutlined />
+              </Tooltip>
+            }
+            total={<Link style={{color:'rgba(0, 0, 0, 0.65)'}} to='/dbs/dbsList'>18</Link>}
+            footer={
+              <Field
+                label={ "日访问量"}
+                value={numeral(1234).format('0,0')}
+              />
+            }
+            contentHeight={46}
+          >
+            <MiniArea color="#975FE4" data={visitData} />
+          </ChartCard>
+        </Col>
+        <Col {...topColResponsiveProps}>
+          <ChartCard
+            bordered={false}
+          
+            title={"访问量"}
+            action={
+              <Tooltip
+                title={"Introduce"}
+              >
+                <InfoCircleOutlined />
+              </Tooltip>
+            }
+            total={numeral(6560).format('0,0')}
+            footer={
+              <Field
+                label={"本周增加"}
+                value="60%"
+              />
+            }
+            contentHeight={46}
+          >
+            <MiniBar data={visitData} />
+          </ChartCard>
+        </Col>
+        <Col {...topColResponsiveProps}>
+          <ChartCard
+           
+            bordered={false}
+            title={"存储空间"}
+            action={
+              <Tooltip
+                title={"introduce"}
+              >
+                <InfoCircleOutlined />
+              </Tooltip>
+            }
+            total="78%"
+            footer={
+              <div style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
+                <Trend flag="up" style={{ marginRight: 16 }}>
+                  {"已使用"}
+                  <span className={styles.trendText}>830G</span>
+                </Trend>
+                <Trend>
+                  {"总空间"}
+                  <span className={styles.trendText}>1000G</span>
+                </Trend>
+              </div>
+            }
+            contentHeight={46}
+          >
+            <MiniProgress percent={78} strokeWidth={8} target={80} color="#13C2C2" />
+          </ChartCard>
+        </Col>
+      </Row>
+      
+    
+      {/* 第三部分 */}
+      <Row gutter={24}>
+        <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+          <Card
+           
+            bordered={false}
+            title={"数据表访问排行"}
+            // extra={iconGroup}
+            style={{ marginTop: 24 }}
+          >
+           <Table
+              rowKey={record => record.index}
+              size="small"
+              columns={columns}
+              dataSource={searchData}
+              pagination={{
+                style: { marginBottom: 0 },
+                pageSize: 5,
+              }}
+            />
+          </Card>
+        </Col>
+        <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+          <Card
+            className={styles.salesCard}
+            bordered={false}
+            title={"数据分布情况" }
+            bodyStyle={{ padding: 24 }}
+            extra={
+              <div className={styles.salesCardExtra}>
+                {iconGroup}
+                <div className={styles.salesTypeRadio}>
+                  <Radio.Group value={salesType} onChange={this.handleChangeSalesType}>
+                    <Radio.Button value="catalog">
+                      {"数据目录" }
+                    </Radio.Button>
+                    <Radio.Button value="source">
+                      {"数据来源"}
+                    </Radio.Button>
+                    <Radio.Button value="dbtype">
+                      {"存储类型" }
+                    </Radio.Button>
+                    <Radio.Button value="online">
+                      {"数据源"}
+                    </Radio.Button>
+                  </Radio.Group>
                 </div>
-              </TabPane>
-            ))}
-          </Tabs>
-        </Card>
-        </GridContent>
-            );
+              </div>
+            }
+            style={{ marginTop: 24, minHeight: 509 }}
+          >
+           
+            <Pie
+              hasLegend
+              subTitle={"Tables"}
+              total={400}
+              data={salesPieData}
+              height={248}
+              lineWidth={4}
+            />
+          </Card>
+        </Col>
+      </Row>
+   <Card
+        className={styles.offlineCard}
+        bordered={false}
+        bodyStyle={{ padding: '0 0 32px 0' }}
+        style={{ marginTop: 32 }}
+      >
+        <Tabs activeKey={activeKey} onChange={this.handleTabChange}>
+          {offlineData.map(shop => (
+            <TabPane tab={<CustomTab data={shop} currentTabKey={activeKey} />} key={shop.name}>
+              <div style={{ padding: '0 24px' }}>
+                <TimelineChart
+                  height={400}
+                  data={offlineChartData}
+                  titleMap={{
+                    y1: 'traffic',
+                    y2: 'payments',
+                  }}
+                />
+              </div>
+            </TabPane>
+          ))}
+        </Tabs>
+      </Card>
+      </GridContent>
+    );
           }
         }
 

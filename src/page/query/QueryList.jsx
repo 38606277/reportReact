@@ -6,7 +6,25 @@
 */
 import React from 'react';
 
-import { Card, Button, Divider, Input, message,Table, Form, FormItem, Icon, Row, Col,loading,Dropdown,Menu } from 'antd';
+import { DownOutlined, FileSearchOutlined } from '@ant-design/icons';
+
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+
+import {
+    Card,
+    Button,
+    Divider,
+    Input,
+    message,
+    Table,
+    FormItem,
+    Row,
+    Col,
+    loading,
+    Dropdown,
+    Menu,
+} from 'antd';
 
 import FunctionService from '../../service/FunctionService.jsx'
 import HttpService from '../../util/HttpService.jsx';
@@ -140,8 +158,8 @@ export default class QueryList extends React.Component {
                             <Menu.Item key="table">数据库表</Menu.Item>
                         </Menu>
                     )}>
-                        <Button icon="file-search" type="primary" >
-                        新建数据服务<Icon type="down" />
+                        <Button icon={<FileSearchOutlined />} type="primary" >
+                        新建数据服务<DownOutlined />
                         </Button>
                     </Dropdown>
                     {/* <Button href="#/query/QueryCreator/sql/create/0" style={{ marginRight: "10px" }} type="primary">新建查询</Button> */}
@@ -198,6 +216,6 @@ export default class QueryList extends React.Component {
                     </Table>
                 </Card>
             </div >
-        )
+        );
     }
 }

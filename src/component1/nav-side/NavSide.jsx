@@ -1,5 +1,14 @@
 import React from 'react';
-import { Layout, Menu, Breadcrumb, Icon, Row, Col } from 'antd';
+
+import {
+  DesktopOutlined,
+  FileOutlined,
+  PieChartOutlined,
+  TeamOutlined,
+  UserOutlined,
+} from '@ant-design/icons';
+
+import { Layout, Menu, Breadcrumb, Row, Col } from 'antd';
 import './NavSide.scss';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -34,16 +43,16 @@ export default class NavSide extends React.Component {
           </div>
           <Menu theme="light" defaultSelectedKeys={['1']} mode="inline"  >
             <Menu.Item key="1">
-              <Icon type="pie-chart" />
+              <PieChartOutlined />
               <span>首页</span>
             </Menu.Item>
             <Menu.Item key="2">
-              <Icon type="desktop" />
+              <DesktopOutlined />
               <span>我的报表</span>
             </Menu.Item>
             <SubMenu
               key="sub1"
-              title={<span><Icon type="user" /><span>我的任务</span></span>}
+              title={<span><UserOutlined /><span>我的任务</span></span>}
             >
               <Menu.Item key="3">Tom</Menu.Item>
               <Menu.Item key="4">Bill</Menu.Item>
@@ -51,20 +60,20 @@ export default class NavSide extends React.Component {
             </SubMenu>
             <SubMenu
               key="sub2"
-              title={<span><Icon type="team" /><span>系统管理</span></span>}
+              title={<span><TeamOutlined /><span>系统管理</span></span>}
             >
               <Menu.Item key="6">Team 1</Menu.Item>
               <Menu.Item key="8">Team 2</Menu.Item>
             </SubMenu>
             <SubMenu
               key="sub3"
-              title={<span><Icon type="team" /><span>函数管理</span></span>}
+              title={<span><TeamOutlined /><span>函数管理</span></span>}
             >
               <Menu.Item key="9">函数列表</Menu.Item>
               <Menu.Item key="10">数据字典</Menu.Item>
             </SubMenu>
             <Menu.Item key="9">
-              <Icon type="file" />
+              <FileOutlined />
               <span>File</span>
             </Menu.Item>
           </Menu>

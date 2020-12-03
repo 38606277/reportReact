@@ -1,6 +1,8 @@
 import React        from 'react';
 import DB         from '../../../service/DbService.jsx'
-import { Form, Select,Button, Card,Row, Col } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Select, Button, Card, Row, Col } from 'antd';
 import LocalStorge  from '../../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
 const FormItem = Form.Item;

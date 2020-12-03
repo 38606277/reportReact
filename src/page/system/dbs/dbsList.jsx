@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import DB from '../../../service/DbService.jsx';
+import { DatabaseOutlined } from '@ant-design/icons';
 import { Table, Divider, Button, Card, Input } from 'antd';
 // import { SearchOutlined } from '@ant-design/icons';
 const db = new DB();
@@ -71,7 +72,7 @@ class DbsList extends React.Component {
         return (
             <div id="page-wrapper">
                 <Card title="创建数据源">
-                    <Button href="#/dbs/dbInfo/null" type="primary" icon="database">新建数据源</Button>
+                    <Button href="#/dbs/dbInfo/null" type="primary" icon={<DatabaseOutlined />}>新建数据源</Button>
                     <Input.Search
                         style={{ maxWidth: 300, marginBottom: '10px', float: "right" }}
                         placeholder="请输入..."
@@ -82,7 +83,7 @@ class DbsList extends React.Component {
                 </Card>
 
             </div>
-        )
+        );
     }
 }
 

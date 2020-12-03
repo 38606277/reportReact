@@ -1,8 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { EllipsisOutlined, ThunderboltOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
 import {
-    Table, Divider, DatePicker, Modal, Icon, Form, Input, TimePicker, Tag, Select, message, Button, Card,
-    Checkbox, Layout, Tooltip, Row, Col, Pagination, Spin
+    Table,
+    Divider,
+    DatePicker,
+    Modal,
+    Input,
+    TimePicker,
+    Tag,
+    Select,
+    message,
+    Button,
+    Card,
+    Checkbox,
+    Layout,
+    Tooltip,
+    Row,
+    Col,
+    Pagination,
+    Spin,
 } from 'antd';
 import queryService from '../../service/QueryService.jsx';
 import ExportJsonExcel from "js-export-excel";
@@ -581,8 +600,7 @@ class ExecQuery extends React.Component {
                                 })(
                                     <Input onChange={e => this.changeEvent(e)}
                                         addonAfter={record.dict_id == null ? '' :
-                                            <Icon type="ellipsis" theme="outlined"
-                                                onClick={e => this.openModelClick(record.in_id, record.dict_id)} />} />
+                                            <EllipsisOutlined onClick={e => this.openModelClick(record.in_id, record.dict_id)} />} />
                                 )}
                             </FormItem>
                         </Col>
@@ -666,8 +684,7 @@ class ExecQuery extends React.Component {
                                 })(
                                     <Input onChange={e => this.changeEvent(e)}
                                         addonAfter={record.dict_id == null ? '' :
-                                            <Icon type="ellipsis" theme="outlined"
-                                                onClick={e => this.openModelClick(record.in_id, record.dict_id)} />} />
+                                            <EllipsisOutlined onClick={e => this.openModelClick(record.in_id, record.dict_id)} />} />
                                 )}
                             </FormItem>
                         </Col>
@@ -685,7 +702,7 @@ class ExecQuery extends React.Component {
                 onSearch={value => this.onResultSearch(value)}
                 /> */}
                     <Card  bordered={false} title={this.state.paramv3} extra={<div>
-                        <Button onClick={() => this.execSelect('1')} type="primary" icon="thunderbolt">执行查询</Button>
+                        <Button onClick={() => this.execSelect('1')} type="primary" icon={<ThunderboltOutlined />}>执行查询</Button>
                         <Divider type="vertical" />
                         <Button onClick={this.downloadExcel}>保存到excel</Button>
                         <Divider type="vertical" />
@@ -720,7 +737,7 @@ class ExecQuery extends React.Component {
                     </div>
                 </Spin>
             </div>
-        )
+        );
     }
 }
 

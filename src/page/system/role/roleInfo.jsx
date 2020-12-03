@@ -2,7 +2,9 @@ import React        from 'react';
 import Role         from '../../../service/RoleService.jsx'
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import moment from 'moment';
-import { Form, Input, Select,Button, DatePicker,Card,Row, Col } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Select, Button, DatePicker, Card, Row, Col } from 'antd';
 import LocalStorge  from '../../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
 const FormItem = Form.Item;

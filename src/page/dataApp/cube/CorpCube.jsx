@@ -9,8 +9,28 @@ const PlotlyRenderers = createPlotlyRenderers(Plot);
 //const data = [];
 import ReactDOM from 'react-dom';
 import HttpService from '../../../util/HttpService.jsx';
-import { Table, Divider,DatePicker,Modal, Icon, Form, Input, TimePicker, Tag,Select,message, Button, Card, 
-    Checkbox,Layout,Tooltip,Row,Col,Pagination,Spin   } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+    Table,
+    Divider,
+    DatePicker,
+    Modal,
+    Input,
+    TimePicker,
+    Tag,
+    Select,
+    message,
+    Button,
+    Card,
+    Checkbox,
+    Layout,
+    Tooltip,
+    Row,
+    Col,
+    Pagination,
+    Spin,
+} from 'antd';
 
 //const dataTwo = [['attribute', 'attribute2'], ['value1', 'value2']];
 class CorpCube extends React.Component {

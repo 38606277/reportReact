@@ -5,7 +5,28 @@
 * @Last Modified time: 2018-01-31 14:34:10
 */
 import React from 'react';
-import { Card, Button, Tooltip, DiviTableder, Icon, Input, Select, Form, FormItem, Menu, Row, Col } from 'antd';
+import {
+    BarChartOutlined,
+    GlobalOutlined,
+    InfoCircleOutlined,
+    LineChartOutlined,
+    PieChartOutlined,
+    ProfileOutlined,
+} from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+    Card,
+    Button,
+    Tooltip,
+    DiviTableder,
+    Input,
+    Select,
+    FormItem,
+    Menu,
+    Row,
+    Col,
+} from 'antd';
 
 import HttpService from '../../util/HttpService.jsx';
 const { Column, ColumnGroup } = Table;
@@ -57,7 +78,7 @@ export default class DashboardCreator extends React.Component {
             action={
                 <Tooltip
                     title="总销售额">
-                    <Icon type="info-circle-o" />
+                    <InfoCircleOutlined />
                 </Tooltip>
             }
 
@@ -85,7 +106,7 @@ export default class DashboardCreator extends React.Component {
             action={
                 <Tooltip
                     title="总销售额">
-                    <Icon type="info-circle-o" />
+                    <InfoCircleOutlined />
                 </Tooltip>
             }
 
@@ -115,7 +136,7 @@ export default class DashboardCreator extends React.Component {
               <Tooltip
                 title={"Introduce"}
               >
-                <Icon type="info-circle-o" />
+                <InfoCircleOutlined />
               </Tooltip>
             }
             total={numeral(6560).format('0,0')}
@@ -211,19 +232,19 @@ export default class DashboardCreator extends React.Component {
                        
 
                         <Tooltip placement="top" title="指标卡片">
-                            <Button icon="profile"  draggable="true" onDragStart={(event) => this.drag(event,1)} />
+                            <Button icon={<ProfileOutlined />}  draggable="true" onDragStart={(event) => this.drag(event,1)} />
                         </Tooltip>
                         <Tooltip placement="top" title="柱状图">
-                            <Button icon="bar-chart" draggable="true" onDragStart={(event) => this.drag(event,2)} />
+                            <Button icon={<BarChartOutlined />} draggable="true" onDragStart={(event) => this.drag(event,2)} />
                         </Tooltip>
                         <Tooltip placement="top" title="拆线图">
-                            <Button icon="line-chart"  draggable="true" onDragStart={(event) => this.drag(event,3)} />
+                            <Button icon={<LineChartOutlined />}  draggable="true" onDragStart={(event) => this.drag(event,3)} />
                         </Tooltip>
                         <Tooltip placement="top" title="饼图">
-                            <Button icon="pie-chart"  draggable="true" onDragStart={(event) => this.drag(event,4)} />
+                            <Button icon={<PieChartOutlined />}  draggable="true" onDragStart={(event) => this.drag(event,4)} />
                         </Tooltip>
                         <Tooltip placement="top" title="地图">
-                            <Button icon="global" />
+                            <Button icon={<GlobalOutlined />} />
                         </Tooltip>
                         <Select setValue={this.form} style={{ minWidth: '300px' }}>
                              <Option kye="1" value="1">一行一列</Option>
@@ -291,6 +312,6 @@ export default class DashboardCreator extends React.Component {
 
                 </Card>
             </div >
-        )
+        );
     }
 }

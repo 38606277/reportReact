@@ -1,6 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Form, Input, Table, Button, Modal, Card, Row, Col, Select, message, Tabs, Divider, Tag } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+    Input,
+    Table,
+    Button,
+    Modal,
+    Card,
+    Row,
+    Col,
+    Select,
+    message,
+    Tabs,
+    Divider,
+    Tag,
+} from 'antd';
 import LocalStorge from '../../util/LogcalStorge.jsx';
 import CubeService from '../../service/CubeService.jsx';
 import QueryService from '../../service/QueryService.jsx';

@@ -1,6 +1,9 @@
 import React from 'react';
 
-import { Form, Input, Select, Button, DatePicker, Card, Row, Col,message } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+
+import { Input, Select, Button, DatePicker, Card, Row, Col, message } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import LocalStorge from '../../util/LogcalStorge.jsx';
 import HttpService from '../../util/HttpService.jsx';

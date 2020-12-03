@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { Layout, Menu, Icon,Spin} from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Layout, Menu, Spin } from 'antd';
 import queryService from '../../service/QueryService.jsx';
 import  LocalStorge         from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
@@ -38,28 +39,30 @@ export default class SiderBar extends React.Component {
       
     }
     fourformSubmenusChild(obj,index){
-    return (<SubMenu key={obj.func_name+obj.func_id} 
-            onTitleClick={this.clickMuen.bind(this,obj,index)} 
-            title={<span><Icon type={obj.func_icon} />
-            <span>{obj.func_name}</span></span>}>
-            {
-                obj.shujuList==null?'':obj.shujuList.map(obj2=>(
-                    <SubMenu key={obj2.class_name+obj2.class_id+obj2.auth_type} 
-                        onTitleClick={this.clickQryName.bind(this,obj2)} 
-                        title={<span><Icon type={'folder'} /><span>
-                        {obj2.class_name}</span></span>}>
-                        {
-                            obj2.shuJuChildren==null?'':obj2.shuJuChildren.map(citem=>(
-                                <Menu.Item key={citem.qry_name+citem.qry_id} >
-                                <Link to={'/query/ExecQuery/'+citem.qry_id+'/'+obj2.class_id+'/'+citem.qry_name+'/null'}>
-                                <Icon type={'table'} /><span>{citem.qry_name}</span>
-                                </Link></Menu.Item>
-                            ))
-                        }
-                    </SubMenu>
-                ))
-            }
-        </SubMenu>);
+    return (
+        <SubMenu key={obj.func_name+obj.func_id} 
+                onTitleClick={this.clickMuen.bind(this,obj,index)} 
+                title={<span><LegacyIcon type={obj.func_icon} />
+                <span>{obj.func_name}</span></span>}>
+                {
+                    obj.shujuList==null?'':obj.shujuList.map(obj2=>(
+                        <SubMenu key={obj2.class_name+obj2.class_id+obj2.auth_type} 
+                            onTitleClick={this.clickQryName.bind(this,obj2)} 
+                            title={<span><LegacyIcon type={'folder'} /><span>
+                            {obj2.class_name}</span></span>}>
+                            {
+                                obj2.shuJuChildren==null?'':obj2.shuJuChildren.map(citem=>(
+                                    <Menu.Item key={citem.qry_name+citem.qry_id} >
+                                    <Link to={'/query/ExecQuery/'+citem.qry_id+'/'+obj2.class_id+'/'+citem.qry_name+'/null'}>
+                                    <LegacyIcon type={'table'} /><span>{citem.qry_name}</span>
+                                    </Link></Menu.Item>
+                                ))
+                            }
+                        </SubMenu>
+                    ))
+                }
+            </SubMenu>
+    );
     }
     // threeformSubmenusChild(obj,index,indexs){
     //     let cHtml=<div></div>;
@@ -80,9 +83,9 @@ export default class SiderBar extends React.Component {
           cHtml = childArray.map((item, index) => {
                 return this.formSubmenusChild(item);
             });
-            return <SubMenu key={obj.func_name} title={<span><Icon type={obj.func_icon} /><span>{obj.func_name}</span></span>}>{cHtml}</SubMenu>
+            return <SubMenu key={obj.func_name} title={<span><LegacyIcon type={obj.func_icon} /><span>{obj.func_name}</span></span>}>{cHtml}</SubMenu>;
         }else{
-            return <Menu.Item key={obj.func_name} ><Link to={obj.func_url}><Icon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>
+            return <Menu.Item key={obj.func_name} ><Link to={obj.func_url}><LegacyIcon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>;
         }
     }
     clickMuen=(obj,index)=>{
@@ -119,12 +122,12 @@ export default class SiderBar extends React.Component {
                     if("undefined"!=typeof(obj.children) &&obj.children.length>0){
                         return this.formSubmenusChild(obj);
                     }else{
-                        return <Menu.Item key={"sub"+index} ><Link to={obj.func_url}><Icon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>
+                        return <Menu.Item key={"sub"+index} ><Link to={obj.func_url}><LegacyIcon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>;
                     }
                 }
             } else {
                 //这里的routeurl是路由地址，是自定义的一个属性
-                return <Menu.Item key={"sub"+index} ><Link to={obj.func_url}><Icon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>
+                return <Menu.Item key={"sub"+index} ><Link to={obj.func_url}><LegacyIcon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>;
             }
         });
          const collapsed=this.props.collapsed;

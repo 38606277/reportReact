@@ -1,5 +1,7 @@
 import React        from 'react';
-import { Form, Input, Table,Button, Modal,Card,Row, Col,Icon ,Pagination,message} from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Table, Button, Modal, Card, Row, Col, Pagination, message } from 'antd';
 import LocalStorge  from '../../util/LogcalStorge.jsx';
 import CubeService from '../../service/CachedService.jsx';
 const _cubeService = new CubeService();

@@ -2,7 +2,23 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from 'antd/lib/pagination';
-import { Table, Divider, Button, Card, Tree, Input, Form, Spin, Row, Col, Select, Tooltip, Modal } from 'antd';
+import { BarChartOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+    Table,
+    Divider,
+    Button,
+    Card,
+    Tree,
+    Input,
+    Spin,
+    Row,
+    Col,
+    Select,
+    Tooltip,
+    Modal,
+} from 'antd';
 import CubeService from '../../service/CubeService.jsx';
 import HttpService from '../../util/HttpService.jsx';
 import { forInRight } from 'lodash';
@@ -437,16 +453,16 @@ export default class dataAssetList extends React.Component {
                                 <Card bodyStyle={{ padding: "5px", backgroundColor: '#fafafa' }}>
 
                                     <Tooltip placement="top" title="目录视图">
-                                        <Button type={this.state.buttontype[0]} icon="profile" onClick={() => this.onViewClick(4, 0)} />
+                                        <Button type={this.state.buttontype[0]} icon={<ProfileOutlined />} onClick={() => this.onViewClick(4, 0)} />
                                     </Tooltip>
                                     <Tooltip placement="top" title="数据来源视图" >
-                                        <Button type={this.state.buttontype[1]} icon="bar-chart" onClick={() => this.onViewClick(3, 1)} />
+                                        <Button type={this.state.buttontype[1]} icon={<BarChartOutlined />} onClick={() => this.onViewClick(3, 1)} />
                                     </Tooltip>
                                     <Tooltip placement="top" title="数据类型视图">
-                                        <Button type={this.state.buttontype[2]} icon="line-chart" onClick={() => this.onViewClick(2, 2)} />
+                                        <Button type={this.state.buttontype[2]} icon={<LineChartOutlined />} onClick={() => this.onViewClick(2, 2)} />
                                     </Tooltip>
                                     <Tooltip placement="top" title="数据源视图">
-                                        <Button type={this.state.buttontype[3]} icon="pie-chart" onClick={() => this.onViewClick(4, 3)} />
+                                        <Button type={this.state.buttontype[3]} icon={<PieChartOutlined />} onClick={() => this.onViewClick(4, 3)} />
                                     </Tooltip>
 
 
@@ -511,6 +527,6 @@ export default class dataAssetList extends React.Component {
                     </Card>
                 </Modal>
             </div>
-        )
+        );
     }
 }

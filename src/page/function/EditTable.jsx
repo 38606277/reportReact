@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Table, Input, InputNumber, Popconfirm, Form, Select, Icon,Card } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Table, Input, InputNumber, Popconfirm, Select, Card } from 'antd';
 import { Button } from 'antd/lib/radio';
 
 const data = [];

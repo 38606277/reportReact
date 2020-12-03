@@ -3,7 +3,9 @@ import User         from '../../service/user-service.jsx'
 import createHistory from 'history/createBrowserHistory';
 import locale from 'antd/lib/date-picker/locale/zh_CN';
 import moment from 'moment';
-import { Form, Input, Select,Button, DatePicker,Card,Row, Col } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Select, Button, DatePicker, Card, Row, Col } from 'antd';
 import TextArea from 'antd/lib/input/TextArea';
 import LocalStorge  from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();

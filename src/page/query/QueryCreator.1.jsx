@@ -1,5 +1,27 @@
 import React from 'react'
-import { Card, Button, Table, Form, Input, Divider, Checkbox, Dropdown, Select, Radio, Icon, message, Modal, DatePicker, InputNumber, Switch, Row, Col, Tabs, Menu } from 'antd'
+import { DownOutlined, MinusOutlined, PlusOutlined, ProfileOutlined, ToolOutlined } from '@ant-design/icons';
+import { Form, Icon as LegacyIcon } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+    Card,
+    Button,
+    Table,
+    Input,
+    Divider,
+    Checkbox,
+    Dropdown,
+    Select,
+    Radio,
+    message,
+    Modal,
+    DatePicker,
+    InputNumber,
+    Switch,
+    Row,
+    Col,
+    Tabs,
+    Menu,
+} from 'antd';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 
@@ -268,7 +290,7 @@ class functionCreator extends React.Component {
                         </Menu>
                     )}>
                         <Button style={{ marginLeft: 8 }}>
-                            SQL <Icon type="down" />
+                            SQL <DownOutlined />
                         </Button>
                     </Dropdown>}>
                     <Form layout="inline" onSubmit={this.onSaveClick}>
@@ -276,10 +298,10 @@ class functionCreator extends React.Component {
                             <Col span={10}>
                                 <Card bodyStyle={{ padding: '8px' }} >
                                     <div>
-                                        <Button type="primary" icon="tool" onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成查询</Button>
+                                        <Button type="primary" icon={<ToolOutlined />} onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成查询</Button>
                                         {/* <Button icon="save" onClick={() => this.onSaveClick(e)} style={{ marginRight: "10px" }} >保存</Button> */}
                                         <Button type="primary" htmlType="submit" style={{ marginRight: "10px" }}>保存</Button>
-                                        <Button icon="list" onClick={() => window.location = '#/query/QueryList'} style={{ marginRight: "10px" }}   >退出</Button>
+                                        <Button icon={<LegacyIcon type="list" />} onClick={() => window.location = '#/query/QueryList'} style={{ marginRight: "10px" }}   >退出</Button>
                                     </div>
                                     <Divider style={{ margin: "8px 0 8px 0" }} />
 
@@ -294,7 +316,7 @@ class functionCreator extends React.Component {
                                             )
                                         }
                                     </FormItem>
-                                    <Tabs type="card" tabBarExtraContent={<Button icon="profile" style={{ color: "blue" }}></Button>}>
+                                    <Tabs type="card" tabBarExtraContent={<Button icon={<ProfileOutlined />} style={{ color: "blue" }}></Button>}>
                                         <TabPane tab="输入SQL" key="1">
                                             <CodeMirror ref="editorsql" value='' style={{ height: '600px', width: '450px', border: "1px" }} options={options} />
                                         </TabPane>
@@ -369,7 +391,7 @@ class functionCreator extends React.Component {
                                         </Col>
                                     </Row>
                                     <Tabs type="card" style={{ marginTop: '15px' }} onChange={this.tabOnChange} 
-                                           tabBarExtraContent={<span><Button icon="plus"></Button><Button icon="minus"></Button></span>}>
+                                           tabBarExtraContent={<span><Button icon={<PlusOutlined />}></Button><Button icon={<MinusOutlined />}></Button></span>}>
                                         <TabPane tab="输入参数" key="1" >
                                             <EditIn onRef={(ref) => this.inParam = ref} />
                                         </TabPane>

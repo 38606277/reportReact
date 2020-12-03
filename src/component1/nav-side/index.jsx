@@ -6,7 +6,8 @@
 */
 import React                from 'react';
 import { Link }    from 'react-router-dom';
-import { Menu, Icon, Row } from 'antd';
+import { AppstoreOutlined, SettingOutlined } from '@ant-design/icons';
+import { Menu, Row } from 'antd';
 
 const SubMenu = Menu.SubMenu;
 const MenuItemGroup = Menu.ItemGroup;
@@ -33,17 +34,17 @@ class NavSide extends React.Component{
                //onClick={this.handleClick}            
             >
                 <Menu.Item key="sub"><Link to='/'>首页</Link></Menu.Item>
-                <SubMenu key="sub1" title={<span><Icon type="appstore" /><span>我的任务</span></span>}>
+                <SubMenu key="sub1" title={<span><AppstoreOutlined /><span>我的任务</span></span>}>
                     <Menu.Item key="/product/index"><Link to='/product/index'>代办任务</Link></Menu.Item>
                     <Menu.Item key="/product/taskList"><Link to='/product/taskList'>已办任务</Link></Menu.Item>
                 </SubMenu>
-                <SubMenu key="sub4" title={<span><Icon type="setting" /><span>系统管理</span></span>}>
+                <SubMenu key="sub4" title={<span><SettingOutlined /><span>系统管理</span></span>}>
                     <Menu.Item key="/user/index"><Link to='/user/index'>用户管理</Link></Menu.Item>
                     <Menu.Item key="10">权限管理</Menu.Item>
                     <Menu.Item key="11">连接管理</Menu.Item>
                     <Menu.Item key="12">权限类型管理</Menu.Item>
                 </SubMenu>
-                <SubMenu key="sub5" title={<span><Icon type="setting" /><span>基础信息</span></span>}>
+                <SubMenu key="sub5" title={<span><SettingOutlined /><span>基础信息</span></span>}>
                     <Menu.Item key="/function/functionList"><Link to='/function/functionList'>函数管理</Link></Menu.Item>
                     <Menu.Item key="11">查询管理</Menu.Item>
                     <Menu.Item key="12">数据字典</Menu.Item>
@@ -61,7 +62,7 @@ class NavSide extends React.Component{
             </Menu>
             </div>
       </div>
-    );
+        );
   }
 }
 

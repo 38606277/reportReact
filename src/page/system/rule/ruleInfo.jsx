@@ -3,7 +3,7 @@ import React                from 'react';
 import Role                 from '../../../service/RoleService.jsx';
 import RuleService          from '../../../service/RuleService.jsx';
 
-import {Table,Button,Card, Tooltip,Input,message,Tree,Tabs, Select,Icon}  from 'antd';
+import { Table, Button, Card, Tooltip, Input, message, Tree, Tabs, Select } from 'antd';
 import Pagination           from 'antd/lib/pagination';
 
 const TreeNode = Tree.TreeNode;

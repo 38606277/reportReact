@@ -6,7 +6,9 @@
 */
 import React from 'react';
 import { Link }             from 'react-router-dom';
-import { Card, Button, Divider, Input,message,Form, Table, Icon, Row, Col,Spin } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Card, Button, Divider, Input, message, Table, Row, Col, Spin } from 'antd';
 import Pagination           from 'antd/lib/pagination';
 import DashboardService from '../../service/DashboardService.jsx';
 const _dashboardService = new DashboardService();

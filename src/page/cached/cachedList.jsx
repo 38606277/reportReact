@@ -7,7 +7,9 @@
 import React from 'react';
 import { Link }             from 'react-router-dom';
 import Pagination           from 'antd/lib/pagination';
-import {Skeleton,Avatar,Divider,Button,Card, List ,Input, Form,Spin,Row,Col}  from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Skeleton, Avatar, Divider, Button, Card, List, Input, Spin, Row, Col } from 'antd';
 import CubeService from '../../service/CachedService.jsx';
 const _cubeService = new CubeService();
 const Search = Input.Search;

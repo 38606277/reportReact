@@ -1,5 +1,30 @@
 import React from 'react'
-import { Card, Button, Table, Form, Input,Avatar,List,Pagination, Divider, Checkbox, Dropdown, Select, Radio, Icon, message, Modal, DatePicker, InputNumber, Switch, Row, Col, Tabs, Menu } from 'antd'
+import { Form, Icon as LegacyIcon } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+    Card,
+    Button,
+    Table,
+    Input,
+    Avatar,
+    List,
+    Pagination,
+    Divider,
+    Checkbox,
+    Dropdown,
+    Select,
+    Radio,
+    message,
+    Modal,
+    DatePicker,
+    InputNumber,
+    Switch,
+    Row,
+    Col,
+    Tabs,
+    Menu,
+} from 'antd';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 
@@ -349,7 +374,7 @@ class ProcedureCreator extends React.Component {
                                 <Card bodyStyle={{ padding: '8px' }} >
                                     <div>
                                         <Button type="primary" htmlType="submit" style={{ marginRight: "10px" }}>保存</Button>
-                                        <Button icon="list" onClick={() => window.location = '#/query/QueryList'} style={{ marginRight: "10px" }}   >退出</Button>
+                                        <Button icon={<LegacyIcon type="list" />} onClick={() => window.location = '#/query/QueryList'} style={{ marginRight: "10px" }}   >退出</Button>
                                     </div>
                                     <Divider style={{ margin: "8px 0 8px 0" }} />
 
@@ -472,8 +497,8 @@ class ProcedureCreator extends React.Component {
                                         </Col>
                                     </Row>
                                     <Tabs type="card" style={{ marginTop: '15px' }} onChange={this.tabOnChange}
-                                        tabBarExtraContent={<span><Button icon="plus" onClick={() => this.onAddRowClick()} />
-                                            <Button icon="minus" onClick={() => this.onDelRowClick()} /></span>}>
+                                        tabBarExtraContent={<span><Button icon={<PlusOutlined />} onClick={() => this.onAddRowClick()} />
+                                            <Button icon={<MinusOutlined />} onClick={() => this.onDelRowClick()} /></span>}>
                                         <TabPane tab="输入参数" key="1" >
                                             <EditIn onRef={(ref) => this.inParam = ref} editable={true}/>
                                         </TabPane>

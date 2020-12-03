@@ -1,5 +1,27 @@
 import React from 'react'
-import { Card, Button, Table, Form, Input, Divider, Checkbox, Dropdown, Select, Radio, Icon, message, Modal, DatePicker, InputNumber, Switch, Row, Col, Tabs, Menu } from 'antd'
+import { CloseOutlined, SaveOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+    Card,
+    Button,
+    Table,
+    Input,
+    Divider,
+    Checkbox,
+    Dropdown,
+    Select,
+    Radio,
+    message,
+    Modal,
+    DatePicker,
+    InputNumber,
+    Switch,
+    Row,
+    Col,
+    Tabs,
+    Menu,
+} from 'antd';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 
@@ -97,16 +119,15 @@ class CreateTemplate extends React.Component {
 
     render() {
         return (
-
             <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px' }}>
                 <Card title="创建模板" bodyStyle={{ padding: "5px" }} headStyle={{ height: '60px' }}
                     extra={
                         <span>
                             <Button style={{ marginLeft: 8 }} onClick={() => this.onSaveButtonClick()}>
-                                保存 <Icon type="save" />
+                                保存 <SaveOutlined />
                             </Button>
                             <Button style={{ marginLeft: 8 }}>
-                                关闭 <Icon type="close" />
+                                关闭 <CloseOutlined />
                             </Button>
                         </span>
 

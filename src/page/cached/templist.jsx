@@ -5,7 +5,23 @@
 * @Last Modified time: 2018-01-31 14:34:10
 */
 import React from 'react';
-import { Card, Button, Table, Input, message,Modal, Form, FormItem, Icon, Row, Col,loading,Dropdown,Menu } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+    Card,
+    Button,
+    Table,
+    Input,
+    message,
+    Modal,
+    FormItem,
+    Row,
+    Col,
+    loading,
+    Dropdown,
+    Menu,
+} from 'antd';
 
 import FunctionService from '../../service/FunctionService.jsx'
 import HttpService from '../../util/HttpService.jsx';
@@ -128,7 +144,7 @@ export default class templist extends React.Component {
                         </Menu>
                     )}>
                         <Button >
-                        新建<Icon type="down" />
+                        新建<DownOutlined />
                         </Button>
                     </Dropdown>
                     {/* <Button href="#/query/QueryCreator/sql/create/0" style={{ marginRight: "10px" }} type="primary">新增</Button> */}
@@ -190,6 +206,6 @@ export default class templist extends React.Component {
                     </Table>
                 </Card>
             </div >
-        )
+        );
     }
 }

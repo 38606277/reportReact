@@ -1,5 +1,29 @@
 import React from 'react'
-import { Card, Button, Table, Form, Input, Divider, Checkbox, Dropdown, Select, Radio, Icon, message, Progress,radioButton,Modal, DatePicker, InputNumber, Switch, Row, Col, Tabs, Menu } from 'antd'
+import { DownOutlined, ProfileOutlined, SaveOutlined, ToolOutlined } from '@ant-design/icons';
+import { Form, Icon as LegacyIcon } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+    Card,
+    Button,
+    Table,
+    Input,
+    Divider,
+    Checkbox,
+    Dropdown,
+    Select,
+    Radio,
+    message,
+    Progress,
+    radioButton,
+    Modal,
+    DatePicker,
+    InputNumber,
+    Switch,
+    Row,
+    Col,
+    Tabs,
+    Menu,
+} from 'antd';
 
 import CodeMirror from 'react-codemirror';
 import 'codemirror/lib/codemirror.css';
@@ -257,7 +281,7 @@ class functionCreator extends React.Component {
                         </Menu>
                     )}>
                         <Button style={{ marginLeft: 8 }}>
-                            SQL <Icon type="down" />
+                            SQL <DownOutlined />
                         </Button>
                     </Dropdown>}>
                     <Form layout="inline">
@@ -265,9 +289,9 @@ class functionCreator extends React.Component {
                             <Col span={10}>
                                 <Card bodyStyle={{ padding: '8px' }}>
                                     <div>
-                                    <Button type="primary" icon="tool" onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成字典</Button>
-                                        <Button icon="save" onClick={() => this.onSaveClick()} style={{ marginRight: "10px" }} >保存</Button>
-                                        <Button icon="list" onClick={() => window.location = '#/dict/DictList'} style={{ marginRight: "10px" }}   >退出</Button>
+                                    <Button type="primary" icon={<ToolOutlined />} onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成字典</Button>
+                                        <Button icon={<SaveOutlined />} onClick={() => this.onSaveClick()} style={{ marginRight: "10px" }} >保存</Button>
+                                        <Button icon={<LegacyIcon type="list" />} onClick={() => window.location = '#/dict/DictList'} style={{ marginRight: "10px" }}   >退出</Button>
                                     </div>
                                     <Divider style={{ margin: "8px 0 8px 0" }} />
 
@@ -282,7 +306,7 @@ class functionCreator extends React.Component {
                                             )
                                         }
                                     </FormItem>
-                                    <Tabs type="card" tabBarExtraContent={<Button icon="profile" style={{ color: "blue" }}></Button>}>
+                                    <Tabs type="card" tabBarExtraContent={<Button icon={<ProfileOutlined />} style={{ color: "blue" }}></Button>}>
                                         <TabPane tab="输入SQL" key="1">
                                             <CodeMirror ref="editorsql" value='' style={{ height: '600px', width: '450px', border: "1px" }} options={options} />
                                         </TabPane>

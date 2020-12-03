@@ -1,6 +1,8 @@
 import React        from 'react';
 import Questionserver                 from '../../service/QuestionsService.jsx';
-import { Form, Input, Select,Button, DatePicker,Card,Row, Col } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Select, Button, DatePicker, Card, Row, Col } from 'antd';
 import HttpService from '../../util/HttpService.jsx';
 import LocalStorge  from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();

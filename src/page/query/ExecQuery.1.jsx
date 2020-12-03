@@ -1,8 +1,27 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Table, Divider,DatePicker,Modal, Icon, Form, Input, Tag,Select, Button, Card, Checkbox,Layout,Tooltip,Row,Col,Pagination  } from 'antd';
+import { EllipsisOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+    Table,
+    Divider,
+    DatePicker,
+    Modal,
+    Input,
+    Tag,
+    Select,
+    Button,
+    Card,
+    Checkbox,
+    Layout,
+    Tooltip,
+    Row,
+    Col,
+    Pagination,
+} from 'antd';
 import queryService from '../../service/QueryService.jsx';
-import ExportJsonExcel from "js-export-excel"; 
+import ExportJsonExcel from "js-export-excel";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 const Option = Select.Option;
 const Search = Input.Search;
@@ -393,8 +412,7 @@ class ExecQuery extends React.Component {
                         })(
                             <Input onChange={e=>this.changeEvent(e)} 
                             addonAfter={record.dict_id==null?'':
-                            <Icon type="ellipsis" theme="outlined"  
-                            onClick={e=>this.openModelClick(record.in_id,record.dict_id)}/>} />
+                            <EllipsisOutlined onClick={e=>this.openModelClick(record.in_id,record.dict_id)} />} />
                         )}
                      </FormItem>
                 </Col>

@@ -1,5 +1,29 @@
 import React from 'react'
-import { Card, Button, Table, Form, Input,Avatar,List,Pagination, Divider, Checkbox, Dropdown, Select, Radio, Icon, message, Modal, DatePicker, InputNumber, Switch, Row, Col, Tabs, Menu } from 'antd'
+import { Form, Icon as LegacyIcon } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+    Card,
+    Button,
+    Table,
+    Input,
+    Avatar,
+    List,
+    Pagination,
+    Divider,
+    Checkbox,
+    Dropdown,
+    Select,
+    Radio,
+    message,
+    Modal,
+    DatePicker,
+    InputNumber,
+    Switch,
+    Row,
+    Col,
+    Tabs,
+    Menu,
+} from 'antd';
 import HttpService from '../../util/HttpService.jsx';
 import DbService from '../../service/DbService.jsx'
 import './nlp.scss';
@@ -314,7 +338,7 @@ class NlpCreator extends React.Component {
                 <Card title={this.state.action == 'create' ? '创建查询' : '编辑查询'} bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}
                     extra={<div>
                         <Button type="primary" htmlType="button" onClick={this.onSaveClick} style={{ marginRight: "10px" }}>保存</Button>
-                        <Button icon="list" onClick={() => window.location = '#/query/QueryList'} style={{ marginRight: "10px" }}   >退出</Button>
+                        <Button icon={<LegacyIcon type="list" />} onClick={() => window.location = '#/query/QueryList'} style={{ marginRight: "10px" }}   >退出</Button>
                     </div>}>
                    
                           <Row>

@@ -1,6 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Layout, Menu, Breadcrumb, Icon, Tooltip, Row, Col, Button, Dropdown, Card } from 'antd';
+
+import {
+    AppstoreOutlined,
+    HomeOutlined,
+    MailFilled,
+    SettingOutlined,
+    SolutionOutlined,
+} from '@ant-design/icons';
+
+import { Layout, Menu, Breadcrumb, Tooltip, Row, Col, Button, Dropdown, Card } from 'antd';
 import './Layout.scss';
 import logo from '../../asset/logo.png'
 
@@ -59,7 +68,7 @@ export default class MainLoyout extends React.Component {
                             <li>
                                 <a href="javascript:;">
                                     {/* <Icon type="setting" theme="filled" /> */}
-                                    <Icon type="mail" theme="filled" style={{ color: '#fff', fontSize: "20px", fontWeight: "bold" }} />
+                                    <MailFilled style={{ color: '#fff', fontSize: "20px", fontWeight: "bold" }} />
                                 </a>
                             </li>
                             <li>
@@ -109,18 +118,18 @@ export default class MainLoyout extends React.Component {
 
                         <Menu theme="light" defaultSelectedKeys={['1']} mode="inline"  >
 
-                            <Menu.Item key="sub"><Link to='/'><Icon type="home" />首页</Link></Menu.Item>
-                            <SubMenu key="sub1" title={<span><Icon type="appstore" /><span>我的任务</span></span>}>
+                            <Menu.Item key="sub"><Link to='/'><HomeOutlined />首页</Link></Menu.Item>
+                            <SubMenu key="sub1" title={<span><AppstoreOutlined /><span>我的任务</span></span>}>
                                 <Menu.Item key="/product/index"><Link to='/product/index'>代办任务</Link></Menu.Item>
                                 <Menu.Item key="/product/taskList"><Link to='/product/taskList'>已办任务</Link></Menu.Item>
                             </SubMenu>
-                            <SubMenu key="sub4" title={<span><Icon type="setting" /><span>系统管理</span></span>}>
+                            <SubMenu key="sub4" title={<span><SettingOutlined /><span>系统管理</span></span>}>
                                 <Menu.Item key="/user/index"><Link to='/user/index'>用户管理</Link></Menu.Item>
                                 <Menu.Item key="10">权限管理</Menu.Item>
                                 <Menu.Item key="11">连接管理</Menu.Item>
                                 <Menu.Item key="12">权限类型管理</Menu.Item>
                             </SubMenu>
-                            <SubMenu key="sub5" title={<span><Icon type="solution" /><span>基础信息</span></span>}>
+                            <SubMenu key="sub5" title={<span><SolutionOutlined /><span>基础信息</span></span>}>
                                 <Menu.Item key="/function/functionList"><Link to='/function/functionList'>函数管理</Link></Menu.Item>
                                 <Menu.Item key="/query/QueryList"><Link to='/query/QueryList'>查询管理</Link></Menu.Item>
                                 <Menu.Item key="14">数据字典</Menu.Item>

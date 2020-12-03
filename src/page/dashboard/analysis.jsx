@@ -1,6 +1,7 @@
 import React        from 'react';
 import { Link }     from 'react-router-dom';
-import {  Row,  Col,  Icon,  Card,  Tabs,  Table,  Radio,  DatePicker,  Tooltip,  Menu,  Dropdown,} from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { Row, Col, Card, Tabs, Table, Radio, DatePicker, Tooltip, Menu, Dropdown } from 'antd';
 import {  ChartCard,  MiniArea,  MiniBar,  MiniProgress,  Field,  Bar,  Pie, TimelineChart,} from '../../components/Charts';
 import Trend from '../../components/Trend/index.jsx';
 import NumberInfo from '../../components/NumberInfo';
@@ -258,337 +259,337 @@ const radarData=[{"name":"个人","label":"引用","value":10},{"name":"个人",
               </Row>
             );
     return (
-        <GridContent>
-        <Row gutter={24}>
-            <Col {...topColResponsiveProps}>
-                <ChartCard
-                bordered={false}
-                title="总销售额"
-                action={
-                    <Tooltip
-                    title="总销售额"> 
-                        <Icon type="info-circle-o" />
-                    </Tooltip>
-                }
-                
-                total={() => <Yuan>126560</Yuan>}
-                footer={
-                    <Field
-                    label={"日销售额"}
-                    value={`￥${numeral(12423).format('0,0')}`}
-                    />
-                }
-                contentHeight={46}
-                >
+      <GridContent>
+      <Row gutter={24}>
+          <Col {...topColResponsiveProps}>
+              <ChartCard
+              bordered={false}
+              title="总销售额"
+              action={
+                  <Tooltip
+                  title="总销售额"> 
+                      <InfoCircleOutlined />
+                  </Tooltip>
+              }
+              
+              total={() => <Yuan>126560</Yuan>}
+              footer={
+                  <Field
+                  label={"日销售额"}
+                  value={`￥${numeral(12423).format('0,0')}`}
+                  />
+              }
+              contentHeight={46}
+              >
+              <Trend flag="up" style={{ marginRight: 16 }}>
+              {"周同比" }
+                  <span className={styles.trendText}>12%</span>
+              </Trend>
+              <Trend flag="down">
+                  {"日同比"}
+                  <span className={styles.trendText}>11%</span>
+              </Trend>
+              </ChartCard>
+          </Col>
+          <Col {...topColResponsiveProps}>
+          <ChartCard
+            bordered={false}
+            title={"visits"}
+            action={
+              <Tooltip
+                title={ "introduce" }
+              >
+                <InfoCircleOutlined />
+              </Tooltip>
+            }
+            total={numeral(8846).format('0,0')}
+            footer={
+              <Field
+                label={ "Day Visits"}
+                value={numeral(1234).format('0,0')}
+              />
+            }
+            contentHeight={46}
+          >
+            <MiniArea color="#975FE4" data={visitData} />
+          </ChartCard>
+        </Col>
+        <Col {...topColResponsiveProps}>
+          <ChartCard
+            bordered={false}
+          
+            title={"Payments"}
+            action={
+              <Tooltip
+                title={"Introduce"}
+              >
+                <InfoCircleOutlined />
+              </Tooltip>
+            }
+            total={numeral(6560).format('0,0')}
+            footer={
+              <Field
+                label={"Conversion Rate"}
+                value="60%"
+              />
+            }
+            contentHeight={46}
+          >
+            <MiniBar data={visitData} />
+          </ChartCard>
+        </Col>
+        <Col {...topColResponsiveProps}>
+          <ChartCard
+           
+            bordered={false}
+            title={"Operational Effect"}
+            action={
+              <Tooltip
+                title={"introduce"}
+              >
+                <InfoCircleOutlined />
+              </Tooltip>
+            }
+            total="78%"
+            footer={
+              <div style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
                 <Trend flag="up" style={{ marginRight: 16 }}>
-                {"周同比" }
-                    <span className={styles.trendText}>12%</span>
+                  {"Weekly changes"}
+                  <span className={styles.trendText}>12%</span>
                 </Trend>
                 <Trend flag="down">
-                    {"日同比"}
-                    <span className={styles.trendText}>11%</span>
+                  {"Weekly changes"}
+                  <span className={styles.trendText}>11%</span>
                 </Trend>
-                </ChartCard>
-            </Col>
-            <Col {...topColResponsiveProps}>
-            <ChartCard
-              bordered={false}
-              title={"visits"}
-              action={
-                <Tooltip
-                  title={ "introduce" }
-                >
-                  <Icon type="info-circle-o" />
-                </Tooltip>
-              }
-              total={numeral(8846).format('0,0')}
-              footer={
-                <Field
-                  label={ "Day Visits"}
-                  value={numeral(1234).format('0,0')}
-                />
-              }
-              contentHeight={46}
+              </div>
+            }
+            contentHeight={46}
+          >
+            <MiniProgress percent={78} strokeWidth={8} target={80} color="#13C2C2" />
+          </ChartCard>
+        </Col>
+      </Row>
+      
+      {/* 第二部分 */}
+      <Card  bordered={false} bodyStyle={{ padding: 0 }}>
+        <div className={styles.salesCard}>
+          <Tabs tabBarExtraContent={salesExtra} size="large" tabBarStyle={{ marginBottom: 24 }}>
+            <TabPane
+              tab={"Sales" }
+              key="sales"
             >
-              <MiniArea color="#975FE4" data={visitData} />
-            </ChartCard>
-          </Col>
-          <Col {...topColResponsiveProps}>
-            <ChartCard
-              bordered={false}
-            
-              title={"Payments"}
-              action={
-                <Tooltip
-                  title={"Introduce"}
-                >
-                  <Icon type="info-circle-o" />
-                </Tooltip>
-              }
-              total={numeral(6560).format('0,0')}
-              footer={
-                <Field
-                  label={"Conversion Rate"}
-                  value="60%"
-                />
-              }
-              contentHeight={46}
-            >
-              <MiniBar data={visitData} />
-            </ChartCard>
-          </Col>
-          <Col {...topColResponsiveProps}>
-            <ChartCard
-             
-              bordered={false}
-              title={"Operational Effect"}
-              action={
-                <Tooltip
-                  title={"introduce"}
-                >
-                  <Icon type="info-circle-o" />
-                </Tooltip>
-              }
-              total="78%"
-              footer={
-                <div style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
-                  <Trend flag="up" style={{ marginRight: 16 }}>
-                    {"Weekly changes"}
-                    <span className={styles.trendText}>12%</span>
-                  </Trend>
-                  <Trend flag="down">
-                    {"Weekly changes"}
-                    <span className={styles.trendText}>11%</span>
-                  </Trend>
-                </div>
-              }
-              contentHeight={46}
-            >
-              <MiniProgress percent={78} strokeWidth={8} target={80} color="#13C2C2" />
-            </ChartCard>
-          </Col>
-        </Row>
-        
-        {/* 第二部分 */}
-        <Card  bordered={false} bodyStyle={{ padding: 0 }}>
-          <div className={styles.salesCard}>
-            <Tabs tabBarExtraContent={salesExtra} size="large" tabBarStyle={{ marginBottom: 24 }}>
-              <TabPane
-                tab={"Sales" }
-                key="sales"
-              >
-                <Row>
-                  <Col xl={16} lg={12} md={12} sm={24} xs={24}>
-                    <div className={styles.salesBar}>
-                      <Bar
-                        height={295}
-                        title={"Sales Trend"}
-                        data={salesData}
-                      />
-                    </div>
-                  </Col>
-                  <Col xl={8} lg={12} md={12} sm={24} xs={24}>
-                    <div className={styles.salesRank}>
-                      <h4 className={styles.rankingTitle}>
-                       {"Sales Ranking"}
-                       
-                      </h4>
-                      <ul className={styles.rankingList}>
-                        {this.rankingListData.map((item, i) => (
-                          <li key={item.title+'s'+i}>
-                            <span
-                              className={`${styles.rankingItemNumber} ${
-                                i < 3 ? styles.active : ''
-                              }`}
-                            >
-                              {i + 1}
-                            </span>
-                            <span className={styles.rankingItemTitle} title={item.title}>
-                              {item.title}
-                            </span>
-                            <span className={styles.rankingItemValue}>
-                              {numeral(item.total).format('0,0')}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </Col>
-                </Row>
-              </TabPane>
-              <TabPane
-                tab={"Visits"}
-                key="views"
-              >
-                <Row>
-                  <Col xl={16} lg={12} md={12} sm={24} xs={24}>
-                    <div className={styles.salesBar}>
-                      <Bar
-                        height={292}
-                        title={"Visits Trend"}
-                        data={salesData}
-                      />
-                    </div>
-                  </Col>
-                  <Col xl={8} lg={12} md={12} sm={24} xs={24}>
-                    <div className={styles.salesRank}>
-                      <h4 className={styles.rankingTitle}>
-                        {"Visits Ranking"}
-                      </h4>
-                      <ul className={styles.rankingList}>
-                        {this.rankingListData.map((item, i) => (
-                          <li key={item.title+'v'+i}>
-                            <span
-                              className={`${styles.rankingItemNumber} ${
-                                i < 3 ? styles.active : ''
-                              }`}
-                            >
-                              {i + 1}
-                            </span>
-                            <span className={styles.rankingItemTitle} title={item.title}>
-                              {item.title}
-                            </span>
-                            <span>{numeral(item.total).format('0,0')}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </Col>
-                </Row>
-              </TabPane>
-            </Tabs>
-          </div>
-        </Card>
-
-        {/* 第三部分 */}
-        <Row gutter={24}>
-          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-            <Card
-             
-              bordered={false}
-              title={"Online Top Search"}
-              // extra={iconGroup}
-              style={{ marginTop: 24 }}
-            >
-              <Row gutter={68}>
-                <Col sm={12} xs={24} style={{ marginBottom: 24 }}>
-                  <NumberInfo
-                    subTitle={
-                      <span>
-                       {"search users"}
-                        <Tooltip
-                          title={"introduce"}
-                        >
-                          <Icon style={{ marginLeft: 8 }} type="info-circle-o" />
-                        </Tooltip>
-                      </span>
-                    }
-                    gap={8}
-                    total={numeral(12321).format('0,0')}
-                    status="up"
-                    subTotal={17.1}
-                  />
-                  <MiniArea line height={45} data={visitData2} />
+              <Row>
+                <Col xl={16} lg={12} md={12} sm={24} xs={24}>
+                  <div className={styles.salesBar}>
+                    <Bar
+                      height={295}
+                      title={"Sales Trend"}
+                      data={salesData}
+                    />
+                  </div>
                 </Col>
-                <Col sm={12} xs={24} style={{ marginBottom: 24 }}>
-                  <NumberInfo
-                    subTitle={
-                      <span>{"Per Capita Search"}
-                        />
-                        <Tooltip
-                          title={"introduce"}
-                        >
-                          <Icon style={{ marginLeft: 8 }} type="info-circle-o" />
-                        </Tooltip>
-                      </span>
-                    }
-                    total={2.7}
-                    status="down"
-                    subTotal={26.2}
-                    gap={8}
-                  />
-                  <MiniArea line height={45} data={visitData2} />
+                <Col xl={8} lg={12} md={12} sm={24} xs={24}>
+                  <div className={styles.salesRank}>
+                    <h4 className={styles.rankingTitle}>
+                     {"Sales Ranking"}
+                     
+                    </h4>
+                    <ul className={styles.rankingList}>
+                      {this.rankingListData.map((item, i) => (
+                        <li key={item.title+'s'+i}>
+                          <span
+                            className={`${styles.rankingItemNumber} ${
+                              i < 3 ? styles.active : ''
+                            }`}
+                          >
+                            {i + 1}
+                          </span>
+                          <span className={styles.rankingItemTitle} title={item.title}>
+                            {item.title}
+                          </span>
+                          <span className={styles.rankingItemValue}>
+                            {numeral(item.total).format('0,0')}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </Col>
               </Row>
-              <Table
-                rowKey={record => record.index}
-                size="small"
-                columns={columns}
-                dataSource={searchData}
-                pagination={{
-                  style: { marginBottom: 0 },
-                  pageSize: 5,
-                }}
-              />
-            </Card>
-          </Col>
-          <Col xl={12} lg={24} md={24} sm={24} xs={24}>
-            <Card
-              className={styles.salesCard}
-              bordered={false}
-              title={"The Proportion of Sales" }
-              bodyStyle={{ padding: 24 }}
-              extra={
-                <div className={styles.salesCardExtra}>
-                  {iconGroup}
-                  <div className={styles.salesTypeRadio}>
-                    <Radio.Group value={salesType} onChange={this.handleChangeSalesType}>
-                      <Radio.Button value="all">
-                        {"ALL" }
-                      </Radio.Button>
-                      <Radio.Button value="online">
-                        {"Online"}
-                      </Radio.Button>
-                      <Radio.Button value="stores">
-                        {"Stores"}
-                      </Radio.Button>
-                    </Radio.Group>
-                  </div>
-                </div>
-              }
-              style={{ marginTop: 24, minHeight: 509 }}
+            </TabPane>
+            <TabPane
+              tab={"Visits"}
+              key="views"
             >
-              <h4 style={{ marginTop: 8, marginBottom: 32 }}>
-                {"Sales" }
-              </h4>
-              <Pie
-                hasLegend
-                subTitle={"Sales"}
-                total={() => <Yuan>{salesPieData.reduce((pre, now) => now.y + pre, 0)}</Yuan>}
-                data={salesPieData}
-                valueFormat={value => <Yuan>{value}</Yuan>}
-                height={248}
-                lineWidth={4}
-              />
-            </Card>
-          </Col>
-        </Row>
-        {/* 第四部分 */}
-        <Card
-          className={styles.offlineCard}
-          bordered={false}
-          bodyStyle={{ padding: '0 0 32px 0' }}
-          style={{ marginTop: 32 }}
-        >
-          <Tabs activeKey={activeKey} onChange={this.handleTabChange}>
-            {offlineData.map(shop => (
-              <TabPane tab={<CustomTab data={shop} currentTabKey={activeKey} />} key={shop.name}>
-                <div style={{ padding: '0 24px' }}>
-                  <TimelineChart
-                    height={400}
-                    data={offlineChartData}
-                    titleMap={{
-                      y1: 'traffic',
-                      y2: 'payments',
-                    }}
-                  />
-                </div>
-              </TabPane>
-            ))}
+              <Row>
+                <Col xl={16} lg={12} md={12} sm={24} xs={24}>
+                  <div className={styles.salesBar}>
+                    <Bar
+                      height={292}
+                      title={"Visits Trend"}
+                      data={salesData}
+                    />
+                  </div>
+                </Col>
+                <Col xl={8} lg={12} md={12} sm={24} xs={24}>
+                  <div className={styles.salesRank}>
+                    <h4 className={styles.rankingTitle}>
+                      {"Visits Ranking"}
+                    </h4>
+                    <ul className={styles.rankingList}>
+                      {this.rankingListData.map((item, i) => (
+                        <li key={item.title+'v'+i}>
+                          <span
+                            className={`${styles.rankingItemNumber} ${
+                              i < 3 ? styles.active : ''
+                            }`}
+                          >
+                            {i + 1}
+                          </span>
+                          <span className={styles.rankingItemTitle} title={item.title}>
+                            {item.title}
+                          </span>
+                          <span>{numeral(item.total).format('0,0')}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </Col>
+              </Row>
+            </TabPane>
           </Tabs>
-        </Card>
-        </GridContent>
-            );
+        </div>
+      </Card>
+
+      {/* 第三部分 */}
+      <Row gutter={24}>
+        <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+          <Card
+           
+            bordered={false}
+            title={"Online Top Search"}
+            // extra={iconGroup}
+            style={{ marginTop: 24 }}
+          >
+            <Row gutter={68}>
+              <Col sm={12} xs={24} style={{ marginBottom: 24 }}>
+                <NumberInfo
+                  subTitle={
+                    <span>
+                     {"search users"}
+                      <Tooltip
+                        title={"introduce"}
+                      >
+                        <InfoCircleOutlined style={{ marginLeft: 8 }} />
+                      </Tooltip>
+                    </span>
+                  }
+                  gap={8}
+                  total={numeral(12321).format('0,0')}
+                  status="up"
+                  subTotal={17.1}
+                />
+                <MiniArea line height={45} data={visitData2} />
+              </Col>
+              <Col sm={12} xs={24} style={{ marginBottom: 24 }}>
+                <NumberInfo
+                  subTitle={
+                    <span>{"Per Capita Search"}
+                      />
+                      <Tooltip
+                        title={"introduce"}
+                      >
+                        <InfoCircleOutlined style={{ marginLeft: 8 }} />
+                      </Tooltip>
+                    </span>
+                  }
+                  total={2.7}
+                  status="down"
+                  subTotal={26.2}
+                  gap={8}
+                />
+                <MiniArea line height={45} data={visitData2} />
+              </Col>
+            </Row>
+            <Table
+              rowKey={record => record.index}
+              size="small"
+              columns={columns}
+              dataSource={searchData}
+              pagination={{
+                style: { marginBottom: 0 },
+                pageSize: 5,
+              }}
+            />
+          </Card>
+        </Col>
+        <Col xl={12} lg={24} md={24} sm={24} xs={24}>
+          <Card
+            className={styles.salesCard}
+            bordered={false}
+            title={"The Proportion of Sales" }
+            bodyStyle={{ padding: 24 }}
+            extra={
+              <div className={styles.salesCardExtra}>
+                {iconGroup}
+                <div className={styles.salesTypeRadio}>
+                  <Radio.Group value={salesType} onChange={this.handleChangeSalesType}>
+                    <Radio.Button value="all">
+                      {"ALL" }
+                    </Radio.Button>
+                    <Radio.Button value="online">
+                      {"Online"}
+                    </Radio.Button>
+                    <Radio.Button value="stores">
+                      {"Stores"}
+                    </Radio.Button>
+                  </Radio.Group>
+                </div>
+              </div>
+            }
+            style={{ marginTop: 24, minHeight: 509 }}
+          >
+            <h4 style={{ marginTop: 8, marginBottom: 32 }}>
+              {"Sales" }
+            </h4>
+            <Pie
+              hasLegend
+              subTitle={"Sales"}
+              total={() => <Yuan>{salesPieData.reduce((pre, now) => now.y + pre, 0)}</Yuan>}
+              data={salesPieData}
+              valueFormat={value => <Yuan>{value}</Yuan>}
+              height={248}
+              lineWidth={4}
+            />
+          </Card>
+        </Col>
+      </Row>
+      {/* 第四部分 */}
+      <Card
+        className={styles.offlineCard}
+        bordered={false}
+        bodyStyle={{ padding: '0 0 32px 0' }}
+        style={{ marginTop: 32 }}
+      >
+        <Tabs activeKey={activeKey} onChange={this.handleTabChange}>
+          {offlineData.map(shop => (
+            <TabPane tab={<CustomTab data={shop} currentTabKey={activeKey} />} key={shop.name}>
+              <div style={{ padding: '0 24px' }}>
+                <TimelineChart
+                  height={400}
+                  data={offlineChartData}
+                  titleMap={{
+                    y1: 'traffic',
+                    y2: 'payments',
+                  }}
+                />
+              </div>
+            </TabPane>
+          ))}
+        </Tabs>
+      </Card>
+      </GridContent>
+    );
           }
         }
 

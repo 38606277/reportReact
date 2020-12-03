@@ -3,7 +3,21 @@ import React                from 'react';
 import { Link }             from 'react-router-dom';
 import Query                 from '../../service/QueryService.jsx';
 import Pagination           from 'antd/lib/pagination';
-import {Table,Divider,Button,Card,Popconfirm,Avatar,List, Modal,Tooltip,Input, Form,Icon,message}  from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+    Table,
+    Divider,
+    Button,
+    Card,
+    Popconfirm,
+    Avatar,
+    List,
+    Modal,
+    Tooltip,
+    Input,
+    message,
+} from 'antd';
 import  LocalStorge         from '../../util/LogcalStorge.jsx';
 import HttpService from '../../util/HttpService.jsx';
 

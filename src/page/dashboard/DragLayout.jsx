@@ -4,7 +4,18 @@ import _ from "lodash";
 import ReactEcharts from 'echarts-for-react';
 import { getBarChart,getLineChart,getPieChart } from "./chart";
 
-import { Card, Button, Tooltip, Table, Icon, Input, Select, Form, FormItem, Layout, Row, Col } from 'antd';
+import {
+  BarChartOutlined,
+  GlobalOutlined,
+  LineChartOutlined,
+  PieChartOutlined,
+  ProfileOutlined,
+} from '@ant-design/icons';
+
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+
+import { Card, Button, Tooltip, Table, Input, Select, FormItem, Layout, Row, Col } from 'antd';
 
 import HttpService from '../../util/HttpService.jsx';
 const { Column, ColumnGroup } = Table;
@@ -114,58 +125,51 @@ export default class DragLayout extends PureComponent {
   }
 
   render() {
-   return(
+   return (
+     <div>
 
-    <div>
+     <Card title="创建仪表板" bodyStyle={{ padding: "0px" }}>
 
-    <Card title="创建仪表板" bodyStyle={{ padding: "0px" }}>
+         <Card bodyStyle={{ padding: "5px" }}>
+             <Button style={{ marginRight: "10px" }} type="primary">新增行</Button>
+             <Button style={{ marginRight: "10px" }} type="primary">保存</Button>
+            
+              <Tooltip placement="top" title="指标卡片">
+                 <Button icon={<ProfileOutlined />}   onClick={this.addChart.bind(this,'line')} />
+             </Tooltip>
+             <Tooltip placement="top" title="柱状图">
+                 <Button icon={<BarChartOutlined />} onClick={this.addChart.bind(this,'bar')}/>
+             </Tooltip>
+             <Tooltip placement="top" title="拆线图">
+                 <Button icon={<LineChartOutlined />}  onClick={this.addChart.bind(this,'line')} />
+             </Tooltip>
+             <Tooltip placement="top" title="饼图">
+                 <Button icon={<PieChartOutlined />} onClick={this.addChart.bind(this,'pie')} />
+             </Tooltip>
+             <Tooltip placement="top" title="地图">
+                 <Button icon={<GlobalOutlined />} />
+             </Tooltip>
+             <Select setValue={this.form} style={{ minWidth: '300px' }}>
+                  <Option kye="1" value="1">一行一列</Option>
+                  <Option key="2" value="2">一行二列</Option>
+             </Select>
+         </Card>
+         <Card>
+         <div style={{ background: '#fff', padding: 20, minHeight: 800 }}>
+           <ResponsiveReactGridLayout
+             className="layout"
+             {...this.props}
+             layouts={this.state.layouts}
+             onLayoutChange={(layout, layouts) =>
+               this.onLayoutChange(layout, layouts)
+             }
+           >
+             {this.generateDOM()}
+           </ResponsiveReactGridLayout>
+         </div>
+         </Card>
 
-        <Card bodyStyle={{ padding: "5px" }}>
-            <Button style={{ marginRight: "10px" }} type="primary">新增行</Button>
-            <Button style={{ marginRight: "10px" }} type="primary">保存</Button>
-           
-             <Tooltip placement="top" title="指标卡片">
-                <Button icon="profile"   onClick={this.addChart.bind(this,'line')} />
-            </Tooltip>
-            <Tooltip placement="top" title="柱状图">
-                <Button icon="bar-chart" onClick={this.addChart.bind(this,'bar')}/>
-            </Tooltip>
-            <Tooltip placement="top" title="拆线图">
-                <Button icon="line-chart"  onClick={this.addChart.bind(this,'line')} />
-            </Tooltip>
-            <Tooltip placement="top" title="饼图">
-                <Button icon="pie-chart" onClick={this.addChart.bind(this,'pie')} />
-            </Tooltip>
-            <Tooltip placement="top" title="地图">
-                <Button icon="global" />
-            </Tooltip>
-            <Select setValue={this.form} style={{ minWidth: '300px' }}>
-                 <Option kye="1" value="1">一行一列</Option>
-                 <Option key="2" value="2">一行二列</Option>
-            </Select>
-        </Card>
-        <Card>
-        <div style={{ background: '#fff', padding: 20, minHeight: 800 }}>
-          <ResponsiveReactGridLayout
-            className="layout"
-            {...this.props}
-            layouts={this.state.layouts}
-            onLayoutChange={(layout, layouts) =>
-              this.onLayoutChange(layout, layouts)
-            }
-          >
-            {this.generateDOM()}
-          </ResponsiveReactGridLayout>
-        </div>
-        </Card>
-
-    </Card>
-</div >
-
-
-
-
-
-  
-   )}
+     </Card>
+ </div >
+   );}
 }

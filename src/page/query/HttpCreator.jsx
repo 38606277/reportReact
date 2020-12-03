@@ -1,5 +1,30 @@
 import React from 'react'
-import { Card, Button, Table, Form, Input, Divider, Avatar,List,Pagination,Checkbox, Dropdown, Select, Radio, Icon, message, Modal, DatePicker, InputNumber, Switch, Row, Col, Tabs, Menu } from 'antd'
+import { Form, Icon as LegacyIcon } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { BarsOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  Card,
+  Button,
+  Table,
+  Input,
+  Divider,
+  Avatar,
+  List,
+  Pagination,
+  Checkbox,
+  Dropdown,
+  Select,
+  Radio,
+  message,
+  Modal,
+  DatePicker,
+  InputNumber,
+  Switch,
+  Row,
+  Col,
+  Tabs,
+  Menu,
+} from 'antd';
 import moment from 'moment';
 import 'moment/locale/zh-cn';
 import "@babel/polyfill";
@@ -364,7 +389,7 @@ class HttpCreator extends React.Component {
                     {/* <Button type="primary" icon="tool" onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成查询</Button> */}
                     {/* <Button icon="save" onClick={() => this.onSaveClick(e)} style={{ marginRight: "10px" }} >保存</Button> */}
                     <Button type="primary" htmlType="submit" style={{ marginRight: "10px" }}>保存</Button>
-                    <Button icon="list" onClick={() => window.location = '#/query/QueryList'} style={{ marginRight: "10px" }}   >退出</Button>
+                    <Button icon={<LegacyIcon type="list" />} onClick={() => window.location = '#/query/QueryList'} style={{ marginRight: "10px" }}   >退出</Button>
                   </div>
                   <Divider style={{ margin: "8px 0 8px 0" }} />
 
@@ -398,7 +423,7 @@ class HttpCreator extends React.Component {
                       )
                     }
                   </FormItem>
-                  <Tabs type="card" tabBarExtraContent={<Button icon="bars">生成输入输出</Button>}>
+                  <Tabs type="card" tabBarExtraContent={<Button icon={<BarsOutlined />}>生成输入输出</Button>}>
                     <TabPane tab="请求" key="1">
                       <CodeMirror ref="editorsql" value='' style={{ height: '300px', width: '450px', border: "1px" }} options={options} />
                     </TabPane>
@@ -478,8 +503,8 @@ class HttpCreator extends React.Component {
                       </Col>
                   </Row>
                   <Tabs type="card" style={{ marginTop: '15px' }} onChange={this.tabOnChange}
-                    tabBarExtraContent={<span><Button icon="plus" onClick={() => this.onAddRowClick()} />
-                      <Button icon="minus" onClick={() => this.onDelRowClick()} /></span>}>
+                    tabBarExtraContent={<span><Button icon={<PlusOutlined />} onClick={() => this.onAddRowClick()} />
+                      <Button icon={<MinusOutlined />} onClick={() => this.onDelRowClick()} /></span>}>
                     <TabPane tab="输入参数" key="1" >
                       <EditIn onRef={(ref) => this.inParam = ref} editable={true}/>
                     </TabPane>

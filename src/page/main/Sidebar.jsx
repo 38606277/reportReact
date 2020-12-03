@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, Redirect } from 'react-router-dom';
-import { Layout, Menu, Icon, Spin } from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Layout, Menu, Spin } from 'antd';
 import queryService from '../../service/QueryService.jsx';
 import LocalStorge from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
@@ -39,63 +40,69 @@ export default class SiderBar extends React.Component {
     }
     //数据图标分析透视导航分解   
     dashboardformSubmenusChild(obj, index) {
-        return (<SubMenu key={obj.func_name + obj.func_id}
-            onTitleClick={this.dashBoardClickMuen.bind(this, obj)}
-            id='divtitle'
-            title={<span><Icon type={obj.func_icon} />
-                <span>{obj.func_name}</span></span>}>
-            {
-                obj.dashboardList == null ? '' : obj.dashboardList.map(obj2 => (
-                    <Menu.Item key={obj2.dashboard_name + obj2.dashboard_id} >
-                        <Link to={'#'}>
-                            <Icon type={obj2.icon == undefined ? 'table' : obj2.icon} /><span>{obj2.dashboard_name}</span>
-                        </Link></Menu.Item>
-                ))
-            }
-        </SubMenu>);
+        return (
+            <SubMenu key={obj.func_name + obj.func_id}
+                onTitleClick={this.dashBoardClickMuen.bind(this, obj)}
+                id='divtitle'
+                title={<span><LegacyIcon type={obj.func_icon} />
+                    <span>{obj.func_name}</span></span>}>
+                {
+                    obj.dashboardList == null ? '' : obj.dashboardList.map(obj2 => (
+                        <Menu.Item key={obj2.dashboard_name + obj2.dashboard_id} >
+                            <Link to={'#'}>
+                                <LegacyIcon type={obj2.icon == undefined ? 'table' : obj2.icon} /><span>{obj2.dashboard_name}</span>
+                            </Link></Menu.Item>
+                    ))
+                }
+            </SubMenu>
+        );
     }
     //数据透视导航分解   
     cubeformSubmenusChild(obj, index) {
-        return (<SubMenu key={obj.func_name + obj.func_id}
-            onTitleClick={this.cubeClickMuen.bind(this, obj)}
-            id='divtitle'
-            title={<span ><Icon type={obj.func_icon} />
-                <span>{obj.func_name}</span></span>}>
-            {
-                obj.cubeList == null ? '' : obj.cubeList.map(obj2 => (
-                    <Menu.Item key={obj2.cube_name + obj2.cube_id} >
-                        <Link to={'/dashboard/DataAnalysis/' + obj2.qry_id + '/' + obj2.class_id + '/' + obj2.cube_name}>
-                            <Icon type={obj2.icon == undefined ? 'table' : obj2.icon} /><span>{obj2.cube_name}</span>
-                        </Link></Menu.Item>
-                ))
-            }
-        </SubMenu>);
+        return (
+            <SubMenu key={obj.func_name + obj.func_id}
+                onTitleClick={this.cubeClickMuen.bind(this, obj)}
+                id='divtitle'
+                title={<span ><LegacyIcon type={obj.func_icon} />
+                    <span>{obj.func_name}</span></span>}>
+                {
+                    obj.cubeList == null ? '' : obj.cubeList.map(obj2 => (
+                        <Menu.Item key={obj2.cube_name + obj2.cube_id} >
+                            <Link to={'/dashboard/DataAnalysis/' + obj2.qry_id + '/' + obj2.class_id + '/' + obj2.cube_name}>
+                                <LegacyIcon type={obj2.icon == undefined ? 'table' : obj2.icon} /><span>{obj2.cube_name}</span>
+                            </Link></Menu.Item>
+                    ))
+                }
+            </SubMenu>
+        );
     }
     //数据查询获取导航2    
     fourformSubmenusChild(obj, index) {
-        return (<SubMenu key={obj.func_name + obj.func_id}
-            onTitleClick={this.clickMuen.bind(this, obj, index)}
-            id='divtitle'
-            title={<span><Icon type={obj.func_icon} />
-                <span>{obj.func_name}</span></span>}>
-            {
-                obj.shujuList == null ? '' : obj.shujuList.map(obj2 => (
-                    <SubMenu key={obj2.class_name + obj2.class_id + obj2.auth_type}
-                        onTitleClick={this.clickQryName.bind(this, obj2)}
-                        title={<span><Icon type={'folder'} /><span>
-                            {obj2.class_name}</span></span>}>
-                        {
-                            obj2.shuJuChildren == null ? '' : obj2.shuJuChildren.map(citem => (
-                                <Menu.Item key={citem.qry_name + citem.qry_id} >
-                                    <Link to={'/query/ExecQuery/' + citem.qry_id + '/' + obj2.class_id + '/' + citem.qry_name + '/null'}>
-                                        <Icon type={'table'} /><span>{citem.qry_name}</span>
-                                    </Link></Menu.Item>
-                            ))
-                        }
-                    </SubMenu>
-                ))
-            }
-        </SubMenu>);
+        return (
+            <SubMenu key={obj.func_name + obj.func_id}
+                onTitleClick={this.clickMuen.bind(this, obj, index)}
+                id='divtitle'
+                title={<span><LegacyIcon type={obj.func_icon} />
+                    <span>{obj.func_name}</span></span>}>
+                {
+                    obj.shujuList == null ? '' : obj.shujuList.map(obj2 => (
+                        <SubMenu key={obj2.class_name + obj2.class_id + obj2.auth_type}
+                            onTitleClick={this.clickQryName.bind(this, obj2)}
+                            title={<span><LegacyIcon type={'folder'} /><span>
+                                {obj2.class_name}</span></span>}>
+                            {
+                                obj2.shuJuChildren == null ? '' : obj2.shuJuChildren.map(citem => (
+                                    <Menu.Item key={citem.qry_name + citem.qry_id} >
+                                        <Link to={'/query/ExecQuery/' + citem.qry_id + '/' + obj2.class_id + '/' + citem.qry_name + '/null'}>
+                                            <LegacyIcon type={'table'} /><span>{citem.qry_name}</span>
+                                        </Link></Menu.Item>
+                                ))
+                            }
+                        </SubMenu>
+                    ))
+                }
+            </SubMenu>
+        );
     }
     //固定循环设置导航
     formSubmenusChild(obj) {
@@ -105,14 +112,14 @@ export default class SiderBar extends React.Component {
             cHtml = childArray.map((item, index) => {
                 return this.formSubmenusChild(item);
             });
-            return <SubMenu style={{fontFamily:"yahei",backgroundColor:'#fafafa'}} key={obj.func_name} id='divtitle' title={<span><Icon type={obj.func_icon} /><span>{obj.func_name}</span></span>}>{cHtml}</SubMenu>
+            return <SubMenu style={{fontFamily:"yahei",backgroundColor:'#fafafa'}} key={obj.func_name} id='divtitle' title={<span><LegacyIcon type={obj.func_icon} /><span>{obj.func_name}</span></span>}>{cHtml}</SubMenu>;
         } else {
             if(obj.target=='_blank')
             {
-                return <Menu.Item style={{fontFamily:"yahei",backgroundColor:'#fafafa'}} key={obj.func_name} ><a href={obj.func_url} target={obj.target} id='divtitle'><Icon type={obj.func_icon} /><span>{obj.func_name}</span></a></Menu.Item>
+                return <Menu.Item style={{fontFamily:"yahei",backgroundColor:'#fafafa'}} key={obj.func_name} ><a href={obj.func_url} target={obj.target} id='divtitle'><LegacyIcon type={obj.func_icon} /><span>{obj.func_name}</span></a></Menu.Item>;
             }else
             {
-                return <Menu.Item style={{fontFamily:"yahei",backgroundColor:'#fafafa'}} key={obj.func_name} ><Link  to={obj.func_url}  id='divtitle'><Icon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>
+                return <Menu.Item style={{fontFamily:"yahei",backgroundColor:'#fafafa'}} key={obj.func_name} ><Link  to={obj.func_url}  id='divtitle'><LegacyIcon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>;
             }
         }
     }
@@ -178,18 +185,20 @@ export default class SiderBar extends React.Component {
     }
     //我的报表导航
     baoBiaoSubmenus(obj, index) {
-        return (<SubMenu key={obj.func_name + obj.func_id}
-            onTitleClick={this.clickMuenBao.bind(this, obj, index)}
-            id='divtitle'
-            title={<span><Icon type={obj.func_icon} />
-                <span>{obj.func_name}</span></span>}>
-            {
-                obj.baobiaoList == null ? '' : obj.baobiaoList.map(obj2 => (
-                    this.baoBiaoSubmenusChild(obj2)
-                ))
+        return (
+            <SubMenu key={obj.func_name + obj.func_id}
+                onTitleClick={this.clickMuenBao.bind(this, obj, index)}
+                id='divtitle'
+                title={<span><LegacyIcon type={obj.func_icon} />
+                    <span>{obj.func_name}</span></span>}>
+                {
+                    obj.baobiaoList == null ? '' : obj.baobiaoList.map(obj2 => (
+                        this.baoBiaoSubmenusChild(obj2)
+                    ))
 
-            }
-        </SubMenu>);
+                }
+            </SubMenu>
+        );
     }
     //我的报表详细导航
     baoBiaoSubmenusChild(obj) {
@@ -199,9 +208,9 @@ export default class SiderBar extends React.Component {
             cHtml = childArray.map((item, index) => {
                 return this.baoBiaoSubmenusChild(item);
             });
-            return <SubMenu key={obj.name} id='' title={<span><Icon type={"table"} /><span>{obj.name}</span></span>}>{cHtml}</SubMenu>
+            return <SubMenu key={obj.name} id='' title={<span><LegacyIcon type={"table"} /><span>{obj.name}</span></span>}>{cHtml}</SubMenu>;
         } else {
-            return <Menu.Item key={obj.name} ><Link to={"/query/web/" + obj.path} id='divtitle'><Icon type={"table"} /><span>{obj.name}</span></Link></Menu.Item>
+            return <Menu.Item key={obj.name} ><Link to={"/query/web/" + obj.path} id='divtitle'><LegacyIcon type={"table"} /><span>{obj.name}</span></Link></Menu.Item>;
         }
     }
     render() {
@@ -219,12 +228,12 @@ export default class SiderBar extends React.Component {
                     if ("undefined" != typeof (obj.children) && obj.children.length > 0) {
                         return this.formSubmenusChild(obj);
                     } else {
-                        return <Menu.Item key={"sub" + index} id="atitle"><Link target="_blank" to={obj.func_url}><Icon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>
+                        return <Menu.Item key={"sub" + index} id="atitle"><Link target="_blank" to={obj.func_url}><LegacyIcon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>;
                     }
                 }
             } else {
                 //这里的routeurl是路由地址，是自定义的一个属性
-                return <Menu.Item key={"sub" + index} id="atitle"><Link to={obj.func_url}><Icon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>
+                return <Menu.Item key={"sub" + index} id="atitle"><Link to={obj.func_url}><LegacyIcon type={obj.func_icon} /><span>{obj.func_name}</span></Link></Menu.Item>;
             }
         });
         const collapsed = this.props.collapsed;

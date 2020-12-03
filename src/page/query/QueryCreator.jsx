@@ -1,5 +1,19 @@
 import React from 'react'
-import { Card, Button, Dropdown, Icon, message, Modal, DatePicker, InputNumber, Switch, Row, Col, Tabs, Menu } from 'antd'
+import { DownOutlined } from '@ant-design/icons';
+import {
+    Card,
+    Button,
+    Dropdown,
+    message,
+    Modal,
+    DatePicker,
+    InputNumber,
+    Switch,
+    Row,
+    Col,
+    Tabs,
+    Menu,
+} from 'antd';
 
 import SqlCreator from './SqlCreator.jsx';
 import ProcedureCreator from './ProcedureCreator.jsx';
@@ -61,7 +75,7 @@ export default class QueryCreator extends React.Component {
                         </Menu>
                     )}>
                         <Button style={{ marginLeft: 8 }}>
-                        {this.state.qry_type_name}  <Icon type="down" />
+                        {this.state.qry_type_name}  <DownOutlined />
                         </Button>
                     </Dropdown>}>
                     {this.state.creator}

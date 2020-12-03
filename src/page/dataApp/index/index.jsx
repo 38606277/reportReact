@@ -2,7 +2,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from 'antd/lib/pagination';
-import { Table, Divider, Button, Card, Tree, Input, Form, Spin, Row, Col, Select, Radio, Modal } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+    Table,
+    Divider,
+    Button,
+    Card,
+    Tree,
+    Input,
+    Spin,
+    Row,
+    Col,
+    Select,
+    Radio,
+    Modal,
+} from 'antd';
 import CubeService from '../../../service/CubeService.jsx';
 import HttpService from '../../../util/HttpService.jsx';
 const _cubeService = new CubeService();

@@ -11,8 +11,29 @@ const PlotlyRenderers = createPlotlyRenderers(Plot);
 import ReactDOM from 'react-dom';
 import CubeService from '../../service/CubeService.jsx';
 const _cubeService =new CubeService();
-import { Table, Divider,DatePicker,Modal, Icon, Form, Input, TimePicker, Tag,Select,message, Button, Card, 
-    Checkbox,Layout,Tooltip,Row,Col,Pagination,Spin   } from 'antd';
+import { EllipsisOutlined } from '@ant-design/icons';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import {
+    Table,
+    Divider,
+    DatePicker,
+    Modal,
+    Input,
+    TimePicker,
+    Tag,
+    Select,
+    message,
+    Button,
+    Card,
+    Checkbox,
+    Layout,
+    Tooltip,
+    Row,
+    Col,
+    Pagination,
+    Spin,
+} from 'antd';
 import queryService from '../../service/QueryService.jsx';
 import TagSelect from '../../components/TagSelect';
 import moment from 'moment';
@@ -379,8 +400,7 @@ class DataAnalysis extends React.Component {
                             })(
                                 <Input onChange={e=>this.changeEvent(e)} 
                                 addonAfter={record.dict_id==null?'':
-                                <Icon type="ellipsis" theme="outlined"  
-                                onClick={e=>this.openModelClick(record.in_id,record.dict_id)}/>} />
+                                <EllipsisOutlined onClick={e=>this.openModelClick(record.in_id,record.dict_id)} />} />
                             )}
                             </FormItem>
                     </Col>
@@ -449,8 +469,7 @@ class DataAnalysis extends React.Component {
                             })(
                                 <Input onChange={e=>this.changeEvent(e)} 
                                 addonAfter={record.dict_id==null?'':
-                                <Icon type="ellipsis" theme="outlined"  
-                                onClick={e=>this.openModelClick(record.in_id,record.dict_id)}/>} />
+                                <EllipsisOutlined onClick={e=>this.openModelClick(record.in_id,record.dict_id)} />} />
                             )}
                             </FormItem>
                     </Col>

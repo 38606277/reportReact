@@ -3,7 +3,9 @@
 */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Card, Button, Divider, Input, Form, Icon, Row, Col, Select, Table } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Card, Button, Divider, Input, Row, Col, Select, Table } from 'antd';
 
 const FormItem = Form.Item;
 const Option = Select.Option;

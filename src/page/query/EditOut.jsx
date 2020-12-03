@@ -1,6 +1,8 @@
 import React, {  Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { Table, Divider, Tag, Form, Input, Select, Modal, Button, Card, Checkbox } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Table, Divider, Tag, Input, Select, Modal, Button, Card, Checkbox } from 'antd';
 
 import HttpService from '../../util/HttpService.jsx';
 import './query.scss';

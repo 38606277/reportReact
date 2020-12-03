@@ -1,6 +1,8 @@
 import React        from 'react';
 import AuthType     from '../../../service/AuthTypeService.jsx'
-import { Form, Input, Select,Button, Card,Row, Col } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Input, Select, Button, Card, Row, Col } from 'antd';
 import LocalStorge  from '../../../util/LogcalStorge.jsx';
 import TextArea from 'antd/lib/input/TextArea';
 const localStorge = new LocalStorge();

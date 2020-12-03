@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Menu, Icon } from 'antd';
+import { Icon as LegacyIcon } from '@ant-design/compatible';
+import { Menu } from 'antd';
 import Link from 'umi/link';
 import isEqual from 'lodash/isEqual';
 import memoizeOne from 'memoize-one';
@@ -18,7 +19,7 @@ const getIcon = icon => {
     return <img src={icon} alt="icon" className={styles.icon} />;
   }
   if (typeof icon === 'string') {
-    return <Icon type={icon} />;
+    return <LegacyIcon type={icon} />;
   }
   return icon;
 };

@@ -1,5 +1,30 @@
 import React from 'react'
-import { Card, Button, Table, Form, Input, Divider, Avatar, Checkbox, List, Dropdown, Pagination, Select, Radio, Icon, message, Modal, DatePicker, InputNumber, Switch, Row, Col, Tabs, Menu } from 'antd'
+import { Form, Icon as LegacyIcon } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { BarsOutlined, ToolOutlined } from '@ant-design/icons';
+import {
+    Card,
+    Button,
+    Table,
+    Input,
+    Divider,
+    Avatar,
+    Checkbox,
+    List,
+    Dropdown,
+    Pagination,
+    Select,
+    Radio,
+    message,
+    Modal,
+    DatePicker,
+    InputNumber,
+    Switch,
+    Row,
+    Col,
+    Tabs,
+    Menu,
+} from 'antd';
 import moment from 'moment';
 import {SplitPane} from 'react-split-pane';
 import 'moment/locale/zh-cn';
@@ -377,7 +402,7 @@ class SqlCreator extends React.Component {
 
                                         {/* <Button icon="save" onClick={() => this.onSaveClick(e)} style={{ marginRight: "10px" }} >保存</Button> */}
                                         <Button type="primary" htmlType="submit" style={{ marginRight: "10px" }}>保存</Button>
-                                        <Button icon="list" onClick={() => window.location = '#/query/QueryList'} style={{ marginRight: "10px" }}   >退出</Button>
+                                        <Button icon={<LegacyIcon type="list" />} onClick={() => window.location = '#/query/QueryList'} style={{ marginRight: "10px" }}   >退出</Button>
                                     </div>
                                     <Divider style={{ margin: "8px 0 8px 0" }} />
 
@@ -395,8 +420,8 @@ class SqlCreator extends React.Component {
                                     <Row style={{ marginBottom: "5px" }}>
                                         <span style={{ color: "black", fontWeight: "400", position: "absolute", bottom: "2px" }}><span class="ant-form-item-required"></span>输入查询SQL</span>
                                         <span style={{ float: "right", }}>
-                                            <Button icon="tool" loading={this.state.loading} onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成查询</Button>
-                                            <Button icon="bars" onClick={() => this.sqlFormat()} style={{ marginRight: "10px" }}> 格式化</Button>
+                                            <Button icon={<ToolOutlined />} loading={this.state.loading} onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成查询</Button>
+                                            <Button icon={<BarsOutlined />} onClick={() => this.sqlFormat()} style={{ marginRight: "10px" }}> 格式化</Button>
                                         </span>
                                     </Row>
                                     <CodeMirror ref="editorsql" value='' style={{ height: '600px', width: '450px', border: "2px solid red" }} options={options} />

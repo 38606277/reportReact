@@ -2,7 +2,9 @@ import React                from 'react';
 import { Link }             from 'react-router-dom';
 import DictService                 from '../../service/DictService.jsx';
 import Pagination           from 'antd/lib/pagination';
-import {Avatar,Divider,Button,Card, List,Input, Form,Row,Col,Icon}  from 'antd';
+import { Form, Icon as LegacyIcon } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Avatar, Divider, Button, Card, List, Input, Row, Col } from 'antd';
 import  LocalStorge         from '../../util/LogcalStorge.jsx';
 import HttpService from '../../util/HttpService.jsx';
 const Item = List.Item;
@@ -13,11 +15,11 @@ import './../dict/Dict.scss';
 
 const IconText = ({ type, text }) => (
     <span>
-      <Icon type={type} style={{ marginRight: 8 }} />
+      <LegacyIcon type={type} style={{ marginRight: 8 }} />
       {text}
     </span>
   );
-  const url=window.getServerUrl();
+const url=window.getServerUrl();
 class UploadList extends React.Component{
     constructor(props){
         super(props);

@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
-import { Card, Row, Col, Icon, Skeleton, Avatar, Input, Button } from 'antd';
+import {
+    BankOutlined,
+    PushpinOutlined,
+    SearchOutlined,
+    SettingOutlined,
+    TagOutlined,
+    ThunderboltOutlined,
+} from '@ant-design/icons';
+import { Card, Row, Col, Skeleton, Avatar, Input, Button } from 'antd';
 import { List, Typography } from 'antd';
 import BMap from 'BMap';
 // import BMapLib from 'BMapLib';
@@ -105,8 +113,8 @@ class assetmap extends Component {
                         <Col span={24}>
                             <Input addonAfter={
                                 <span>
-                                    <Button  style={{width:'40px',border:'0px', borderRadius:'0px'}}  onClick={this.togglePanel} icon="thunderbolt" />
-                                    <Button  type="primary" style={{width:'40px',border:'0px', borderRadius:'0px'}}  icon="search" />
+                                    <Button  style={{width:'40px',border:'0px', borderRadius:'0px'}}  onClick={this.togglePanel} icon={<ThunderboltOutlined />} />
+                                    <Button  type="primary" style={{width:'40px',border:'0px', borderRadius:'0px'}}  icon={<SearchOutlined />} />
                                 </span>
                             }></Input>
                         </Col>
@@ -116,12 +124,12 @@ class assetmap extends Component {
                             <Col span={24}><img src={url + this.state.addressImg} style={{ height: '100px', width: '100%' }} /></Col>
                         </Row>
                         <Row style={{ height: '40px', marginTop: '10px', marginLeft: '10px' }}>
-                            <Col span={24} ><Icon type='bank' style={{ marginRight: '8px' }} />{this.state.address}</Col>
+                            <Col span={24} ><BankOutlined style={{ marginRight: '8px' }} />{this.state.address}</Col>
                         </Row>
                         <Row style={{ height: '40px', marginLeft: '30px', color: '#0e89f5' }}>
-                            <Col span={8}><Icon type='setting' style={{ marginRight: '8px' }} />详细</Col>
-                            <Col span={8}><Icon type='tag' style={{ marginRight: '8px' }} />分离</Col>
-                            <Col span={8}><Icon type='pushpin' style={{ marginRight: '8px' }} />新增</Col>
+                            <Col span={8}><SettingOutlined style={{ marginRight: '8px' }} />详细</Col>
+                            <Col span={8}><TagOutlined style={{ marginRight: '8px' }} />分离</Col>
+                            <Col span={8}><PushpinOutlined style={{ marginRight: '8px' }} />新增</Col>
                         </Row>
 
                         <List
@@ -151,7 +159,7 @@ class assetmap extends Component {
                 </Card>
 
             </div>
-        )
+        );
     }
 
     init() {
