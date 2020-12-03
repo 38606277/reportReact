@@ -39,7 +39,7 @@ export default class DashboardTemplate extends React.Component {
    
     render() {
         return (
-           
+           <div></div>
         )
     }
 }
