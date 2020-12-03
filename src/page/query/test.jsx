@@ -71,4 +71,4 @@ const initData = [{
     indexName: '类型不符合要求的标本数',
     indexValue: '',
     field: 'typeIncorredSpecimen',
-
+}]
