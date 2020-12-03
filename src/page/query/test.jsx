@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
-import { Form, Table, InputNumber } from 'antd';
+import { Form } from '@ant-design/compatible';
+import '@ant-design/compatible/assets/index.css';
+import { Table, InputNumber } from 'antd';
 
 export default class DTable extends PureComponent {
 

@@ -13,7 +13,6 @@
     "dist_win": "set WEBPACK_ENV=online&& node_modules/.bin/webpack -p",
     "dev": "webpack-dev-server  --progress --colors --mode development --config ./webpack.dev.config.js",
     "prod": "webpack --mode production --config ./webpack.prod.config.js --progress --colors"
-  
   },
   "devDependencies": {
     "babel-core": "6.26.3",
@@ -35,7 +34,6 @@
     "file-loader": "1.1.6",
     "html-webpack-plugin": "3.2.0",
     "install": "^0.12.1",
-
     "less": "^3.11.1",
     "less-loader": "^5.0.0",
     "mini-css-extract-plugin": "^0.5.0",
@@ -53,15 +51,16 @@
     "webpack-dev-server": "3.1.5"
   },
   "dependencies": {
+    "@ant-design/icons": "4.3.0",
+    "@ant-design/pro-table": "2.11.4",
     "@antv/data-set": "^0.10.1",
     "@antv/g6": "^3.6.0",
     "@grapecity/spread-excelio": "^12.0.9",
     "@grapecity/spread-sheets": "^11.2.2",
     "@grapecity/spread-sheets-react": "^11.2.2",
     "@grapecity/spread-sheets-resources-zh": "^11.2.2",
-    "@ant-design/icons": "4.3.0",
-    "@ant-design/pro-table": "2.11.4",
-    "antd": "^3.9.3",
+    "antd": "4.9.1",
+    "@ant-design/compatible":"^1.0.0",
     "bizcharts": "^3.2.4",
     "bizcharts-plugin-slider": "^2.0.3",
     "browserslist": "^4.9.1",
