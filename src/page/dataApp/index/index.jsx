@@ -2,7 +2,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from 'antd/lib/pagination';
-import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import {
     Table,
@@ -23,7 +22,7 @@ import HttpService from '../../../util/HttpService.jsx';
 const _cubeService = new CubeService();
 import ReactEcharts from 'echarts-for-react';
 const Search = Input.Search;
-const FormItem = Form.Item;
+
 const { TreeNode } = Tree;
 const { Option } = Select;
 import '../corp.css'
@@ -32,50 +31,6 @@ import '../corp.css'
 
 
 
-
-// const treeData = [
-//     {
-//         title: '人力资源',
-//         key: '0-0',
-//         children: [
-//             {
-//                 title: '0-0-0',
-//                 key: '0-0-0',
-//                 children: [
-//                     { title: '0-0-0-0', key: '0-0-0-0' },
-//                     { title: '0-0-0-1', key: '0-0-0-1' },
-//                     { title: '0-0-0-2', key: '0-0-0-2' },
-//                 ],
-//             },
-//             {
-//                 title: '0-0-1',
-//                 key: '0-0-1',
-//                 children: [
-//                     { title: '0-0-1-0', key: '0-0-1-0' },
-//                     { title: '0-0-1-1', key: '0-0-1-1' },
-//                     { title: '0-0-1-2', key: '0-0-1-2' },
-//                 ],
-//             },
-//             {
-//                 title: '0-0-2',
-//                 key: '0-0-2',
-//             },
-//         ],
-//     },
-//     {
-//         title: '财务',
-//         key: '0-1',
-//         children: [
-//             { title: '0-1-0-0', key: '0-1-0-0' },
-//             { title: '0-1-0-1', key: '0-1-0-1' },
-//             { title: '0-1-0-2', key: '0-1-0-2' },
-//         ],
-//     },
-//     {
-//         title: '投资',
-//         key: '0-2',
-//     },
-// ];
 
 function onChange(value) {
     console.log(`selected ${value}`);
@@ -279,6 +234,9 @@ export default class index extends React.Component {
             FLEX_VALUE_SET_ID: 6
         };
 
+
+
+         
         HttpService.post('/reportServer/FlexValue/getFlexValuesTree', JSON.stringify(param)).then(res => {
             if (res.resultCode == "1000") {
                 this.setState({
@@ -608,7 +566,8 @@ export default class index extends React.Component {
                             <Row>
                                 <Col sm={4}>
                                     <Tree
-                                        onSelect={this.onSelect}
+                                        // onSelect={this.onSelect}
+                                        // onExpand={this.onSelect}
 
                                     >
                                         {this.renderTreeNodes(this.state.treeData)}

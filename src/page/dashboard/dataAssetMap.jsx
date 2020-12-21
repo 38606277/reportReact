@@ -272,11 +272,11 @@ const radarData=[{"name":"个人","label":"引用","value":10},{"name":"个人",
                   </Tooltip>
               }
               
-              total={<Link style={{color:'rgba(0, 0, 0, 0.65)'}} to='/dataAsset/dataAssetList'>8,846</Link>}
+              total={<Link style={{color:'rgba(0, 0, 0, 0.65)'}} to='/dataAsset/dataAssetList'>28,846</Link>}
               footer={
                   <Field
                   label={"日新增"}
-                  value={`￥${numeral(12423).format('0,0')}`}
+                  value={`￥${numeral(323).format('0,0')}`}
                   />
               }
               contentHeight={46}
@@ -425,8 +425,8 @@ const radarData=[{"name":"个人","label":"引用","value":10},{"name":"个人",
            
             <Pie
               hasLegend
-              subTitle={"Tables"}
-              total={400}
+              subTitle={"表"}
+              total={15238}
               data={salesPieData}
               height={248}
               lineWidth={4}
