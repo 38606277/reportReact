@@ -77,6 +77,9 @@ export default class dataAssetMap extends React.Component{
       const { rangePickerValue } = this.state;
       const value = getTimeDistance(type);
       if (!rangePickerValue[0] || !rangePickerValue[1]) {
+       
+
+        a
         return '';
       }
       if (
