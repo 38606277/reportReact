@@ -104,7 +104,10 @@ export default class dataAssetList extends React.Component {
             visible: false,
             tableData: [],
             tableColumn: [],
-            activeButton: 0
+            selectedKeys:['0-0'],//树默认选中第一个
+            activeButton:0,
+            //选项卡切换默认
+            Hcard:null
         };
     }
     componentDidMount() {
@@ -247,8 +250,29 @@ export default class dataAssetList extends React.Component {
 
     };
 
-    onViewClick = (viewID, buttontype) => {
-
+    onViewClick =async (viewID, buttontype,number) => {
+        let obj={
+            0:{
+                url:"/reportServer/dataAsset/getTablesByCatalog",
+                id:'catalog_id',
+                l:'id'
+            },
+            1:{
+                url:"/reportServer/dataAsset/getTablesBySource",
+                id:'source_id',
+                l:'name'
+            },
+            2:{
+                url:"/reportServer/dataAsset/getTablesByDbType",
+                id:"dbtype_id",
+                l:'name'
+            },
+            3:{
+                url:"/reportServer/dataAsset/getTablesByHost",
+                id:'host_id',
+                l:'name'
+            }
+        }
         let param = {
             FLEX_VALUE_SET_ID: viewID
         };
@@ -256,8 +280,8 @@ export default class dataAssetList extends React.Component {
             //数据源
             let param = {};
             let url = "reportServer/DBConnection/ListAll";
-            HttpService.post(url, param).then(response => {
-                this.setState({ treeData: response });
+            await HttpService.post(url, param).then(response => {
+                this.setState({Hcard:{...response[0]},treeData: response })
                 // alert(JSON.stringify(this.state.treeData));
                 // 设置高亮
                 this.activeButton(buttontype);
@@ -268,10 +292,12 @@ export default class dataAssetList extends React.Component {
             });
 
         } else {
-            HttpService.post('/reportServer/FlexValue/getFlexValuesTree', JSON.stringify(param)).then(res => {
+            await HttpService.post('/reportServer/FlexValue/getFlexValuesTree', JSON.stringify(param)).then(res => {
                 if (res.resultCode == "1000") {
                     this.setState({
                         treeData: res.data,
+                        Hcard:{...res.data[0]},
+                        selectedKeys:["0-0"]
                     });
                     // 设置高亮
                     this.activeButton(buttontype);
@@ -282,11 +308,26 @@ export default class dataAssetList extends React.Component {
                 }
             }, errMsg => {
                 this.setState({
-                    list: [], loading: false
+                    list: [], loading: false, selectedKeys:["0-0"]
                 });
             });
 
         }
+        let url =obj[number].url,
+            data={
+                    [obj[number].id]:this.state.Hcard[obj[number].l]
+                }
+            await HttpService.post(url, JSON.stringify(data)).then(res => {//默认点击修改数据
+                this.setState({ list: res.data });
+                // alert(JSON.stringify(this.state.treeData));
+                // 设置高亮
+                //   this.activeButton(buttontype);
+            }, errMsg => {
+                this.setState({
+                    list: [],
+                    selectedKeys:["0-0"]
+                });
+            });
 
 
     }
@@ -353,13 +394,26 @@ export default class dataAssetList extends React.Component {
             //生成列信息
             let cols = [];
             let columns = res.data[0];
+            let obj={
+                overflow: 'hidden',
+                display: 'block',
+                width: '200px',
+                height:'40px'
+            }
             for (var key in columns) {
 
-                cols.push({
-                    title: key,
-                    dataIndex: key,
-                    width: 100
-                })
+                if(key==='fileDataBlob'){
+                    cols.push({
+                        title: key,
+                        dataIndex: key,
+                        render: text => <a style={{...obj}}>{text}</a>,
+                    })
+                }else{
+                    cols.push({
+                        title: key,
+                        dataIndex: key
+                    })
+                }
 
             }
             // for (j = 0, len = columns.length; j < len; j++) {
@@ -453,16 +507,16 @@ export default class dataAssetList extends React.Component {
                                 <Card bodyStyle={{ padding: "5px", backgroundColor: '#fafafa' }}>
 
                                     <Tooltip placement="top" title="目录视图">
-                                        <Button type={this.state.buttontype[0]} icon={<ProfileOutlined />} onClick={() => this.onViewClick(4, 0)} />
+                                        <Button type={this.state.buttontype[0]} icon={<ProfileOutlined />} onClick={() => this.onViewClick(4, 0,0)} />
                                     </Tooltip>
                                     <Tooltip placement="top" title="数据来源视图" >
-                                        <Button type={this.state.buttontype[1]} icon={<BarChartOutlined />} onClick={() => this.onViewClick(3, 1)} />
+                                        <Button type={this.state.buttontype[1]} icon={<BarChartOutlined />} onClick={() => this.onViewClick(3, 1,1)} />
                                     </Tooltip>
                                     <Tooltip placement="top" title="数据类型视图">
-                                        <Button type={this.state.buttontype[2]} icon={<LineChartOutlined />} onClick={() => this.onViewClick(2, 2)} />
+                                        <Button type={this.state.buttontype[2]} icon={<LineChartOutlined />} onClick={() => this.onViewClick(2, 2,2)} />
                                     </Tooltip>
                                     <Tooltip placement="top" title="数据源视图">
-                                        <Button type={this.state.buttontype[3]} icon={<PieChartOutlined />} onClick={() => this.onViewClick(4, 3)} />
+                                        <Button type={this.state.buttontype[3]} icon={<PieChartOutlined />} onClick={() => this.onViewClick(4, 3,3)} />
                                     </Tooltip>
 
 
@@ -473,6 +527,7 @@ export default class dataAssetList extends React.Component {
                                     // autoExpandParent={this.state.autoExpandParent}
                                     // onCheck={this.onCheck}
                                     // checkedKeys={this.state.checkedKeys}
+                                    selectedKeys={this.state.selectedKeys}
                                     onSelect={this.onSelect}
 
                                 >
@@ -497,10 +552,10 @@ export default class dataAssetList extends React.Component {
                                     </Row>
 
                                 </Card>
-                                <Table dataSource={this.state.list} columns={columns} pagination={false} />
-                                <Pagination current={this.state.pageNum}
+                                <Table dataSource={this.state.list} columns={columns} bordered={true} />
+                                {/* <Pagination current={this.state.pageNum}
                                     total={this.state.total}
-                                    onChange={(pageNum) => this.onPageNumChange(pageNum)} />
+                                    onChange={(pageNum) => this.onPageNumChange(pageNum)} /> */}
                             </Col>
                         </Row>
 
@@ -513,6 +568,8 @@ export default class dataAssetList extends React.Component {
                 <Modal
                     title="Basic Modal"
                     width='900px'
+                    cancelText='取消'
+                    okText='确认'
                     visible={this.state.visible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
@@ -520,10 +577,10 @@ export default class dataAssetList extends React.Component {
                     <Card>
                         <Table dataSource={this.state.tableData} columns={this.state.tableColumn}
                             scroll={{ x: 1300 }}
-                            pagination={true} />
-                        <Pagination current={this.state.pageNum}
+                            bordered={true} />
+                        {/* <Pagination current={this.state.pageNum}
                             total={this.state.total}
-                            onChange={(pageNum) => this.onPageNumChange(pageNum)} />
+                            onChange={(pageNum) => this.onPageNumChange(pageNum)} /> */}
                     </Card>
                 </Modal>
             </div>
