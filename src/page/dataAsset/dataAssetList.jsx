@@ -377,6 +377,7 @@ export default class dataAssetList extends React.Component {
         });
 
     showModal = (record) => {
+        console.log(record)
         this.setState({
             visible: true,
             tableColumn: [],

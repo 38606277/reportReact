@@ -127,6 +127,7 @@ class corp extends React.Component {
         };
 
         HttpService.post('/reportServer/finance/getNetProfitTop10', JSON.stringify(param)).then(res => {
+            console.log(res.data)
             if (res.resultCode == "1000") {
                 this.setState({
                     netProfitTop10: res.data,

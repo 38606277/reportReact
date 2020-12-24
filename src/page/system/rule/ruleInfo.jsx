@@ -40,6 +40,8 @@ class RuleInfo extends React.Component{
     }
     
     componentDidMount(){
+        // this.setState({roleId: 'webFunc',roleName:'webFunc',expandedKeys:[],checkedKeys: []})
+        this.selectedOnchage(2,'系统管理员','','')
         this.loadRoleList();
         if(null!=this.state.roleId && ''!=this.state.roleId && 'null'!=this.state.roleId){
             this.selectedOnchage(this.state.roleId,'','','');
@@ -598,6 +600,7 @@ class RuleInfo extends React.Component{
         });
      }
      onChangeTab = (activeKey) => {
+         console.log(activeKey)
         this.setState({ activeKey:activeKey,treeData:[] },function () {
             let name=this.state.roleName;
             let roleId=this.state.roleId;

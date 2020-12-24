@@ -479,6 +479,7 @@ export default class index extends React.Component {
 
     renderTreeNodes = data =>
         data.map(item => {
+            console.log(data)
             if (item.children) {
                 return (
                     <TreeNode title={item.value} key={item.key} dataRef={item}>

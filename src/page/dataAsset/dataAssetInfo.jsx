@@ -409,8 +409,8 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/legend'
 import 'echarts/lib/chart/pie';
-
-
+import XY from './Primordial.jsx'
+import Map from './Map.jsx'
 const { TabPane } = Tabs;
 const _cubeService = new CubeService();
 const localStorge = new LocalStorge();
@@ -440,7 +440,7 @@ const classlist=[
     text:'存储类型视图'
   }
 ]
-let datalist=['元数据','数据血缘','数据权限','数据浏览','元数据1','数据建模']
+let datalist=['元数据','数据血缘','数据权限','数据浏览','元数据1','数据建模','数据血缘1版','地图']
 
 let maringLeft={
   marginLeft:'100px'
@@ -559,6 +559,13 @@ function List1(props){
   console.log(data)
   return(
     <Table columns={cm} dataSource={data}/>
+  )
+}
+
+
+function  MYXY(props){
+  return(
+    < XY/>
   )
 }
 //数据血缘
@@ -765,7 +772,9 @@ export default ()=>{
     '数据权限':<div>数据权限</div>,
     '数据浏览':<div>数据浏览</div>,
     '元数据1':<List1 data={data} cm={cm}></List1>,
-    '数据建模':<DataModeling></DataModeling>
+    '数据建模':<DataModeling></DataModeling>,
+    '数据血缘1版':<MYXY />,
+    '地图':<Map />
   };
   function callback(key){
     settext(datalist[key]) 
@@ -822,13 +831,14 @@ export default ()=>{
            name="horizontal_login" layout="inline"
         >
           <Form.Item
+                style={{marginTop:'10px'}}
                 {...layout}
                 label="资源类型"
                 name="basic"
                 initialValues={{ remember: true }}
                 rules={[{ required: true, message: 'Please input your username!' }]}
               >
-               <Select defaultValue="请选择" style={{ width: 155,marginLeft:7 }} onChange={setcube_class}>
+               <Select defaultValue="请选择" style={{ width: 164,marginLeft:5 }} onChange={setcube_class}>
                 {
                   cube_classlist.map((item,index)=>{
                     return <Option value={item.value} key={index}>{item.text}</Option>
@@ -837,14 +847,14 @@ export default ()=>{
                 </Select>
           </Form.Item>
           <Form.Item
-                style={{marginLeft:'20px'}}
+                style={{marginLeft:'12px',marginTop:'10px'}}
                 {...layout}
                 label="资产位置"
                 name="basic"
                 initialValues={{ remember: true }}
                 rules={[{ required: true, message: 'Please input your username!' }]}
               >
-               <Select defaultValue="请选择" style={{ width: 155,marginLeft:7 }} onChange={setAsset_location}>
+               <Select defaultValue="请选择" style={{ width: 164,marginLeft:5 }} onChange={setAsset_location}>
                 {
                   cube_classlist.map((item,index)=>{
                     return <Option value={item.value} key={index}>{item.text}</Option>
@@ -853,7 +863,7 @@ export default ()=>{
                 </Select>
           </Form.Item>
           {/* 搜索按钮 */}
-          <Button type="primary" style={{float:'right',marginRight:'100px'}} onClick={()=>Hsearch()}>确认修改</Button>
+          <Button type="primary" style={{float:'right',marginRight:'100px',marginTop:'10px'}} onClick={()=>Hsearch()}>确认修改</Button>
         </Form>
         <Tabs defaultActiveKey={listdata+""} onChange={callback}>
           {

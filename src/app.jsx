@@ -156,6 +156,11 @@ const dataComputeRouter = Loadable({
 });
 
 
+const mycorp =Loadable({
+    loader:()=>import('./page/dataApp/mcorp copy.jsx'),
+    loading: loading,
+    delay:3000
+})
 function LoadPage(url) {
     //    console.log(Loadable({
     //         loader: () => import(url),
@@ -194,6 +199,7 @@ class App extends React.Component {
                             <Route path="/chat" component={QaRouter} />
                             <Route path="/report" component={ReportRouter} />
                             <Route path="/assetmap" component={assetmap}/> 
+                            <Route path='/mycorp' component={mycorp}/>
                         </Switch>
                     </Layout>
                 );

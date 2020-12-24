@@ -5,11 +5,14 @@ import { Row, Col, Card, Tabs, Table, Radio, DatePicker, Tooltip, Menu, Dropdown
 import {  ChartCard,  MiniArea,  MiniBar,  MiniProgress,  Field,  Bar,  Pie, TimelineChart,} from '../../components/Charts';
 import Trend from '../../components/Trend/index.jsx';
 import NumberInfo from '../../components/NumberInfo';
+
+import Map2 from './dataAssetMap2.jsx'
 import numeral from 'numeral';
 import GridContent from '../../components/PageHeaderWrapper/GridContent';
 import Yuan from '../../util/Yuan';
 import { getTimeDistance } from '../../util/utils';
 import styles from './Analysis.less';
+
 
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
@@ -460,6 +463,7 @@ const radarData=[{"name":"个人","label":"引用","value":10},{"name":"个人",
           ))}
         </Tabs>
       </Card>
+      <Map2 />
       </GridContent>
     );
           }
