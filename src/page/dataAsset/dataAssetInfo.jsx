@@ -796,7 +796,7 @@ export default ()=>{
       }
       console.log(path)
        await HttpService.post('/reportServer/DBConnection2/getAllTableList', JSON.stringify(obj)).then(res=>{
-         console.log(res.data)
+         console.log(res)
        })
     }
     mylist()
@@ -847,7 +847,7 @@ export default ()=>{
                 </Select>
           </Form.Item>
           <Form.Item
-                style={{marginLeft:'12px',marginTop:'10px'}}
+                style={{marginLeft:'2px',marginTop:'10px'}}
                 {...layout}
                 label="资产位置"
                 name="basic"

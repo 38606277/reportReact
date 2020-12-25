@@ -209,23 +209,6 @@ let  list= [
             address: '西湖区湖底公园1号',
           },
 ]
-const columns = [
-  {
-    title: '表名',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: 'id',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: '内容',
-    dataIndex: 'address',
-    key: 'address',
-  },
-];
 export default ()=>{
   let box=useRef()
   useEffect(()=>{
@@ -234,6 +217,9 @@ export default ()=>{
     const graph = new Graph({
       container:box.current,
       grid: true,
+    })
+    graph.drawBackground({
+      color: '#f5f5ref5',
     })
     let setlist=(list)=>{
       let box=document.createElement('div')
@@ -307,6 +293,23 @@ export default ()=>{
         },
       },
     })
+    const targe3 =graph.addNode({
+      x:20,
+      y:380,
+      width:200,
+      height:150,
+      data:[...list],
+      html:{
+        render(node){
+          console.log(node)
+          return (
+            list.map(item=>{
+              return <div>{item.key}</div>
+            })
+          )
+        }
+      }
+    })
     graph.addEdge({
       source,
       target:target,
@@ -330,6 +333,24 @@ export default ()=>{
       source,
       target:target2,
       // https://x6.antv.vision/zh/docs/api/registry/router#oneside
+      router: {
+        name: 'manhattan',
+        vertices: [],
+        args: {
+          side: 'right',
+          padding: 2000 ,
+            maxDirectionChange:90,
+        },
+      },
+      attrs: {
+        line: {
+          stroke: '#722ed1',
+        },
+      },
+    })
+    graph.addEdge({
+      source,
+      target:targe3,
       router: {
         name: 'manhattan',
         vertices: [],
