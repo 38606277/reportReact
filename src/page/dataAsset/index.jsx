@@ -28,6 +28,7 @@ export default ()=>{
     let [G_data_source,setG_data_source]=useState([]);//已建模表
     let [mylist,setmylist]=useState([]);
     let [user,setuser]=useState(true);
+    let [recordSelect,setrecordSelect]=useState([]);//记录选中数据
     const Hcenter=useRef();//中间dom
     const Hbtn=useRef();//中间蓝色按钮
     const letTable=useRef();///左侧dom
@@ -59,7 +60,7 @@ export default ()=>{
     const rowSelection = {
         selectedRowKeys,
         onChange: (selectedRowKeys, selectedRows) => {
-            // // setG_data_source()
+            // setrecordSelect(selectedRowKeys)
             setarr(selectedRows);
             setselectedRowKeys(selectedRowKeys);
         },
@@ -92,6 +93,7 @@ export default ()=>{
         password:source.password,
         dbName:e
       };
+      console.log(obj)
       HttpService.post('/reportServer/dataModeling/getTableNamesByDbname',JSON.stringify(obj)).then(res=>{
         console.log(res);
       });
@@ -116,6 +118,20 @@ export default ()=>{
     };
     //提交建模内容
     const Submit = () =>{
+      let MJSON=G_data_source.map(item=>{
+        delete item.key
+        return {
+          ...item
+        }
+      })
+      let mydata={
+          tableName: "appuser",
+          password: "123456",
+          tableFields:JSON.stringify([...MJSON])
+      }
+      HttpService.post('/reportServer/dataModeling/createNewTable2',JSON.stringify(mydata)).then(res=>{
+        console.log(res)
+      })
       //非空校验
       let obj={
         0:'请选择数据源',
@@ -187,7 +203,7 @@ export default ()=>{
                         bordered={true} 
                         title={()=>{//表头
                           return <div>
-                                    <div style={{textAlign:'center',paddingBottom:"10px"}} >选择数据库</div>
+                                    <div style={{textAlign:'center',padding:"10px 0 20px 0"}} >选择数据库</div>
                                     <Form
                                       name="horizontal_login" layout="inline"
                                       >
@@ -250,7 +266,7 @@ export default ()=>{
                 <div style={{width:'45%',float:'right'}}>
                     <Table dataSource={G_data_source} columns={colimnsR} pagination={G_data_source.length>10?true:false} title={() => {
                         return <div>
-                          <div style={{textAlign:'center',paddingBottom:"10px"}} >建模</div>
+                          <div style={{textAlign:'center',padding:"10px 0 20px 0"}} >建模</div>
                           <Form
                               name="horizontal_login" layout="inline"
                               >

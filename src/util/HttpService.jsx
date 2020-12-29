@@ -28,6 +28,7 @@ export default class HttpService {
                     //console.log(response.json())
                     return response.json();
                 }).catch((error)=>{
+                    console.log(error)
                     return error.json();
                 });
         }

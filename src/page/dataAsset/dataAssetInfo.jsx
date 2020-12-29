@@ -847,7 +847,7 @@ export default ()=>{
                 </Select>
           </Form.Item>
           <Form.Item
-                style={{marginLeft:'2px',marginTop:'10px'}}
+                style={{marginLeft:'12px',marginTop:'10px'}}
                 {...layout}
                 label="资产位置"
                 name="basic"

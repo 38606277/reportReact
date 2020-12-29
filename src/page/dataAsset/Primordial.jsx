@@ -1,22 +1,22 @@
 import React,{useState,useEffect,useRef} from 'react'
 import { Table, Tag, Space } from 'antd';
-// const columns = [
-//   {
-//     title: '表名',
-//     dataIndex: 'name',
-//     key: 'name',
-//   },
-//   {
-//     title: 'id',
-//     dataIndex: 'age',
-//     key: 'age',
-//   },
-//   {
-//     title: '内容',
-//     dataIndex: 'address',
-//     key: 'address',
-//   },
-// ];
+const columns = [
+  {
+    title: '表名',
+    dataIndex: 'name',
+    key: 'name',
+  },
+  {
+    title: 'id',
+    dataIndex: 'age',
+    key: 'age',
+  },
+  {
+    title: '内容',
+    dataIndex: 'address',
+    key: 'address',
+  },
+];
 // const obj={
 //   source:'指向',
 //   children:[
@@ -180,7 +180,7 @@ import { Table, Tag, Space } from 'antd';
 // }
 
 import { Graph } from '@antv/x6'
-
+import '@antv/x6-react-shape'
 
 
 let  list= [
@@ -209,11 +209,34 @@ let  list= [
             address: '西湖区湖底公园1号',
           },
 ]
+
+
+let H_Table=(props)=>{
+  let list=props.list
+  return(
+    <Table dataSource={list} columns={columns} size={'small'}/>
+  )
+}
+let arr =[
+  {
+    x:50,
+    y:20,
+    list:list
+  },
+  {
+    x:50,
+    y:500,
+    list:list
+  }
+]
 export default ()=>{
   let box=useRef()
   useEffect(()=>{
-    box.current.style.width='1000px'
-    box.current.style.height='1000px'
+    let H=box.current.parentNode.clientHeight
+    let W=box.current.parentNode.clientWidth
+    console.log(W,H)
+    box.current.style.width=W+'px'
+    box.current.style.height=W+'px'
     const graph = new Graph({
       container:box.current,
       grid: true,
@@ -221,154 +244,49 @@ export default ()=>{
     graph.drawBackground({
       color: '#f5f5ref5',
     })
-    let setlist=(list)=>{
-      let box=document.createElement('div')
-      box.innerHTML=`<div><span>编号</span><span>id</span><span>表名</span><span>内容</span></div>`
-      list.forEach((item,index)=>{
-          let ad=document.createElement('div')
-          for(let i in item){
-            ad.innerHTML+=`<span>${item[i]}</span>`
-          }
-          box.style.width='200px'
-          box.style.height='100%'
-          box.style.overflowY ='scroll'
-          box.appendChild(ad)
+    let  mygraph =(x,y,list)=>{//创建子血缘方法
+      return graph.addNode({
+        shape: 'react-shape',
+        x:x,
+        y:y,
+        width:200,
+        height:400,
+        attrs: {
+          body: {
+            fill: '#fff',
+            stroke: '#fff',
+          },
+        },
+        component:<H_Table  list={list}/>
       })
-      box.childNodes.forEach((item,inde)=>{
-        item.style.display='flex'
-        item.style.borderBottom='1px solid #ccc'
-        item.childNodes.forEach((items,indexs)=>{
-          items.style.flex='1'
-          items.style.boxSizing='boder-box'
-          items.style.paddingTop='5px'
-          items.style.textAlign='center'
-          if(indexs!==0){
-            items.style.borderLeft='1px solid #ccc'
-          }
-        })
-      })
-      console.log(box.childNodes)
-      return box
     }
-    const source = graph.addNode({
-      shape: 'html',
-      x: 300,
-      y: 160,
-      width: 200,
-      height: 150,
-      html:setlist(list),
-      attrs: {
-        body: {
-          fill: '#f5f5f5',
-          stroke: '#d9d9d9',
-        },
-      },
+    const source=mygraph(500,200,list)//创建父血缘
+    let Dataex=arr.map((item,index)=>{//循环创建子
+      return mygraph(item.x,item.y,item.list)
     })
-    
-    const target = graph.addNode({
-      shape: 'html',
-      x: 600,
-      y: 160,
-      width: 200,
-      height: 150,
-      html:setlist(list),
-      attrs: {
-        body: {
-          fill: '#f5f5f5',
-          stroke: '#d9d9d9',
+    Dataex.forEach((item,index)=>{//子父连接
+      graph.addEdge({
+        source:item,
+        target:source,
+        router: {
+          name: 'manhattan',
+          args: { 
+            step:50,
+            padding: 300,
+            startDirections: ['right'],
+            endDirections: ['left'],
+          },
         },
-      },
+        attrs: {
+          line: {
+            stroke: '#722ed1',
+          },
+        },
+      })
     })
-    const target2 = graph.addNode({
-      shape: 'html',
-      x:20,
-      y: 160,
-      width: 200,
-      height: 150,
-      html:setlist(list),
-      attrs: {
-        body: {
-          fill: '#f5f5f5',
-          stroke: '#d9d9d9',
-        },
-      },
-    })
-    const targe3 =graph.addNode({
-      x:20,
-      y:380,
-      width:200,
-      height:150,
-      data:[...list],
-      html:{
-        render(node){
-          console.log(node)
-          return (
-            list.map(item=>{
-              return <div>{item.key}</div>
-            })
-          )
-        }
-      }
-    })
-    graph.addEdge({
-      source,
-      target:target,
-      // https://x6.antv.vision/zh/docs/api/registry/router#oneside
-      router: {
-        name: 'manhattan',
-        args: {
-          side: 'right',
-          padding: 2000 ,
-          
-      maxDirectionChange:90,
-        },
-      },
-      attrs: {
-        line: {
-          stroke: '#722ed1',
-        },
-      },
-    })
-    graph.addEdge({
-      source,
-      target:target2,
-      // https://x6.antv.vision/zh/docs/api/registry/router#oneside
-      router: {
-        name: 'manhattan',
-        vertices: [],
-        args: {
-          side: 'right',
-          padding: 2000 ,
-            maxDirectionChange:90,
-        },
-      },
-      attrs: {
-        line: {
-          stroke: '#722ed1',
-        },
-      },
-    })
-    graph.addEdge({
-      source,
-      target:targe3,
-      router: {
-        name: 'manhattan',
-        vertices: [],
-        args: {
-          side: 'right',
-          padding: 2000 ,
-            maxDirectionChange:90,
-        },
-      },
-      attrs: {
-        line: {
-          stroke: '#722ed1',
-        },
-      },
-    })
+    console.log(Dataex)
   },[box])
   return (<div ref={box}>
-
   </div>)
 }
 

@@ -176,11 +176,11 @@ export default ()=>{
         box.current.style.height='1000px'  
         box.current.style.widht='2000px'
         let n=0 
-        let tiem= setTimeout(() => {
-          let arr=[colorData[1],colorData[2],colorData[0]]
-          console.log(1)
-          setdata(arr)
-        }, 500);
+        // let tiem= setTimeout(() => {
+        //   let arr=[colorData[1],colorData[2],colorData[0]]
+        //   console.log(1)
+        //   setdata(arr)
+        // }, 500);
         // let inter= setInterval(() => {
         //     let arr=[colorData[1],colorData[2],colorData[0]]
         //     setdata(arr)
@@ -205,8 +205,8 @@ export default ()=>{
                   tagName: 'foreignObject',
                   selector: 'fo',
                   attrs: {
-                    width: 6,
-                    height: 6,
+                    width: 6,//控制小圆大小
+                    height: 6,//控制小圆大小
                     x: -3,
                     y: -3,
                     magnet: 'true',
@@ -245,6 +245,7 @@ export default ()=>{
           Graph.registerConnector(
             'algo-edge',
             (source, target) => {
+              console.log(source,target)
               const offset = 4
               const control = 80
               const v1 = { x: source.x, y: source.y + offset + control }
