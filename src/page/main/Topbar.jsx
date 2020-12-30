@@ -416,7 +416,7 @@ export default class TopBar extends React.Component {
         // const contenttwo = ({contsss});
 
         return (
-            <div className="top-navbar" style={{ lineHeight: '50px', background: '#fafafa' }}>
+            <div className="top-navbar" style={{ lineHeight: '50px', background: '#fafafa',position: 'fixed' }}>
                 {/* #2f96e2  'rgb(112 107 125)' */}
                 <div style={{display:'flex', height: '50px', lineHeight: '50px', float: 'left',alignItems:'center'}} >
                

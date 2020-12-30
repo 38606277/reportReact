@@ -20,8 +20,8 @@ export default class SiderBar extends React.Component {
             loading: false,
             userId: 0,
             categoryList2: [],
+            mainHeigth: window.innerHeight - 70 + 'px',
         };
-
     }
     componentDidMount() {
         //获取报表列表
@@ -238,7 +238,7 @@ export default class SiderBar extends React.Component {
         });
         const collapsed = this.props.collapsed;
         return (
-            <div className="navbar-side">
+            <div className="navbar-side" style={{position: 'fixed'}}>
                 <Sider
                     trigger={null}
                     collapsible
@@ -246,7 +246,7 @@ export default class SiderBar extends React.Component {
                     theme="light"
                     width='220px'
                     collapsedWidth='60'
-                    style={{ overflow: 'auto', height: '100vh', left: 0,backgroundColor:'#fafafa' }}
+                    style={{ overflow: 'auto', height: this.state.mainHeigth, left: 0,backgroundColor:'#fafafa' }}
                 >
                     <Spin spinning={this.state.loading} delay={100}>
                         <Menu style={{fontFamily:"sans-serif",fontSize:"28px", backgroundColor:'#fafafa'}} theme="light" defaultSelectedKeys={['1']} mode="inline"  >
