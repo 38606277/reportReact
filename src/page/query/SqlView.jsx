@@ -227,9 +227,9 @@ class SqlView extends React.Component {
             <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px',height:this.state.mainHeigth }}>
                 <Card title={'SQL查询详情'} bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}
                     extra={<span>类型：SQL语句</span>}>
-                    <Card bodyStyle={{ padding: '0px' }} title={'*基本信息'}>
+                    <Card bodyStyle={{ padding: '0px' }} type="inner" title={'*基本信息'} size='small'>
                         <Row>
-                            <Col span={8}>
+                            <Col span={8} style={{padding:'5px'}}>
                                 服务名称
                             </Col>
                             <Col span={16}>
@@ -238,7 +238,7 @@ class SqlView extends React.Component {
 
                         </Row>
                         <Row>
-                            <Col span={8}>
+                            <Col span={8} style={{padding:'5px'}}>
                                 服务地址
                             </Col>
                             <Col span={16}>
@@ -247,7 +247,7 @@ class SqlView extends React.Component {
 
                         </Row>
                         <Row>
-                            <Col span={6}>
+                            <Col span={6} style={{padding:'5px'}}>
                                 服务类型
                             </Col>
                             <Col span={6}>
@@ -261,8 +261,8 @@ class SqlView extends React.Component {
                             </Col>
                         </Row>
                     </Card>
-                    <Card title={'*参数信息'}>
-                        <Table  dataSource={this.state.inData} pagination={false}>
+                    <Card title={'*参数信息'} size='small'>
+                        <Table  dataSource={this.state.inData} pagination={false} size='small'>
                             <Column
                                 title="参数名称"
                                 dataIndex="in_id"
@@ -286,8 +286,8 @@ class SqlView extends React.Component {
                             {'data:'}
                         </Col>
                     </Row>
-                    <Card title={'*返回参数说明'}>
-                            <Table  dataSource={this.state.outData} pagination={false}>
+                    <Card title={'*返回参数说明'} type="inner"  size='small'>
+                            <Table  dataSource={this.state.outData} pagination={false} size='small'>
                                 <Column
                                     title="参数名称"
                                     dataIndex="out_id"
@@ -304,26 +304,6 @@ class SqlView extends React.Component {
                             </Table>
                         </Card>
                 </Card>
-                <div>
-                    <Modal title="图片选择" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel}>
-                        <List
-                            itemLayout="horizontal"
-                            dataSource={this.state.imgList}
-                            renderItem={item => (
-                                <List.Item>
-                                    <List.Item.Meta
-                                        avatar={<Avatar src={url + "/report/" + item.usefilepath} />}
-                                        description={<a onClick={() => this.clickimg(item.usefilepath, item.filename)} >{item.filename}</a>}
-                                    />
-                                </List.Item>
-                            )}
-                        />
-
-                        <Pagination current={this.state.pageNumd}
-                            total={this.state.totald}
-                            onChange={(pageNumd) => this.onPageNumdChange(pageNumd)} />
-                    </Modal>
-                </div>
             </div >
         );
     }
