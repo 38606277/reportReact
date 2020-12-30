@@ -32,13 +32,17 @@ const DictValueList = Loadable({
 });
 
 
-const DictValueInfo = Loadable({
-    loader: () => import(/* webpackChunkName: "DictValueInfo" */ './DictValueInfo.jsx'),
-    loading: loading,
-    delay:3000
-});
+// const DictValueInfo = Loadable({
+//     loader: () => import(/* webpackChunkName: "DictValueInfo" */ './DictValueInfo.jsx'),
+//     loading: loading,
+//     delay:3000
+// });
 
-
+// const DictValueInfo = Loadable({//新建
+//     loader: () => import(/* webpackChunkName: "DictValueInfo" */ '../dataAsset/index.jsx'),
+//     loading: loading,
+//     delay:3000
+// });
 export default class DictRouter extends React.Component{
     render(){
         return (
@@ -47,7 +51,8 @@ export default class DictRouter extends React.Component{
                  <Route path="/dict/DictCreator/:action/:id" component={DictCreator} />
                  <Route path="/dict/DictViewData/:id" component={DictViewData} />
                  <Route path="/dict/DictValueList/:dictId" component={DictValueList} />
-                 <Route path="/dict/DictValueInfo/:dictId/:value_code" component={DictValueInfo} />
+                 {/* <Route path="/dict/index" component={DictValueInfo} /> */}
+                 {/* <Route path="/dict/DictValueInfo/:dictId/:value_code" component={DictValueInfo} /> */}
                  <Redirect exact from="/dict" to="/dict/DictList"/> 
             </Switch>
         )

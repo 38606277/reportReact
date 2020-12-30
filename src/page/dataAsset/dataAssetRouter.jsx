@@ -4,13 +4,16 @@ import { HashRouter as Router, Switch, Redirect, Route, Link } from 'react-route
 // 页面
 import dataAssetList from './dataAssetList.jsx';
 import dataAssetInfo from './dataAssetInfo.jsx';
-
+import dataadd from './index.jsx'//新建
+import Xy from './Primordial.jsx'
 export default class dataAssetRouter extends React.Component{
     render(){
         return (
             <Switch>
                  <Route path="/dataAsset/dataAssetList" component={dataAssetList} />
                  <Route path="/dataAsset/dataAssetInfo/:dataAsset_id" component={dataAssetInfo} />
+                 <Route path="/dataAsset/index" component={dataadd} />
+                 <Route path="/dataAsset/Primordial" component={Xy} />
                  {/* <Redirect exact from="/dataAsset" to="/dataAsset/dataAssetList"/>  */}
             </Switch>
         )

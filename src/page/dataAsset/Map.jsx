@@ -178,7 +178,6 @@ const ProvinceData = [
 export default (props)=>{
     let map=useRef()
     useEffect(()=>{
-        console.log(map.current)
         map.current.style.position='relative'
         map.current.style.width='300px'
         map.current.style.height='300px'

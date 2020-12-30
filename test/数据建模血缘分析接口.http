@@ -1,0 +1,50 @@
+
+
+###mysql数据建模-（数据库中创建表，保存元数据信息）
+POST http://192.168.206.49:9609//reportServer/dataModeling/createNewTable2 HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    tableFields:"[{'fieldName':'id','fieldType':'bigint(20)'},{'fieldName':'name','fieldType':'double'}]", 
+    leftTableFields:"[{'fieldName':'id','fieldType':'bigint(20)','dbName':'form','leftTableName':'table1'},{'fieldName':'name','fieldType':'double','dbName':'form','leftTableName':'table1'}]", 
+    tableName: "appuser"
+}
+
+
+
+
+###返回血缘分析数据
+POST http://192.168.206.49:9609//reportServer/dataModeling/bloodlationshipAnalysisDisplay HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    
+    modelId: "793556228272816129",
+    password: "123456"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

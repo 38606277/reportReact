@@ -156,11 +156,18 @@ const dataComputeRouter = Loadable({
 });
 
 
-const mycorp =Loadable({
+const mycorp =Loadable({//算发图
     loader:()=>import('./page/dataApp/mcorp copy.jsx'),
     loading: loading,
     delay:3000
 })
+const addlist=Loadable(
+    {
+        loader:()=>import('./page/dataAsset/addlist.jsx'),
+        loading:loading,
+        delay:3000
+    }
+)
 function LoadPage(url) {
     //    console.log(Loadable({
     //         loader: () => import(url),
@@ -200,6 +207,7 @@ class App extends React.Component {
                             <Route path="/report" component={ReportRouter} />
                             <Route path="/assetmap" component={assetmap}/> 
                             <Route path='/mycorp' component={mycorp}/>
+                            <Route path='/addlist' component={addlist}/>
                         </Switch>
                     </Layout>
                 );
