@@ -172,7 +172,7 @@
 
 import React, { useState ,useEffect} from 'react';
 import HttpService from '../../util/HttpService.jsx';
-import { Table, Input, InputNumber, Popconfirm, Form } from 'antd';
+import { Table, Input, InputNumber, Popconfirm, Form ,Card,Button} from 'antd';
 import LocalStorge  from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
 const originData = [];
@@ -196,8 +196,8 @@ const EditableCell = ({
   children,
   ...restProps
 }) => {
-  console.log(dataIndex)
   const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+  console.log(inputNode)
   return (
     <td {...restProps}>
       {editing ? (
@@ -329,7 +329,7 @@ export default ()=>{
           </span>
         ) : (
           <a disabled={editingKey !== ''} onClick={() => edit(record)}>
-            修改主导航
+            修改导航
           </a>
         );
       },
@@ -352,21 +352,24 @@ export default ()=>{
     };
   });
   return (
-    <Form form={form} component={false}>
-      <Table
-        components={{
-          body: {
-            cell: EditableCell,
-          },
-        }}
-        bordered
-        dataSource={data}
-        columns={mergedColumns}
-        rowClassName="editable-row"
-        pagination={{
-          onChange: cancel,
-        }}
-      />
-    </Form>
+    <Card title='侧导航设置'>
+       <Button type="primary" style={{float:'right',marginBottom:'20px'}} onClick={()=>addlist(statlist)}>增加新的主导航</Button>
+      <Form form={form} component={false}>
+        <Table
+          components={{
+            body: {
+              cell: EditableCell,
+            },
+          }}
+          bordered
+          dataSource={data}
+          columns={mergedColumns}
+          rowClassName="editable-row"
+          pagination={{
+            onChange: cancel,
+          }}
+        />
+      </Form>
+    </Card>
   );
 }
