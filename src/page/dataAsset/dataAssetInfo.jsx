@@ -400,9 +400,7 @@ import LocalStorge from '../../util/LogcalStorge.jsx';
 import CubeService from '../../service/CubeService.jsx';
 import QueryService from '../../service/QueryService.jsx';
 import HttpService from '../../util/HttpService.jsx';
-import DataModeling from './index.jsx'
 import { fromPairs } from 'lodash';
-import G6 from '@antv/g6';
 import echarts from 'echarts';
 // // 引入提示框和标题组件
 import 'echarts/lib/component/tooltip';
@@ -440,7 +438,7 @@ const classlist=[
     text:'存储类型视图'
   }
 ]
-let datalist=['元数据','数据血缘','数据权限','数据浏览','元数据1','数据建模','数据血缘1版','地图']
+let datalist=['元数据','数据血缘','数据权限','数据浏览','元数据1','数据血缘1版','地图']
 
 let maringLeft={
   marginLeft:'100px'
@@ -517,33 +515,11 @@ const columns = [
     ),
   },
 ];
-let cm=[
-  {
-    title: '列名',
-    dataIndex: 'name',
-    key: 'name',
-    render: text => <a>{text}</a>,
-  },
-  {
-    title: '数据类型',
-    dataIndex: 'address',
-    key: 'address',
-  },
-  {
-    title: '描述',
-    dataIndex: 'age',
-    key: 'age',
-  },
-  {
-    title: '操作',
-    key: 'action',
-    render: (text, record) => (
-      <a onClick={()=>function(){}}>
-       修改描述
-      </a>
-    ),
-  },
-];
+function setdescribe(record,listInput,isModalVisible, setIsModalVisible){
+  
+  console.log(record)
+}
+
 
 //组件
 //元数据
@@ -556,7 +532,6 @@ function List (props){
 //元数据1
 function List1(props){
   let {cm,data}=props
-  console.log(data)
   return(
     <Table columns={cm} dataSource={data}/>
   )
@@ -756,8 +731,45 @@ var option = {
   )
 }
 
+//修改
+function setdescribes(listInput,setIsModalVisible){
+  if(listInput===''){
+    return  message.error('修改内容不可为空，或者取消修改');
+  }
+  console.log(listInput)
+  setIsModalVisible(false)
+}
 //组件
 export default ()=>{
+  let [listInput,setListinput] = useState('')//获取对话框input内容
+  let [isModalVisible, setIsModalVisible] = useState(false);
+  let cm=[
+    {
+      title: '列名',
+      dataIndex: 'name',
+      key: 'name',
+      render: text => <a>{text}</a>,
+    },
+    {
+      title: '数据类型',
+      dataIndex: 'address',
+      key: 'address',
+    },
+    {
+      title: '描述',
+      dataIndex: 'age',
+      key: 'age',
+    },
+    {
+      title: '操作',
+      key: 'action',
+      render: (text, record) => (
+        <a onClick={()=>setIsModalVisible(true)}>
+         修改描述
+        </a>
+      ),
+    },
+  ];
   let [cube_name,setcube_name]=useState('');
   let [cube_desc,setcube_desc]=useState('');
   let [cube_class,setcube_class]=useState('');//资源类型
@@ -772,7 +784,6 @@ export default ()=>{
     '数据权限':<div>数据权限</div>,
     '数据浏览':<div>数据浏览</div>,
     '元数据1':<List1 data={data} cm={cm}></List1>,
-    '数据建模':<DataModeling></DataModeling>,
     '数据血缘1版':<MYXY />,
     '地图':<Map />
   };
@@ -794,9 +805,9 @@ export default ()=>{
       let obj={
         table_id:path
       }
-      console.log(path)
+      // console.log(path)
        await HttpService.post('/reportServer/DBConnection2/getAllTableList', JSON.stringify(obj)).then(res=>{
-         console.log(res.data)
+        //  console.log(res)
        })
     }
     mylist()
@@ -877,6 +888,15 @@ export default ()=>{
           }
         </Tabs>
       </Card>
+      <Modal title="修改描述" 
+             visible={isModalVisible} 
+             onOk={()=>{setdescribes(listInput,setIsModalVisible)}} 
+             onCancel={()=>{setIsModalVisible(!isModalVisible)}}
+             cancelText='取消'
+             okText='确认'
+             >
+          <Input placeholder="请修改描述" value={listInput} onChange={e=>{setListinput(e.target.value)}}/>
+      </Modal>
     </div>
   )
 }

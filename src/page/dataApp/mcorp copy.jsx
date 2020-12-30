@@ -1,22 +1,192 @@
 import React,{useEffect,useState,useRef} from 'react'
 import ReactDOM from 'react-dom'
 import insertCss from 'insert-css'
-import { Tooltip } from 'antd'
+import { Tooltip ,Table} from 'antd'
 import { Graph, Node, Path, Dom } from '@antv/x6'
+import './Hindex.css'
+const dataSource = [
+    {
+      key: '1',
+      name: '胡彦斌',
+      age: 32,
+      address: '西湖区湖底公园1号',
+    },
+    {
+      key: '2',
+      name: '胡彦祖',
+      age: 42,
+      address: '西湖区湖底公园1号',
+    },
+  ];
+  
+  const columns = [
+    {
+      title: '姓名',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: '年龄',
+      dataIndex: 'age',
+      key: 'age',
+    },
+    {
+      title: '住址',
+      dataIndex: 'address',
+      key: 'address',
+    },
+  ]
+let bow= ()=>{
+    return (
+        <Table dataSource={dataSource} columns={columns} />
+    )
+}
 
 
+let at={
+  attrs: {
+    line: {
+      stroke: '#808080',
+      strokeWidth: 1,
+      targetMarker: '',
+    },
+  },
+}
 export default ()=>{
     let box=useRef()
+
+    let [nat,setnat]=useState({...at})
+    
     let [colorData,setdata]=useState(['#fe854f','#7c68fc','#73d13d'])
+    let [o,seto]=useState(true)
+    let aty={
+      markup: [
+        {
+          tagName: 'path',
+          selector: 'wrap',
+          groupSelector: 'lines',
+        },
+        {
+          tagName: 'path',
+          selector: 'line1',
+          groupSelector: 'lines',
+        },
+        {
+          tagName: 'path',
+          selector: 'line2',
+          groupSelector: 'lines',
+        },
+        {
+          tagName: 'path',
+          selector: 'line3',
+          groupSelector: 'lines',
+        },
+      ],
+      attrs: {
+        lines: {
+          connection: true,
+          strokeDasharray: '10,20',
+          strokeLinejoin: 'round',
+          fill: 'none',
+        },
+        line1: {
+          stroke: colorData[0],
+          strokeWidth: 2,
+        },
+        line2: {
+          stroke: colorData[1],
+          strokeDashoffset: 10,
+          strokeWidth: 2,
+        },
+        line3: {
+          strokeWidth: 2,
+          strokeDashoffset: 20,
+          stroke: colorData[2],
+          targetMarker: {
+            tagName: 'path',
+            stroke: '#73d13d',
+            strokeWidth: 1,
+            d: 'M 0 -4 0 -10 -12 0 0 10 0 4',
+          },
+        },
+      },
+    }
+    let [yat,setyat]=useState({...aty})
+    let st = () =>{
+      seto(!o)
+    }
+    let add=()=>{
+      let arr=[colorData[1],colorData[2],colorData[0]]
+       setdata(arr)
+      let aty={
+        markup: [
+          {
+            tagName: 'path',
+            selector: 'wrap',
+            groupSelector: 'lines',
+          },
+          {
+            tagName: 'path',
+            selector: 'line1',
+            groupSelector: 'lines',
+          },
+          {
+            tagName: 'path',
+            selector: 'line2',
+            groupSelector: 'lines',
+          },
+          {
+            tagName: 'path',
+            selector: 'line3',
+            groupSelector: 'lines',
+          },
+        ],
+        attrs: {
+          lines: {
+            connection: true,
+            strokeDasharray: '10,20',
+            strokeLinejoin: 'round',
+            fill: 'none',
+          },
+          line1: {
+            stroke: arr[0],
+            strokeWidth: 2,
+          },
+          line2: {
+            stroke: arr[1],
+            strokeDashoffset: 10,
+            strokeWidth: 2,
+          },
+          line3: {
+            strokeWidth: 2,
+            strokeDashoffset: 20,
+            stroke: arr[2],
+            targetMarker: {
+              tagName: 'path',
+              stroke: '#73d13d',
+              strokeWidth: 1,
+              d: 'M 0 -4 0 -10 -12 0 0 10 0 4',
+            },
+          },
+        },
+      }
+      setyat(aty)
+    }
     useEffect(()=>{
-        box.current.style.height='1000px'   
+        box.current.style.height='1000px'  
+        box.current.style.widht='2000px'
+        let n=0 
+        // let tiem= setTimeout(() => {
+        //   let arr=[colorData[1],colorData[2],colorData[0]]
+        //   console.log(1)
+        //   setdata(arr)
+        // }, 500);
         // let inter= setInterval(() => {
         //     let arr=[colorData[1],colorData[2],colorData[0]]
         //     setdata(arr)
-        // }, 1000);
-        // if(!box){
-        //     clearInterval(inter)
-        // }
+        //     n+=1
+        // }, 500);
+        
         Graph.registerNode(
             'algo-node',
             {
@@ -35,10 +205,10 @@ export default ()=>{
                   tagName: 'foreignObject',
                   selector: 'fo',
                   attrs: {
-                    width: 10,
-                    height: 10,
-                    x: -5,
-                    y: -5,
+                    width: 6,//控制小圆大小
+                    height: 6,//控制小圆大小
+                    x: -3,
+                    y: -3,
                     magnet: 'true',
                   },
                   children: [
@@ -75,6 +245,7 @@ export default ()=>{
           Graph.registerConnector(
             'algo-edge',
             (source, target) => {
+              console.log(source,target)
               const offset = 4
               const control = 80
               const v1 = { x: source.x, y: source.y + offset + control }
@@ -258,7 +429,7 @@ export default ()=>{
             y: 260,
             width: 160,
             height: 30,
-            shape: 'html',
+            shape: 'algo-node',
             // label: '算法3',
             attrs: {
                 body: {
@@ -283,116 +454,22 @@ export default ()=>{
                 },
               },
             },
-            html:<div>12221</div>
+            html:()=>{
+                let div = document.createElement('div')
+                div.innerHTML='1111'
+                return div
+            }
           })
-          
           graph.addEdge({
             source: { cell: source, port: 'out1' },
             target: { cell: target, port: 'in1' },
-            markup: [
-                {
-                  tagName: 'path',
-                  selector: 'wrap',
-                  groupSelector: 'lines',
-                },
-                {
-                  tagName: 'path',
-                  selector: 'line1',
-                  groupSelector: 'lines',
-                },
-                {
-                  tagName: 'path',
-                  selector: 'line2',
-                  groupSelector: 'lines',
-                },
-                {
-                  tagName: 'path',
-                  selector: 'line3',
-                  groupSelector: 'lines',
-                },
-              ],
-              attrs: {
-                lines: {
-                  connection: true,
-                  strokeDasharray: '10,20',
-                  strokeLinejoin: 'round',
-                  fill: 'none',
-                },
-                line1: {
-                  stroke: colorData[0],
-                  strokeWidth: 8,
-                },
-                line2: {
-                  stroke: colorData[1],
-                  strokeDashoffset: 10,
-                  strokeWidth: 8,
-                },
-                line3: {
-                  strokeWidth: 8,
-                  strokeDashoffset: 20,
-                  stroke: colorData[2],
-                  targetMarker: {
-                    tagName: 'path',
-                    stroke: '#73d13d',
-                    strokeWidth: 2,
-                    d: 'M 0 -4 0 -10 -12 0 0 10 0 4',
-                  },
-                },
-              },
+            ...o?{...yat}:{...nat}
+          
           })
           graph.addEdge({
             source: { cell: source, port: 'out1' },
             target: { cell: a3, port: 'in1' },
-            markup: [
-                {
-                  tagName: 'path',
-                  selector: 'wrap',
-                  groupSelector: 'lines',
-                },
-                {
-                  tagName: 'path',
-                  selector: 'line1',
-                  groupSelector: 'lines',
-                },
-                {
-                  tagName: 'path',
-                  selector: 'line2',
-                  groupSelector: 'lines',
-                },
-                {
-                  tagName: 'path',
-                  selector: 'line3',
-                  groupSelector: 'lines',
-                },
-              ],
-              attrs: {
-                lines: {
-                  connection: true,
-                  strokeDasharray: '10,20',
-                  strokeLinejoin: 'round',
-                  fill: 'none',
-                },
-                line1: {
-                  stroke: colorData[0],
-                  strokeWidth: 8,
-                },
-                line2: {
-                  stroke: colorData[1],
-                  strokeDashoffset: 10,
-                  strokeWidth: 8,
-                },
-                line3: {
-                  strokeWidth: 8,
-                  strokeDashoffset: 20,
-                  stroke: colorData[2],
-                  targetMarker: {
-                    tagName: 'path',
-                    stroke: '#73d13d',
-                    strokeWidth: 2,
-                    d: 'M 0 -4 0 -10 -12 0 0 10 0 4',
-                  },
-                },
-              },
+            ...!o?{...yat}:{...nat}
           })
           insertCss(`
 .x6-node [magnet="true"] {
@@ -497,11 +574,18 @@ export default ()=>{
   z-index: 10;
   box-sizing: border-box;
 }
-`)
-    },[box,colorData])
+        `)
+    if(!n==0){
+      clearTimeout(tiem)  
+    }
+    },[box,colorData,o])
     return(
-        <div ref={box} id='connected'>
-            
+        <div>
+          <div ref={box} id='connected'></div>
+            <div className="Hbox">
+              <div className='Hbox1' onClick={()=>add()}>开始</div>
+              <div className='Hbox2' onClick={()=>st()}>切换</div>
+            </div>
         </div>
     )
 }

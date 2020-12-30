@@ -10,14 +10,12 @@ export default class HttpService {
     }
     
     //
-    static post(url,param,n){
+    static post(url,param){
         if((undefined==localStorge.getStorage('userInfo') && url!='/reportServer/user/encodePwd' && url!='/reportServer/user/Reactlogin') || (''==localStorge.getStorage('userInfo')  && url!='/reportServer/user/encodePwd' && url!='/reportServer/user/Reactlogin')){
             window.location.href='#login';
             return  new Promise((resolve, reject) => {});
         }else{
-            let myurl=n?'http://192.168.206.49:9601/':HttpService.getBaseUrl()
-            console.log(myurl)
-            const fullUrl = myurl + url;
+            const fullUrl = HttpService.getBaseUrl() + url;
             let opts = {
                 method: 'POST',
                 headers: {
@@ -30,6 +28,7 @@ export default class HttpService {
                     //console.log(response.json())
                     return response.json();
                 }).catch((error)=>{
+                    console.log(error)
                     return error.json();
                 });
         }

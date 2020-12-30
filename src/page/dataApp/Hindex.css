@@ -1,0 +1,25 @@
+.Hbox{
+    width: 100px;
+    height: 300px;
+    position: fixed;
+    top: 10px;
+    right: 100px;
+    z-index: 999921219;
+    display: flex;
+}
+.Hbox1{
+    width: 100px;
+    height: 100px;
+    background-color: blue;
+    color: white;
+    text-align: center;
+    line-height: 100px;
+}
+.Hbox2{
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    line-height: 100px;
+    background-color: red;
+    color: white;
+}
