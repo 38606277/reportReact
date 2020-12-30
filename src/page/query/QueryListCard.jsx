@@ -170,15 +170,7 @@ export default class QueryList extends React.Component {
                             // ]}
                         >
                             <List.Item.Meta
-                                title={<a onClick={()=>{
-                                    if(item.qry_type=='sql'){
-                                        window.location.href="#/query/SqlView/view/"+item.qry_id;
-                                    }else if(item.qry_type=='procedure'){
-                                        window.location.href="#/query/ProcedureCreator/update/"+item.qry_id;
-                                    }else if(item.qry_type=='http'){
-                                        window.location.href="#/query/HttpCreator/update/"+item.qry_id;
-                                    }
-                                 }}>{item.qry_name}</a>}
+                                title={<a onClick={()=>{window.location.href="#/query/SqlView/view/"+item.qry_id}}>{item.qry_name}</a>}
                                 description={item.qry_desc}
                             />
                             <div>查询类别：{item.class_name}</div>

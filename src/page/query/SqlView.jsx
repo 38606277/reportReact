@@ -17,7 +17,7 @@ import {
     Radio,
     message,
     Modal,
-    DatePicker,
+    Icon,
     InputNumber,
     Switch,
     Row,
@@ -92,6 +92,8 @@ class SqlView extends React.Component {
             qry_id: this.props.match.params.id,
             qry_name:'',
             qry_desc:'',
+            class_id:'',
+            qry_type:'',
             //定义状态
             inData: [],
             outData: [],
@@ -117,11 +119,11 @@ class SqlView extends React.Component {
                             outData: res.data.out,
                             qry_file: res.data.qry_file,
                             qry_name:res.data.qry_name,
-                            qry_desc:res.data.qry_desc
+                            qry_desc:res.data.qry_desc,
+                            class_id:res.data.class_id,
+                            qry_type:res.data.qry_type
                         });
                         this.props.form.setFieldsValue(res.data);
-                        this.inParam.setFormValue(this.state.inData);
-                        this.outParam.setFormValue(this.state.outData);
                     }
                     else
                         message.error(res.message);
@@ -137,7 +139,6 @@ class SqlView extends React.Component {
         //查询查询类别定义
         HttpService.post("reportServer/query/getAllQueryClass", '')
             .then(res => {
-                console.log(JSON.stringify(res));
                 if (res.resultCode == '1000') {
                     this.setState({ funcClassList: res.data });
                 }
@@ -194,39 +195,10 @@ class SqlView extends React.Component {
         });
     }
     render() {
-        const { getFieldDecorator } = this.props.form;
-        const formItemLayout = {
-            labelCol: { span: 10 },
-            wrapperCol: { span: 14 }
-        };
-        const formItemLayout1 = {
-            labelCol: { span: 3 },
-            wrapperCol: { span: 10 }
-        };
-
-        const formItemLayout2 = {
-            labelCol: { span: 5 },
-            wrapperCol: { span: 15 }
-        };
-
-        const offsetLayout = {
-            wrapperCol: {
-                xs: 24,
-                sm: {
-                    span: 12,
-                    offset: 4
-                }
-            }
-        }
-        const rowObject = {
-            minRows: 4, maxRows: 600
-        }
-
-
         return (
             <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px',height:this.state.mainHeigth }}>
-                <Card title={'SQL查询详情'} bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}
-                    extra={<span>类型：SQL语句</span>}>
+                <Card title={'查询详情'} bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}
+                    extra={<Button type="primary" shape="round"  href="#/query/QueryListCard">返回</Button>}>
                     <Card bodyStyle={{ padding: '0px' }} type="inner" title={'*基本信息'} size='small'>
                         <Row>
                             <Col span={3} style={{padding:'10px',color:'#ccc'}}>
@@ -242,7 +214,7 @@ class SqlView extends React.Component {
                                 服务地址:
                             </Col>
                             <Col span={21}  style={{padding:'10px'}}>
-                                http://localhost:8086/#/query/SqlView/view/{this.state.qry_id}
+                            http://localhost:9609/reportServer/query/execQuery/{this.state.qry_id}/{this.state.class_id}
                             </Col>
 
                         </Row>
@@ -251,13 +223,13 @@ class SqlView extends React.Component {
                                 服务类型:
                             </Col>
                             <Col span={9}  style={{padding:'10px'}}>
-                                原子服务
+                                {this.state.qry_type}
                             </Col>
                             <Col span={3} style={{padding:'10px',color:'#ccc'}}>
                                 所属部门:
                             </Col>
                             <Col span={9}  style={{padding:'10px'}}>
-                                行政部门
+                                
                             </Col>
                         </Row>
                     </Card>
