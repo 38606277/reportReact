@@ -229,39 +229,39 @@ class SqlView extends React.Component {
                     extra={<span>类型：SQL语句</span>}>
                     <Card bodyStyle={{ padding: '0px' }} type="inner" title={'*基本信息'} size='small'>
                         <Row>
-                            <Col span={8} style={{padding:'5px'}}>
-                                服务名称
+                            <Col span={3} style={{padding:'10px',color:'#ccc'}}>
+                                服务名称:
                             </Col>
-                            <Col span={16}>
+                            <Col span={21} style={{padding:'10px'}}>
                                {this.state.qry_name}|{this.state.qry_desc}
                             </Col>
 
                         </Row>
                         <Row>
-                            <Col span={8} style={{padding:'5px'}}>
-                                服务地址
+                            <Col span={3} style={{padding:'10px',color:'#ccc'}}>
+                                服务地址:
                             </Col>
-                            <Col span={16}>
+                            <Col span={21}  style={{padding:'10px'}}>
                                 http://localhost:8086/#/query/SqlView/view/{this.state.qry_id}
                             </Col>
 
                         </Row>
                         <Row>
-                            <Col span={6} style={{padding:'5px'}}>
-                                服务类型
+                            <Col span={3} style={{padding:'10px',color:'#ccc'}}>
+                                服务类型:
                             </Col>
-                            <Col span={6}>
+                            <Col span={9}  style={{padding:'10px'}}>
                                 原子服务
                             </Col>
-                            <Col span={6}>
-                                所属部门
+                            <Col span={3} style={{padding:'10px',color:'#ccc'}}>
+                                所属部门:
                             </Col>
-                            <Col span={6}>
+                            <Col span={9}  style={{padding:'10px'}}>
                                 行政部门
                             </Col>
                         </Row>
                     </Card>
-                    <Card title={'*参数信息'} size='small'>
+                    <Card title={'*参数信息'} type="inner" size='small'>
                         <Table  dataSource={this.state.inData} pagination={false} size='small'>
                             <Column
                                 title="参数名称"
@@ -279,11 +279,12 @@ class SqlView extends React.Component {
                         </Table>
                     </Card>
                     <Row>
-                        <Col>
-                        {'调用方式说明'}
+                        <Col span={3} style={{padding:'10px',color:'#ccc'}}>
+                        调用方式说明:
                         </Col>
-                        <Col>
-                            {'data:'}
+                        <Col span={21}>
+                           <TextArea rows={4} readOnly>{'data:'}</TextArea>
+                            
                         </Col>
                     </Row>
                     <Card title={'*返回参数说明'} type="inner"  size='small'>
@@ -300,7 +301,6 @@ class SqlView extends React.Component {
                                     title="参数说明"
                                     dataIndex="out_name"
                                 />
-                                
                             </Table>
                         </Card>
                 </Card>
