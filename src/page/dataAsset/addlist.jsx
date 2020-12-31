@@ -133,32 +133,32 @@
 //                 }
 //                 }}
 //             />
-//             <Modal title={setstr+n+"导航"} visible={isModalVisible} onOk={()=>handleOk} onCancel={()=>setisModalVisible(!isModalVisible)}>
-//               <p>
-//                 <Form.Item
-//                   label={n+"导航名称"}
-//                   name="username"
-//                 >
-//                   <Input placeholder='请输入' value={username} onChange={(e)=>{setusername(e.target.value)}}/>
-//                 </Form.Item>
-//               </p>
-//               <p>
-//                 <Form.Item
-//                   label={n+"导航路径"}
-//                   name="urlname"
-//                 >
-//                   <Input placeholder='请输入' value={urlname} onChange={(e)=>{seturlname(e.target.value)}}/>
-//                 </Form.Item>
-//               </p>
-//               <p>
-//                 <Form.Item
-//                   label={n+"导导航icon"}
-//                   name="iconname"
-//                 >
-//                   <Input placeholder='请输入antd中的icn字段' value={iconname} onChange={(e)=>{seticonname(e.target.value)}}/>
-//                 </Form.Item>
-//               </p>
-//             </Modal>
+            // <Modal title={setstr+n+"导航"} visible={isModalVisible} onOk={()=>handleOk} onCancel={()=>setisModalVisible(!isModalVisible)}>
+            //   <p>
+            //     <Form.Item
+            //       label={n+"导航名称"}
+            //       name="username"
+            //     >
+            //       <Input placeholder='请输入' value={username} onChange={(e)=>{setusername(e.target.value)}}/>
+            //     </Form.Item>
+            //   </p>
+            //   <p>
+            //     <Form.Item
+            //       label={n+"导航路径"}
+            //       name="urlname"
+            //     >
+            //       <Input placeholder='请输入' value={urlname} onChange={(e)=>{seturlname(e.target.value)}}/>
+            //     </Form.Item>
+            //   </p>
+            //   <p>
+            //     <Form.Item
+            //       label={n+"导导航icon"}
+            //       name="iconname"
+            //     >
+            //       <Input placeholder='请输入antd中的icn字段' value={iconname} onChange={(e)=>{seticonname(e.target.value)}}/>
+            //     </Form.Item>
+            //   </p>
+            // </Modal>
 //         </Card>
 //     )
 // }
@@ -172,7 +172,7 @@
 
 import React, { useState ,useEffect} from 'react';
 import HttpService from '../../util/HttpService.jsx';
-import { Table, Input, InputNumber, Popconfirm, Form ,Card,Button} from 'antd';
+import { Table, Input, InputNumber, Popconfirm, Form ,Card,Button,Modal,message,Tag} from 'antd';
 import LocalStorge  from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
 const originData = [];
@@ -185,7 +185,35 @@ for (let i = 0; i < 100; i++) {
     address: `London Park no. ${i}`,
   });
 }
-
+const addlist=(statlist)=>{//添加主
+  const {setisModalVisible,setStr}=statlist
+  setisModalVisible(true)
+  setStr('主')
+};
+const addSon=(record,statlist)=>{
+  const {setisModalVisible,setStr}=statlist
+  setisModalVisible(true)
+  setStr('次')
+}
+const isNullVerification=(arr,obj,method,fn)=>{//非空验证
+  if(obj[arr.indexOf('')]){
+    message.warning(obj[arr.indexOf('')])
+    return 
+  }
+  fn()
+  method(false)
+}
+const handleOk=(statlist)=>{
+  const {setisModalVisible,username,urlname,iconname,setusername,seturlname,seticonname}=statlist
+  let TipsArr=[username,urlname]
+  const TipsObj={//非空校验
+    0:'导航名称必填',
+    1:'导航路径必填',
+  }
+  isNullVerification(TipsArr,TipsObj,setisModalVisible,()=>{
+    console.log(1)
+  })
+}
 const EditableCell = ({
   editing,
   dataIndex,
@@ -197,7 +225,7 @@ const EditableCell = ({
   ...restProps
 }) => {
   const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
-  console.log(inputNode)
+  // console.log(inputNode)
   return (
     <td {...restProps}>
       {editing ? (
@@ -221,11 +249,51 @@ const EditableCell = ({
     </td>
   );
 };
+
+
+const H_input = (props)=>{
+  const {style,text,value,change}=props
+    return (
+      <div style={{display:'flex',height:'32px',lineHeight:'32px',margin:"10px 0",...style}}>
+        <span style={{flex:'2'}}>{text}</span>
+        <span style={{flex:'8'}}><span style={{display:'inline-block',width:"5%",textAlign:'center'}}>:</span><Input style={{width:'95%'}} placeholder='请输入' value={value} onChange={(e)=>{change(e.target.value)}}/></span>
+      </div>
+    )
+}
 export default ()=>{
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
   const [editingKey, setEditingKey] = useState('');
-  let userId=localStorge.getStorage('userInfo').id;
+  const [isModalVisible,setisModalVisible]=useState(false)//控制弹窗
+  const [str,setStr]=useState('')//是主菜'单还是次菜单
+  const [username,setusername]=useState('');//主导航名称
+  const [urlname,seturlname]=useState('')//主导航路径
+  const [iconname,seticonname]=useState('')//主导航ICon
+  const userId=localStorge.getStorage('userInfo').id;//获取用户id
+  const inputList=[//弹框input数据
+    {
+      text:'导航名称',
+      variable:username,
+      method:setusername
+    },
+    {
+      text:'导航路径',
+      variable:urlname,
+      method:seturlname
+    },
+    {
+      text:'导航名称',
+      variable:iconname,
+      method:seticonname
+    }
+  ]
+  const statlist={
+    isModalVisible,setisModalVisible,
+    str,setStr,
+    username,setusername,
+    urlname,seturlname,
+    iconname,seticonname
+  }
   useEffect(()=>{
     (
       async () =>{
@@ -245,15 +313,20 @@ export default ()=>{
               }
             ) 
           })
-          console.log(newdata)  
           setData(newdata)
         })
       }
     )();
-  },[])
+    if(!isModalVisible){
+      setusername('')
+      seturlname('')
+      seticonname('')
+    }
+  },[isModalVisible])
   const isEditing = (record) => record.key === editingKey;
 
   const edit = (record) => {
+    console.log(record)
     form.setFieldsValue({
       name: '',
       age: '',
@@ -263,13 +336,11 @@ export default ()=>{
     setEditingKey(record.key);
   };
 
-  const cancel = (record) => {
-    setEditingKey('');
-  };
-
-  const save = async (key) => {
-    try {
-      const row = await form.validateFields();
+  const cancel =async (record) => {
+    let key=record.key
+     try {
+      const row = await form.validateFields();//获取当前三个input中的数据
+      console.log(record,row)
       const newData = [...data];
       const index = newData.findIndex((item) => key === item.key);
 
@@ -279,13 +350,18 @@ export default ()=>{
         setData(newData);
         setEditingKey('');
       } else {
-        newData.push(row);
+        // newData.push(row);
         setData(newData);
         setEditingKey('');
       }
     } catch (errInfo) {
       console.log('Validate Failed:', errInfo);
     }
+  };
+
+  const save =  () => {
+    setEditingKey('');
+   
   };
 
   const columns = [
@@ -316,20 +392,26 @@ export default ()=>{
           <span>
             <a
               href="javascript:;"
-              onClick={() => save(record.key)}
+              onClick={() => save()}
               style={{
                 marginRight: 8,
               }}
             >
               取消修改
             </a>
-            <Popconfirm title="确认是否修改?" onConfirm={()=>cancel(_)}>
+            <Popconfirm title="确认是否修改?" 
+                        onConfirm={()=>cancel(record)}
+                        onCancel={()=>save()}
+                        okText="确认"
+                        cancelText="取消"
+            >
               <a>修改</a>
             </Popconfirm>
           </span>
-        ) : (
-          <a disabled={editingKey !== ''} onClick={() => edit(record)}>
-            修改导航
+        ) : ( 
+          <a>
+            <Tag disabled={editingKey !== ''} onClick={() => edit(record)} color="#87d068">修改导航</Tag>
+            <Tag color="#108ee9" onClick={()=>{addSon(record,statlist)}}>添加导航</Tag>
           </a>
         );
       },
@@ -339,7 +421,6 @@ export default ()=>{
     if (!col.editable) {
       return col;
     }
-
     return {
       ...col,
       onCell: (record) => ({
@@ -370,6 +451,17 @@ export default ()=>{
           }}
         />
       </Form>
+      <Modal title={"添加"+str+"导航"} visible={isModalVisible} onOk={()=>handleOk(statlist)} onCancel={()=>setisModalVisible(!isModalVisible)}
+              cancelText="取消" okText="确定"
+      >
+        {
+          inputList.map((item,index)=>{
+            return(
+              <H_input key={index} text={str+item.text}  value={item.variable} change={item.method}/>
+            )
+          })
+        }
+      </Modal>
     </Card>
   );
 }
