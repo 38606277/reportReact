@@ -104,6 +104,7 @@ class SqlView extends React.Component {
             visible: false, qry_file: null,
             pageNumd: 1, perPaged: 10, totald: 0,
             mainHeigth: window.innerHeight - 80 + 'px',
+            mainBoxHeigth:window.innerHeight - 120 + 'px',
         };
     }
     componentDidMount() {
@@ -196,9 +197,10 @@ class SqlView extends React.Component {
     }
     render() {
         return (
-            <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px',height:this.state.mainHeigth }}>
+            <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px',height:this.state.mainHeigth,overflow: 'hidden!important' }}>
                 <Card title={'查询详情'} bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}
-                    extra={<Button type="primary" shape="round"  href="#/query/QueryListCard">返回</Button>}>
+                    extra={<Button type="primary" shape="round" size='small' href="#/query/QueryListCard">返回</Button>}>
+                  <div className="main_box" style={{height:this.state.mainBoxHeigth,overflow:'auto'}}>
                     <Card bodyStyle={{ padding: '0px' }} type="inner" title={'*基本信息'} size='small'>
                         <Row>
                             <Col span={3} style={{padding:'10px',color:'#ccc'}}>
@@ -275,8 +277,9 @@ class SqlView extends React.Component {
                                 />
                             </Table>
                         </Card>
+                    </div>
                 </Card>
-            </div >
+            </div>
         );
     }
 
