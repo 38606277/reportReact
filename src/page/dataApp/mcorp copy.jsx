@@ -52,11 +52,13 @@ let at={
     },
   },
 }
+let fn=()=>{
+
+}
 export default ()=>{
     let box=useRef()
-
+    let tiem=useRef()
     let [nat,setnat]=useState({...at})
-    
     let [colorData,setdata]=useState(['#fe854f','#7c68fc','#73d13d'])
     let [o,seto]=useState(true)
     let aty={
@@ -113,80 +115,75 @@ export default ()=>{
     }
     let [yat,setyat]=useState({...aty})
     let st = () =>{
+      console.log(tiem.current)
+      clearInterval(tiem.current)
       seto(!o)
     }
     let add=()=>{
-      let arr=[colorData[1],colorData[2],colorData[0]]
-       setdata(arr)
-      let aty={
-        markup: [
-          {
-            tagName: 'path',
-            selector: 'wrap',
-            groupSelector: 'lines',
-          },
-          {
-            tagName: 'path',
-            selector: 'line1',
-            groupSelector: 'lines',
-          },
-          {
-            tagName: 'path',
-            selector: 'line2',
-            groupSelector: 'lines',
-          },
-          {
-            tagName: 'path',
-            selector: 'line3',
-            groupSelector: 'lines',
-          },
-        ],
-        attrs: {
-          lines: {
-            connection: true,
-            strokeDasharray: '10,20',
-            strokeLinejoin: 'round',
-            fill: 'none',
-          },
-          line1: {
-            stroke: arr[0],
-            strokeWidth: 2,
-          },
-          line2: {
-            stroke: arr[1],
-            strokeDashoffset: 10,
-            strokeWidth: 2,
-          },
-          line3: {
-            strokeWidth: 2,
-            strokeDashoffset: 20,
-            stroke: arr[2],
-            targetMarker: {
-              tagName: 'path',
-              stroke: '#73d13d',
-              strokeWidth: 1,
-              d: 'M 0 -4 0 -10 -12 0 0 10 0 4',
-            },
-          },
-        },
-      }
-      setyat(aty)
+      clearInterval(tiem.current)
     }
     useEffect(()=>{
         box.current.style.height='1000px'  
-        box.current.style.widht='2000px'
-        let n=0 
-        // let tiem= setTimeout(() => {
-        //   let arr=[colorData[1],colorData[2],colorData[0]]
-        //   console.log(1)
-        //   setdata(arr)
-        // }, 500);
-        // let inter= setInterval(() => {
-        //     let arr=[colorData[1],colorData[2],colorData[0]]
-        //     setdata(arr)
-        //     n+=1
-        // }, 500);
-        
+        box.current.style.widht='2000px' 
+        tiem.current =setInterval(() => {
+            //  console.log(1)
+            let arr=[colorData[1],colorData[2],colorData[0]]
+            setdata([...arr])
+            let aty={
+              markup: [
+                {
+                  tagName: 'path',
+                  selector: 'wrap',
+                  groupSelector: 'lines',
+                },
+                {
+                  tagName: 'path',
+                  selector: 'line1',
+                  groupSelector: 'lines',
+                },
+                {
+                  tagName: 'path',
+                  selector: 'line2',
+                  groupSelector: 'lines',
+                },
+                {
+                  tagName: 'path',
+                  selector: 'line3',
+                  groupSelector: 'lines',
+                },
+              ],
+              attrs: {
+                lines: {
+                  connection: true,
+                  strokeDasharray: '10,20',
+                  strokeLinejoin: 'round',
+                  fill: 'none',
+                },
+                line1: {
+                  stroke: arr[0],
+                  strokeWidth: 2,
+                },
+                line2: {
+                  stroke: arr[1],
+                  strokeDashoffset: 10,
+                  strokeWidth: 2,
+                },
+                line3: {
+                  strokeWidth: 2,
+                  strokeDashoffset: 20,
+                  stroke: arr[2],
+                  targetMarker: {
+                    tagName: 'path',
+                    stroke: '#73d13d',
+                    strokeWidth: 1,
+                    d: 'M 0 -4 0 -10 -12 0 0 10 0 4',
+                  },
+                },
+              },
+            }
+            setyat(aty)
+            console.log(...arr)
+        }, 500);
         Graph.registerNode(
             'algo-node',
             {
@@ -245,7 +242,7 @@ export default ()=>{
           Graph.registerConnector(
             'algo-edge',
             (source, target) => {
-              console.log(source,target)
+              // console.log(source,target)
               const offset = 4
               const control = 80
               const v1 = { x: source.x, y: source.y + offset + control }
@@ -352,7 +349,7 @@ export default ()=>{
           })
           
           graph.on('edge:connected', (args) => {
-              console.log(args.currentCel)
+              // console.log(args.currentCel)
             const edge = args.edge
             const node = args.currentCel
             const elem = args.currentMagnet
@@ -472,118 +469,118 @@ export default ()=>{
             ...!o?{...yat}:{...nat}
           })
           insertCss(`
-.x6-node [magnet="true"] {
-  cursor: crosshair;
-  transition: none;
-}
+            .x6-node [magnet="true"] {
+              cursor: crosshair;
+              transition: none;
+            }
 
-.x6-node [magnet="true"]:hover {
-  opacity: 1;
-}
+            .x6-node [magnet="true"]:hover {
+              opacity: 1;
+            }
 
-.x6-node [magnet="true"][port-group="in"] {
-  cursor: move;
-}
+            .x6-node [magnet="true"][port-group="in"] {
+              cursor: move;
+            }
 
-.my-port {
-  width: 100%;
-  height: 100%;
-  border: 1px solid #808080;
-  border-radius: 100%;
-  background: #eee;
-}
+            .my-port {
+              width: 100%;
+              height: 100%;
+              border: 1px solid #808080;
+              border-radius: 100%;
+              background: #eee;
+            }
 
-.my-port.connected {
-  width: 0;
-  height: 0;
-  margin-top: 5px;
-  margin-left: 1px;
-  border-width: 5px 4px 0;
-  border-style: solid;
-  border-color: #808080 transparent transparent;
-  border-radius: 0;
-  background-color: transparent;
-}
+            .my-port.connected {
+              width: 0;
+              height: 0;
+              margin-top: 5px;
+              margin-left: 1px;
+              border-width: 5px 4px 0;
+              border-style: solid;
+              border-color: #808080 transparent transparent;
+              border-radius: 0;
+              background-color: transparent;
+            }
 
-.x6-port-body.available {
-  overflow: visible;
-}
+            .x6-port-body.available {
+              overflow: visible;
+            }
 
-.x6-port-body.available body {
-  overflow: visible;
-}
+            .x6-port-body.available body {
+              overflow: visible;
+            }
 
-.x6-port-body.available body > div::before {
-  content: " ";
-  float: left;
-  width: 20px;
-  height: 20px;
-  margin-top: -5px;
-  margin-left: -5px;
-  border-radius: 50%;
-  background-color: rgba(57, 202, 116, 0.6);
-  box-sizing: border-box;
-}
+            .x6-port-body.available body > div::before {
+              content: " ";
+              float: left;
+              width: 20px;
+              height: 20px;
+              margin-top: -5px;
+              margin-left: -5px;
+              border-radius: 50%;
+              background-color: rgba(57, 202, 116, 0.6);
+              box-sizing: border-box;
+            }
 
-.x6-port-body.available body > div::after {
-  content: " ";
-  float: left;
-  clear: both;
-  width: 10px;
-  height: 10px;
-  margin-top: -15px;
-  border-radius: 50%;
-  background-color: #fff;
-  border: 1px solid #39ca74;
-  position: relative;
-  z-index: 10;
-  box-sizing: border-box;
-}
+            .x6-port-body.available body > div::after {
+              content: " ";
+              float: left;
+              clear: both;
+              width: 10px;
+              height: 10px;
+              margin-top: -15px;
+              border-radius: 50%;
+              background-color: #fff;
+              border: 1px solid #39ca74;
+              position: relative;
+              z-index: 10;
+              box-sizing: border-box;
+            }
 
-.x6-port-body.adsorbed {
-  overflow: visible;
-}
+            .x6-port-body.adsorbed {
+              overflow: visible;
+            }
 
-.x6-port-body.adsorbed body {
-  overflow: visible;
-}
+            .x6-port-body.adsorbed body {
+              overflow: visible;
+            }
 
-.x6-port-body.adsorbed body > div::before {
-  content: " ";
-  float: left;
-  width: 28px;
-  height: 28px;
-  margin-top: -9px;
-  margin-left: -9px;
-  border-radius: 50%;
-  background-color: rgba(57, 202, 116, 0.6);
-  box-sizing: border-box;
-}
+            .x6-port-body.adsorbed body > div::before {
+              content: " ";
+              float: left;
+              width: 28px;
+              height: 28px;
+              margin-top: -9px;
+              margin-left: -9px;
+              border-radius: 50%;
+              background-color: rgba(57, 202, 116, 0.6);
+              box-sizing: border-box;
+            }
 
-.x6-port-body.adsorbed body > div::after {
-  content: " ";
-  float: left;
-  clear: both;
-  width: 10px;
-  height: 10px;
-  margin-top: -19px;
-  border-radius: 50%;
-  background-color: #fff;
-  border: 1px solid #39ca74;
-  position: relative;
-  z-index: 10;
-  box-sizing: border-box;
-}
+            .x6-port-body.adsorbed body > div::after {
+              content: " ";
+              float: left;
+              clear: both;
+              width: 10px;
+              height: 10px;
+              margin-top: -19px;
+              border-radius: 50%;
+              background-color: #fff;
+              border: 1px solid #39ca74;
+              position: relative;
+              z-index: 10;
+              box-sizing: border-box;
+            }
         `)
-    if(!n==0){
-      clearTimeout(tiem)  
-    }
-    },[box,colorData,o])
+        return ()=>{
+          clearInterval(tiem.current)
+        }
+    },[colorData,o])
     return(
         <div>
           <div ref={box} id='connected'></div>
             <div className="Hbox">
-              <div className='Hbox1' onClick={()=>add()}>开始</div>
+              <div className='Hbox1' onClick={()=>add()}>停止</div>
               <div className='Hbox2' onClick={()=>st()}>切换</div>
             </div>
         </div>

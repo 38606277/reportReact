@@ -297,7 +297,10 @@ export default ()=>{
                           <Form
                               name="horizontal_login" layout="inline"
                               >
-                              <div>
+                              <div  style={{
+                                marginRight:"9px",
+                                marginBottom:"9px"
+                              }}>
                                   <span style={{marginRight:'8px'}}><span style={{...Star}}>*</span>数据表</span>  <Input placeholder="Basic usage" style={{...inoutStyle}} value={H_list} onChange={(e)=>setH_list(e.target.value)}/>
                               </div>
                               <Form.Item
