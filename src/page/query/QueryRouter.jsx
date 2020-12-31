@@ -38,6 +38,11 @@ const SqlView = Loadable({
     loading: loading,
     delay:3000
 });
+const QueryView = Loadable({
+    loader: () => import(/* webpackChunkName: "QueryView" */ './QueryView.jsx'),
+    loading: loading,
+    delay:3000
+});
 const ProcedureCreator = Loadable({
     loader: () => import(/* webpackChunkName: "ProcedureCreator" */ './ProcedureCreator.jsx'),
     loading: loading,
@@ -107,6 +112,7 @@ class QueryRouter extends React.Component{
                  <Route path="/query/nlpCreator/:tid" component={NlpCreator} />
                  <Route path="/query/NlpList" component={NlpList} />
                  <Route path="/query/SqlView/:action/:id" component={SqlView} />
+                 <Route path="/query/QueryView/:action/:id" component={QueryView} />
                  <Redirect exact from="/query" to="/query/ExecQuery"/> 
             </Switch>
         )

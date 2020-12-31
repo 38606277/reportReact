@@ -200,13 +200,7 @@ export default class QueryList extends React.Component {
                             render={(text, record) => (
                                 <span>
                                      <a onClick={()=>{
-                                        if(record.qry_type=='sql'){
-                                            window.location.href="#/query/SqlView/view/"+record.qry_id;
-                                        }else if(record.qry_type=='procedure'){
-                                            window.location.href="#/query/ProcedureCreator/update/"+record.qry_id;
-                                        }else if(record.qry_type=='http'){
-                                            window.location.href="#/query/HttpCreator/update/"+record.qry_id;
-                                        }
+                                        window.location.href="#/query/QueryView/view/"+record.qry_id;
                                      }}>查看</a>
                                     <Divider type="vertical" />
                                     <a onClick={()=>{

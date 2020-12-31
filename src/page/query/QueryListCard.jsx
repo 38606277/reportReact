@@ -43,6 +43,8 @@ export default class QueryList extends React.Component {
         pageSize:10,
         pageNum:1,
         total:0,
+        mainHeigth: window.innerHeight - 80 + 'px',
+        mainBoxHeigth:window.innerHeight - 120 + 'px',
       };
     componentDidMount() {
         this.getAllQueryName();
@@ -141,7 +143,7 @@ export default class QueryList extends React.Component {
           };
 
         return (
-            <div>
+            <div style={{ background: '#ECECEC', padding: '0px',height:this.state.mainHeigth,overflow: 'hidden!important' }}>
                 <Card title="市场数据" bodyStyle={{ padding: "10px" }}>
                     <Search
                         style={{ maxWidth: 300, marginBottom: '10px' }}
@@ -149,50 +151,52 @@ export default class QueryList extends React.Component {
                         enterButton="查询"
                         onSearch={value => this.onSearch(value)}
                     />
-                    <List
-                        dataSource={this.state.list}
-                        pagination={{
-                            onChange: page => {
-                                this.onPageNumChange(page);
-                            },
-                            pageSize: this.state.pageSize,
-                            total:this.state.total
-                          }}
-                        itemLayout="vertical"
-                        size="large"
-                        renderItem={item => (
-                        <List.Item
-                            key={item.qry_name}
-                            // actions={[
-                            // <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
-                            // <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
-                            // <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
-                            // ]}
-                        >
-                            <List.Item.Meta
-                                title={<a onClick={()=>{window.location.href="#/query/SqlView/view/"+item.qry_id}}>{item.qry_name}</a>}
-                                description={item.qry_desc}
-                            />
-                            <div>查询类别：{item.class_name}</div>
-                            <div>调用方式：{item.qry_type}</div>
-                            {/* <Card title={item.qry_name} size='small'>
-                            {item.qry_file == null ?
-                                                    <Avatar src={require("./../../asset/logo.png")}  />
-                                                    : <Avatar src={url + "/report/" + item.qry_file} />}
-                                <div style={{cursor:'pointer' }} onClick={()=>{
-                                        if(item.qry_type=='sql'){
-                                            window.location.href="#/query/SqlView/view/"+item.qry_id;
-                                        }else if(item.qry_type=='procedure'){
-                                            window.location.href="#/query/ProcedureCreator/update/"+item.qry_id;
-                                        }else if(item.qry_type=='http'){
-                                            window.location.href="#/query/HttpCreator/update/"+item.qry_id;
-                                        }
-                                     }}>{item.qry_name}</div>
-                                     <div>  类型：{item.qry_type}</div>
-                            </Card> */}
-                        </List.Item>
-                        )}
-                    />
+                      <div className="main_box" style={{height:this.state.mainBoxHeigth,overflow:'auto'}}>
+                        <List
+                            dataSource={this.state.list}
+                            pagination={{
+                                onChange: page => {
+                                    this.onPageNumChange(page);
+                                },
+                                pageSize: this.state.pageSize,
+                                total:this.state.total
+                            }}
+                            itemLayout="vertical"
+                            size="large"
+                            renderItem={item => (
+                            <List.Item
+                                key={item.qry_name}
+                                // actions={[
+                                // <IconText icon={StarOutlined} text="156" key="list-vertical-star-o" />,
+                                // <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" />,
+                                // <IconText icon={MessageOutlined} text="2" key="list-vertical-message" />,
+                                // ]}
+                            >
+                                <List.Item.Meta
+                                    title={<a onClick={()=>{window.location.href="#/query/SqlView/view/"+item.qry_id}}>{item.qry_name}</a>}
+                                    description={item.qry_desc}
+                                />
+                                <div>查询类别：{item.class_name}</div>
+                                <div>调用方式：{item.qry_type}</div>
+                                {/* <Card title={item.qry_name} size='small'>
+                                {item.qry_file == null ?
+                                                        <Avatar src={require("./../../asset/logo.png")}  />
+                                                        : <Avatar src={url + "/report/" + item.qry_file} />}
+                                    <div style={{cursor:'pointer' }} onClick={()=>{
+                                            if(item.qry_type=='sql'){
+                                                window.location.href="#/query/SqlView/view/"+item.qry_id;
+                                            }else if(item.qry_type=='procedure'){
+                                                window.location.href="#/query/ProcedureCreator/update/"+item.qry_id;
+                                            }else if(item.qry_type=='http'){
+                                                window.location.href="#/query/HttpCreator/update/"+item.qry_id;
+                                            }
+                                        }}>{item.qry_name}</div>
+                                        <div>  类型：{item.qry_type}</div>
+                                </Card> */}
+                            </List.Item>
+                            )}
+                        />
+                    </div>
                 </Card>
             </div >
         );
