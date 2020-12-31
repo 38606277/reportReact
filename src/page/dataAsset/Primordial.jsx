@@ -1,7 +1,7 @@
 import React,{useState,useEffect,useRef} from 'react'
 import { Table, Tag, Space,Card ,Select  } from 'antd';
 import HttpService from '../../util/HttpService.jsx';
-import { Graph } from '@antv/x6'
+import { Graph,Path } from '@antv/x6'
 import '@antv/x6-react-shape'
 const {Option}=Select 
 const columns = [
@@ -16,7 +16,7 @@ const columns = [
     key: 'column_type',
   },
   {
-    title: '"table_name"',
+    title: 'table_name',
     dataIndex: 'table_name',
     key: 'table_name',
   },
@@ -42,9 +42,8 @@ const opentList=[
 ]
 let H_Table=(props)=>{
   let list=props.list
-  console.log(list)
   return(
-    <Table scroll={{x:200,y:270}} dataSource={list} columns={columns} size={'small'}/>
+    <Table scroll={{x:150,y:200}} dataSource={list} columns={columns} size={'small'}/>
   )
 }
 let handleChange=(e)=>{
@@ -84,28 +83,49 @@ export default ()=>{
     if(user)(
         getlist()
     )
-   
-    console.log(getlists)
     let H=box.current.parentNode.clientHeight
     let W=box.current.parentNode.clientWidth
-    console.log(W,H)
     // box.current.style.width=W+'px'
     box.current.style.height=W+'px'
+    box.current.style.boxShadow="5px 5px 5px 5px #eee"
+    Graph.registerConnector(
+      'curve',
+      (sourcePoint, targetPoint) => {
+        const path = new Path()
+        path.appendSegment(Path.createSegment('M', sourcePoint))
+        path.appendSegment(
+          Path.createSegment(
+            'C',
+            sourcePoint.x+90,
+            sourcePoint.y+20,
+            targetPoint.x-100,
+            targetPoint.y,
+            targetPoint.x,
+            targetPoint.y,
+          ),
+        )
+        return path.serialize()
+      },
+      true,
+    )
     const graph = new Graph({
       container:box.current,
       grid: true,
-    })
-    graph.drawBackground({
-      color: '#f5f5ref5',
+      background: {
+        color: '#fff', // 设置画布背景颜色
+      },
+      grid: {
+        size: 1,      // 网格大小 10px
+        visible: true, // 渲染网格背景
+      },
     })
     let  mygraph =(x,y,list)=>{//创建子血缘方法
-      console.log(list)
       return graph.addNode({
         shape: 'react-shape',
         x:x,
         y:y,
         width:200,
-        height:400,
+        height:350,
         attrs: {
           body: {
             fill: '#fff',
@@ -115,7 +135,7 @@ export default ()=>{
         component:<H_Table  list={list}/>
       })
     }
-    const source=mygraph(500,250,getlists[0])//创建父血缘
+    const source=mygraph(350,200,getlists[0])//创建父血缘
     let arr =[
       {
         x:50,
@@ -124,34 +144,28 @@ export default ()=>{
       },
       {
         x:50,
-        y:500,
+        y:370,
         list:getlists[2]
       }
     ]
     let Dataex=arr.map((item,index)=>{//循环创建子
       return mygraph(item.x,item.y,item.list)
     })
-    Dataex.forEach((item,index)=>{//子父连接
+    Dataex.forEach((item,index)=>{//子父连接 cell: source, anchor: 'bottom', connectionPoint: 'anchor'
       graph.addEdge({
-        source:item,
-        target:source,
+        source:{cell:item,anchor: 'right', connectionPoint: 'anchor'},
+        target:{ cell: source, anchor: 'left', connectionPoint: 'anchor' },
+        connector: { name: 'curve' },
         router: {
-          name: 'manhattan',
-          args: { 
-            step:50,
-            padding: 300,
-            startDirections: ['right'],
-            endDirections: ['left'],
-          },
+          name: 'manhattan'
         },
         attrs: {
           line: {
-            stroke: '#722ed1',
+            stroke: 'skyblue',
           },
         },
       })
     })
-    console.log(Dataex)
   },[getlists])
   return (<Card title="数据血缘">
     <div style={

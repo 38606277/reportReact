@@ -407,7 +407,6 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/legend'
 import 'echarts/lib/chart/pie';
-import XY from './Primordial.jsx'
 import Map from './Map.jsx'
 const { TabPane } = Tabs;
 const _cubeService = new CubeService();
@@ -438,7 +437,7 @@ const classlist=[
     text:'存储类型视图'
   }
 ]
-let datalist=['元数据','数据血缘','数据权限','数据浏览','元数据1','数据血缘1版','地图']
+let datalist=['元数据','数据血缘','数据权限','数据浏览','元数据1','地图']
 
 let maringLeft={
   marginLeft:'100px'
@@ -534,13 +533,6 @@ function List1(props){
   let {cm,data}=props
   return(
     <Table columns={cm} dataSource={data}/>
-  )
-}
-
-
-function  MYXY(props){
-  return(
-    < XY/>
   )
 }
 //数据血缘
@@ -784,7 +776,6 @@ export default ()=>{
     '数据权限':<div>数据权限</div>,
     '数据浏览':<div>数据浏览</div>,
     '元数据1':<List1 data={data} cm={cm}></List1>,
-    '数据血缘1版':<MYXY />,
     '地图':<Map />
   };
   function callback(key){
