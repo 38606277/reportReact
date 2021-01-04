@@ -1,5 +1,5 @@
 import React,{useState,useEffect,useRef} from 'react';
-import { Form, Input, Table, Button, Modal, Card,  Radio,Row, Col, Select, Pagination, message, Tabs, Divider, Tag ,Layout} from 'antd';
+import { Form, Input, Table, Button, Card, Select, Pagination, message, Tabs, Divider, Tag ,Layout,Popconfirm} from 'antd';
 import HttpService from '../../util/HttpService.jsx';
 const layout = {
     labelCol: { span: 7 },
@@ -7,7 +7,7 @@ const layout = {
   };
 const inoutStyle={
   width:'155px',
-  marginLeft:'8px'
+  marginLeft:'5px'
 };
 const Star={//红色*样式
   marginRight: '4px',
@@ -16,31 +16,86 @@ const Star={//红色*样式
   fontFamily: 'SimSun, sans-serif',
   lineHeight: '1'
 };
+const EditableCell = ({
+  editing,
+  dataIndex,
+  title,
+  inputType,
+  record,
+  index,
+  children,
+  ...restProps
+}) => {
+  const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
+  return (
+    <td {...restProps}>
+      {editing ? (
+        <Form.Item
+          name={dataIndex}
+          style={{
+            margin: 0,
+          }}
+          rules={[
+            {
+              required: true,
+              message: `Please Input ${title}!`,
+            },
+          ]}
+        >
+          {inputNode}
+        </Form.Item>
+      ) : (
+        children
+      )}
+    </td>
+  );
+};
+const columns = [
+  {
+    title: 'fieldName',
+    dataIndex: 'fieldName',
+    render: (text) => <a>{text}</a>,
+  },
+  {
+    title: 'fieldType',
+    dataIndex: 'fieldType',
+  }
+];
+const reme=(res,G_data_source,setG_data_source)=>{
+  let arr =G_data_source.filter(item=>{
+    if(item.key!==res.key){
+      return item
+    }
+  })
+  setG_data_source([...arr])
+  console.log(arr)
+}
 export default ()=>{
-    let [source,setsource]=useState({});//记录账号和密码 +数据来源标记
-    let [data_source,setdata_source]=useState([]);//来源
-    let [selectedRowKeys,setselectedRowKeys]=useState([]);//控制1表选中
-    let [arr,setarr]=useState([]);//整合选中信息
-    let [data_library,setdata_library]=useState([]);//数据库
-    let [data_list,setdata_list]=useState([]);//数据表
-    let [selectionType, setSelectionType] = useState('checkbox');//表
-    let [G_data_source,setG_data_source]=useState([]);//已建模表
-    let [mylist,setmylist]=useState([]);
-    let [user,setuser]=useState(true);
-    let [recordSelect,setrecordSelect]=useState([]);//记录选中数据
-    let [librarystr,setlibrarystr]=useState('')//获取数据库字段
-    let [liststr,setliststr]=useState('')//获取数据表字段
-    let [tableList,settableList]=useState([])//左侧记录
+    const [editingKey, setEditingKey] = useState('');
+    const [form] = Form.useForm();
+    const [source,setsource]=useState({});//记录账号和密码 +数据来源标记
+    const [data_source,setdata_source]=useState([]);//来源
+    const [selectedRowKeys,setselectedRowKeys]=useState([]);//控制1表选中
+    const [arr,setarr]=useState([]);//整合选中信息
+    const [data_library,setdata_library]=useState([]);//数据库
+    const [data_list,setdata_list]=useState([]);//数据表
+    const [selectionType, setSelectionType] = useState('checkbox');//表
+    const [G_data_source,setG_data_source]=useState([]);//已建模表
+    const [mylist,setmylist]=useState([]);
+    const [user,setuser]=useState(true);
+    const [librarystr,setlibrarystr]=useState('');//获取数据库字段
+    const [liststr,setliststr]=useState('')//获取数据表字段
+    const [tableList,settableList]=useState([])//左侧记录
     const Hcenter=useRef();//中间dom
     const Hbtn=useRef();//中间蓝色按钮
     const letTable=useRef();///左侧dom
-
+    const [recordSelect,setrecordSelect]=useState([]);//单选框选中数据
     //右侧变量
-    let [Rdata_source,setRdata_source]=useState([{'value':'总部','text':'总部'}]);//数据来源
-    let [Rdata_library,setRdata_library]=useState([{'value':'my','text':'my'},{'value':'ou','text':'ou'}]);//数据列表
-    let [getRsource,setRsource]=useState('');//数据来源内容
-    let [getRlibrary,setRlibrary]=useState('');//数据列表内容
-    let [H_list,setH_list]=useState('');//获取数据内容
+    const [Rdata_library,setRdata_library]=useState([{'value':'my','text':'my'},{'value':'ou','text':'ou'}]);//数据列表
+    const [H_module_name,setmoduleName]=useState('')//模型名称
+    // const [getRsource,setRsource]=useState('');//数据来源内容
+    const [getRlibrary,setRlibrary]=useState('');//数据列表内容
+    const [H_list,setH_list]=useState('');//获取数据内容
     useEffect(()=>{
         if(user){
             let mysource=async()=>{
@@ -58,12 +113,11 @@ export default ()=>{
             mysource();
         }
         Hcenter.current.style.paddingTop=letTable.current.clientHeight/2-Hbtn.current.clientHeight+'px';//动态改变按钮高度
-    },[source,mylist,user]);
+    },[source,mylist,user,G_data_source]);
     const rowSelection = {
         selectedRowKeys,
         onChange: (selectedRowKeys, selectedRows) => {
             setrecordSelect([...selectedRows])
-            console.log(recordSelect)
             // setrecordSelect(selectedRowKeys)
             setarr(selectedRows);
             setselectedRowKeys(selectedRowKeys);
@@ -174,41 +228,127 @@ export default ()=>{
       //   return
       // };
     }
-    const columns = [
-        {
-          title: 'fieldName',
-          dataIndex: 'fieldName',
-          render: (text) => <a>{text}</a>,
-        },
-        {
-          title: 'fieldType',
-          dataIndex: 'fieldType',
+    const isEditing = (record) => record.key === editingKey;
+
+    const edit = (record) => {
+      // console.log(record)
+      form.setFieldsValue({
+        title: '',
+        dataIndex: '',
+        ...record,
+      });
+      setEditingKey(record.key);
+    };
+  
+    const cancel =async (record) => {
+      let key=record.key
+       try {
+        const row = await form.validateFields();//获取当前三个input中的数据
+        console.log(row)
+        const newData = [...G_data_source];
+        const index = newData.findIndex((item) => key === item.key);
+  
+        if (index > -1) {
+          const item = newData[index];
+          newData.splice(index, 1, { ...item, ...row });
+          setG_data_source(newData);
+          setEditingKey('');
+        } else {
+          // newData.push(row);
+          setG_data_source(newData);
+          setEditingKey('');
         }
-      ];
-    const colimnsR=[
+      } catch (errInfo) {
+        console.log('Validate Failed:', errInfo);
+      }
+    };
+  
+    const save =  () => {
+      setEditingKey('');
+     
+    };
+  
+    const colimnsR = [
       {
         title: 'fieldName',
         dataIndex: 'fieldName',
-        render: (text) => <a>{text}</a>,
+        width: '25%',
+        editable: true,
       },
       {
         title: 'fieldType',
         dataIndex: 'fieldType',
-      },
+        width: '15%',
+        editable: true,
+      },  
       {
-        title:'操作',
-        render: (text,res) => <a onClick={()=>{//右侧取消逻辑
-          let arr=G_data_source.filter(item=>{
-            return item.fieldName!==res.fieldName
-          })
-          let sele=arr.map(item=>{
-           return item.key
-          })
-          setG_data_source(arr)
-          setselectedRowKeys(sele)
-        }}>取消</a>,
-      }
+        title: '操作',
+        dataIndex: 'x',
+        render: (_, res) => {
+          const editable = isEditing(res)
+          if(!isNaN(res.key)){
+            return (<Tag color="#108ee9" onClick={()=>{
+              let arr=G_data_source.filter(item=>{
+                return item.fieldName!==res.fieldName
+              })
+              let sele=arr.map(item=>{
+               return item.key
+              })
+              setG_data_source(arr)
+              setselectedRowKeys(sele)
+            }}>取消</Tag>)
+          }else{
+            return editable?(
+              <div>
+                <Tag onClick={()=>cancel(res)}>确定</Tag>
+              </div>
+            ):(<div>
+              <Tag onClick={()=>reme(res,G_data_source,setG_data_source)}>删除</Tag>
+              <Tag onClick={()=>edit(res)}>修改</Tag>
+            </div>)
+          }          
+        },
+      },
     ];
+    const mergedColumns = colimnsR.map((col) => {
+      if (!col.editable) {
+        return col;
+      }
+      return {
+        ...col,
+        onCell: (record) => ({
+          record,
+          inputType: col.dataIndex === 'age' ? 'number' : 'text',
+          dataIndex: col.dataIndex,
+          title: col.title,
+          editing: isEditing(record),
+        }),
+      };
+    });
+    const addGlist=()=>{
+      // console.log(G_data_source)
+      if(G_data_source.length>0){
+        let fieldNametext =G_data_source[G_data_source.length-1].fieldName
+        let fieldTypetext =G_data_source[G_data_source.length-1].fieldType
+        let obj={
+          0:'请填写fieldName',
+          1:'请填写fieldType'
+        }
+        let arr=[fieldNametext,fieldTypetext]
+        if(obj[arr.indexOf('')]){
+          message.warning(obj[arr.indexOf('')])
+          return
+        }
+        console.log(fieldNametext,fieldTypetext)
+        G_data_source.push({fieldName:'',fieldType:"",key:G_data_source.length+'H'})
+        setG_data_source([...G_data_source])
+        edit(G_data_source[G_data_source.length-1]) 
+      }else{
+        let arr=[{fieldName:'',fieldType:"",key:G_data_source.length+'H'}]
+        setG_data_source(arr)
+        edit(arr[0])
+      }
+    }
     return(
         <div>
             <Card title='数据建模' style={{display:'flow-root'}}>
@@ -291,7 +431,23 @@ export default ()=>{
                 </div>
                 <div style={{paddingTop:'130px',paddingLeft:'20px',paddingRight:'20px'}} ref={Hcenter}><Button type="primary" onClick={()=>go()} ref={Hbtn}>→</Button></div>
                 <div style={{width:'45%',float:'right'}}>
-                    <Table dataSource={G_data_source} columns={colimnsR} pagination={G_data_source.length>10?true:false} title={() => {//右侧表头
+                  <Form form={form} component={false}>
+                  <Table
+                     components={{
+                      body: {
+                        cell: EditableCell,
+                      },
+                      }}
+                      bordered
+                      rowClassName="editable-row"
+                      pagination={{
+                        onChange: cancel,
+                      }}
+                      dataSource={G_data_source} 
+                      columns={mergedColumns} 
+                      pagination={G_data_source.length>10?true:false} 
+                      rowClassName="editable-row"
+                      title={() => {//右侧表头
                         return <div>
                           <div style={{textAlign:'center',padding:"10px 0 20px 0"}} >建模</div>
                           <Form
@@ -301,36 +457,31 @@ export default ()=>{
                                 marginRight:"9px",
                                 marginBottom:"9px"
                               }}>
-                                  <span style={{marginRight:'8px'}}><span style={{...Star}}>*</span>数据表</span>  <Input placeholder="Basic usage" style={{...inoutStyle}} value={H_list} onChange={(e)=>setH_list(e.target.value)}/>
+                                  <span style={{marginRight:'8px'}}><span style={{...Star}}>*</span>模型名称</span> <span>：</span><Input placeholder="请输入" style={{...inoutStyle, marginLeft:'10px'}} value={H_module_name} onChange={(e)=>setmoduleName(e.target.value)}/>
                               </div>
-                              <Form.Item
-                                      {...layout}
-                                      label="数据库"
-                                      name="basic2 "
-                                      initialValues={{ remember: true }}
-                                      rules={[{ required: true}]}
-                                      style={{marginBottom:'9px'}}
-                                  >
-                                  <Select defaultValue="请选择" style={{ width: 155,marginLeft:7 }} onChange={setRlibrary}>
+                              <div style={{marginBottom:"9px"}}>
+                               <span style={{marginRight:'8px'}}><span style={{...Star}}>*</span>数据库</span><span style={{marginLeft:"18px"}}>：</span> 
+                               <Select defaultValue="请选择" style={{ width: 155,marginLeft:9 }} onChange={setRlibrary}>
                                       {
                                         Rdata_library.map((item,index)=>{
                                           return <Option value={item.value} key={index}>{item.text}</Option>
                                       })
                                       }
-                                  </Select>
-                              </Form.Item>
-                              <div>
-                                  <span style={{marginRight:'8px'}}><span style={{...Star}}>*</span>数据表</span>  <Input placeholder="Basic usage" style={{...inoutStyle}} value={H_list} onChange={(e)=>setH_list(e.target.value)}/>
+                                </Select>
                               </div>
+                              <div>
+                                  <span style={{marginRight:'8px'}}><span style={{...Star}}>*</span>数据表</span><span style={{marginLeft:"18px"}}>：</span><Input placeholder="请输入" style={{...inoutStyle}} value={H_list} onChange={(e)=>setH_list(e.target.value)}/>
+                              </div>
+                              <Button type="primary" style={{marginLeft:"100px"}} onClick={()=>addGlist(G_data_source,setG_data_source)}>新增列</Button>
                           </Form>
                         </div>
                     }} bordered={true} 
                         size='small'
                     />
+                  </Form>
                   <Button type="primary" style={{float:'right',marginTop:'20px'}} onClick={()=>Submit()}>建模</Button>
                 </div>
               </Form>
-               
                 {/* <Table dataSource={G_data_source} columns={columns} pagination={G_data_source>10?true:false} title={() => {
                     return <div style={{textAlign:'center'}} >修改建模</div>
                 }} bordered={true}/> */}

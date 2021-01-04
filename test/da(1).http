@@ -1,0 +1,675 @@
+#语音查询
+
+POST http://localhost:80/reportServer/nlp/getResult/查询亚信的采购订单 HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+body: {}
+
+###列出所有的数据库
+POST http://localhost:80/reportServer/DBConnection/ListAll HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+body: {}
+
+###登录请求示例
+POST http://localhost:8080/reportServer/user/login HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{ UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+###查询所有的函数
+POST http://localhost:80/reportServer/function/getAllFunctionName HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+body: {}
+
+
+
+###查询所有的函数类别
+POST http://localhost:80/reportServer/function1/getAllFunctionClass HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+body: {}
+
+###查询函数用ID
+POST http://localhost:80/reportServer/function/getFunctionByID/36 HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    func_id:"37"
+}
+###保存一个函数
+POST http://localhost:80//reportServer/DBConnection2/insertMysqlMetadata HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+ 
+}
+
+
+
+###同步mysql元数据信息
+POST http://localhost:9609//reportServer/DBConnection2/getDatabaseList HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    jdbcurl:"jdbc:mysql://192.168.206.49:3306/", 
+    username: "appuser",
+    password: "123456"
+}
+
+
+###获取元数据信息
+POST http://localhost:9609//reportServer/DBConnection2/getAllTableList HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+
+}
+
+###通过目录查询
+POST http://localhost:80//reportServer/DBConnection2/getTableNamesByCatalog HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+  catalog: "2",
+}
+
+###构建菜单树
+POST http://localhost:80//reportServer/DBConnection2/getOrgTree HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+  catalog: "2",
+}
+
+###查询hive数据库
+POST http://localhost:80//reportServer/HiveMetadataV2/showDatabases HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+  
+}
+
+###查询hive指定数据库下的所有表
+POST http://localhost:80//reportServer/HiveMetadataV2/showTables HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+   databaseName: "default",
+}
+
+
+###查询hive指定数据库下的所有表V2
+POST http://localhost:80//reportServer/HiveMetadataV2/showTablesV2 HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+   databaseName: "lee_20200901",
+}
+###查询hive表结构
+POST http://localhost:80//reportServer/HiveMetadataV2/descTable HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+  
+}
+
+
+###同步hive表元数据
+POST http://localhost:9609//reportServer/HiveMetadataV2/synchronizeHiveMetadata HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    jdbcurl:"jdbc:hive2://172.17.5.132:10000/", 
+    username: "root",
+    password: "123456"
+}
+
+###同步hbase表元数据
+POST http://localhost:9609//reportServer/HbaseMetadata/synchronizeHbaseMetadata HTTP/1.1
+content-type: application/json;charset=utf-8
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    jdbcurl:"jdbc:phoenix:172.17.5.132,172.17.5.133,172.17.5.166:2181?&useSSL=false", 
+    username: "admin",
+    password: "admin"
+}
+
+###查询hbase表数据
+POST http://localhost:80//reportServer/HbaseMetadata/queryDataByTableName HTTP/1.1
+content-type: application/json;charset=utf-8
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    jdbcurl:"jdbc:phoenix:172.17.5.132,172.17.5.133,172.17.5.166:2181?&useSSL=false", 
+    username: "admin",
+    password: "admin",
+    tableName: "user"
+
+}
+
+###查询mysql表数据
+POST http://localhost:80//reportServer/DBConnection2/getDataBytableName HTTP/1.1
+content-type: application/json;charset=utf-8
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    jdbcurl:"jdbc:phoenix:172.17.5.132,172.17.5.133,172.17.5.166:2181?&useSSL=false", 
+    username: "admin",
+    password: "admin",
+    tableName: "da_table"
+
+}
+
+
+###查询hbase表数据
+POST http://localhost:80//reportServer/HbaseMetadata/getDataBytableName HTTP/1.1
+content-type: application/json;charset=utf-8
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    jdbcurl:"jdbc:phoenix:172.17.5.132,172.17.5.133,172.17.5.166:2181?&useSSL=false", 
+    username: "admin",
+    password: "admin",
+    tableName: "user"
+
+}
+
+
+###查询hive表数据
+POST http://localhost:9609//reportServer/HiveMetadataV2/getDataBytableName HTTP/1.1
+content-type: application/json;charset=utf-8
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+  
+
+}
+
+
+###查询hive表数据
+POST http://localhost:80//reportServer/HiveMetadataV2/getDataBytableName HTTP/1.1
+content-type: application/json;charset=utf-8
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+  
+
+}
+
+
+
+
+###数据转换
+POST http://localhost:80//reportServer/DBConnection2/dataFormatConversion HTTP/1.1
+content-type: application/json;charset=utf-8
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+   
+    tableName: "bd_index_copy1",
+    indexName: "index_name"
+}
+
+
+
+###统计mysql中记录数
+POST http://localhost:9609//reportServer/DBConnection2/statisticsTableRecordsNumber HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    jdbcurl:"jdbc:mysql://192.168.206.49:3306/", 
+    username: "appuser",
+    password: "123456",
+    dbName: "form"
+}
+
+###统计mysql中记录数
+POST http://192.168.206.49:9609//reportServer/DBConnection2/statisticsTableRecordsNumber HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    jdbcurl:"jdbc:mysql://192.168.206.49:3306/", 
+    username: "appuser",
+    password: "123456",
+    dbName: "form"
+}
+
+###统计hbase中记录数
+POST http://localhost:80//reportServer/HbaseMetadata/statisticsTableRecordsNumber HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    jdbcurl:"jdbc:phoenix:172.17.5.132,172.17.5.133,172.17.5.166:2181?&useSSL=false", 
+    username: "admin",
+    password: "admin",
+    dbName: "hbase"
+}
+
+
+###统计hive表中记录数
+POST http://localhost:80//reportServer/HiveMetadataV2/statisticsTableRecordsNumber HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    jdbcurl:"jdbc:hive2://172.17.5.132:10000/", 
+    username: "root",
+    password: "123456",
+     dbName: "default"
+}
+
+
+###读取mysql表结构信息（字段名）
+POST http://localhost:80//reportServer/DBConnection2/getStructureV2 HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    dbName: "form",
+     tableName: "bd_index"
+}
+
+
+###读取hive表结构信息（字段名，字段类型）
+POST http://localhost:80//reportServer/HiveMetadataV2/getTableStructure HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    jdbcurl:"jdbc:hive2://172.17.5.132:10000/", 
+    username: "root",
+    password: "123456",
+    dbName: "default",
+    tableName: "m_student"
+}
+
+
+###读取hbase表结构信息（列族，字段名）
+POST http://localhost:80//reportServer/HbaseMetadata/getTableStructure HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+
+    tableName: "HI_CITY"
+}
+
+###统计大数据平台数据（通过目录ID）
+POST http://localhost:9609//reportServer/DBConnection2/statisticsRecordsNumberByCatalog HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    catalog: "4"
+   
+}
+
+###统计大数据平台数据（通过数据库类型，数据库名字统计）
+POST http://localhost:9609//reportServer/DBConnection2/statisticsRecordsNumberByDataBaseName HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    dbType: "hive",
+     dbName: "default"
+}
+
+###统计大数据平台数据（通过数据库类型）
+POST http://localhost:8080//reportServer/DBConnection2/statisticsRecordsNumberByDataBaseType HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    dbType: "hbase",
+     dbName: "hbase"
+}
+
+
+###统计大数据平台记录总数
+POST http://localhost:9609//reportServer/DBConnection2/statisticsAllRecordsNumber HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    
+}
+
+###统计大数据平台记录总数
+POST http://192.168.206.49:9609/reportServer/DBConnection2/statisticsAllRecordsNumber HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    
+}
+
+###Kmeans聚类
+POST http://localhost:9609/reportServer/kmeansgeneral/training HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+     tableName: "aaaakmeans",
+     modelPath: "/data",
+     size: "2",
+}
+
+###查看Kmeans聚类结果
+POST http://localhost:9609/reportServer/kmeansgeneral/getKmeansResult HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+     tableName: "aaaakmeans_result",
+     modelPath: "/data",
+     size: "2",
+}
+
+
+###Kmeans聚类
+POST http://192.168.206.49:9609/reportServer/kmeansgeneral/training HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+     tableName: "aaaakmeans",
+     modelPath: "/data",
+     size: "3",
+}
+
+###查看Kmeans聚类结果
+POST http://192.168.206.49:9609/reportServer/kmeansgeneral/getKmeansResult HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+     tableName: "aaaakmeans_result",
+     modelPath: "/data",
+     size: "",
+}
+
+###python程序
+POST http://127.0.0.1:5000/rest_test HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+     username: "aaaakmeans_result",
+     password: "/data"  
+}
+
+
+
+###线性回归训练
+POST http://192.168.206.49:9609/reportServer/linearregression/training HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+     tableName: "m_shangzheng180",
+     columnY: "close",
+     columnX: "open,high",
+     modelPath: "/intelligentapplication/investment/investmentforecast/LinearRegressionGeneralTraining_m_shangzheng180"
+     
+}
+
+###线性回归测试
+POST http://192.168.206.49:9609/reportServer/linearregression/predict HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+     tableName: "m_shangzheng180_predict",
+     columnY: "close",
+     columnX: "open,high",
+     modelPath: "/intelligentapplication/investment/investmentforecast/LinearRegressionGeneralTraining_m_shangzheng180"
+     
+}
+
+###线性回归测试
+POST http://192.168.206.49:9609/reportServer/linearregression/predict HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+     tableName: "m_shangzheng180_predict",
+     columnY: "close",
+     columnX: "open,high",
+     modelPath: "/intelligentapplication/investment/investmentforecast/LinearRegressionGeneralTraining_m_shangzheng180"
+     
+}
+
+###线性回归测试
+POST http://localhost:9609/reportServer/linearregression/predict HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+     tableName: "m_shangzheng180_predict",
+     columnY: "close",
+     columnX: "open,high",
+     modelPath: "/intelligentapplication/investment/investmentforecast/LinearRegressionGeneralTraining_m_shangzheng180"
+     
+}
+
+###线性回归测试
+POST http://localhost:9609/reportServer/linearregression/predict HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+     tableName: "m_shangzheng180_predict",
+     columnY: "close",
+     columnX: "open,high",
+     modelPath: "/intelligentapplication/investment/investmentforecast/LinearRegressionGeneralTraining_m_shangzheng180"
+     
+}
+
+###获取所有资源url
+POST http://localhost:9609//reportServer/dataModeling/getjdbcUrl HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+
+}
+
+
+###获取url下的db
+POST http://localhost:9609//reportServer/dataModeling/getDatabaseList HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    jdbcurl:"jdbc:mysql://192.168.206.49:3306/", 
+    username: "appuser",
+    password: "123456"
+}
+
+
+###获取db下的所有表
+POST http://localhost:9609//reportServer/dataModeling/getTableNamesByDbname HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+     url:"jdbc:mysql://192.168.206.49:3306/", 
+     user: "appuser",
+     password: "123456",
+     dbName: "apigateway"
+}
+
+###通过表名获取表结构
+POST http://localhost:9609//reportServer/dataModeling/getStructureByTableName HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+     url:"jdbc:mysql://192.168.206.49:3306/apigateway?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&useUnicode=true&autoReconnect=true", 
+     username: "appuser",
+     password: "123456",
+     dbName: "apigateway",
+     tableName: "financial_ch_gtgf"
+}
+
+
+###通过表名获取表结构
+POST http://192.168.206.49:9609//reportServer/dataModeling/getStructureByTableName HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+     url:"jdbc:mysql://192.168.206.49:3306/apigateway?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&useSSL=false&useUnicode=true&autoReconnect=true", 
+     username: "appuser",
+     password: "123456",
+     dbName: "apigateway",
+     tableName: "financial_ch_gtgf"
+}
+
+
+
+
+###获取所有资源url
+POST http://192.168.206.49:9609//reportServer/dataModeling/getjdbcUrl HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+
+}
+
+
+###获取url下的db
+POST http://192.168.206.49:9609//reportServer/dataModeling/getDatabaseList HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    jdbcurl:"jdbc:mysql://192.168.206.49:3306/", 
+    username: "appuser",
+    password: "123456"
+}
+
+###mysql数据库中创建表
+POST http://localhost:9609//reportServer/dataModeling/getDatabaseList HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    tableName:"aaNewTable", 
+    username: "appuser",
+    password: "123456"
+}
+
+
+###mysql数据库中创建表
+POST http://localhost:9609//reportServer/dataModeling/createNewTable HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    tableName:"[{'fieldName':'id','fieldType':'bigint(20)'},{'fieldName':'name','fieldType':'double'}]", 
+    username: "appuser",
+    password: "123456"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

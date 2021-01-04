@@ -15,14 +15,13 @@
     <script type="text/javascript">
        function getServerUrl()
         {
-            // if(location.hostname)
-            // {
-            //     return "http://"+location.hostname+":"+'80'+"/";
-            // }else
-            // {
-            //     return 'http://192.168.206.49:'+'80'+'/';
-            // }
-            return 'http://192.168.206.49:9609/' 
+            if(location.hostname)
+            {
+                return "http://"+location.hostname+":"+'9609'+"/";
+            }else
+            {
+                return 'http://localhost:'+'9609'+'/';
+            }
         }
         //  alert(getServerUrl());
     </script>
