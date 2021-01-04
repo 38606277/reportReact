@@ -59,7 +59,7 @@ credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
 
 
 ###同步mysql元数据信息
-POST http://192.168.206.49:9609//reportServer/DBConnection2/getDatabaseList HTTP/1.1
+POST http://localhost:9609//reportServer/DBConnection2/getDatabaseList HTTP/1.1
 content-type: application/json
 method: POST
 credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
@@ -72,7 +72,7 @@ credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
 
 
 ###获取元数据信息
-POST http://192.168.206.49:9609//reportServer/DBConnection2/getAllTableList HTTP/1.1
+POST http://localhost:9609//reportServer/DBConnection2/getAllTableList HTTP/1.1
 content-type: application/json
 method: POST
 credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
@@ -143,7 +143,7 @@ credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
 
 
 ###同步hive表元数据
-POST http://localhost:80//reportServer/HiveMetadataV2/synchronizeHiveMetadata HTTP/1.1
+POST http://localhost:9609//reportServer/HiveMetadataV2/synchronizeHiveMetadata HTTP/1.1
 content-type: application/json
 method: POST
 credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
@@ -155,7 +155,7 @@ credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
 }
 
 ###同步hbase表元数据
-POST http://localhost:80//reportServer/HbaseMetadata/synchronizeHbaseMetadata HTTP/1.1
+POST http://localhost:9609//reportServer/HbaseMetadata/synchronizeHbaseMetadata HTTP/1.1
 content-type: application/json;charset=utf-8
 method: POST
 credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
@@ -251,7 +251,7 @@ credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
 
 
 ###统计mysql中记录数
-POST http://localhost:80//reportServer/DBConnection2/statisticsTableRecordsNumber HTTP/1.1
+POST http://localhost:9609//reportServer/DBConnection2/statisticsTableRecordsNumber HTTP/1.1
 content-type: application/json
 method: POST
 credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }

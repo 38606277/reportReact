@@ -21,7 +21,7 @@ const FormCreator = Loadable({
 });
 
 const dataAssetMap = Loadable({
-    loader: () => import(/* webpackChunkName: "dataAssetMap" */ './dataAssetMap.jsx'),
+    loader: () => import(/* webpackChunkName: "dataAssetMap" */ './dataAssetMap2.jsx'),
     loading: loading,
     delay:3000
 });

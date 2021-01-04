@@ -260,6 +260,13 @@ const H_input = (props)=>{
       </div>
     )
 }
+const remoList =(record,getlist)=>{
+  HttpService.post('/reportServer/menu/deleteMenuById',JSON.stringify([{func_id:5002}])).then(res=>{
+    console.log(res)
+  })
+  
+  // console.log(record)
+}
 export default ()=>{
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
@@ -269,7 +276,7 @@ export default ()=>{
   const [username,setusername]=useState('');//主导航名称
   const [urlname,seturlname]=useState('')//主导航路径
   const [iconname,seticonname]=useState('')//主导航ICon
-  const userId=localStorge.getStorage('userInfo').id;//获取用户id
+  // const userId=localStorge.getStorage('userInfo').id;//获取用户id
   const inputList=[//弹框input数据
     {
       text:'导航名称',
@@ -294,29 +301,31 @@ export default ()=>{
     urlname,seturlname,
     iconname,seticonname
   }
+  let getlist = async () =>{
+    await HttpService.post('/reportServer/auth/getFunRuleListReact',JSON.stringify({type: "reactWeb"})).then(res=>{
+      console.log(res)
+      // let newdata=[]
+      // res.data.forEach((item,index)=>{
+      //   newdata.push(
+      //     {
+      //       ...item,
+      //       key:index,
+      //       children: item.children.map((items,indexs)=>{
+      //         return {
+      //           ...items,
+      //           key:index+"_"+indexs
+      //         }
+      //       })
+      //     }
+      //   ) 
+      // })
+      setData(res)
+    })
+  }
   useEffect(()=>{
-    (
-      async () =>{
-        await HttpService.post('/reportServer/auth/getMenuListNew',JSON.stringify({userId:userId})).then(res=>{
-          let newdata=[]
-          res.data.forEach((item,index)=>{
-            newdata.push(
-              {
-                ...item,
-                key:index,
-                children: item.children.map((items,indexs)=>{
-                  return {
-                    ...items,
-                    key:index+"_"+indexs
-                  }
-                })
-              }
-            ) 
-          })
-          setData(newdata)
-        })
-      }
-    )();
+    getlist()
+  },[])
+  useEffect(()=>{
     if(!isModalVisible){
       setusername('')
       seturlname('')
@@ -326,11 +335,10 @@ export default ()=>{
   const isEditing = (record) => record.key === editingKey;
 
   const edit = (record) => {
-    console.log(record)
     form.setFieldsValue({
-      name: '',
-      age: '',
-      address: '',
+      // name: '',
+      // age: '',
+      // address: '',
       ...record,
     });
     setEditingKey(record.key);
@@ -367,7 +375,7 @@ export default ()=>{
   const columns = [
     {
       title: '导航名称',
-      dataIndex: 'func_name',
+      dataIndex: 'title',
       width: '25%',
       editable: true,
     },
@@ -410,8 +418,9 @@ export default ()=>{
           </span>
         ) : ( 
           <a>
-            <Tag disabled={editingKey !== ''} onClick={() => edit(record)} color="#87d068">修改导航</Tag>
-            <Tag color="#108ee9" onClick={()=>{addSon(record,statlist)}}>添加导航</Tag>
+            <Tag disabled={editingKey !== ''} onClick={() => edit(record)} color="#87d068">修改</Tag>
+            <Tag color="red" onClick={()=>remoList(record,getlist)}>删除</Tag>
+            <Tag color="#108ee9" onClick={()=>{addSon(record,statlist)}}>添加</Tag>
           </a>
         );
       },

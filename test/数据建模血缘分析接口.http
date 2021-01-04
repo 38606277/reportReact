@@ -1,7 +1,7 @@
 
 
 ###mysql数据建模-（数据库中创建表，保存元数据信息）
-POST http://192.168.206.49:9609//reportServer/dataModeling/createNewTable2 HTTP/1.1
+POST http://localhost:80//reportServer/dataModeling/createNewTable2 HTTP/1.1
 content-type: application/json
 method: POST
 credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
@@ -25,6 +25,17 @@ credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
     
     modelId: "793556228272816129",
     password: "123456"
+}
+
+###返会菜单
+POST http://127.0.0.1:9609/reportServer/auth/getMenuListNew HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    userId: 506
+
 }
 
 
