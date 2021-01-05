@@ -16,7 +16,7 @@ export default class dataAssetRouter extends React.Component{
                  <Route path="/dataAsset/dataAssetInfo/:dataAsset_id" component={dataAssetInfo} />
                  <Route path="/dataAsset/index" component={dataadd} />
                  <Route path="/dataAsset/Primordial" component={Xy} />
-                 <Route path="/dataAsset/modelList" component={modelList} />
+                 <Route path="/dataAsset/addModule" component={ModuleNew} />
                  {/* <Redirect exact from="/dataAsset" to="/dataAsset/dataAssetList"/>  */}
             </Switch>
         )
