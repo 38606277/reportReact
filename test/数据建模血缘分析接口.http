@@ -37,6 +37,16 @@ credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
     userId: 506
 
 }
+###返会菜单2
+POST http://127.0.0.1:9609/reportServer/auth/getMenuListNew HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    userId: 506
+
+}
 
 
 

@@ -1,0 +1,50 @@
+.H_addModule{
+    .H_addModule_Name{//模型名称
+        display: flex;
+        height: 30px;
+        line-height: 30px;
+        .H_addModule_NameText{
+            flex:4
+        }
+        .H_addModule_NameInput{
+            flex: 6;
+        }
+    }
+    .H_addModule_Lass{//类
+        display: flex;
+        height: 30px;
+        line-height: 30px;
+        margin-left: 10px;
+        .H_addModule_LassTitle{
+            flex: 4;
+        }
+        .H_addModule_LassSelect{
+            flex: 6;
+        }
+    }
+    .H_addModule_Explain{//说明
+        margin: 20px 0;
+        display: flow-root;
+        .H_addModule_ExplainText{
+            float: left;
+        }
+        .H_addModule_ExplainArea{
+            float: left;
+            width: 300px;
+            margin-left: 40px;
+        }
+    }
+    .H_addModule_btnList{
+        margin: 20px 0;
+        display: flow-root;
+        position: relative;
+        .H_addModule_btnListAdd{
+            float: left;
+            position: absolute;
+            bottom: -20px;
+        }
+        .H_addModule_btnListPre{
+            float: right;
+        }
+    }
+}
