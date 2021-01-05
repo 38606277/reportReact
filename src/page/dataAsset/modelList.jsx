@@ -23,6 +23,7 @@ import {
 import CubeService from '../../service/CubeService.jsx';
 import HttpService from '../../util/HttpService.jsx';
 import { forInRight } from 'lodash';
+// import X6 from '../x6/ERGraph/index.tsx'
 const _cubeService = new CubeService();
 const Search = Input.Search;
 const FormItem = Form.Item;

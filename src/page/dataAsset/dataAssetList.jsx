@@ -548,7 +548,7 @@ export default class dataAssetList extends React.Component {
                                             />
                                         </Col>
                                         <Col xs={24} sm={12}>
-                                            <Button href={"#/dataAsset/addModule"} style={{ float: "right", marginRight: "30px" }} type="primary">新建数据资产</Button>
+                                            <Button href={"#/dataAsset/modelList"} style={{ float: "right", marginRight: "30px" }} type="primary">新建数据资产</Button>
                                         </Col>
                                     </Row>
 
