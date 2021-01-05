@@ -23,6 +23,8 @@ import {
 import CubeService from '../../service/CubeService.jsx';
 import HttpService from '../../util/HttpService.jsx';
 import { forInRight } from 'lodash';
+
+import ERGraphDemo from '../ERGraphDemo/index.tsx';
 const _cubeService = new CubeService();
 const Search = Input.Search;
 const FormItem = Form.Item;
@@ -501,6 +503,7 @@ export default class modelList extends React.Component {
 
         return (
             <div id="page-wrapper">
+                <ERGraphDemo />
                 <Spin spinning={this.state.loading} delay={100}>
                     <Card title="数据模型" bodyStyle={{ padding: "8px", backgroundColor: '#fafafa' }}>
                         <Row>

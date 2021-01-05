@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+      "moduleResolution": "node",
+      "module": "ESNEXT",
+      "target": "es6",
+      "jsx": "preserve",
+      "esModuleInterop": true
+  }
+}

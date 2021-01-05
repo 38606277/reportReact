@@ -20,6 +20,7 @@ module.exports = {
         filename: '[name].js',
         // publicPath:"/build/"
     },
+ 
     module: {
         rules: [
             {
@@ -39,6 +40,15 @@ module.exports = {
                     }
                 }
             },
+
+            {
+                test: /\.(ts|tsx)$/,
+                exclude: /node-modules/,
+                use: [
+                    'babel-loader', 'ts-loader'
+                ]
+            },
+            
             {
                 test: /\.(sa|sc|c)ss$/,
                 use: [
@@ -111,6 +121,9 @@ module.exports = {
             }
         ]
     },
+    resolve: {
+        extensions: [".js", ".jsx", ".json",".ts",".tsx"]
+},
     performance: {
         hints: false
     },

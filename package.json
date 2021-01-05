@@ -60,8 +60,12 @@
     "@antv/l7": "^2.3.3",
     "@antv/l7-district": "^2.2.46",
     "@antv/l7-maps": "^2.3.3",
-    "@antv/x6": "^1.6.3",
-    "@antv/x6-react-shape": "^1.1.47",
+  
+
+    "@antv/x6": "^1.9.3",
+    "@antv/x6-react-components": "^1.0.4",
+    "@antv/x6-react-shape": "^1.1.58",
+
     "@grapecity/spread-excelio": "^12.0.9",
     "@grapecity/spread-sheets": "^11.2.2",
     "@grapecity/spread-sheets-react": "^11.2.2",
