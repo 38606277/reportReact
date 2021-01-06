@@ -33,7 +33,7 @@ export default class EREditorDemo extends React.PureComponent<{}, {}> {
           id: relationId,
           source: sourceEntityId,
           target: targetEntityId,
-          label: '1:N',
+          label: '1:p',
           // render: (data: RelationCanvasModel) => {
           //   return null;
           // },
