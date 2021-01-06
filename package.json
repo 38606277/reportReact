@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@babel/polyfill": "^7.10.1",
+    "awesome-typescript-loader": "^5.2.1",
     "babel-core": "6.26.3",
     "babel-loader": "7.1.5",
     "babel-plugin-import": "1.8.0",
@@ -44,7 +45,9 @@
     "react-sortablejs": "^1.3.4",
     "sass-loader": "7.1.0",
     "sortablejs": "^1.6.1",
+    "source-map-loader": "^2.0.0",
     "style-loader": "0.19.1",
+    "ts-loader": "^8.0.14",
     "typescript": "^4.1.3",
     "url-loader": "1.1.1",
     "webpack": "4.27.1",
@@ -61,12 +64,9 @@
     "@antv/l7": "^2.3.3",
     "@antv/l7-district": "^2.2.46",
     "@antv/l7-maps": "^2.3.3",
-  
-
     "@antv/x6": "^1.9.3",
     "@antv/x6-react-components": "^1.0.4",
     "@antv/x6-react-shape": "^1.1.58",
-
     "@grapecity/spread-excelio": "^12.0.9",
     "@grapecity/spread-sheets": "^11.2.2",
     "@grapecity/spread-sheets-react": "^11.2.2",

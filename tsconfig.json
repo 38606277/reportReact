@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
       "moduleResolution": "node",
-      "module": "ESNEXT",
+      "module": "es6",
       "target": "es6",
-      "jsx": "preserve",
-      "esModuleInterop": true
+      "jsx": "react",
+      "esModuleInterop": true,
+      // "allowJs": true, 
   }
 }

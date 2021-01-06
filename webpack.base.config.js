@@ -40,14 +40,24 @@ module.exports = {
                     }
                 }
             },
-
             {
                 test: /\.(ts|tsx)$/,
                 exclude: /node-modules/,
-                use: [
-                    'babel-loader', 'ts-loader'
-                ]
+                loader:'ts-loader'
             },
+            // {
+            //     test: /\.(ts|tsx)$/,
+            //     exclude: /node-modules/,
+            //     use: [
+            //         {
+            //             loader: 'awesome-typescript-loader',
+            //             options: {
+            //                 useBabel: true,
+            //                 babelCore: '@babel/core'
+            //             }
+            //         }
+            //     ]
+            //   },
             
             {
                 test: /\.(sa|sc|c)ss$/,
@@ -58,7 +68,16 @@ module.exports = {
                     'sass-loader',
                 ],
             },
-            {
+
+            // {
+            //     test:/\.less$/,
+            //     use: [
+            //          'style-loader',
+            //          'css-loader',
+            //          'less-loader'
+            //     ]
+            //   },
+             {
                 test: /\.less/,
                 use: [
                     // MiniCssExtractPlugin.loader,
@@ -122,8 +141,8 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: [".js", ".jsx", ".json",".ts",".tsx"]
-},
+        extensions: [".js", ".jsx", ".json",".ts",".tsx",'.less']
+    },
     performance: {
         hints: false
     },
