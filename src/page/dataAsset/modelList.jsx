@@ -502,7 +502,7 @@ export default class modelList extends React.Component {
 
 
         return (
-            <div id="page-wrapper">
+            <div id="page-wrapper" style={{height:'1000px'}}>
                 <ERGraphDemo />
                 <Spin spinning={this.state.loading} delay={100}>
                     <Card title="数据模型" bodyStyle={{ padding: "8px", backgroundColor: '#fafafa' }}>

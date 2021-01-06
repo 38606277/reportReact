@@ -261,6 +261,7 @@ const H_input = (props)=>{
     )
 }
 const remoList =(record,getlist)=>{
+    console.log(record)
   HttpService.post('/reportServer/menu/deleteMenuById',JSON.stringify([{func_id:5002}])).then(res=>{
     console.log(res)
   })

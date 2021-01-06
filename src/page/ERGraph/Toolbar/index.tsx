@@ -9,7 +9,10 @@ import {
   AntDesignOutlined,
 } from '@ant-design/icons';
 import classNames from 'classnames';
-import styles from './index.less';
+//  import styles from './index.less';
+const styles = require('./index.less');
+
+
 
 interface Props {
   className?: string;
@@ -88,7 +91,7 @@ const GraphToolbar: React.FC<Props> = (props) => {
           <AntDesignOutlined />
         </li>
       </Popover>
-      <Modal
+      {/* <Modal
         visible={designShow}
         footer={null}
         onCancel={() => setDesignShow(false)}
@@ -119,7 +122,7 @@ const GraphToolbar: React.FC<Props> = (props) => {
             <Text>设计师：源子</Text>
           </Paragraph>
         </Typography>
-      </Modal>
+      </Modal> */}
     </ul>
   );
 };

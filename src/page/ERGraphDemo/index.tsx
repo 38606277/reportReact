@@ -1,9 +1,9 @@
 import React from 'react';
 import ERGraph from '../ERGraph';
-import { NodeConfig, EdgeConfig } from '@/pages/xflow';
+import { NodeConfig, EdgeConfig } from '../xflow';
 import { mockEntityData, mockRelationData } from './mock';
 import { EntityCanvasModel, RelationCanvasModel } from './interface';
-import Entity from './Entity/index.tsx';
+import Entity from './Entity';
 // import Relation from './Relation';
 
 export default class EREditorDemo extends React.PureComponent<{}, {}> {

@@ -1,6 +1,6 @@
 import React,{useState,useEffect,useRef} from 'react';
 import { Form, Input, Table, Button, Card, Select, Pagination, message, Tabs, Divider, Tag ,Layout,Popconfirm} from 'antd';
-import HttpService from '../../util/HttpService.jsx';
+import HttpService from '../../util/HttpService';
 const layout = {
     labelCol: { span: 7 },
     wrapperCol: { span: 15 },
@@ -326,6 +326,12 @@ export default ()=>{
       };
     });
     const addGlist=()=>{
+      let str=''
+      for(let i=0;i<26;i++){    
+        str+=String.fromCharCode(65+i)+String.fromCharCode(97+i)+i
+      }
+      let n=Math.floor(Math.random()*str.length-1)
+      let z=Math.floor(Math.random()*str.length-1)
       // console.log(G_data_source)
       if(G_data_source.length>0){
         let fieldNametext =G_data_source[G_data_source.length-1].fieldName
@@ -344,7 +350,7 @@ export default ()=>{
         setG_data_source([...G_data_source])
         edit(G_data_source[G_data_source.length-1]) 
       }else{
-        let arr=[{fieldName:'',fieldType:"",key:G_data_source.length+'H'}]
+        let arr=[{fieldName:'',fieldType:"",key:G_data_source.length+'H'+str[n]+str[z]}]
         setG_data_source(arr)
         edit(arr[0])
       }
