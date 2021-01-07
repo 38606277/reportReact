@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React,{useState} from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from 'antd/lib/pagination';
 import { BarChartOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined } from '@ant-design/icons';
@@ -110,7 +110,8 @@ export default class modelList extends React.Component {
             selectedKeys: ['0-0'],//树默认选中第一个
             activeButton: 0,
             //选项卡切换默认
-            Hcard: null
+            Hcard: null,
+            moduleType:true
         };
     }
     componentDidMount() {
@@ -502,10 +503,30 @@ export default class modelList extends React.Component {
 
 
         return (
-            <div id="page-wrapper" style={{height:'1000px'}}>
-                <ERGraphDemo />
+            <div id="page-wrapper">
                 <Spin spinning={this.state.loading} delay={100}>
-                    <Card title="数据模型" bodyStyle={{ padding: "8px", backgroundColor: '#fafafa' }}>
+                    <Card title="数据模型" bodyStyle={{ padding: "8px", backgroundColor: '#fafafa' }} extra={<div>
+                        <Button href={"#/dataAsset/addLists"} style={{ float: "right", marginRight: "10px" }} type="primary">编辑模型</Button>
+                        <Button href={"#/dataAsset/addLists"} style={{ float: "right", marginRight: "10px" }} type="primary">新建模型</Button></div>}>
+                        <div style={{display:'flow-root',padding:"20px 0"}}>
+                             <Form
+                                name="horizontal_login" layout="inline" style={{float:'left',marginLeft:'214px'}}
+                                >
+                                    <Form.Item label="模型名称" style={{marginRight:'30px'}}>
+                                        <span style={{color:'red'}}>人力资源</span>
+                                    </Form.Item>
+                                    <Form.Item label="模型类型" style={{marginRight:'30px'}}>
+                                        <span style={{color:'red'}}>人力资源</span>
+                                    </Form.Item>
+                                    <Form.Item label="创建日期" style={{marginRight:'30px'}}>
+                                        <span style={{color:'red'}}>2020-1-1</span>
+                                    </Form.Item>
+                                    <Form.Item label="创建人" style={{marginRight:'30px'}}>
+                                        <span style={{color:'red'}}>姓名</span>
+                                    </Form.Item>
+                            </Form>
+                            
+                        </div>
                         <Row>
                             <Col sm={4}>
 
@@ -527,20 +548,22 @@ export default class modelList extends React.Component {
 
                                     <Row>
                                         <Col xs={24} sm={24}>
-                                        <Button href={"#/dataAsset/index"} style={{ float: "right", marginRight: "10px" }} type="primary">编辑模型</Button>
-                                            <Button href={"#/dataAsset/index"} style={{ float: "right", marginRight: "10px" }} type="primary">新建模型</Button>
-                                 
-
                                             <Radio.Group style={{ float: "left", marginRight: "30px" }}  defaultValue="list" buttonStyle="solid" onChange={(e) => { this.setState({ iView: e.target.value }) }}>
-                                                <Radio.Button value="list">列表</Radio.Button>
-                                                <Radio.Button value="column">模型</Radio.Button>
+                                                <Radio.Button value="list" onClick={()=>this.setState({moduleType:true})}>列表</Radio.Button>
+                                                <Radio.Button value="column" onClick={()=>this.setState({moduleType:false})}>模型</Radio.Button>
   
                                             </Radio.Group>
                                         </Col>
                                     </Row>
 
                                 </Card>
-                                <Table dataSource={this.state.list} columns={columns} bordered={true} />
+                                <div style={{height:"664px"}}>
+                                    {
+                                        this.state.moduleType? <Table dataSource={this.state.list} columns={columns} bordered={true}
+                                        />:<ERGraphDemo />
+                                    } 
+                                </div>
+                               
                                 {/* <Pagination current={this.state.pageNum}
                                     total={this.state.total}
                                     onChange={(pageNum) => this.onPageNumChange(pageNum)} /> */}

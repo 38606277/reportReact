@@ -135,7 +135,7 @@ export default class EventController {
               'selection:changed',
               ({ selected, removed, added }) => {
                 event.handler && event.handler({ selected, removed, added });
-                this.x6BaseGraph.bringCellsToFront(selected);
+                // this.x6BaseGraph.bringCellsToFront(selected);
               },
             );
             break;

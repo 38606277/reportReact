@@ -12,7 +12,6 @@ import Edge from '../graph/edge';
 import { CellController, EventController } from '../controller/index';
 import _ from 'lodash';
 // import ReactDOM from 'react-dom';
-console.log(1)
 export default class X6BaseGraph implements BaseGraph {
   public graph!: Graph;
   public cellController!: CellController;
