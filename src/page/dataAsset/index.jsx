@@ -213,7 +213,7 @@ export default ()=>{
           tableFields:JSON.stringify([...MJSON])
       }
       HttpService.post('/reportServer/dataModeling/createNewTable2',JSON.stringify(mydata)).then(res=>{
-        message.success('建模完成')
+        message.success('采集完成')
       })
       //非空校验
       // let obj={
@@ -357,7 +357,7 @@ export default ()=>{
     }
     return(
         <div>
-            <Card title='数据建模' style={{display:'flow-root'}}>
+            <Card title='数据采集' style={{display:'flow-root'}}>
               <Form
               name="horizontal_lo2" layout="inline"
               >
@@ -455,7 +455,7 @@ export default ()=>{
                       rowClassName="editable-row"
                       title={() => {//右侧表头
                         return <div>
-                          <div style={{textAlign:'center',padding:"10px 0 20px 0"}} >建模</div>
+                          <div style={{textAlign:'center',padding:"10px 0 20px 0"}} >采集</div>
                           <Form
                               name="horizontal_login" layout="inline"
                               >
@@ -485,7 +485,7 @@ export default ()=>{
                         size='small'
                     />
                   </Form>
-                  <Button type="primary" style={{float:'right',marginTop:'20px'}} onClick={()=>Submit()}>建模</Button>
+                  <Button type="primary" style={{float:'right',marginTop:'20px'}} onClick={()=>Submit()}>保存</Button>
                 </div>
               </Form>
                 {/* <Table dataSource={G_data_source} columns={columns} pagination={G_data_source>10?true:false} title={() => {

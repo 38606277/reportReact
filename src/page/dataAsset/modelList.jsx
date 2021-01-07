@@ -25,6 +25,30 @@ import HttpService from '../../util/HttpService.jsx';
 import { forInRight } from 'lodash';
 
 import ERGraphDemo from '../ERGraphDemo/index.tsx';
+
+
+const ModData =[
+    {
+        text:"模型名称",
+        value:"人力资源"
+    },
+    {
+        text:"数据来源",
+        value:"公司内部"
+    },
+    {
+        text:"数据类型",
+        value:"mysql",
+    },
+    {
+        text:"创建时间",
+        value:"2021/01/01"
+    },
+    {
+        text:"创建人",
+        value:"XXXX"
+    }
+]
 const _cubeService = new CubeService();
 const Search = Input.Search;
 const FormItem = Form.Item;
@@ -505,30 +529,11 @@ export default class modelList extends React.Component {
         return (
             <div id="page-wrapper">
                 <Spin spinning={this.state.loading} delay={100}>
-                    <Card title="数据模型" bodyStyle={{ padding: "8px", backgroundColor: '#fafafa' }} extra={<div>
+                    <Card title="数据模型" bodyStyle={{ backgroundColor: '#fafafa',boxSizing:"border-box" }} extra={<div>
                         <Button href={"#/dataAsset/addLists"} style={{ float: "right", marginRight: "10px" }} type="primary">编辑模型</Button>
                         <Button href={"#/dataAsset/addLists"} style={{ float: "right", marginRight: "10px" }} type="primary">新建模型</Button></div>}>
-                        <div style={{display:'flow-root',padding:"20px 0"}}>
-                             <Form
-                                name="horizontal_login" layout="inline" style={{float:'left',marginLeft:'214px'}}
-                                >
-                                    <Form.Item label="模型名称" style={{marginRight:'30px'}}>
-                                        <span style={{color:'red'}}>人力资源</span>
-                                    </Form.Item>
-                                    <Form.Item label="模型类型" style={{marginRight:'30px'}}>
-                                        <span style={{color:'red'}}>人力资源</span>
-                                    </Form.Item>
-                                    <Form.Item label="创建日期" style={{marginRight:'30px'}}>
-                                        <span style={{color:'red'}}>2020-1-1</span>
-                                    </Form.Item>
-                                    <Form.Item label="创建人" style={{marginRight:'30px'}}>
-                                        <span style={{color:'red'}}>姓名</span>
-                                    </Form.Item>
-                            </Form>
-                            
-                        </div>
                         <Row>
-                            <Col sm={4}>
+                            <Col sm={4} style={{backgroundColor:"#fff",boxSizing:"border-box",paddingTop:"2px"}}>
 
                                 <Tree
                                     // onExpand={this.onExpand}
@@ -544,11 +549,21 @@ export default class modelList extends React.Component {
                                 </Tree>
                             </Col>
                             <Col sm={20}>
+                                <div style={{display:'flow-root',marginLeft:"1px",backgroundColor:"#fff",padding:"20px 0 0 20px"}}>
+                                    {
+                                        ModData.map((item,index)=>{
+                                            return(<div key={index} style={{display:"flex",fontSize:"20px",float:"left",marginRight:"100px",marginBottom:"20px"}}>
+                                                <div style={{width:'108px'}}>{item.text}<span style={{padding:"0 4px"}}>：</span></div>
+                                                <div>{item.value}</div>
+                                            </div>)
+                                        })
+                                    }
+                                </div>
                                 <Card bodyStyle={{ padding: "8px", backgroundColor: '#fafafa' }}>
 
                                     <Row>
                                         <Col xs={24} sm={24}>
-                                            <Radio.Group style={{ float: "left", marginRight: "30px" }}  defaultValue="list" buttonStyle="solid" onChange={(e) => { this.setState({ iView: e.target.value }) }}>
+                                            <Radio.Group style={{ float: "right", marginRight: "30px" }}  defaultValue="list" buttonStyle="solid" onChange={(e) => { this.setState({ iView: e.target.value }) }}>
                                                 <Radio.Button value="list" onClick={()=>this.setState({moduleType:true})}>列表</Radio.Button>
                                                 <Radio.Button value="column" onClick={()=>this.setState({moduleType:false})}>模型</Radio.Button>
   
@@ -557,7 +572,7 @@ export default class modelList extends React.Component {
                                     </Row>
 
                                 </Card>
-                                <div style={{height:"664px"}}>
+                                <div style={{height:"500px"}}>
                                     {
                                         this.state.moduleType? <Table dataSource={this.state.list} columns={columns} bordered={true}
                                         />:<ERGraphDemo />

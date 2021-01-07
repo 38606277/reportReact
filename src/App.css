@@ -1563,7 +1563,7 @@ html {
 }
 .er-editor-demo-container .minimap-container {
     position: absolute;
-    top: 50px;
+    top: 200px;
     right: 16px;
     /** X6推荐覆写样式 */
 }
