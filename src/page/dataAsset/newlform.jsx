@@ -73,7 +73,7 @@ const titleList=[
         value:'xxx6'
     },
 ]
-export default ()=>{
+export default (props)=>{
     const [G_data_source,setG_data_source]=useState([])
     const [editingKey, setEditingKey] = useState('');
     const [form] = Form.useForm();
@@ -195,9 +195,7 @@ export default ()=>{
         }
       }
     return(
-        <Card
-            title="新建表格"
-        >
+        <Card>
             <div style={{display:'flow-root',backgroundColor: 'rgb(250, 250, 250)',margin:"20px 0"}}>
                 <div style={{float:'left'}}>
                     <Radio.Group style={{ float: "left", marginRight: "30px" }}  defaultValue="xxx1 " buttonStyle="solid">
@@ -208,6 +206,7 @@ export default ()=>{
                         }
                     </Radio.Group>
                 </div>
+                <Button>添加</Button>
                 <Button type="primary" style={{float:"right"}}>保存</Button>
             </div>
             <div>

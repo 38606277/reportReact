@@ -45,7 +45,7 @@ const ModData =[
         value:"2021/01/01"
     },
     {
-        text:"创建人",
+        text:"创 建 人 ",
         value:"XXXX"
     }
 ]
@@ -550,14 +550,27 @@ export default class modelList extends React.Component {
                             </Col>
                             <Col sm={20}>
                                 <div style={{display:'flow-root',marginLeft:"1px",backgroundColor:"#fff",padding:"20px 0 0 20px"}}>
+                                <Form
+                                      name="horizontal_login" layout="inline"
+                                >
                                     {
+                                        ModData.map((item,index)=>{
+                                            return(
+                                                <Form.Item name="note" label={item.text} rules={[{ required: true }]}>
+                                                    <Input value={item.value} bordered={false} disabled/>
+                                                </Form.Item>
+                                            )
+                                        })
+                                    }
+                                </Form>
+                                    {/* {
                                         ModData.map((item,index)=>{
                                             return(<div key={index} style={{display:"flex",fontSize:"20px",float:"left",marginRight:"100px",marginBottom:"20px"}}>
                                                 <div style={{width:'108px'}}>{item.text}<span style={{padding:"0 4px"}}>：</span></div>
                                                 <div>{item.value}</div>
                                             </div>)
                                         })
-                                    }
+                                    } */}
                                 </div>
                                 <Card bodyStyle={{ padding: "8px", backgroundColor: '#fafafa' }}>
 
@@ -566,7 +579,6 @@ export default class modelList extends React.Component {
                                             <Radio.Group style={{ float: "right", marginRight: "30px" }}  defaultValue="list" buttonStyle="solid" onChange={(e) => { this.setState({ iView: e.target.value }) }}>
                                                 <Radio.Button value="list" onClick={()=>this.setState({moduleType:true})}>列表</Radio.Button>
                                                 <Radio.Button value="column" onClick={()=>this.setState({moduleType:false})}>模型</Radio.Button>
-  
                                             </Radio.Group>
                                         </Col>
                                     </Row>
