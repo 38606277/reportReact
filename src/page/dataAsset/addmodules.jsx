@@ -1,6 +1,7 @@
 import React,{useState,useEffect,useRef} from 'react';
 import { Form, Input, Table, Button, Card, Select, Pagination, message, Tabs, Divider, Tag ,Layout,Popconfirm,Row,Col,Radio} from 'antd';
 const { Option } = Select;
+import newFrom from './newlform'
 const Hinput= props=>{
   const {ISname,value,chang}=props
   return (
@@ -139,7 +140,7 @@ export default ()=>{
               })
             }
           </div>
-          <Button type="primary" style={{float:'right',marginTop:"100px"}}  href={"#/dataAsset/newlform"}>保存</Button>
+          <Button type="primary" style={{float:'right',marginTop:"100px"}}>保存</Button>
       </div>
       <Card bodyStyle={{ padding: "8px", backgroundColor: '#fafafa' }}>
         <Row>
@@ -148,7 +149,7 @@ export default ()=>{
                     <Radio.Button value="list" onClick={()=>setformat(true)}>列表</Radio.Button>
                     <Radio.Button value="column" onClick={()=>setformat(false)}>模型</Radio.Button>
                     {
-                      format?<Radio.Button value="list">添加</Radio.Button>:null
+                      format?<Button value="2121">添加</Button>:null
                     }
                 </Radio.Group>
             </Col>
@@ -158,11 +159,6 @@ export default ()=>{
         format?<Table 
           columns={columns}
           dataSource={list}
-          title={()=>{
-            return(
-              <div>添加</div>
-            )
-          }}
         ></Table>:null
       }
       {/* <div style={{
