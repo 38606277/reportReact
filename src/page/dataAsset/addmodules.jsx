@@ -2,6 +2,7 @@ import React,{useState,useEffect,useRef} from 'react';
 import { Form, Input, Table, Button, Card, Select, Pagination, message, Tabs, Divider, Tag ,Layout,Popconfirm,Row,Col,Radio,Modal} from 'antd';
 const { Option } = Select;
 import NewFrom from './newlform'
+import ModuleTable from './ModuleTable'
 import './addmodules.scss'
 const Star={//红色*样式
   marginRight: '4px',
@@ -13,9 +14,9 @@ const Star={//红色*样式
 const Hinput= props=>{
   const {ISname,value,chang}=props
   return (
-    <div style={{display:"flex",width:'280px',height:'30px',alignItems:'center'}}>
+    <div style={{display:"flex",width:'480px',height:'30px',alignItems:'center'}}>
       <span style={{marginRight:'5px'}}><span style={{...Star}}>*</span>{ISname} <span>： </span></span>
-      <Input style={{width:'130px'}} value={value} onChange={e=>chang(e.target.value)}/>
+      <Input style={{width:'390px'}} value={value} onChange={e=>chang(e.target.value)}/>
     </div>
   )
 }
@@ -74,6 +75,7 @@ const columns =[
     title:"操作",
     dataIndex:'x',
     render:res=>{
+      console.log(res)
       return(
         <div>
           <Tag color="blue">修改</Tag>
@@ -83,7 +85,34 @@ const columns =[
     }
   }
 ]
+
+const datatitle=[
+  {
+    title:"名",
+    dataIndex:"name",
+    key:"name"
+  },
+  {
+    title:"类型",
+    dataIndex:"Class",
+    key:"class",
+    render:(_,res)=>{
+      console.log(res)
+      return (res.type?<div>s</div>:<Input />)
+    }
+  },
+  {
+    
+  }
+]
+const Lists =[
+  {name:"111",key:1,Class:"1212",type:false},
+  {}
+]
 export default ()=>{
+  const [data,setdata]=([...Lists])
+
+
   const [data_Source,setData_Source]=useState('');//数据来源
   const [ModName,setModName]=useState('');//模型名称
   const [data_Class,setData_Class]=useState('');//数据类型
@@ -131,7 +160,7 @@ export default ()=>{
             {
               formlist.map((item,index)=>{
                 return (
-                  <div key={index} style={{margin:"10px 20px",display:item.type==='input'?null:"inline-block"}}>
+                  <div key={index} style={{margin:"20px 20px",display:item.type==='input'?null:"inline-block"}}>
                     {
                       item.type==='input'?<Hinput value={item.value} chang={item.fn} ISname={item.text}/>:<Hselect list={item.list} chang={item.fn} ISname={item.text}/>
                     }
@@ -197,8 +226,10 @@ export default ()=>{
           </div>
         </div>
       }
-     
-
+      {
+        console.log(data)
+      }
+      <ModuleTable data={[data]} columns={datatitle}></ModuleTable>
 
       <Modal
           title="新建表格"
