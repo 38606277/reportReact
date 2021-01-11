@@ -1,5 +1,5 @@
 
-import React,{useState,useEffect} from 'react';
+import React,{useState} from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from 'antd/lib/pagination';
 import { BarChartOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined } from '@ant-design/icons';
@@ -21,7 +21,6 @@ import {
     Modal,
     Tag,
     Popconfirm,
-    message
 } from 'antd';
 const { Option } = Select;
 import CubeService from '../../service/CubeService.jsx';
@@ -29,7 +28,6 @@ import HttpService from '../../util/HttpService.jsx';
 import { forInRight } from 'lodash';
 
 import ERGraphDemo from '../ERGraphDemo/index.tsx';
-import { isTemplateSpan } from 'typescript';
 
 //
 const Star={//红色*样式
@@ -48,8 +46,49 @@ const Star={//红色*样式
       </div>
     )
   }
-
+  const Hselect=props=>{
+    const {ISname,list,fn}=props
+    return(
+      <div>
+         <span style={{marginRight:'1px'}}><span style={{...Star}}>*</span>{ISname} <span>： </span></span>
+         <Select style={{width:'130px'}} defaultValue='请选择' onChange={fn}>
+           {
+             list.map((item,index)=>{
+                return (
+                  <Option key={"h"+index} value={item.value}>{item.text}</Option>
+                )
+             })
+           }
+         </Select>
+      </div>
+    )
+  }
   
+
+
+
+const ModData =[
+    {
+        text:"模型名称",
+        value:"人力资源"
+    },
+    {
+        text:"数据来源",
+        value:"公司内部"
+    },
+    {
+        text:"数据类型",
+        value:"mysql",
+    },
+    {
+        text:"创建时间",
+        value:"2021/01/01"
+    },
+    {
+        text:"创 建 人 ",
+        value:"XXXX"
+    }
+]
 const _cubeService = new CubeService();
 const Search = Input.Search;
 const FormItem = Form.Item;
@@ -57,57 +96,41 @@ const { TreeNode } = Tree;
 
 const MyModal=(props)=>{
     const {visible,on,go,set}=props
-    const [data,setdata]=useState('')
     const [data_Source,setData_Source]=useState('');//数据来源
     const [ModName,setModName]=useState('');//模型名称
     const [data_Class,setData_Class]=useState('');//数据类型
-    const [C_list,setC_list]=useState([])//类选择
-    const [S_list,setS_list]=useState([])//来源选择
-        
-        useEffect(()=>{
-            (async ()=>{
-               await HttpService.post('/reportServer/DBConnection/ListAll', JSON.stringify({})).then(res => {
-                    console.log(res)
-                    const Clist=[]
-                    res.forEach(item=>{
-                        let index=Clist.findIndex(items=>{return items.text===item.dbtype})
-                        if(index===-1){
-                            Clist.push({
-                                text:item.dbtype,
-                                value:item.dbtype,
-                            })
-                        }
-                    })
-                    const Tlist=res.filter(item=>{
-                        if(item.dbtype===data_Class){
-                            return {
-                                text:item.name,
-                                value:item.name,
-                            }
-                        }
-                    })
-                    setC_list([...Clist])
-                }, errMsg => {
-                    this.setState({
-                        list: [], loading: false
-                    });
-                }); 
-            })()
-        },[data_Class])
-    const ShandleChange =(e)=>{
-        HttpService.post('/reportServer/DBConnection/ListAll', JSON.stringify({})).then(res => {
-            const Tlist=res.filter(item=>{
-                if(item.dbtype===e){
-                    return {
-                        text:item.name,
-                        value:item.name,
-                    }
-                }
-            })
-            setS_list([...Tlist])
-        })
-        setData_Class(e)
-    }
+    const formlist=[
+        {
+            type:"input",
+            text:"模型名称",
+            value:ModName,
+            fn:setModName
+        },
+        {
+            type:"select",
+            text:"数据类型",
+            list:[
+            {
+                text:"mysql",
+                value:"mysql"
+            }
+            ],
+            value:data_Class,
+            fn:setData_Class
+        },
+        {
+            type:"select",
+            text:"数据来源",
+            list:[
+            {
+                text:"fn",
+                value:"fn"
+            }
+            ],
+            value:data_Source,
+            fn:setData_Source
+        },
+        ];
     return (<Modal 
             title={set!==false?"编辑模型":"新增模型"}
             width='900px'
@@ -125,29 +148,18 @@ const MyModal=(props)=>{
             onCancel={()=>on()}
         >
         <div style={{position:"relative"}}>
-                <Hinput value={ModName} chang={setModName} ISname={"模型名称"}/>
-                <div style={{display:"flex",margin:"10px 0px"}}>
-                    <div style={{display:"flex",width:'220px',height:'30px',alignItems:'center'}}>
-                        <span style={{marginRight:'5px'}}><span style={{...Star}}>*</span>数据类型 <span>： </span></span>
-                        <Select defaultValue="请选择" style={{ width: 120 }} onChange={ShandleChange}>
-                            {
-                                C_list.map((item,index)=>{
-                                    return (<Option value={item.value} key={index}>{item.text}</Option>)
-                                })
-                            }
-                        </Select>
+                {
+                formlist.map((item,index)=>{
+                    return (
+                    <div key={index} style={{margin:"20px 20px",display:item.type==='input'?null:"inline-block"}}>
+                        {
+                        item.type==='input'?<Hinput value={item.value} chang={item.fn} ISname={item.text}/>:<Hselect list={item.list} chang={item.fn} ISname={item.text}/>
+                        }
                     </div>
-                    <div style={{display:"flex",width:'220px',height:'30px',alignItems:'center'}}>
-                        <span style={{marginRight:'5px'}}><span style={{...Star}}>*</span>数据类型 <span>： </span></span>
-                        <Select defaultValue="请选择" style={{ width: 120 }} onChange={setData_Source}>
-                            {
-                                S_list.map((item,index)=>{
-                                    return (<Option value={item.name} key={index}>{item.name}</Option>)
-                                })
-                            }
-                        </Select>
-                    </div>
-                </div>
+                    )
+                })
+                }
+
                 {set!==false?<Button type="primary"  style={{position:"absolute",top:'0px',right:'0px'}} href={"#/dataAsset/newlform/"+set}>新建表格</Button>:null}
 
             </div>
@@ -194,8 +206,7 @@ export default class modelList extends React.Component {
             moduleType:true,
             leftColor:0,
             setModule:false,
-            ModData:{},
-            model_id:null
+            ModData:{}
         };
     }
     componentDidMount() {
@@ -568,22 +579,12 @@ export default class modelList extends React.Component {
         });
     };
     addModule =(data)=>{//添加模型编辑数据
-        ///
         console.log(data)
         const obj={
             "db_source":"请选择模型来源",
             "model_name":"请输入模型名称",
             "db_type":"模型类型"
         }
-        HttpService.post('/reportServer/bdModel/createModel', JSON.stringify(data)).then(res => {
-            console.log((res))
-            if (res.resultCode == "1000") {
-
-            }
-            else {
-                message.error(res.message);
-            }
-        })
         this.setState({visible2:false})
         console.log(1)
     }
@@ -646,14 +647,13 @@ export default class modelList extends React.Component {
         return (
             <div id="page-wrapper">
                 <Spin spinning={this.state.loading} delay={100}>
-                    <Card title="数据模型" bodyStyle={{ backgroundColor: '#fafafa',boxSizing:"border-box" }}>
+                    <Card title="数据模型" bodyStyle={{ backgroundColor: '#fafafa',boxSizing:"border-box" }} extra={<div>
+                        <Button 
+                        // href={"#/dataAsset/addLists"}
+                         style={{ float: "right", marginRight: "10px" }} type="primary" onClick={()=>this.setState({visible2:true,setModule:false})}>新建模型</Button></div>}>
                         <Row>
                             <Col sm={4} style={{backgroundColor:"#fff",boxSizing:"border-box",paddingTop:"2px"}}>
                                 <div style={{boxSizing:"border-box",padding:"20px 5px"}}>
-                                <Button 
-                                    size="small"
-                                    // href={"#/dataAsset/addLists"}
-                                    style={{marginLeft:"116px"}} type="primary" onClick={()=>this.setState({visible2:true,setModule:false})}>新建模型</Button>
                                     {
                                         this.state.treeData.map((item,key)=>{
                                             return (<div key={key} style={{display:"flex",padding:"10px 0"}}>
