@@ -11,6 +11,7 @@ export default class HttpService {
     
     //
     static post(url,param){
+        console.log(url,param)
         if((undefined==localStorge.getStorage('userInfo') && url!='/reportServer/user/encodePwd' && url!='/reportServer/user/Reactlogin') || (''==localStorge.getStorage('userInfo')  && url!='/reportServer/user/encodePwd' && url!='/reportServer/user/Reactlogin')){
             window.location.href='#login';
             return  new Promise((resolve, reject) => {});
@@ -25,10 +26,10 @@ export default class HttpService {
             };
 
             return fetch(fullUrl, opts).then((response) => {
-                    //console.log(response.json())
+                    // console.log(response.json())
                     return response.json();
                 }).catch((error)=>{
-                    console.log(error)
+                    // console.log(error)
                     return error.json();
                 });
         }

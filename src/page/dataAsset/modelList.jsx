@@ -2,7 +2,7 @@
 import React,{useState,useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from 'antd/lib/pagination';
-import { BarChartOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined } from '@ant-design/icons';
+import { BarChartOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined ,SearchOutlined } from '@ant-design/icons';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import {
@@ -56,19 +56,20 @@ const FormItem = Form.Item;
 const { TreeNode } = Tree;
 
 const MyModal=(props)=>{
-    const {visible,on,go,set}=props
-    const [data,setdata]=useState('')
-    const [data_Source,setData_Source]=useState('');//数据来源
-    const [ModName,setModName]=useState('');//模型名称
-    const [data_Class,setData_Class]=useState('');//数据类型
+    const {visible,on,go,set,ModObj}=props
+    const [data,setdata]=useState(false)
+    const [data_Source,setData_Source]=useState(set!==false?ModObj.db_source:'');//数据来源
+    const [ModName,setModName]=useState(set!==false?ModObj.model_name:'');//模型名称
+    const [data_Class,setData_Class]=useState(set!==false?ModObj.model_type:'');//数据类型
     const [C_list,setC_list]=useState([])//类选择
     const [S_list,setS_list]=useState([])//来源选择
-        
         useEffect(()=>{
+            console.log(data_Class);
             (async ()=>{
                await HttpService.post('/reportServer/DBConnection/ListAll', JSON.stringify({})).then(res => {
                     console.log(res)
                     const Clist=[]
+                    setdata(set)
                     res.forEach(item=>{
                         let index=Clist.findIndex(items=>{return items.text===item.dbtype})
                         if(index===-1){
@@ -78,22 +79,18 @@ const MyModal=(props)=>{
                             })
                         }
                     })
-                    const Tlist=res.filter(item=>{
-                        if(item.dbtype===data_Class){
-                            return {
-                                text:item.name,
-                                value:item.name,
-                            }
-                        }
-                    })
                     setC_list([...Clist])
                 }, errMsg => {
                     this.setState({
                         list: [], loading: false
                     });
                 }); 
-            })()
-        },[data_Class])
+                
+            })();
+            if(data!==false){
+                console.log(1)
+            }
+        },[data])
     const ShandleChange =(e)=>{
         HttpService.post('/reportServer/DBConnection/ListAll', JSON.stringify({})).then(res => {
             const Tlist=res.filter(item=>{
@@ -138,7 +135,7 @@ const MyModal=(props)=>{
                         </Select>
                     </div>
                     <div style={{display:"flex",width:'220px',height:'30px',alignItems:'center'}}>
-                        <span style={{marginRight:'5px'}}><span style={{...Star}}>*</span>数据类型 <span>： </span></span>
+                        <span style={{marginRight:'5px'}}><span style={{...Star}}>*</span>数据来源 <span>： </span></span>
                         <Select defaultValue="请选择" style={{ width: 120 }} onChange={setData_Source}>
                             {
                                 S_list.map((item,index)=>{
@@ -148,7 +145,6 @@ const MyModal=(props)=>{
                         </Select>
                     </div>
                 </div>
-                {set!==false?<Button type="primary"  style={{position:"absolute",top:'0px',right:'0px'}} href={"#/dataAsset/newlform/"+set}>新建表格</Button>:null}
 
             </div>
 
@@ -195,7 +191,10 @@ export default class modelList extends React.Component {
             leftColor:0,
             setModule:false,
             ModData:{},
-            model_id:null
+            model_id:null,
+            ModObj:null,
+            table_name:"",//模型名称
+            table_title:""//模型中文名称
         };
     }
     componentDidMount() {
@@ -204,20 +203,48 @@ export default class modelList extends React.Component {
     }
 
 
-    loadCubeList() {
+   async loadCubeList() {
         let param = {
             FLEX_VALUE_SET_ID: 4
         };
 
-        HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
-            //   //报错
+       await HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {//模型接口
             console.log(res.data)
     
             if (res.resultCode == "1000") {
                 this.setState({
                     ModData:{...res.data[0]},
                     treeData: res.data,
+                    module_id:res.data[0].model_id
                 });
+            }
+            else {
+                message.error(res.message);
+            }
+        }, errMsg => {
+            this.setState({
+                list: [], loading: false
+            });
+        });
+        let obj={
+            startIndex:1,
+            perPage:10,
+            table_name:"",
+            table_title:"",
+            model_id:this.state.module_id
+        }
+        await HttpService.post('/reportServer/bdModelTableColumn/table/getTableList',JSON.stringify(obj)).then(res => {///列表接口SunShine:
+            console.log(this.state.module_id)
+          
+            
+            console.log(res.data)
+    
+            if (res.resultCode == "1000") {
+                // this.setState({
+                //     ModData:{...res.data[0]},
+                //     treeData: res.data,
+                //     module_id:res.data[0].model_id
+                // });
             }
             else {
                 message.error(res.message);
@@ -306,6 +333,8 @@ export default class modelList extends React.Component {
     setLeftMenu=(key,item)=>{
         // reportServer/bdModel/getModelById
         this.setState({leftColor:key})
+        this.setState({model_id:item.model_id})
+        this.loadCubeList()
         HttpService.post('/reportServer/bdModel/getModelById', JSON.stringify({model_id:item.model_id})).then(res => {
             // /reportServer/bdModel/getAllList  //报错
             console.log(res.data)
@@ -567,7 +596,7 @@ export default class modelList extends React.Component {
             visible: false,
         });
     };
-    addModule =(data)=>{//添加模型编辑数据
+    addModule =(data)=>{//添加模型编辑数据  未做非空
         ///
         console.log(data)
         const obj={
@@ -575,10 +604,22 @@ export default class modelList extends React.Component {
             "model_name":"请输入模型名称",
             "db_type":"模型类型"
         }
-        HttpService.post('/reportServer/bdModel/createModel', JSON.stringify(data)).then(res => {
+        HttpService.post('/reportServer/bdModel/createModel', JSON.stringify(data)).then(res => {//暂时有问题
             console.log((res))
-            if (res.resultCode == "1000") {
-
+            if (res.resultCode == "1000") {   
+                HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
+            
+                    if (res.resultCode == "1000") {
+                        this.setState({
+                            ModData:{...res.data[0]},
+                            treeData: res.data,
+                            module_id:res.data[0].model_id
+                        });
+                    }
+                    else {
+                        message.error(res.message);
+                    }
+                })
             }
             else {
                 message.error(res.message);
@@ -587,8 +628,29 @@ export default class modelList extends React.Component {
         this.setState({visible2:false})
         console.log(1)
     }
-    confirmModule =()=>{//删除模型
-
+    confirmModule =(module_id)=>{//删除模型
+        HttpService.post('/reportServer/bdModel/deleteModelById', JSON.stringify({"module_id":module_id})).then(res => {
+            console.log(res)
+            if (res.resultCode == "1000") {   
+                HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
+            
+                    if (res.resultCode == "1000") {
+                        this.setState({
+                            ModData:{...res.data[0]},
+                            treeData: res.data,
+                            module_id:res.data[0].model_id
+                        });
+                    }
+                    else {
+                        message.error(res.message);
+                    }
+                })
+            }
+            else {
+                message.error(res.message);
+            }
+        })
+        console.log(module_id)
     }
     render() {
         this.state.list.map((item, index) => {
@@ -654,14 +716,14 @@ export default class modelList extends React.Component {
                                     size="small"
                                     // href={"#/dataAsset/addLists"}
                                     style={{marginLeft:"116px"}} type="primary" onClick={()=>this.setState({visible2:true,setModule:false})}>新建模型</Button>
-                                    {
+                                    {   
                                         this.state.treeData.map((item,key)=>{
                                             return (<div key={key} style={{display:"flex",padding:"10px 0"}}>
                                                 <div style={{flex:'5',color:this.state.leftColor===key?"#1890ff":"",cursor: "pointer"}} onClick={()=>this.setLeftMenu(key,item)}><span style={{display:"inline-block",width:"20px"}}></span>{item.model_name}</div>
-                                                <div style={{flex:'5'}}><Tag color="blue" onClick={()=>this.setState({visible2:true,setModule:item.module_id})}>编辑</Tag>
+                                                <div style={{flex:'5'}}><Tag color="blue" onClick={()=>this.setState({visible2:true,setModule:item.module_id,ModObj:item})}>编辑</Tag>
                                                 <Popconfirm 
                                                      title="确定要删除这个模块吗?"
-                                                     onConfirm={()=>this.confirmModule(item.module_id)}
+                                                     onConfirm={()=>this.confirmModule(item.model_id)}
                                                      okText="删除"
                                                      cancelText="取消"
                                                 ><Tag color="red">删除</Tag>  </Popconfirm>
@@ -682,10 +744,11 @@ export default class modelList extends React.Component {
                                 >
                                     {this.renderTreeNodes(this.state.treeData)}
                                 </Tree> */}
+                                
                             </Col>
                             <Col sm={20}>
                                 <div style={{display:'flow-root',marginLeft:"1px",backgroundColor:"#fff",padding:"20px 0 0 20px"}}>
-                                <Form
+                                <Form style={{position:"relative"}}
                                       name="horizontal_login" layout="inline"
                                 >
                                     <Form.Item name="note" label="模型名称" rules={[{ required: true }]}>
@@ -698,12 +761,28 @@ export default class modelList extends React.Component {
                                         <Input value={this.state.ModData.db_source} bordered={false} disabled/>
                                     </Form.Item>
                                     <Form.Item name="note" label="创建时间" rules={[{ required: true }]}>
-                                        <Input value={null} bordered={false} disabled/>
+                                        <Input value={this.state.ModData.update_date} bordered={false} disabled/>
                                     </Form.Item>
                                     <Form.Item name="note" label="创 建 人" rules={[{ required: true }]}>
-                                        <Input value={null} bordered={false} disabled/>
+                                        <Input value={this.state.ModData.update_by} bordered={false} disabled/>
                                     </Form.Item>
+
+                                    <Button type="primary"  style={{position:"absolute",top:'0px',right:'20px'}} href={"#/dataAsset/newlform/"+this.state.module_id}>新建表格</Button>
                                 </Form>
+                                <Card title="数据列表搜索">
+                                    <Form
+                                        name="horizontal_login" layout="inline"
+                                    >
+                                        <Form.Item name="note" label="模型中文名称" rules={[{ required: true }]} >
+                                            <Input value={this.state.ModData.table_title} onChange={e=>{this.setState({table_title:e.target.value})}} />
+                                        </Form.Item>
+                                        <Form.Item name="note" label="模型名称" rules={[{ required: true }]}>
+                                            <Input value={this.state.ModData.table_name} onChange={e=>{this.setState({table_name:e.target.value})}}/>
+                                        </Form.Item>
+                                        <Button type="primary" icon={<SearchOutlined />}>搜索</Button>
+                                    </Form>
+                                </Card>
+                                
                                     {/* {
                                         ModData.map((item,index)=>{
                                             return(<div key={index} style={{display:"flex",fontSize:"20px",float:"left",marginRight:"100px",marginBottom:"20px"}}>
@@ -762,7 +841,7 @@ export default class modelList extends React.Component {
                             onChange={(pageNum) => this.onPageNumChange(pageNum)} /> */}
                     </Card>
                 </Modal>
-                <MyModal visible={this.state.visible2} on={()=>{this.setState({visible2:false})}} go={(data)=>this.addModule(data)} set={this.state.setModule}></MyModal>
+                <MyModal visible={this.state.visible2} on={()=>{this.setState({visible2:false})}} go={(data)=>this.addModule(data)} set={this.state.setModule} ModObj={this.state.ModObj}></MyModal>
             </div>
         );
     }
