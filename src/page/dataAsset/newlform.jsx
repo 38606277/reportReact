@@ -1,7 +1,11 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect,useRef} from 'react'
 import { Form, Input, Table, Button, Card, Col,Select, Radio,Pagination, message, Tabs, Divider, Tag ,Layout,Popconfirm,Row,InputNumber,Checkbox} from 'antd';
+import { PageContainer } from '@ant-design/pro-layout';
+import ProCard from '@ant-design/pro-card';
+import TableForm from './FieldFrom/TableForm';
+import TableForm2 from './FieldFrom/TableForm2'
+import HttpService from '../../util/HttpService.jsx';
 // import ModuleTable from './ModuleTable'
-import EditOut from '../query/EditOut.jsx'
 const Star={//红色*样式
   marginRight: '4px',
   color: '#ff4d4f',
@@ -9,472 +13,124 @@ const Star={//红色*样式
   fontFamily: 'SimSun, sans-serif',
   lineHeight: '1'
   };
-const EditableCell = ({//栏位
-    editing,
-    dataIndex,
-    title,
-    inputType,
-    record,
-    index,
-    children,
-    ...restProps
-  }) => {
-    const Types=inputType==="number"? <InputNumber />:<Checkbox.Group options={[""]}/>//是inputnumber 还是选择
-    const inputNode = inputType === 'text' ?<Input />  : Types;
-    return (
-      <td {...restProps}>
-        {editing ? (
-          <Form.Item
-            name={dataIndex}
-            style={{
-              margin: 0,
-            }}
-          >
-            {...inputNode}
-          </Form.Item>
-        ) : (
-          children
-        )}
-      </td>
-    );
-  };
-  const EditableCell2=({//栏位
-    editing,
-    dataIndex,
-    title,
-    inputType,
-    record,
-    index,
-    children,
-    ...restProps
-  }) => {
-    // const [none,setnone]=useState('')
-    // const handleChange=(value)=>{
-    //   setnone(value)
-    // }
-    const inputNode = inputType === 'name' ?<Input />  :   <Input />
-    // <Select defaultValue="lucy" style={{ width: 120 }} value={none} onChange={handleChange}>
-    //                                                             <Option value="jack">Jack</Option>
-    //                                                             <Option value="lucy">Lucy</Option>
-    //                                                             <Option value="disabled" disabled>
-    //                                                               Disabled
-    //                                                             </Option>
-    //                                                             <Option value="Yiminghe">yiminghe</Option>
-    //                                                           </Select>;
-    return (
-      <td {...restProps}>
-        {editing ? (
-          <Form.Item
-            name={dataIndex}
-            style={{
-              margin: 0,
-            }}
-          >
-            {...inputNode}
-          </Form.Item>
-        ) : (
-          children
-        )}
-      </td>
-    );
-  };
-  const EditableCell3=({//栏位
-    editing,
-    dataIndex,
-    title,
-    inputType,
-    record,
-    index,
-    children,
-    ...restProps
-  }) => {
-    const inputNode = inputType === 'name' ?<Input />  :   <Input />
-    return (
-      <td {...restProps}>
-        {editing ? (
-          <Form.Item
-            name={dataIndex}
-            style={{
-              margin: 0,
-            }}
-          >
-            {...inputNode}
-          </Form.Item>
-        ) : (
-          children
-        )}
-      </td>
-    );
-  };
-  const reme=(res,data,setdata)=>{
-    console.log(data)
-    let arr =data.filter(item=>{
-      if(item.key!==res.key){
-        return item
-      }
-    })
-    setdata([...arr])
-    console.log(arr)
-  }
-  const preservation=(G_data_source)=>{
-    console.log(G_data_source)
-  }
 const titleList=[
     {
-        title:"栏位",
+        title:"列",
         value:'xxx1'
     },
     {
-        title:"索引",
-        value:'xxx2'
-    },
-    {
-        title:"外键",
+        title:"关系",
         value:'xxx3'
-    },
-    {
-        title:"选项",
-        value:'xxx4'
-    },
-    {
-        title:"注释",
-        value:'xxx5'
     },
     {
         title:"预览",
         value:'xxx6'
     },
 ]
-const MyTable=(props)=>{
-  let {form,EditableCell,data,mergedColumns,cancel,formText}=props
-  return(
-    <Form form={form} component={false}>
-      <Table
-      components={{
-          body: {
-          cell: EditableCell,
-          },
-      }}
-      bordered
-      dataSource={data}
-      columns={mergedColumns}
-      rowClassName={"editable-row"+formText}
-      pagination={{
-          onChange:cancel
-      }}
-      />
-  </Form>
-  )
-}
-
 const Hinput= props=>{
   const {ISname,value,chang}=props
   return (
-    <div style={{display:"flex",width:'480px',height:'30px',alignItems:'center'}}>
+    <div style={{display:"flex",width:'250px',height:'30px',alignItems:'center'}}>
       <span style={{marginRight:'5px'}}><span style={{...Star}}>*</span>{ISname} <span>： </span></span>
-      <Input style={{width:'390px'}} value={value} onChange={e=>chang(e.target.value)}/>
+      <Input style={{width:'150px'}} value={value} onChange={e=>chang(e.target.value)}/>
     </div>
   )
 }
+
 export default (props)=>{
   useEffect(()=>{
-    const path=location.hash.substring(location.hash.lastIndexOf('/')+1);
-    setPath(path)
-  },[path])
-    const [formName,setformName]=useState('')//表名
-    const [G_data_source,setG_data_source]=useState([])//栏位
-    const [editingKey, setEditingKey] = useState('');//栏位
-    const [form] = Form.useForm();
-    const isEditing = (record) => record.key === editingKey;//栏位
-    const [formText,setformText]=useState('xxx1')
-
-    const [Indexes,setIndexes]=useState([])//索引
-    const [editingKey2, setEditingKey2] = useState('');
-    const [form2] = Form.useForm();
-    const isEditing2 = (record) => record.key === editingKey2;
-
-
-    const [ForeignKey,setForeignKey]=useState([])
-    const [editingKey3, setEditingKey3] = useState('');
-    const [form3] = Form.useForm();
-
-    const [path,setPath]=useState('')
-    const isEditing3 = (record) => record.key === editingKey3;
-    const edit = (record,form,setEditingKey) => {
-        form.setFieldsValue({
-          title:'',
-          dataIndex: '',
-          ...record,
-        });
-        setEditingKey(record.key);
-      };
-    const cancel =async (record,data,setdata,setEditingKey,form) => {
-      let key=record.key
-        try {
-        const row = await form.validateFields();//获取当前三个input中的数据
-        console.log(row)
-        const newData = [...data];
-        const index = newData.findIndex((item) => key === item.key);
-  
-        if (index > -1) {
-          const item = newData[index];
-          newData.splice(index, 1, { ...item, ...row });
-          setdata(newData);
-          setEditingKey('');
-        } else {
-          // newData.push(row);
-          setdata([...newData]);
-          setEditingKey('');
-        }
-      } catch (errInfo) {
-        console.log('Validate Failed:', errInfo);
-      }
-    };
+    const path=props.match.params.module_id
     
-    const colimnsR = [//栏位
-      {
-        title: '名',
-        dataIndex: 'name',
-        width: '20%',
-        editable: true,
-      },
-      {
-        title: '类型',
-        dataIndex: 'Class',
-        width: '20%%',
-        editable: true,
-      },  
-      {
-        title:"长度",
-        dataIndex:"len",
-        width:"20%",
-        editable: true,
-      },
-      {
-        title:"小数点",
-        dataIndex:"decimal",
-        width:"10%",
-        editable: true,
-      },
-      {
-        title:"是否必填",
-        dataIndex:"chek",
-        width:"10%",
-        editable: true
-      },
-      {
-        title: '操作',
-        dataIndex: 'x',
-        render: (_, res) => {
-          const editable = isEditing(res)
-            return editable?(
-              <div>
-                <Tag onClick={()=>cancel(res,G_data_source,setG_data_source,setEditingKey,form)}>确定</Tag>
-              </div>
-            ):(<div>
-              <Tag onClick={()=>edit(res,form,setEditingKey)}>修改</Tag>
-              <Tag onClick={()=>reme(res,G_data_source,setG_data_source)}>删除</Tag>
-            </div>)      
-        },
-      },
-    ];
-    const colimnsE=[//索引
-      {
-        title:"名",
-        dataIndex:"name",
-        width:"20%",
-        editable:true
-      },{
-        title:"栏位",
-        dataIndex:"Field",
-        width:"20%",
-        editable:true
-      },{
-        title:"索引类型",
-        dataIndex:"FClass",
-        width:"20%",
-        editable:true
-      },{
-        title:"索引方法",
-        dataIndex:"FCmethod",
-        width:"20%",
-        editable:true
-      },,
-      {
-        title: '操作',
-        dataIndex: 'x',
-        render: (_, res) => {
-          const editable = isEditing2(res)
-            return editable?(
-              <div>
-                <Tag onClick={()=>cancel(res,Indexes,setIndexes,setEditingKey2,form2)}>确定</Tag>
-              </div>
-            ):(<div>
-              <Tag onClick={()=>edit(res,form,setEditingKey2)}>修改</Tag>
-              <Tag onClick={()=>reme(res,Indexes,setIndexes)}>删除</Tag>
-            </div>)      
-        },
-      },
-    ]
-    const colimnsF=[//外键
-      {
-        title:"名",
-        dataIndex:"name",
-        width:"20%",
-        editable:true
-      },{
-        title:"栏位",
-        dataIndex:"Field",
-        width:"20%",
-        editable:true
-      },{
-        title:"索引类型",
-        dataIndex:"FClass",
-        width:"20%",
-        editable:true
-      },{
-        title:"索引方法",
-        dataIndex:"FCmethod",
-        width:"20%",
-        editable:true
-      },,
-      {
-        title: '操作',
-        dataIndex: 'x',
-        render: (_, res) => {
-          const editable = isEditing3(res)
-            return editable?(
-              <div>
-                <Tag onClick={()=>cancel(res,editingKey3, setEditingKey3,setEditingKey3,form3)}>确定</Tag>
-              </div>
-            ):(<div>
-              <Tag onClick={()=>edit(res,form3,setEditingKey3)}>修改</Tag>
-              <Tag onClick={()=>reme(res,ForeignKey,setForeignKey)}>删除</Tag>
-            </div>)      
-        },
-      },
-    ]
-      const mergedColumns = (data,text,isEditing)=>{
-        return data.map((col) => {
-          if (!col.editable) {
-            return col;
-          }
-          const strinput={
-            "xxx1":col.dataIndex === 'len'|| col.dataIndex === 'chek'?col.dataIndex === 'chek'?'check': 'number' : 'text',
-            "xxx2":col.dataIndex ==='name'?'name':'text'
-          }
-          return {
-            ...col,
-            onCell: (record) => ({
-              record,
-              inputType:strinput[text],
-              dataIndex: col.dataIndex,
-              title: col.title,
-              editing: isEditing(record),
-            }),
-          };
-        });
-      }
-      const addGlist=(text)=>{//添加
-        let str=''
-        for(let i=0;i<26;i++){    
-          str+=String.fromCharCode(65+i)+String.fromCharCode(97+i)+i
+    if(path[0]==="L"){
+      HttpService.post('/reportServer/bdModelTableColumn/table/getModelTableById', JSON.stringify({table_id:path.slice(1)/1})).then(res => {
+        console.log(res)
+        if (res.resultCode == "1000") {   
+            HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
+                if (res.resultCode == "1000") {
+                }
+                else {
+                    message.error(res.message);
+                }
+            })
         }
-        let n=Math.floor(Math.random()*str.length-1)
-        let z=Math.floor(Math.random()*str.length-1)
-        const arrobj={
-          "xxx1":{
-            myarr:[...G_data_source],
-            setmyarr:setG_data_source,
-            form:form,
-            setEditingKey:setEditingKey,
-          },
-          "xxx2":{
-            myarr:[...Indexes],
-            setmyarr:setIndexes,
-            form:form2,
-            setEditingKey:setEditingKey2
-          },
-          "xxx3":{
-            myarr:[...ForeignKey],
-            setmyarr:setForeignKey,
-            form:form3,
-            setEditingKey:setEditingKey3
-          }
+        else {
+            message.error(res.message);
         }
-        const data=arrobj[text]
-        const obj={
-          "xxx1":{
-            name:"",
-            key:formText+data.myarr.length+'H'+str[n]+str[z],
-            Class:"",
-            len:"",
-            decimal:"",
-            chek:[]
-          },
-          "xxx2":{
-            name:"",
-            key:formText+data.myarr.length+'H'+str[n]+str[z],
-            Field:"",
-            FClass:"",
-            FCmethod:""
-          },
-          "xxx3":{
-            name:"",
-            key:formText+data.myarr.length+'H'+str[n]+str[z],
-            Field:"",
-            Rlibrary:"",
-            Rfrom:"",
-            RField:""
-          }
-        }
-        if(data.myarr.length>0){
-          data.myarr.push({...obj[text]})
-          data.setmyarr([...data.myarr])
-          edit(data.myarr[data.myarr.length-1],data.form,data.setEditingKey)
-        }else{
-          let arr=[{...obj[text]}]
-          data.setmyarr(arr)
-          edit(arr[0],data.form,data.setEditingKey)
-        }
-      }
-      const copy=(text)=>{
-        const myobj={
-          "xxx1":{
-            arr:[...G_data_source],
-            setarr:setG_data_source
-          },
-          "xxx2":{
-            arr:[...Indexes],
-            setarr:setIndexes
-          },
-            "xxx3":{
-              arr:[...ForeignKey],
-              setarr:setForeignKey
-            }
-        }
-        const obj=myobj[text]
-        if(myobj[text].arr.length>0){
-          obj.arr.push({...obj.arr[obj.arr.length-1]['key']=obj.arr[obj.arr.length-1].key+(obj.arr.length-1+"")})
-          obj.setarr([...obj.arr])
-        }
-      
-      }
-    const formList={
-      "xxx1": <MyTable formText={formText} form={form} EditableCell={EditableCell} data={G_data_source} mergedColumns={mergedColumns(colimnsR,'xxx1',isEditing,form)} cancel={cancel}></MyTable>,//栏位
-      "xxx2": <MyTable formText={formText} form={form2} EditableCell={EditableCell2} data={Indexes} mergedColumns={mergedColumns(colimnsE,'xxx2',isEditing2,form2)} cancel={cancel}></MyTable>,
-      "xxx3": <MyTable formText={formText} form={form3} EditableCell={EditableCell3} data={ForeignKey} mergedColumns={mergedColumns(colimnsF,'xxx3',isEditing3,form3)} cancel={cancel}></MyTable>,
-      "xxx4":<div>选项</div>,
-      "xxx5":<div>注释</div>,
-      "xxx6":<div>浏览</div>,
+    })
     }
-    
+    setPath(path.slice(1))
+  },[path,formName])
+    //栏位
+    const [path,setPath]=useState('');
+    const [formtext,setformText]=useState('xxx1')
+    const [formName,setformName]=useState('')//表名
+    const [notes,setnotes]=useState('')//注释
+    const [tableForm] = Form.useForm();
+    const [list,setList]=useState([])
+    const [mainForm] = Form.useForm();
+    const tableRef = useRef();
+    const [tableData, setTableData] = useState([]);
+    const [displayType, setDisplayType] = useState('list');
+
+
+    //关系
+    const [tableForm2] = Form.useForm();
+    const [list2,setList2]=useState([])
+    const [mainForm2] = Form.useForm();
+    const tableRef2 = useRef();
+    const [tableData2, setTableData2] = useState([]);
+    const [displayType2, setDisplayType2] = useState('list');
+    const addList=formtext=>{
+      let arr={
+        "xxx1":tableRef,
+        "xxx3":tableRef2
+      }
+      let obj={
+        "xxx1":mainForm,
+        "xxx3":mainForm2
+      }
+      arr[formtext].current.addItem({
+        value_id: `${formtext}${(Math.random() * 1000000).toFixed(0)}`,
+        dict_id:obj[formtext].getFieldValue('dict_id'),
+        editable: true,
+        isNew: true,
+      });
+    }
     return(
-        <Card  title={path==='undefined'?"新建列表":"编辑列表"}>
+        <Card  title={path==='undefined'?"新建列表":"编辑列表"} extra={
+          <Button type="primary" onClick={ () =>{
+            mainForm.submit()
+            
+            HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path,table_name:formName,table_title:notes,columnlist:[...tableData],linkList:[...tableData]})).then(res => {
+              console.log(res)
+              if (res.resultCode == "1000") {   
+                  HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
+                      if (res.resultCode == "1000") {
+                        message.success(res.message);
+                        console.log(res)
+                      }
+                      else {
+                          message.error(res.message);
+                      }
+                  })
+              }
+              else {
+                  message.error(res.message);
+              }
+          })
+            // console.log(tableData)
+          }}>保存</Button>
+        }>
+          <Form 
+                   name="horizontal_login" layout="inline"
+              >
             <Hinput ISname={"表名"} value={formName} chang={setformName}/>
+            <Hinput ISname={"注释"} value={notes} chang={setnotes}/>                 
+          </Form>
+            
             <div style={{display:'flow-root',backgroundColor: 'rgb(250, 250, 250)',margin:"20px 0"}}>
                 <div style={{float:'left'}}>
-                    <Radio.Group style={{ float: "left", marginRight: "30px" }}  defaultValue="xxx1 " buttonStyle="solid">
+                    <Radio.Group style={{ float: "left", marginRight: "30px" }}  defaultValue={titleList[0].value} buttonStyle="solid">
                         {
                             titleList.map((item,index)=>{
                                 return (<Radio.Button value={item.value} key={index} onClick={()=>{setformText(item.value)}}>{item.title}</Radio.Button>)
@@ -482,14 +138,117 @@ export default (props)=>{
                         }
                     </Radio.Group>
                 </div>
-                <Button onClick={()=>addGlist(formText)}>添加</Button>
-                <Button onClick={()=>{copy(formText)
-                  console.log('复制')
-                }}>复制</Button>
-                <Button type="primary" style={{float:"right"}}>保存</Button>
+                <Button
+                   onClick={() => { addList(formtext)
+                    //新增一行
+                  }}
+                >添加</Button>
+                <Button
+                onClick={() => {
+                  //删除选中项
+                  tableRef.current.removeRows();
+                }}
+                >删除</Button>
+                
             </div>
             <div>
-              {formList[formText]}
+            <Form
+                style={{
+                  display:formtext==="xxx1"?"block":"none"
+                }}
+                
+                onFinish={async (values) => {
+                  //验证tableForm
+                  tableForm.validateFields()
+                    .then(() => {
+                      //验证成功
+                      let postData={
+                        ...values,
+                        lineForm:tableData,
+                        lineDelete:tableRef.current.getDeleteData()
+                      }
+                      setList([...tableData])
+                      
+                    })
+                  
+                }} >
+
+                {/* <ProCard
+                > */}
+                  {displayType=='list'?
+                    <TableForm
+                      form={mainForm}
+                      ref={tableRef}
+                      primaryKey='value_id' 
+                      value={tableData}
+                      onChange={(newTableData) => {
+                        //onChange实时回调最新的TableData 
+                        //手动获取方式 tableRef.current.getTableData()，可以节省onChange方法
+                        setTableData(newTableData);
+                      }} 
+                      tableForm={tableForm} />
+                    :<TreeTableForm
+                      ref={tableRef} 
+                      primaryKey='value_id' 
+                      value={tableData}
+                      onChange={(newTableData) => {
+                        //onChange实时回调最新的TableData 
+                        //手动获取方式 tableRef.current.getTableData()，可以节省onChange方法
+                        setTableData(newTableData);
+                      }} 
+                      tableForm={tableForm} /> 
+                  }
+                {/* </ProCard> */}
+              </Form>
+              <Form
+                style={{
+                  display:formtext==="xxx3"?"block":"none"
+                }}
+                form={mainForm2}
+                onFinish={async (values) => {
+                  //验证tableForm
+                  tableForm2.validateFields()
+                    .then(() => {
+                      //验证成功
+                      let postData={
+                        ...values,
+                        lineForm:tableData2,
+                        lineDelete:tableRef2.current.getDeleteData()
+                      }
+                      setList([...tableData2])
+                      
+                    })
+                  
+                }} >
+
+                {/* <ProCard
+                > */}
+                  {displayType2=='list'?
+                    <TableForm2
+                      ref={tableRef2}
+                      primaryKey='value_id' 
+                      value={tableData2}
+                      formName={formName}
+                      setformName={setformName}
+                      onChange={(newTableData) => {
+                        //onChange实时回调最新的TableData 
+                        //手动获取方式 tableRef.current.getTableData()，可以节省onChange方法
+                        setTableData2(newTableData);
+                      }} 
+                      tableForm={tableForm2} />
+                    :<TreeTableForm2
+                      ref={tableRef2} 
+                      primaryKey='value_id' 
+                      value={tableData2}
+                      onChange={(newTableData) => {
+                        //onChange实时回调最新的TableData 
+                        //手动获取方式 tableRef.current.getTableData()，可以节省onChange方法
+                        setTableData(newTableData);
+                      }} 
+                      tableForm={tableForm2} /> 
+                  }
+                {/* </ProCard> */}
+              </Form>
               {/* <></> */}
             </div>
             {/* <EditOut></EditOut> */}

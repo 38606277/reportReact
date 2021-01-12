@@ -1,5 +1,3 @@
-
-
 /* stylelint-disable at-rule-empty-line-before,at-rule-name-space-after,at-rule-no-unknown */
 /* stylelint-disable no-duplicate-selectors */
 /* stylelint-disable */
@@ -1563,8 +1561,8 @@ html {
 }
 .er-editor-demo-container .minimap-container {
     position: absolute;
-    top: 200px;
-    right: 16px;
+    top: 10px;
+    right: 10px;
     /** X6推荐覆写样式 */
 }
 .er-editor-demo-container .minimap-container .x6-widget-minimap .x6-graph {

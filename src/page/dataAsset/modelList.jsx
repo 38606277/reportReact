@@ -57,17 +57,23 @@ const { TreeNode } = Tree;
 
 const MyModal=(props)=>{
     const {visible,on,go,set,ModObj}=props
-    const [data,setdata]=useState(false)
-    const [data_Source,setData_Source]=useState(set!==false?ModObj.db_source:'');//数据来源
-    const [ModName,setModName]=useState(set!==false?ModObj.model_name:'');//模型名称
-    const [data_Class,setData_Class]=useState(set!==false?ModObj.model_type:'');//数据类型
+    const [data,setdata]=useState(set)
+    const [data_Source,setData_Source]=useState('请选择');//数据来源
+    const [ModName,setModName]=useState('');//模型名称
+    const [data_Class,setData_Class]=useState('请选择');//数据类型
     const [C_list,setC_list]=useState([])//类选择
     const [S_list,setS_list]=useState([])//来源选择
         useEffect(()=>{
-            console.log(data_Class);
+            setdata(visible)
+            if(ModObj){
+                setModName(ModObj.model_name);
+                setData_Source(ModObj.db_source);
+                setData_Class(ModObj.db_type);
+                ShandleChange(ModObj.db_type)
+                console.log(data_Source)
+            };
             (async ()=>{
                await HttpService.post('/reportServer/DBConnection/ListAll', JSON.stringify({})).then(res => {
-                    console.log(res)
                     const Clist=[]
                     setdata(set)
                     res.forEach(item=>{
@@ -85,13 +91,20 @@ const MyModal=(props)=>{
                         list: [], loading: false
                     });
                 }); 
-                
             })();
-            if(data!==false){
-                console.log(1)
-            }
-        },[data])
-    const ShandleChange =(e)=>{
+        },[visible])
+    const ok=()=>{
+        go({
+            db_source:data_Source,
+            model_name:ModName,
+            db_type:data_Class,
+            model_id:set!==false?ModObj.model_id:null
+        })
+        setData_Source("请选择")
+        setModName("")
+        setData_Class("请选择")
+    }
+    const ShandleChange =(e)=>{//有点小问题
         HttpService.post('/reportServer/DBConnection/ListAll', JSON.stringify({})).then(res => {
             const Tlist=res.filter(item=>{
                 if(item.dbtype===e){
@@ -111,22 +124,20 @@ const MyModal=(props)=>{
             cancelText='取消'
             okText='确认'
             visible={visible}
-            onOk={()=>go(
-                {
-                    db_source:data_Source,
-                    model_name:ModName,
-                    db_type:data_Class,
-                    model_id:set?set:null
-                }
-                )}
-            onCancel={()=>on()}
+            onOk={()=>ok()}
+            onCancel={()=>{
+                setData_Source("请选择")
+                setModName("")
+                setData_Class("请选择")
+                on()
+            }}
         >
         <div style={{position:"relative"}}>
                 <Hinput value={ModName} chang={setModName} ISname={"模型名称"}/>
                 <div style={{display:"flex",margin:"10px 0px"}}>
                     <div style={{display:"flex",width:'220px',height:'30px',alignItems:'center'}}>
                         <span style={{marginRight:'5px'}}><span style={{...Star}}>*</span>数据类型 <span>： </span></span>
-                        <Select defaultValue="请选择" style={{ width: 120 }} onChange={ShandleChange}>
+                        <Select defaultValue="请选择" style={{ width: 120 }} value={data_Class} onChange={ShandleChange}>
                             {
                                 C_list.map((item,index)=>{
                                     return (<Option value={item.value} key={index}>{item.text}</Option>)
@@ -136,7 +147,7 @@ const MyModal=(props)=>{
                     </div>
                     <div style={{display:"flex",width:'220px',height:'30px',alignItems:'center'}}>
                         <span style={{marginRight:'5px'}}><span style={{...Star}}>*</span>数据来源 <span>： </span></span>
-                        <Select defaultValue="请选择" style={{ width: 120 }} onChange={setData_Source}>
+                        <Select defaultValue="请选择" style={{ width: 120 }} value={data_Source} onChange={setData_Source}>
                             {
                                 S_list.map((item,index)=>{
                                     return (<Option value={item.name} key={index}>{item.name}</Option>)
@@ -197,13 +208,30 @@ export default class modelList extends React.Component {
             table_title:""//模型中文名称
         };
     }
-    componentDidMount() {
-        this.loadCubeList();
-        this.loadDataList();
+    async componentDidMount() {
+        await HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {//模型接口
+            console.log(res.data)
+    
+            if (res.resultCode == "1000") {
+                this.setState({
+                    ModData:{...res.data[0]},
+                    treeData: res.data,
+                    module_id:res.data[0].model_id
+                });
+            }
+            else {
+                message.error(res.message);
+            }
+        }, errMsg => {
+            this.setState({
+                list: [], loading: false
+            });
+        });
+        await this.getTableList()
     }
 
 
-   async loadCubeList() {
+   async loadCubeList() {//页面初始化请求
         let param = {
             FLEX_VALUE_SET_ID: 4
         };
@@ -226,6 +254,9 @@ export default class modelList extends React.Component {
                 list: [], loading: false
             });
         });
+        await this.getTableList()
+    }
+    getTableList (){//表list获取
         let obj={
             startIndex:1,
             perPage:10,
@@ -233,37 +264,12 @@ export default class modelList extends React.Component {
             table_title:"",
             model_id:this.state.module_id
         }
-        await HttpService.post('/reportServer/bdModelTableColumn/table/getTableList',JSON.stringify(obj)).then(res => {///列表接口SunShine:
-            console.log(this.state.module_id)
-          
-            
+        console.log(obj)
+        HttpService.post('/reportServer/bdModelTableColumn/table/getTableList',JSON.stringify(obj)).then(res => {///列表接口SunShine:    
             console.log(res.data)
-    
-            if (res.resultCode == "1000") {
-                // this.setState({
-                //     ModData:{...res.data[0]},
-                //     treeData: res.data,
-                //     module_id:res.data[0].model_id
-                // });
-            }
-            else {
-                message.error(res.message);
-            }
-        }, errMsg => {
-            this.setState({
-                list: [], loading: false
-            });
-        });
-    }
-    loadDataList() {
-        let param = {
-            FLEX_VALUE_SET_ID: 4
-        };
-
-        HttpService.post('/reportServer/dataAsset/getDataList', JSON.stringify(param)).then(res => {
             if (res.resultCode == "1000") {
                 this.setState({
-                    list: res.data,
+                    list:res.data.list
                 });
             }
             else {
@@ -330,35 +336,20 @@ export default class modelList extends React.Component {
     };
 
     //左侧点击切换事件
-    setLeftMenu=(key,item)=>{
-        // reportServer/bdModel/getModelById
-        this.setState({leftColor:key})
-        this.setState({model_id:item.model_id})
-        this.loadCubeList()
+     setLeftMenu= (key,item)=>{
+       this.setState({leftColor:key,module_id:item.model_id})
         HttpService.post('/reportServer/bdModel/getModelById', JSON.stringify({model_id:item.model_id})).then(res => {
-            // /reportServer/bdModel/getAllList  //报错
-            console.log(res.data)
             if (res.resultCode == "1000") {
                 this.setState({
                     ModData: res.data,
                 });
+                this.getTableList()
             }
             else {
                 message.error(res.message);
             }
         })
-        HttpService.post('/reportServer/bdModel/getModelById', JSON.stringify({model_id:item.model_id})).then(res => {
-            // /reportServer/bdModel/getAllList  //报错
-            console.log(res.data)
-            if (res.resultCode == "1000") {
-                this.setState({
-                    ModData: res.data,
-                });
-            }
-            else {
-                message.error(res.message);
-            }
-        })
+       
     }
     //树节点选中时
     onSelect = (selectedKeys, info) => {
@@ -540,7 +531,7 @@ export default class modelList extends React.Component {
         };
         let url = "/reportServer/dataAsset/getValueByHostAndTable";
         HttpService.post(url, JSON.stringify(param)).then(res => {
-
+            console.log(res)
             //生成列信息
             let cols = [];
             let columns = res.data[0];
@@ -604,7 +595,7 @@ export default class modelList extends React.Component {
             "model_name":"请输入模型名称",
             "db_type":"模型类型"
         }
-        HttpService.post('/reportServer/bdModel/createModel', JSON.stringify(data)).then(res => {//暂时有问题
+        HttpService.post('/reportServer/bdModel/createModel', JSON.stringify(data)).then(res => {
             console.log((res))
             if (res.resultCode == "1000") {   
                 HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
@@ -615,6 +606,8 @@ export default class modelList extends React.Component {
                             treeData: res.data,
                             module_id:res.data[0].model_id
                         });
+                        this.loadCubeList()
+                        this.setState({visible2:false})
                     }
                     else {
                         message.error(res.message);
@@ -625,21 +618,15 @@ export default class modelList extends React.Component {
                 message.error(res.message);
             }
         })
-        this.setState({visible2:false})
-        console.log(1)
     }
     confirmModule =(module_id)=>{//删除模型
-        HttpService.post('/reportServer/bdModel/deleteModelById', JSON.stringify({"module_id":module_id})).then(res => {
+        HttpService.post('/reportServer/bdModel/deleteModelById', JSON.stringify({"model_id":module_id})).then(res => {
             console.log(res)
             if (res.resultCode == "1000") {   
                 HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
-            
                     if (res.resultCode == "1000") {
-                        this.setState({
-                            ModData:{...res.data[0]},
-                            treeData: res.data,
-                            module_id:res.data[0].model_id
-                        });
+                        this.loadCubeList()
+                        this.getTableList()
                     }
                     else {
                         message.error(res.message);
@@ -650,7 +637,10 @@ export default class modelList extends React.Component {
                 message.error(res.message);
             }
         })
-        console.log(module_id)
+        
+    }
+    deleteList (id){
+        console.log(id)
     }
     render() {
         this.state.list.map((item, index) => {
@@ -660,10 +650,10 @@ export default class modelList extends React.Component {
         let self = this;
         const columns = [
         {
-            title:"表中文名称",
-            dataIndex: 'x',
-            key: 'x',
-            className: 'x',
+            title:"数据文名称",
+            dataIndex: 'table_title',
+            key: 'table_title',
+            className: 'table_title',
         },
         {
             title: '数据名称',
@@ -675,31 +665,24 @@ export default class modelList extends React.Component {
             dataIndex: 'table_desc',
             key: 'table_desc',
             className: 'headerRow',
-        }, {
-            title: '数据目录',
-            dataIndex: 'catalog_value',
-            key: 'catalog_value',
-            className: 'headerRow',
-        }, {
-            title: '数据类型',
-            dataIndex: 'dbtype_id',
-            key: 'cube_desc',
-            className: 'headerRow',
         },
         {
-            title: '数据行',
-            dataIndex: 'data_count',
-            key: 'data_count',
-            className: 'headerRow',
-        }, {
+            title: '创建时间',
+            dataIndex: 'create_date',
+            key: 'create_date',
+            className: 'create_date',
+        },
+        {
             title: '操作',
             dataIndex: '操作',
             className: 'headerRow',
             render: (text, record) => (
                 <span>
-                    <Link to={`/dataAsset/newlform/${record.table_id}`}>编辑</Link>
+                    <Link to={`/dataAsset/newlform/L${record.table_id}`}>编辑</Link>
                     <Divider type="vertical" />
                     <a onClick={() => this.showModal(record)} href="javascript:;">浏览数据</a>
+                    <Divider type="vertical" />
+                    <a onClick={()=>this.deleteList(record.table_id)}>删除</a>
                 </span>
             ),
         }];
@@ -715,7 +698,7 @@ export default class modelList extends React.Component {
                                 <Button 
                                     size="small"
                                     // href={"#/dataAsset/addLists"}
-                                    style={{marginLeft:"116px"}} type="primary" onClick={()=>this.setState({visible2:true,setModule:false})}>新建模型</Button>
+                                    style={{marginLeft:"116px"}} type="primary" onClick={()=>this.setState({visible2:true,setModule:false,ModObj:null})}>新建模型</Button>
                                     {   
                                         this.state.treeData.map((item,key)=>{
                                             return (<div key={key} style={{display:"flex",padding:"10px 0"}}>
@@ -747,8 +730,8 @@ export default class modelList extends React.Component {
                                 
                             </Col>
                             <Col sm={20}>
-                                <div style={{display:'flow-root',marginLeft:"1px",backgroundColor:"#fff",padding:"20px 0 0 20px"}}>
-                                <Form style={{position:"relative"}}
+                                <Card style={{display:'flow-root',marginLeft:"1px",backgroundColor:"#fff",padding:"20px 0 0 20px"}}>
+                                <Form 
                                       name="horizontal_login" layout="inline"
                                 >
                                     <Form.Item name="note" label="模型名称" rules={[{ required: true }]}>
@@ -766,23 +749,7 @@ export default class modelList extends React.Component {
                                     <Form.Item name="note" label="创 建 人" rules={[{ required: true }]}>
                                         <Input value={this.state.ModData.update_by} bordered={false} disabled/>
                                     </Form.Item>
-
-                                    <Button type="primary"  style={{position:"absolute",top:'0px',right:'20px'}} href={"#/dataAsset/newlform/"+this.state.module_id}>新建表格</Button>
                                 </Form>
-                                <Card title="数据列表搜索">
-                                    <Form
-                                        name="horizontal_login" layout="inline"
-                                    >
-                                        <Form.Item name="note" label="模型中文名称" rules={[{ required: true }]} >
-                                            <Input value={this.state.ModData.table_title} onChange={e=>{this.setState({table_title:e.target.value})}} />
-                                        </Form.Item>
-                                        <Form.Item name="note" label="模型名称" rules={[{ required: true }]}>
-                                            <Input value={this.state.ModData.table_name} onChange={e=>{this.setState({table_name:e.target.value})}}/>
-                                        </Form.Item>
-                                        <Button type="primary" icon={<SearchOutlined />}>搜索</Button>
-                                    </Form>
-                                </Card>
-                                
                                     {/* {
                                         ModData.map((item,index)=>{
                                             return(<div key={index} style={{display:"flex",fontSize:"20px",float:"left",marginRight:"100px",marginBottom:"20px"}}>
@@ -791,20 +758,33 @@ export default class modelList extends React.Component {
                                             </div>)
                                         })
                                     } */}
-                                </div>
+                                </Card>
                                 <Card bodyStyle={{ padding: "8px", backgroundColor: '#fafafa' }}>
 
                                     <Row>
                                         <Col xs={24} sm={24}>
+                                        <Form
+                                            style={{float:"left"}}
+                                            name="horizontal_login" layout="inline"
+                                        >
+                                            <Form.Item name="note" label="表中文名称" rules={[{ required: true }]} >
+                                                <Input value={this.state.ModData.table_title} onChange={e=>{this.setState({table_title:e.target.value})}} />
+                                            </Form.Item>
+                                            <Form.Item name="note" label="表名英文" rules={[{ required: true }]}>
+                                                <Input value={this.state.ModData.table_name} onChange={e=>{this.setState({table_name:e.target.value})}}/>
+                                            </Form.Item>
+                                            <Button type="primary" icon={<SearchOutlined />}>搜索</Button>
+                                        </Form>
                                             <Radio.Group style={{ float: "right", marginRight: "30px" }}  defaultValue="list" buttonStyle="solid" onChange={(e) => { this.setState({ iView: e.target.value }) }}>
                                                 <Radio.Button value="list" onClick={()=>this.setState({moduleType:true})}>列表</Radio.Button>
                                                 <Radio.Button value="column" onClick={()=>this.setState({moduleType:false})}>模型</Radio.Button>
                                             </Radio.Group>
+                                            <Button type="primary"  style={{float:"right",marginRight:"10px"}} href={"#/dataAsset/newlform/"+"X"+this.state.module_id}>新建表格</Button>
                                         </Col>
                                     </Row>
 
                                 </Card>
-                                <div style={{height:"500px"}}>
+                                <div style={{position: 'relative',height:'500px'}}>
                                     {
                                         this.state.moduleType? <Table dataSource={this.state.list} columns={columns} bordered={true}
                                         />:<ERGraphDemo />
@@ -841,7 +821,7 @@ export default class modelList extends React.Component {
                             onChange={(pageNum) => this.onPageNumChange(pageNum)} /> */}
                     </Card>
                 </Modal>
-                <MyModal visible={this.state.visible2} on={()=>{this.setState({visible2:false})}} go={(data)=>this.addModule(data)} set={this.state.setModule} ModObj={this.state.ModObj}></MyModal>
+                <MyModal visible={this.state.visible2} on={()=>{this.setState({visible2:false,ModObj:null})}} go={(data)=>this.addModule(data)}  set={this.state.setModule} ModObj={this.state.ModObj}></MyModal>
             </div>
         );
     }

@@ -11,7 +11,7 @@ export default class HttpService {
     
     //
     static post(url,param){
-        console.log(url,param)
+        // console.log(url,param)
         if((undefined==localStorge.getStorage('userInfo') && url!='/reportServer/user/encodePwd' && url!='/reportServer/user/Reactlogin') || (''==localStorge.getStorage('userInfo')  && url!='/reportServer/user/encodePwd' && url!='/reportServer/user/Reactlogin')){
             window.location.href='#login';
             return  new Promise((resolve, reject) => {});
