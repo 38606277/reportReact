@@ -270,27 +270,6 @@ const TableForm = forwardRef((props, ref) => {
             },
         },
         {
-            title: '精度',
-            dataIndex: 'column_decimal',
-            key: 'column_decimal',
-            width: '10%',
-            render: (text, record, index) => {
-                return (
-                    <InputNumberEF
-                        tableForm={tableForm}
-                        text={text}
-                        record={record}
-                        index={record.value_id}
-                        name="column_decimal"
-                        rules={[{ required: false, message: 'Please input your workId!' }]}
-                        handleFieldChange={handleFieldChange}
-                        placeholder={"请输入精度"}
-                  />
-                );
-            },
-        },
-        
-        {
             title: '长度',
             dataIndex: 'column_length',
             key: 'column_length',
@@ -310,6 +289,26 @@ const TableForm = forwardRef((props, ref) => {
                 />
               );
 
+            },
+        },
+        {
+            title: '精度',
+            dataIndex: 'column_decimal',
+            key: 'column_decimal',
+            width: '10%',
+            render: (text, record, index) => {
+                return (
+                    <InputNumberEF
+                        tableForm={tableForm}
+                        text={text}
+                        record={record}
+                        index={record.value_id}
+                        name="column_decimal"
+                        rules={[{ required: false, message: 'Please input your workId!' }]}
+                        handleFieldChange={handleFieldChange}
+                        placeholder={"请输入精度"}
+                  />
+                );
             },
         },
         {

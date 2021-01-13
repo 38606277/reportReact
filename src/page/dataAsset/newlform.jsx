@@ -41,37 +41,38 @@ export default (props)=>{
   useEffect(()=>{
     const path=props.match.params.module_id
     if(path[0]==="L"){
-      const path2 =path.split("&")
-      HttpService.post('/reportServer/bdModelTableColumn/table/getModelTableById', JSON.stringify({table_id:path2.slice(1)/1})).then(res => {
-        console.log(res)
-        if (res.resultCode == "1000") {
-                  let tableLink=res.data.tableLink.length>0?res.data.tableLink.map(item=>{
-                    return {
-                      ...item,
-                      value_id: `xxx3${(Math.random() * 1000000).toFixed(0)}`,
-                      dict_id:mainForm2.getFieldValue('dict_id'),
-                      editable: true,
-                      isNew: true,
-                    }
-                  }):[]
-                  let column =res.data.column.map(item=>{
-                    return {
-                      ...item,
-                      value_id: `xxx1${(Math.random() * 1000000).toFixed(0)}`,
-                      dict_id:mainForm.getFieldValue('dict_id'),
-                      editable: true,
-                      isNew: true,
-                    }
-                  })
-                  setformName(res.data.table.table_name)
-                  setnotes(res.data.table.table_title)
-                  tableRef.current.initData(column)
-                  tableRef2.current.initData(tableLink)
-        }
-        else {
-            message.error(res.message);
-        }
-    })
+      const path2 =path.split("&");
+      (async()=>{
+        await HttpService.post('/reportServer/bdModelTableColumn/table/getModelTableById', JSON.stringify({table_id:path2[0].slice(1)/1})).then(res => {
+          if (res.resultCode == "1000") {
+                    let tableLink=res.data.tableLink.length>0?res.data.tableLink.map(item=>{
+                      return {
+                        ...item,
+                        value_id: `xxx3${(Math.random() * 1000000).toFixed(0)}`,
+                        dict_id:mainForm2.getFieldValue('dict_id'),
+                        editable: true,
+                        isNew: true,
+                      }
+                    }):[]
+                    let column =res.data.column.map(item=>{
+                      return {
+                        ...item,
+                        value_id: `xxx1${(Math.random() * 1000000).toFixed(0)}`,
+                        dict_id:mainForm.getFieldValue('dict_id'),
+                        editable: true,
+                        isNew: true,
+                      }
+                    })
+                    setformName(res.data.table.table_name)
+                    setnotes(res.data.table.table_title)
+                    tableRef.current.initData(column)
+                    tableRef2.current.initData(tableLink)
+          }
+          else {
+              message.error(res.message);
+          }
+      })
+      })()
     }
     setPath(path[0]==="L"?path.split("&"):path.slice(1))
     
@@ -120,7 +121,7 @@ export default (props)=>{
             <Button type="primary" onClick={ () =>{
               mainForm.submit()
               mainForm2.submit()
-              HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path[1],table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path:"",columnlist:[...tableData],linkList:[...tableData2]})).then(res => {
+              HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path[0][0]==="L"?path[1]:path,table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path[0].slice(1):"",columnlist:[...tableData],linkList:[...tableData2]})).then(res => {
                 console.log(res)
                 if (res.resultCode == "1000") {   
                     HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {

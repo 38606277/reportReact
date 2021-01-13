@@ -525,45 +525,43 @@ export default class modelList extends React.Component {
         });
         //查询表格数据 
         let param = {
-            host_id: record.host_id,
-            table_name: record.table_name,
-            dbtype_id: record.dbtype_id
+            table_id: record.table_id
         };
-        let url = "/reportServer/dataAsset/getValueByHostAndTable";
+        let url = "/reportServer/bdModelTableColumn/table/getModelTableById";
         HttpService.post(url, JSON.stringify(param)).then(res => {
             console.log(res)
             //生成列信息
-            let cols = [];
-            let columns = res.data[0];
-            let obj = {
-                overflow: 'hidden',
-                display: 'block',
-                width: '200px',
-                height: '40px'
-            }
-            for (var key in columns) {
+            // let cols = [];
+            // let columns = res.data[0];
+            // let obj = {
+            //     overflow: 'hidden',
+            //     display: 'block',
+            //     width: '200px',
+            //     height: '40px'
+            // }
+            // for (var key in columns) {
 
-                if (key === 'fileDataBlob') {
-                    cols.push({
-                        title: key,
-                        dataIndex: key,
-                        render: text => <a style={{ ...obj }}>{text}</a>,
-                    })
-                } else {
-                    cols.push({
-                        title: key,
-                        dataIndex: key
-                    })
-                }
+            //     if (key === 'fileDataBlob') {
+            //         cols.push({
+            //             title: key,
+            //             dataIndex: key,
+            //             render: text => <a style={{ ...obj }}>{text}</a>,
+            //         })
+            //     } else {
+            //         cols.push({
+            //             title: key,
+            //             dataIndex: key
+            //         })
+            //     }
 
-            }
+            // }
             // for (j = 0, len = columns.length; j < len; j++) {
             //     cols.push({
             //         title: columns[j],
             //         dataIndex: columns[j]
             //     })
             // }
-            this.setState({ tableColumn: cols, tableData: res.data });
+            // this.setState({ tableColumn: cols, tableData: res.data });
 
             // 设置高亮
         }, errMsg => {
@@ -686,7 +684,6 @@ export default class modelList extends React.Component {
             className: 'headerRow',
             render: (text, record) => (
                 <span>
-                    {console.log(record)}
                     <Link to={`/dataAsset/newlform/L${record.table_id+"&"+this.state.module_id}`}>编辑</Link>
                     <Divider type="vertical" />
                     <a onClick={() => this.showModal(record)} href="javascript:;">浏览数据</a>
