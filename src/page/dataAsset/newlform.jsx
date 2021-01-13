@@ -40,25 +40,41 @@ const Hinput= props=>{
 export default (props)=>{
   useEffect(()=>{
     const path=props.match.params.module_id
-    
     if(path[0]==="L"){
-      HttpService.post('/reportServer/bdModelTableColumn/table/getModelTableById', JSON.stringify({table_id:path.slice(1)/1})).then(res => {
+      const path2 =path.split("&")
+      HttpService.post('/reportServer/bdModelTableColumn/table/getModelTableById', JSON.stringify({table_id:path2.slice(1)/1})).then(res => {
         console.log(res)
-        if (res.resultCode == "1000") {   
-            HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
-                if (res.resultCode == "1000") {
-                }
-                else {
-                    message.error(res.message);
-                }
-            })
+        if (res.resultCode == "1000") {
+                  let tableLink=res.data.tableLink.length>0?res.data.tableLink.map(item=>{
+                    return {
+                      ...item,
+                      value_id: `xxx3${(Math.random() * 1000000).toFixed(0)}`,
+                      dict_id:mainForm2.getFieldValue('dict_id'),
+                      editable: true,
+                      isNew: true,
+                    }
+                  }):[]
+                  let column =res.data.column.map(item=>{
+                    return {
+                      ...item,
+                      value_id: `xxx1${(Math.random() * 1000000).toFixed(0)}`,
+                      dict_id:mainForm.getFieldValue('dict_id'),
+                      editable: true,
+                      isNew: true,
+                    }
+                  })
+                  setformName(res.data.table.table_name)
+                  setnotes(res.data.table.table_title)
+                  tableRef.current.initData(column)
+                  tableRef2.current.initData(tableLink)
         }
         else {
             message.error(res.message);
         }
     })
     }
-    setPath(path.slice(1))
+    setPath(path[0]==="L"?path.split("&"):path.slice(1))
+    
   },[path,formName])
     //栏位
     const [path,setPath]=useState('');
@@ -80,14 +96,14 @@ export default (props)=>{
     const tableRef2 = useRef();
     const [tableData2, setTableData2] = useState([]);
     const [displayType2, setDisplayType2] = useState('list');
+    const obj={
+        "xxx1":mainForm,
+        "xxx3":mainForm2
+      }
     const addList=formtext=>{
       let arr={
         "xxx1":tableRef,
         "xxx3":tableRef2
-      }
-      let obj={
-        "xxx1":mainForm,
-        "xxx3":mainForm2
       }
       arr[formtext].current.addItem({
         value_id: `${formtext}${(Math.random() * 1000000).toFixed(0)}`,
@@ -96,30 +112,35 @@ export default (props)=>{
         isNew: true,
       });
     }
+    
     return(
-        <Card  title={path==='undefined'?"新建列表":"编辑列表"} extra={
-          <Button type="primary" onClick={ () =>{
-            mainForm.submit()
-            
-            HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path,table_name:formName,table_title:notes,columnlist:[...tableData],linkList:[...tableData]})).then(res => {
-              console.log(res)
-              if (res.resultCode == "1000") {   
-                  HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
-                      if (res.resultCode == "1000") {
-                        message.success(res.message);
-                        console.log(res)
-                      }
-                      else {
-                          message.error(res.message);
-                      }
-                  })
-              }
-              else {
-                  message.error(res.message);
-              }
-          })
-            // console.log(tableData)
-          }}>保存</Button>
+        <Card  title={props.match.params.module_id[0]==="X"?"新建列表":"编辑列表"} extra={
+          <div>
+            <Button type="primary" href="/#/dataAsset/modelList" style={{right:"50px"}}>返回</Button>
+            <Button type="primary" onClick={ () =>{
+              mainForm.submit()
+              mainForm2.submit()
+              HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path[1],table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path:"",columnlist:[...tableData],linkList:[...tableData2]})).then(res => {
+                console.log(res)
+                if (res.resultCode == "1000") {   
+                    HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
+                        if (res.resultCode == "1000") {
+                          message.success('保存成功');
+                          // console.log(res)
+                          props.history.push('/dataAsset/modelList')
+                        }
+                        else {
+                            message.error(res.message);
+                        }
+                    })
+                }
+                else {
+                    message.error(res.message);
+                }
+            })
+              // console.log(tableData)
+            }}>保存</Button>
+          </div>
         }>
           <Form 
                    name="horizontal_login" layout="inline"
@@ -146,7 +167,7 @@ export default (props)=>{
                 <Button
                 onClick={() => {
                   //删除选中项
-                  tableRef.current.removeRows();
+                  obj[formtext].current.removeRows();
                 }}
                 >删除</Button>
                 
@@ -158,6 +179,7 @@ export default (props)=>{
                 }}
                 
                 onFinish={async (values) => {
+                  console.log(values)
                   //验证tableForm
                   tableForm.validateFields()
                     .then(() => {

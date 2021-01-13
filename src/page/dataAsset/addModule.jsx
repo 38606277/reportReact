@@ -80,7 +80,7 @@ export default ()=>{
         let index=secondaryList.length//获取多少个子表
         const y=Math.floor(w/2)-175
         const x=Math.floor(w/2)-100
-        mygraph(graph,x,y,[{a:2}])
+        mygraph(graph,20,20,[{a:2}])
         console.log(x)
         console.log('添加主模型')
     }

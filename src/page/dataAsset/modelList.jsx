@@ -266,7 +266,7 @@ export default class modelList extends React.Component {
         }
         console.log(obj)
         HttpService.post('/reportServer/bdModelTableColumn/table/getTableList',JSON.stringify(obj)).then(res => {///列表接口SunShine:    
-            console.log(res.data)
+            console.log(res)
             if (res.resultCode == "1000") {
                 this.setState({
                     list:res.data.list
@@ -276,9 +276,9 @@ export default class modelList extends React.Component {
                 message.error(res.message);
             }
         }, errMsg => {
-            this.setState({
-                list: [], loading: false
-            });
+            // this.setState({
+            //     list: [], loading: false
+            // });
         });
     }
     // 页数发生变化的时候
@@ -640,7 +640,15 @@ export default class modelList extends React.Component {
         
     }
     deleteList (id){
-        console.log(id)
+        HttpService.post('/reportServer/bdModelTableColumn/table/deleteTableId', JSON.stringify({"table_id":id})).then(res => {
+            if (res.resultCode == "1000") {   
+                message.success('删除成功');
+                this.getTableList()
+            }
+            else {
+                message.error(res.message);
+            }
+        })
     }
     render() {
         this.state.list.map((item, index) => {
@@ -678,11 +686,18 @@ export default class modelList extends React.Component {
             className: 'headerRow',
             render: (text, record) => (
                 <span>
-                    <Link to={`/dataAsset/newlform/L${record.table_id}`}>编辑</Link>
+                    {console.log(record)}
+                    <Link to={`/dataAsset/newlform/L${record.table_id+"&"+this.state.module_id}`}>编辑</Link>
                     <Divider type="vertical" />
                     <a onClick={() => this.showModal(record)} href="javascript:;">浏览数据</a>
                     <Divider type="vertical" />
-                    <a onClick={()=>this.deleteList(record.table_id)}>删除</a>
+                    <Popconfirm
+                        title="您确定要删除此表吗?"
+                        onConfirm={()=>this.deleteList(record.table_id)}
+                        okText="确定"
+                        cancelText="取消"
+                    ><a>删除</a> 
+                    </Popconfirm>
                 </span>
             ),
         }];

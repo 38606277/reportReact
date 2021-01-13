@@ -6,8 +6,10 @@ export default  (props) => {
   const {data,columns}=props
   console.log(data)
   return (
-    <Table dataSource={data} columns={columns} >
-
+    <Table dataSource={data} columns={columns} 
+    
+    >
+        
     </Table>
   )
 };
