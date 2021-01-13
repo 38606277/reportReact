@@ -3,10 +3,37 @@ import ERGraph from '../ERGraph';
 import { NodeConfig, EdgeConfig } from '../xflow';
 import { mockEntityData, mockRelationData } from './mock';
 import { EntityCanvasModel, RelationCanvasModel } from './interface';
+import HttpService from '../../util/HttpService.jsx'
 import Entity from './Entity';
 // import Relation from './Relation';
 
 export default class EREditorDemo extends React.PureComponent<{}, {}> {
+  constructor(props) {
+    super(props);
+  }
+  componentDidMount(){
+    // this.props.module_id:any
+    let obj={
+      startIndex:1,
+      perPage:10,
+      table_name:"",
+      table_title:"",
+      model_id:1
+  }
+  console.log(obj)
+  HttpService.post('/reportServer/bdModelTableColumn/table/getTableList',JSON.stringify(obj)).then(res => {///列表接口SunShine: 
+      if (res.resultCode == "1000") {
+          console.log(res)
+      }
+      else {
+          // message.error(res.message);
+      }
+  }, errMsg => {
+      // this.setState({
+      //     list: [], loading: false
+      // });
+  });
+  }
   calRenderData = () => {
     const nodes: NodeConfig[] = mockEntityData.map(
       (entity: EntityCanvasModel) => {

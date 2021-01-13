@@ -198,7 +198,7 @@ class SqlView extends React.Component {
     render() {
         return (
             <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px',height:this.state.mainHeigth,overflow: 'hidden!important' }}>
-                <Card title={'查询详情'} bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}
+                <Card title={'服务详情'} bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}
                     extra={<Button type="primary" shape="round" size='small' href="#/query/QueryList">返回</Button>}>
                   <div className="main_box" style={{height:this.state.mainBoxHeigth,overflow:'auto'}}>
                     <Card bodyStyle={{ padding: '0px' }} type="inner" title={'*基本信息'} size='small'>

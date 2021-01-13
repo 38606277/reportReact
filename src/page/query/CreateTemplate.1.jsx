@@ -198,10 +198,10 @@ class CreateTemplate extends React.Component {
         this.setState({
             qryTemplate: <div>
                 <Card bodyStyle={{ padding: '25px', minHeight: '200px' }}>
-                    <div>查询条件111111</div>
+                    <div>服务条件111111</div>
                 </Card>
                 <Card bodyStyle={{ padding: '5px', marginTop: '15px', minHeight: '300px' }}>
-                    <div>查询结果1111111</div>
+                    <div>服务结果1111111</div>
                 </Card>
             </div >
         });

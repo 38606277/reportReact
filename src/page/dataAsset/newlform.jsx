@@ -32,12 +32,13 @@ const Hinput= props=>{
   return (
     <div style={{display:"flex",width:'250px',height:'30px',alignItems:'center'}}>
       <span style={{marginRight:'5px'}}><span style={{...Star}}>*</span>{ISname} <span>： </span></span>
-      <Input style={{width:'150px'}} value={value} onChange={e=>chang(e.target.value)}/>
+      <Input bordered={chang?true:false}  disabled={chang?null:"disabled"} style={{width:'150px'}} value={value} onChange={chang?e=>chang(e.target.value):null}/>
     </div>
   )
 }
 
 export default (props)=>{
+  console.log()
   useEffect(()=>{
     const path=props.match.params.module_id
     if(path[0]==="L"){
@@ -74,11 +75,24 @@ export default (props)=>{
       })
       })()
     }
-    setPath(path[0]==="L"?path.split("&"):path.slice(1))
+    setPath(path[0]==="L"?path.split("&"):path.slice(1));
+    (async ()=>{
+      await HttpService.post('/reportServer/bdModel/getModelById', JSON.stringify({model_id:path[0]==="L"?path.split("&")[0].slice(1):path.slice(1)})).then(res => {
+        if (res.resultCode == "1000") {
+          console.log(res)
+          setmodel_name(res.data.model_name)
+        }
+        else {
+            message.error(res.message);
+        }
+    })
+      // 
+    })()
     
-  },[path,formName])
+  },[path,formName,model_name])
     //栏位
     const [path,setPath]=useState('');
+    const [model_name,setmodel_name]=useState('')
     const [formtext,setformText]=useState('xxx1')
     const [formName,setformName]=useState('')//表名
     const [notes,setnotes]=useState('')//注释
@@ -88,7 +102,6 @@ export default (props)=>{
     const tableRef = useRef();
     const [tableData, setTableData] = useState([]);
     const [displayType, setDisplayType] = useState('list');
-
 
     //关系
     const [tableForm2] = Form.useForm();
@@ -145,7 +158,8 @@ export default (props)=>{
         }>
           <Form 
                    name="horizontal_login" layout="inline"
-              >
+              > 
+            <Hinput ISname={"模型名称"} value={model_name}/>  
             <Hinput ISname={"表名"} value={formName} chang={setformName}/>
             <Hinput ISname={"注释"} value={notes} chang={setnotes}/>                 
           </Form>
@@ -190,7 +204,6 @@ export default (props)=>{
                         lineForm:tableData,
                         lineDelete:tableRef.current.getDeleteData()
                       }
-                      setList([...tableData])
                       
                     })
                   

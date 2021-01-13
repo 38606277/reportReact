@@ -168,26 +168,26 @@ export default class QueryList extends React.Component {
                     <Search
                         style={{ maxWidth: 300, marginBottom: '10px', float: "right" }}
                         placeholder="请输入..."
-                        enterButton="查询"
+                        enterButton="服务"
                         onSearch={value => this.onSearch(value)}
                     />
 
                     <Table dataSource={this.state.list} rowKey={"qry_id"} rowSelection={rowSelection} ref="qryTable" >
                         <Column
-                            title="查询ID"
+                            title="服务ID"
                             dataIndex="qry_id"
                             sorter={(a, b) => a.qry_id - b.qry_id}
                         />
                         <Column
-                            title="查询名称"
+                            title="服务名称"
                             dataIndex="qry_name"
                         />
                         <Column
-                            title="查询描述"
+                            title="服务描述"
                             dataIndex="qry_desc"
                         />
                         <Column
-                            title="查询类别"
+                            title="服务类别"
                             dataIndex="class_name"
                             sorter={(a, b) => a.class_name.length - b.class_name.length}
                         />
@@ -198,23 +198,60 @@ export default class QueryList extends React.Component {
                         <Column
                             title="动作"
                             render={(text, record) => (
-                                <span>
-                                     <a onClick={()=>{
-                                        window.location.href="#/query/QueryView/view/"+record.qry_id;
-                                     }}>查看</a>
-                                    <Divider type="vertical" />
-                                    <a onClick={()=>{
-                                        if(record.qry_type=='sql'){
-                                            window.location.href="#/query/SqlCreator/update/"+record.qry_id;
-                                        }else if(record.qry_type=='procedure'){
-                                            window.location.href="#/query/ProcedureCreator/update/"+record.qry_id;
-                                        }else if(record.qry_type=='http'){
-                                            window.location.href="#/query/HttpCreator/update/"+record.qry_id;
-                                        }
-                                     }}>编辑</a>
-                                    <Divider type="vertical" />
-                                    <a href={`#/query/CreateTemplate`}>模板</a>
-                                </span>
+                                <Dropdown overlay={
+                                    ()=>{
+                                        console.log(record)
+                                        return (
+                                            <Menu>
+                                                <Menu.Item>
+                                                  <a onClick={()=>{
+                                                        window.location.href="#/query/QueryView/view/"+record.qry_id;
+                                                    }}>API接口</a>
+                                                </Menu.Item>
+                                                <Menu.Item>
+                                                    <a onClick={()=>{
+                                                        if(record.qry_type=='sql'){
+                                                            window.location.href="#/query/SqlCreator/update/"+record.qry_id;
+                                                        }else if(record.qry_type=='procedure'){
+                                                            window.location.href="#/query/ProcedureCreator/update/"+record.qry_id;
+                                                        }else if(record.qry_type=='http'){
+                                                            window.location.href="#/query/HttpCreator/update/"+record.qry_id;
+                                                        }
+                                                    }}>编辑</a>
+                                                </Menu.Item>
+                                                <Menu.Item>
+                                                <a   href={`#/query/CreateTemplate`}>模板</a>
+                                                </Menu.Item>
+                                                <Menu.Item>
+                                                <a onClick={()=>{
+                                                        window.location.href="#/query/ExecQuery/"+record.qry_id+"/"+record.class_id+"/"+record.qry_name+"/null";
+                                                    }}>立即执行</a>
+                                                </Menu.Item>
+                                            </Menu>
+                                        )
+                                    }
+                                }>
+                                <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                                    操作<DownOutlined />
+                                    </a>
+                                </Dropdown>
+                                // <span>
+                                //      <a onClick={()=>{
+                                //         window.location.href="#/query/QueryView/view/"+record.qry_id;
+                                //      }}>查看</a>
+                                //     <Divider type="vertical" />
+                                //     <a onClick={()=>{
+                                //         if(record.qry_type=='sql'){
+                                //             window.location.href="#/query/SqlCreator/update/"+record.qry_id;
+                                //         }else if(record.qry_type=='procedure'){
+                                //             window.location.href="#/query/ProcedureCreator/update/"+record.qry_id;
+                                //         }else if(record.qry_type=='http'){
+                                //             window.location.href="#/query/HttpCreator/update/"+record.qry_id;
+                                //         }
+                                //      }}>编辑</a>
+                                //     <Divider type="vertical" />
+                                //     <a href={`#/query/CreateTemplate`}>模板</a>
+                                // </span>
                             )}
                         />
                     </Table>
