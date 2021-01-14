@@ -96,6 +96,11 @@ const DataMarket =Loadable({
     loading: loading,
     delay:3000
 })
+const DataMarketDetails =Loadable({
+    loader: () => import(/* webpackChunkName: "NlpList" */ './DataMarketDetails.jsx'),
+    loading: loading,
+    delay:3000
+})
 class QueryRouter extends React.Component{
     render(){
         return (
@@ -118,6 +123,7 @@ class QueryRouter extends React.Component{
                  <Route path="/query/SqlView/:action/:id" component={SqlView} />
                  <Route path="/query/QueryView/:action/:id" component={QueryView} />
                  <Route path="/query/DataMarket" component={DataMarket} />
+                 <Route path="/query/DataMarketDetails/:id_details" component={DataMarketDetails} />
                  <Redirect exact from="/query" to="/query/ExecQuery"/> 
             </Switch>
         )

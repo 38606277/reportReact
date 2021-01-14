@@ -17,13 +17,20 @@ export default (props)=>{
         })();
     },[])
     return(
-        <Card  title="数据市场" style={{display:"flow-root"}}>
+        <Card  title="数据市场" style={{display:"flow-root"}} headStyle={{fontWeight:"600",fontSize:"20px"}}>
             {
                 classList.map((item,index)=>{
-                    console.log(item.img_file)
                     return (
-                        <div key={index} className={style.DataMarket} style={{background:url+"/report/"+item.img_file}}>
-                            <div>{item.class_name}</div>
+                        <div key={index} className={style.DataMarket}
+                            onClick={()=>{
+                                props.history.push('/query/DataMarketDetails/'+item.class_id+"&"+item.class_name)
+                                console.log(item.class_id)
+                            }}
+                        >
+                            <div style={{textAlign:"center"}}>
+                                <img className={style.DataMarket_img} src={url+"/report/"+item.img_file} />
+                            </div>
+                            <div className={style.DataMarket_text}>{item.class_name}</div>
                         </div>
                     )
                 })

@@ -1,11 +1,26 @@
 .DataMarket{
-    width: 140px;
-    height: 100px;
+    width: 200px;
+    padding: 20px;
     border-radius: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #fff;
     text-align: center;
-    line-height: 100px;
+    display: flow-root;
     float: left;
     margin-right: 20px;
     margin-bottom: 20px;
+    cursor:pointer;
+    .DataMarket_img{
+        width: 75px;
+        height: 75px;
+    }
+    .DataMarket_text{
+        margin-top: 10px;
+        font-weight: 700;
+    }
+}
+.DataMarket:hover{
+    border: 1px solid #ccc;
+}
+.DataMarket:hover .DataMarket_text{
+    color: #1890ff;
 }

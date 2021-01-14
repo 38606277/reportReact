@@ -198,10 +198,10 @@ class SqlView extends React.Component {
     render() {
         return (
             <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px',height:this.state.mainHeigth,overflow: 'hidden!important' }}>
-                <Card title={'服务详情'} bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}
+                <Card title={'服务详情'} bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ fontWeight:"600",fontSize:"20px"}}
                     extra={<Button type="primary" shape="round" size='small' href="#/query/QueryList">返回</Button>}>
                   <div className="main_box" style={{height:this.state.mainBoxHeigth,overflow:'auto'}}>
-                    <Card bodyStyle={{ padding: '0px' }} type="inner" title={'*基本信息'} size='small'>
+                    <Card bodyStyle={{ padding: '0px' }} type="inner" title={'*基本信息'} size='small' headStyle={{fontWeight:"600",fontSize:"17px"}}>
                         <Row>
                             <Col span={3} style={{padding:'10px',color:'#ccc'}}>
                                 服务名称:
@@ -221,7 +221,7 @@ class SqlView extends React.Component {
 
                         </Row>
                         <Row>
-                            <Col span={3} style={{padding:'10px',color:'#ccc'}}>
+                            <Col span={3} style={{padding:'10px',color:'#ccc'}} >
                                 服务类型:
                             </Col>
                             <Col span={9}  style={{padding:'10px'}}>
@@ -235,8 +235,9 @@ class SqlView extends React.Component {
                             </Col>
                         </Row>
                     </Card>
-                    <Card title={'*参数信息'} type="inner" size='small'>
-                        <Table  dataSource={this.state.inData} pagination={false} size='small'>
+                        <Table  dataSource={this.state.inData} pagination={false} size='small' title={()=>{
+                            return <h3 style={{fontWeight:"600",fontSize:"17px"}}>*入参</h3>
+                        }}>
                             <Column
                                 title="参数名称"
                                 dataIndex="in_id"
@@ -251,18 +252,18 @@ class SqlView extends React.Component {
                             />
                             
                         </Table>
-                    </Card>
                     <Row>
-                        <Col span={3} style={{padding:'10px',color:'#ccc'}}>
+                        {/* <Col span={3} style={{padding:'10px',color:'#ccc'}}>
                         调用方式说明:
                         </Col>
                         <Col span={21}>
                            <TextArea rows={4} readOnly>{'data:'}</TextArea>
                             
-                        </Col>
+                        </Col> */}
                     </Row>
-                    <Card title={'*返回参数说明'} type="inner"  size='small'>
-                            <Table  dataSource={this.state.outData} pagination={false} size='small'>
+                            <Table  dataSource={this.state.outData} pagination={false} size='small'  title={()=>{
+                                return <h3 style={{fontWeight:"600",fontSize:"17px"}}>*出参</h3>
+                            }}>
                                 <Column
                                     title="参数名称"
                                     dataIndex="out_id"
@@ -276,7 +277,6 @@ class SqlView extends React.Component {
                                     dataIndex="out_name"
                                 />
                             </Table>
-                        </Card>
                     </div>
                 </Card>
             </div>

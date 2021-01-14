@@ -216,9 +216,10 @@ export default class SiderBar extends React.Component {
     render() {
         let html = this.state.categoryList.map((obj, index) => {
             if ("undefined" != typeof (obj.children)) {
-                if (obj.func_id == '1001') {
-                    return this.fourformSubmenusChild(obj, index);
-                } else if (obj.func_id == '1006') {
+                // if (obj.func_id == '1001') {
+                //     return this.fourformSubmenusChild(obj, index);
+                // } else 
+                if (obj.func_id == '1006') {
                     return this.cubeformSubmenusChild(obj, index);
                 } else if (obj.func_id == '1007') {
                     return this.dashboardformSubmenusChild(obj, index);
