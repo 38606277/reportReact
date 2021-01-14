@@ -386,7 +386,7 @@ class TableCreator extends React.Component {
 
         return (
             <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px' }}>
-                <Card title={this.state.action == 'create' ? '创建查询' : '编辑查询'} bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}
+                <Card title={this.state.action == 'create' ? '创建服务' : '编辑服务'} bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}
                     extra={<span>类型：SQL语句</span>}>
                     <Form layout="inline" onSubmit={this.handleSubmit}>
                         <Row gutter={0}>
@@ -418,7 +418,7 @@ class TableCreator extends React.Component {
                                 <Card bodyStyle={{ padding: '5px' }}>
                                     <Row>
                                         <Col span={16}>
-                                            <FormItem label=" 查询类别"    >
+                                            <FormItem label=" 服务类别"    >
                                                 {
                                                     getFieldDecorator('class_id', {
                                                         rules: [{ required: true, message: '函数类别是必须的' }],
@@ -470,7 +470,7 @@ class TableCreator extends React.Component {
                                     </Row>
                                     <Row>
                                         <Col span={24}>
-                                            <FormItem label="查询说明" style={{ marginLeft: '14px' }}  >
+                                            <FormItem label="服务说明" style={{ marginLeft: '14px' }}  >
                                                 {
                                                     getFieldDecorator('qry_desc', {
                                                     })(

@@ -335,11 +335,11 @@ class QueryClass extends React.Component{
        
         return (
             <div id="page-wrapper">
-            <Card title="查询管理">
+            <Card title="服务管理">
                 <Tooltip>
                     <Search
-                        placeholder="输入新查询名称"
-                        enterButton="新建查询"
+                        placeholder="输入新服务名称"
+                        enterButton="新建服务"
                         size="large"
                         style={{ width: 300,marginBottom:'10px' }}
                         name='className'

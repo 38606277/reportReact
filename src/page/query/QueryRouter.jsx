@@ -91,7 +91,11 @@ const NlpList = Loadable({
 //     loading: loading,
 //     delay:3000
 // });
-
+const DataMarket =Loadable({
+    loader: () => import(/* webpackChunkName: "NlpList" */ './DataMarket.jsx'),
+    loading: loading,
+    delay:3000
+})
 class QueryRouter extends React.Component{
     render(){
         return (
@@ -113,6 +117,7 @@ class QueryRouter extends React.Component{
                  <Route path="/query/NlpList" component={NlpList} />
                  <Route path="/query/SqlView/:action/:id" component={SqlView} />
                  <Route path="/query/QueryView/:action/:id" component={QueryView} />
+                 <Route path="/query/DataMarket" component={DataMarket} />
                  <Redirect exact from="/query" to="/query/ExecQuery"/> 
             </Switch>
         )

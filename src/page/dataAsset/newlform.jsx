@@ -38,14 +38,15 @@ const Hinput= props=>{
 }
 
 export default (props)=>{
-  console.log()
+  console.log(props)
   useEffect(()=>{
     const path=props.match.params.module_id
     if(path[0]==="L"){
       const path2 =path.split("&");
       (async()=>{
-        await HttpService.post('/reportServer/bdModelTableColumn/table/getModelTableById', JSON.stringify({table_id:path2[0].slice(1)/1})).then(res => {
+        await HttpService.post('/reportServer/bdModelTableColumn/table/getModelTableById', JSON.stringify({table_id:path2[0].slice(1)})).then(res => {
           if (res.resultCode == "1000") {
+            console.log()
                     let tableLink=res.data.tableLink.length>0?res.data.tableLink.map(item=>{
                       return {
                         ...item,
@@ -77,7 +78,8 @@ export default (props)=>{
     }
     setPath(path[0]==="L"?path.split("&"):path.slice(1));
     (async ()=>{
-      await HttpService.post('/reportServer/bdModel/getModelById', JSON.stringify({model_id:path[0]==="L"?path.split("&")[0].slice(1):path.slice(1)})).then(res => {
+      
+      await HttpService.post('/reportServer/bdModel/getModelById', JSON.stringify({model_id:path[0]==="L"?path.split("&")[1]:path.slice(1)})).then(res => {
         if (res.resultCode == "1000") {
           console.log(res)
           setmodel_name(res.data.model_name)
@@ -134,6 +136,7 @@ export default (props)=>{
             <Button type="primary" onClick={ () =>{
               mainForm.submit()
               mainForm2.submit()
+              console.log(path)
               HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path[0][0]==="L"?path[1]:path,table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path[0].slice(1):"",columnlist:[...tableData],linkList:[...tableData2]})).then(res => {
                 console.log(res)
                 if (res.resultCode == "1000") {   
@@ -141,7 +144,7 @@ export default (props)=>{
                         if (res.resultCode == "1000") {
                           message.success('保存成功');
                           // console.log(res)
-                          props.history.push('/dataAsset/modelList')
+                          // props.history.push('/dataAsset/modelList')
                         }
                         else {
                             message.error(res.message);

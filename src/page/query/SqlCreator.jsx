@@ -388,7 +388,7 @@ class SqlCreator extends React.Component {
 
         return (
             <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px' }}>
-                <Card title={this.state.action == 'create' ? '创建查询' : '编辑查询'} bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}
+                <Card title={this.state.action == 'create' ? '创建服务' : '编辑服务'} bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}
                     extra={<span>类型：SQL语句</span>}>
                     <Form layout="inline" onSubmit={this.handleSubmit}>
                         <Row gutter={0}>
@@ -418,9 +418,9 @@ class SqlCreator extends React.Component {
                                         }
                                     </FormItem>
                                     <Row style={{ marginBottom: "5px" }}>
-                                        <span style={{ color: "black", fontWeight: "400", position: "absolute", bottom: "2px" }}><span class="ant-form-item-required"></span>输入查询SQL</span>
+                                        <span style={{ color: "black", fontWeight: "400", position: "absolute", bottom: "2px" }}><span class="ant-form-item-required"></span>输入服务SQL</span>
                                         <span style={{ float: "right", }}>
-                                            <Button icon={<ToolOutlined />} loading={this.state.loading} onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成查询</Button>
+                                            <Button icon={<ToolOutlined />} loading={this.state.loading} onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >生成服务</Button>
                                             <Button icon={<BarsOutlined />} onClick={() => this.sqlFormat()} style={{ marginRight: "10px" }}> 格式化</Button>
                                         </span>
                                     </Row>
@@ -432,7 +432,7 @@ class SqlCreator extends React.Component {
                                 <Card bodyStyle={{ padding: '5px' }}>
                                     <Row>
                                         <Col span={16}>
-                                            <FormItem label=" 查询类别"    >
+                                            <FormItem label=" 服务类别"    >
                                                 {
                                                     getFieldDecorator('class_id', {
                                                         rules: [{ required: true, message: '函数类别是必须的' }],
@@ -447,7 +447,7 @@ class SqlCreator extends React.Component {
                                             </FormItem>
                                         </Col>
                                         <Col span={8}>
-                                            <FormItem label="查询ID"  >
+                                            <FormItem label="服务ID"  >
                                                 {
                                                     getFieldDecorator('qry_id', {
                                                     })(
@@ -460,7 +460,7 @@ class SqlCreator extends React.Component {
                                     </Row>
                                     <Row>
                                         <Col span={16}>
-                                            <FormItem label=" 查询名称"   >
+                                            <FormItem label=" 服务名称"   >
                                                 {
                                                     getFieldDecorator('qry_name', {
                                                         rules: [{ required: true, message: '函数名称是必须的' }],
@@ -484,7 +484,7 @@ class SqlCreator extends React.Component {
                                     </Row>
                                     <Row>
                                         <Col span={24}>
-                                            <FormItem label="查询说明" style={{ marginLeft: '14px' }}  >
+                                            <FormItem label="服务说明" style={{ marginLeft: '14px' }}  >
                                                 {
                                                     getFieldDecorator('qry_desc', {
                                                     })(

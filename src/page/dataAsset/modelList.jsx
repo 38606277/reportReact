@@ -352,7 +352,7 @@ export default class modelList extends React.Component {
             className: 'headerRow',
             render: (text, record) => (
                 <span>
-                    <a  onClick={()=>this.setState({visible3:true,Mysrc:"L"+record.table_id+"&"+this.state.module_id})}>编辑</a>
+                    <a  href={"#/dataAsset/newlform/"+"L"+record.table_id+"&"+this.state.module_id}>编辑</a>
                     <Divider type="vertical" />
                     <a onClick={() => this.showModal(record)} href="javascript:;">浏览数据</a>
                     <Divider type="vertical" />
@@ -484,11 +484,11 @@ export default class modelList extends React.Component {
                     </Card>
                 </Modal>
                 <MyModal visible={this.state.visible2} on={()=>{this.setState({visible2:false,ModObj:null})}} go={(data)=>this.addModule(data)}  set={this.state.setModule} ModObj={this.state.ModObj}></MyModal>
-                <Modal title="新建表格" visible={this.state.visible3} onOk={this.novisible3} onCancel={()=>this.setState({visible3:false})} >
+                {/* <Modal title="新建表格" visible={this.state.visible3} onOk={this.novisible3} onCancel={()=>this.setState({visible3:false})} >
                         <NewForm visible={this.state.visible3} module_id={this.state.Mysrc} go={(e)=>{
                             this.novisible3(e)
                         }}></NewForm>
-                </Modal>
+                </Modal> */}
             </div>
         );
     }
