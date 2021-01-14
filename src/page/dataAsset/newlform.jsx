@@ -50,7 +50,7 @@ export default (props)=>{
                     let tableLink=res.data.tableLink.length>0?res.data.tableLink.map(item=>{
                       return {
                         ...item,
-                        value_id: `xxx3${(Math.random() * 1000000).toFixed(0)}`,
+                        id: `xxx3NEW${(Math.random() * 1000000).toFixed(0)}`,
                         dict_id:mainForm2.getFieldValue('dict_id'),
                         editable: true,
                         isNew: true,
@@ -59,7 +59,7 @@ export default (props)=>{
                     let column =res.data.column.map(item=>{
                       return {
                         ...item,
-                        value_id: `xxx1${(Math.random() * 1000000).toFixed(0)}`,
+                        id: `xxx1NEW${(Math.random() * 1000000).toFixed(0)}`,
                         dict_id:mainForm.getFieldValue('dict_id'),
                         editable: true,
                         isNew: true,
@@ -122,7 +122,7 @@ export default (props)=>{
         "xxx3":tableRef2
       }
       arr[formtext].current.addItem({
-        value_id: `${formtext}${(Math.random() * 1000000).toFixed(0)}`,
+        id: `${formtext}${(Math.random() * 1000000).toFixed(0)}`,
         dict_id:obj[formtext].getFieldValue('dict_id'),
         editable: true,
         isNew: true,
@@ -218,7 +218,7 @@ export default (props)=>{
                     <TableForm
                       form={mainForm}
                       ref={tableRef}
-                      primaryKey='value_id' 
+                      primaryKey='id' 
                       value={tableData}
                       onChange={(newTableData) => {
                         //onChange实时回调最新的TableData 
@@ -228,7 +228,7 @@ export default (props)=>{
                       tableForm={tableForm} />
                     :<TreeTableForm
                       ref={tableRef} 
-                      primaryKey='value_id' 
+                      primaryKey='id' 
                       value={tableData}
                       onChange={(newTableData) => {
                         //onChange实时回调最新的TableData 
@@ -265,7 +265,7 @@ export default (props)=>{
                   {displayType2=='list'?
                     <TableForm2
                       ref={tableRef2}
-                      primaryKey='value_id' 
+                      primaryKey='id' 
                       value={tableData2}
                       formName={formName}
                       setformName={setformName}
@@ -277,7 +277,7 @@ export default (props)=>{
                       tableForm={tableForm2} />
                     :<TreeTableForm2
                       ref={tableRef2} 
-                      primaryKey='value_id' 
+                      primaryKey='id' 
                       value={tableData2}
                       onChange={(newTableData) => {
                         //onChange实时回调最新的TableData 
