@@ -27,12 +27,12 @@ export default (props)=>{
                     <div key={index} className={style.DataMarketDetails}
                     >
                         <div className={[style.DataMarketDetails_listRight].join(' ')}>
-                            <div  style={{marginBottom:'4px'}}><span>产品名称</span>：{item.qry_name}</div>
-                            <div><span>产品用途</span>：{item.qry_desc}</div>
+                            <div  style={{marginBottom:'4px'}}><span>服务名称</span>：{item.qry_name}</div>
+                            <div><span>服务用途</span>：{item.qry_desc}</div>
                         </div>
                         <div className={style.DataMarketDetails_list}>
                             <div style={{marginBottom:'4px'}}><span>服务类型</span>：{item.qry_type}</div>
-                            <div><span>服务连接</span>：http://localhost:9609/reportServer/query/execQuery/{item.qry_id}/{props.match.params.id_details.split("&")[0]}</div>
+                            <div><span>服务地址</span>：http://localhost:9609/reportServer/query/execQuery/{item.qry_id}/{props.match.params.id_details.split("&")[0]}</div>
                         </div>
                         <div className={style.DataMarketDetails_Btn}>
                             <div>

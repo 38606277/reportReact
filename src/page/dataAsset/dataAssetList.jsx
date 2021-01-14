@@ -389,6 +389,7 @@ export default class dataAssetList extends React.Component {
             table_name: record.table_name,
             dbtype_id: record.dbtype_id
         };
+        console.log(param)
         let url = "/reportServer/dataAsset/getValueByHostAndTable";
         HttpService.post(url, JSON.stringify(param)).then(res => {
 
