@@ -1,4 +1,3 @@
-
 import React,{useState,useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import style from './modelList.less'
@@ -87,7 +86,7 @@ export default class modelList extends React.Component {
                 list: [], loading: false
             });
         });
-        await this.getTableList()
+        await this.getTableList("","")
     }
     componentDidUpdate(){//执行回调
         
@@ -119,14 +118,14 @@ export default class modelList extends React.Component {
                 list: [], loading: false
             });
         });
-        await this.getTableList()
+        await this.getTableList("","")
     }
-    getTableList (){//表list获取
+    getTableList (table_name,table_title){//表list获取
         let obj={
             startIndex:1,
             perPage:10,
-            table_name:"",
-            table_title:"",
+            table_name:table_title,
+            table_title:table_name,
             model_id:this.state.module_id
         }
         console.log(obj)
@@ -172,7 +171,7 @@ export default class modelList extends React.Component {
                 this.setState({
                     ModData: res.data,
                 });
-                this.getTableList()
+                this.getTableList("","")
             }
             else {
                 message.error(res.message);
@@ -181,59 +180,55 @@ export default class modelList extends React.Component {
        
     }
     showModal = (record) => {
-        console.log(record)
         this.setState({
-            visible: true,
-            tableColumn: [],
-            tableData: []
+            visible: true
         });
         //查询表格数据 
         let param = {
-            table_id: record.table_id
+            dbtype_id:this.state.ModData.db_type,
+            host_id:this.state.ModData.db_source,
+            table_name:record.table_name
         };
-        let url = "/reportServer/bdModelTableColumn/table/getModelTableById";
+        let url = "/reportServer/dataAsset/getValueByHostAndTable";
         HttpService.post(url, JSON.stringify(param)).then(res => {
-            console.log(res)
             //生成列信息
-            // let cols = [];
-            // let columns = res.data[0];
-            // let obj = {
-            //     overflow: 'hidden',
-            //     display: 'block',
-            //     width: '200px',
-            //     height: '40px'
-            // }
-            // for (var key in columns) {
+            let cols = [];
+            let columns = res.data[0];
+            let obj={
+                overflow: 'hidden',
+                display: 'block',
+                width: '200px',
+                height:'40px'
+            }
+            for (var key in columns) {
 
-            //     if (key === 'fileDataBlob') {
-            //         cols.push({
-            //             title: key,
-            //             dataIndex: key,
-            //             render: text => <a style={{ ...obj }}>{text}</a>,
-            //         })
-            //     } else {
-            //         cols.push({
-            //             title: key,
-            //             dataIndex: key
-            //         })
-            //     }
+                if(key==='fileDataBlob'){
+                    cols.push({
+                        title: key,
+                        dataIndex: key,
+                        render: text => <a style={{...obj}}>{text}</a>,
+                    })
+                }else{
+                    cols.push({
+                        title: key,
+                        dataIndex: key
+                    })
+                }
 
-            // }
+            }
             // for (j = 0, len = columns.length; j < len; j++) {
             //     cols.push({
             //         title: columns[j],
             //         dataIndex: columns[j]
             //     })
             // }
-            // this.setState({ tableColumn: cols, tableData: res.data });
-
+            this.setState({ tableColumn: cols, tableData: res.data });
             // 设置高亮
         }, errMsg => {
             this.setState({
                 list: []
             });
         });
-
     };
 
     handleOk = e => {
@@ -288,7 +283,7 @@ export default class modelList extends React.Component {
                 HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
                     if (res.resultCode == "1000") {
                         this.loadCubeList()
-                        this.getTableList()
+                        this.getTableList("","")
                     }
                     else {
                         message.error(res.message);
@@ -305,7 +300,7 @@ export default class modelList extends React.Component {
         HttpService.post('/reportServer/bdModelTableColumn/table/deleteTableId', JSON.stringify({"table_id":id})).then(res => {
             if (res.resultCode == "1000") {   
                 message.success('删除成功');
-                this.getTableList()
+                this.getTableList("","")
             }
             else {
                 message.error(res.message);
@@ -315,6 +310,11 @@ export default class modelList extends React.Component {
     novisible3=(e)=>{
         console.log(e)
         // this.setState(({visible3:false}))
+    }
+    search=()=>{
+        const {table_title,table_name}=this.state
+        this.getTableList(table_title,table_name)
+        this.setState({table_title:"",table_name:""})
     }
     render() {
         this.state.list.map((item, index) => {
@@ -442,7 +442,9 @@ export default class modelList extends React.Component {
                                             <Form.Item name="note" label="表名英文" rules={[{ required: true }]}>
                                                 <Input value={this.state.ModData.table_name} onChange={e=>{this.setState({table_name:e.target.value})}}/>
                                             </Form.Item>
-                                            <Button type="primary" icon={<SearchOutlined />}>搜索</Button>
+                                            <Button type="primary" icon={<SearchOutlined />} onClick={()=>{
+                                                this.search()
+                                            }}>搜索</Button>
                                         </Form>
                                             <Radio.Group style={{ float: "right", marginRight: "30px" }}  defaultValue="list" buttonStyle="solid" onChange={(e) => { this.setState({ iView: e.target.value }) }}>
                                                 <Radio.Button value="list" onClick={()=>this.setState({moduleType:true})}>列表</Radio.Button>

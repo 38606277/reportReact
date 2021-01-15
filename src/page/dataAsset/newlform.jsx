@@ -1,6 +1,7 @@
 import React,{useState,useEffect,useRef} from 'react'
 import { Form, Input, Table, Button, Card, Col,Select, Radio,Pagination, message, Tabs, Divider, Tag ,Layout,Popconfirm,Row,InputNumber,Checkbox} from 'antd';
-import { PageContainer } from '@ant-design/pro-layout';
+import { PageContainer} from '@ant-design/pro-layout';
+import {PlusOutlined,MinusOutlined} from '@ant-design/icons'
 import ProCard from '@ant-design/pro-card';
 import TableForm from './FieldFrom/TableForm';
 import TableForm2 from './FieldFrom/TableForm2'
@@ -136,8 +137,14 @@ export default (props)=>{
             <Button type="primary" onClick={ () =>{
               mainForm.submit()
               mainForm2.submit()
-              console.log(path)
-              HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path[0][0]==="L"?path[1]:path,table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path[0].slice(1):"",columnlist:[...tableData],linkList:[...tableData2]})).then(res => {
+              // let deleteColumnList =tableData.length>0?tableData.map(item=>{
+              //     return item.column_name
+              // }):[]
+              // let deleteTableLinkList =tableData2.length>0?tableData2.map(item=>{
+              //   return item.column_name
+              //  }):[]
+              // console.log(deleteColumnList)
+              HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path[0][0]==="L"?path[1]:path,table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path[0].slice(1):"",columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[]})).then(res => {
                 console.log(res)
                 if (res.resultCode == "1000") {   
                     HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
@@ -177,17 +184,28 @@ export default (props)=>{
                         }
                     </Radio.Group>
                 </div>
+                <div style={{float:"right"}}>
                 <Button
+                    style={{
+                      marginRight:"10px"
+                    }}
+                   icon={<PlusOutlined />}
                    onClick={() => { addList(formtext)
                     //新增一行
                   }}
-                >添加</Button>
+                ></Button>
                 <Button
+                icon={<MinusOutlined />}
                 onClick={() => {
-                  //删除选中项
-                  obj[formtext].current.removeRows();
+                  //删除选中项orm)
+                  if(formtext==="xxx1"){
+                    return mainForm.current.removeRows()
+                  }else if(formtext==="xxx3"){
+                    return mainForm2.current.removeRows()
+                  }
                 }}
-                >删除</Button>
+                ></Button>
+                </div>
                 
             </div>
             <div>
@@ -197,7 +215,6 @@ export default (props)=>{
                 }}
                 
                 onFinish={async (values) => {
-                  console.log(values)
                   //验证tableForm
                   tableForm.validateFields()
                     .then(() => {
@@ -207,7 +224,7 @@ export default (props)=>{
                         lineForm:tableData,
                         lineDelete:tableRef.current.getDeleteData()
                       }
-                      
+                         setList(postData)
                     })
                   
                 }} >
@@ -254,7 +271,7 @@ export default (props)=>{
                         lineForm:tableData2,
                         lineDelete:tableRef2.current.getDeleteData()
                       }
-                      setList([...tableData2])
+                      setList(postData)
                       
                     })
                   
