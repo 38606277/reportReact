@@ -214,7 +214,7 @@ const TableForm = forwardRef((props, ref) => {
                   name="link_column_name"
                   rules={[{ required: false, message: 'Please input your workId!' }]}
                   handleFieldChange={handleFieldChange}
-                  placeholder={"是否为空"}
+                  placeholder={""}
                 />
               );
 
