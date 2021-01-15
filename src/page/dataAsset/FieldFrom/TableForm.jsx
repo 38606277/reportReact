@@ -276,6 +276,10 @@ const TableForm = forwardRef((props, ref) => {
             width: '10%',
             className:styles.columnshow,
             render: (text, record, index) => {
+                // if(record.column_type){
+                //     text=255
+                //     console.log("默认值")
+                // }
                 return (
                   <InputNumberEF
                   tableForm={tableForm}

@@ -252,6 +252,7 @@ export default class modelList extends React.Component {
             "model_name":"请输入模型名称",
             "db_type":"模型类型"
         }
+        
         HttpService.post('/reportServer/bdModel/createModel', JSON.stringify(data)).then(res => {
             console.log((res))
             if (res.resultCode == "1000") {   

@@ -203,16 +203,16 @@ class SqlView extends React.Component {
                   <div className="main_box" style={{height:this.state.mainBoxHeigth,overflow:'auto'}}>
                     <Card bodyStyle={{ padding: '0px' }} type="inner" title={'*基本信息'} size='small' headStyle={{fontWeight:"600",fontSize:"17px"}}>
                         <Row>
-                            <Col span={3} style={{padding:'10px',color:'#ccc'}}>
+                            <Col span={3} style={{padding:'10px'}}>
                                 服务名称:
                             </Col>
                             <Col span={21} style={{padding:'10px'}}>
-                               {this.state.qry_name}|{this.state.qry_desc}
+                               {this.state.qry_name} {this.state.qry_desc?"|":null} {this.state.qry_desc}
                             </Col>
 
                         </Row>
                         <Row>
-                            <Col span={3} style={{padding:'10px',color:'#ccc'}}>
+                            <Col span={3} style={{padding:'10px'}}>
                                 服务地址:
                             </Col>
                             <Col span={21}  style={{padding:'10px'}}>
@@ -221,13 +221,13 @@ class SqlView extends React.Component {
 
                         </Row>
                         <Row>
-                            <Col span={3} style={{padding:'10px',color:'#ccc'}} >
+                            <Col span={3} style={{padding:'10px'}} >
                                 服务类型:
                             </Col>
                             <Col span={9}  style={{padding:'10px'}}>
                                 {this.state.qry_type}
                             </Col>
-                            <Col span={3} style={{padding:'10px',color:'#ccc'}}>
+                            <Col span={3} style={{padding:'10px'}}>
                                 所属部门:
                             </Col>
                             <Col span={9}  style={{padding:'10px'}}>

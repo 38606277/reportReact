@@ -39,7 +39,6 @@ const Hinput= props=>{
 }
 
 export default (props)=>{
-  console.log(props)
   useEffect(()=>{
     const path=props.match.params.module_id
     if(path[0]==="L"){
@@ -105,7 +104,7 @@ export default (props)=>{
     const tableRef = useRef();
     const [tableData, setTableData] = useState([]);
     const [displayType, setDisplayType] = useState('list');
-
+    const [index,setIndex]=useState(0)
     //关系
     const [tableForm2] = Form.useForm();
     const [list2,setList2]=useState([])
@@ -122,6 +121,7 @@ export default (props)=>{
         "xxx1":tableRef,
         "xxx3":tableRef2
       }
+      setIndex(2)
       arr[formtext].current.addItem({
         id: `${formtext}${(Math.random() * 1000000).toFixed(0)}`,
         dict_id:obj[formtext].getFieldValue('dict_id'),
@@ -137,6 +137,20 @@ export default (props)=>{
             <Button type="primary" onClick={ () =>{
               mainForm.submit()
               mainForm2.submit()
+              if(formName===""){
+                return  message.error("请填写表名");
+              }
+              if(notes===""){
+                return message.error("请填写注释");
+              }
+              if(tableData.length>0){
+                tableData.forEach((item,index)=>{
+                  for(let i in item){
+                    console.log(i)
+                  }
+                })
+              }
+              console.log(list)
               // let deleteColumnList =tableData.length>0?tableData.map(item=>{
               //     return item.column_name
               // }):[]
@@ -161,7 +175,7 @@ export default (props)=>{
                 else {
                     message.error(res.message);
                 }
-            })
+              })
               // console.log(tableData)
             }}>保存</Button>
           </div>
@@ -199,14 +213,13 @@ export default (props)=>{
                 onClick={() => {
                   //删除选中项orm)
                   if(formtext==="xxx1"){
-                    return mainForm.current.removeRows()
+                    return tableRef.current.removeRows()
                   }else if(formtext==="xxx3"){
-                    return mainForm2.current.removeRows()
+                    return tableRef.current.removeRows()
                   }
                 }}
                 ></Button>
                 </div>
-                
             </div>
             <div>
             <Form
