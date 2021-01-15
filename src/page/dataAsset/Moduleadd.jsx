@@ -47,7 +47,7 @@ export default (props)=>{
     const [S_list,setS_list]=useState([])//来源选择
         useEffect(()=>{
             setdata(visible)
-            if(ModObj){
+            if(ModObj&&set!==false){
                 setModName(ModObj.model_name);
                 setData_Source(ModObj.db_source);
                 setData_Class(ModObj.db_type);

@@ -22,7 +22,7 @@ import {
     Tag,
     Popconfirm,
     message,
-    Popover 
+    Popover
 } from 'antd';
 const { Option } = Select;
 import CubeService from '../../service/CubeService.jsx';
@@ -63,11 +63,13 @@ export default class modelList extends React.Component {
             ModObj:null,
             table_name:"",//模型名称
             table_title:"",//模型中文名称
-            Mysrc:""
+            Mysrc:"",
+            startIndex:1,
+            perPage:10,
+            total:0
         };
     }
     async componentDidMount() {
-        console.log(this.props.location)
         await HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {//模型接口
             if (res.resultCode == "1000") {
                 this.setState({
@@ -122,18 +124,21 @@ export default class modelList extends React.Component {
     }
     getTableList (table_name,table_title){//表list获取
         let obj={
-            startIndex:1,
-            perPage:10,
+            startIndex:this.state.startIndex,
+            perPage:this.state.perPage,
             table_name:table_title,
             table_title:table_name,
             model_id:this.state.module_id
         }
         console.log(obj)
         HttpService.post('/reportServer/bdModelTableColumn/table/getTableList',JSON.stringify(obj)).then(res => {///列表接口SunShine:    
-            console.log(res)
+            console.log(res )
             if (res.resultCode == "1000") {
                 this.setState({
-                    list:res.data.list
+                    list:res.data.list,
+                    startIndex:1,
+                    perPage:10,
+                    total:res.data.total
                 });
             }
             else {
@@ -169,7 +174,7 @@ export default class modelList extends React.Component {
         HttpService.post('/reportServer/bdModel/getModelById', JSON.stringify({model_id:item.model_id})).then(res => {
             if (res.resultCode == "1000") {
                 this.setState({
-                    ModData: res.data,
+                    ModData: res.data
                 });
                 this.getTableList("","")
             }
@@ -246,13 +251,17 @@ export default class modelList extends React.Component {
     };
     addModule =(data)=>{//添加模型编辑数据  未做非空
         ///
+        const {db_source,db_type,model_name}=data
         console.log(data)
-        const obj={
-            "db_source":"请选择模型来源",
-            "model_name":"请输入模型名称",
-            "db_type":"模型类型"
+        if(model_name===""){
+            return message.error("请填写模型名称")
         }
-        
+        if(db_type==="请选择"){
+            return message.error("请填选择模型类型")
+        }
+        if(db_source===""){
+            return message.error("请填选择模型来源")
+        }
         HttpService.post('/reportServer/bdModel/createModel', JSON.stringify(data)).then(res => {
             console.log((res))
             if (res.resultCode == "1000") {   
@@ -317,6 +326,18 @@ export default class modelList extends React.Component {
         this.getTableList(table_title,table_name)
         this.setState({table_title:"",table_name:""})
     }
+    onShowSizeChange=(current, pageSize)=>{
+        this.setState({
+            startIndex:1,
+            perPage:pageSize
+        })
+    }
+    setpagindex=(page, pageSize)=>{
+        this.setState({
+            startIndex:page,
+            perPage:pageSize
+        })
+    }
     render() {
         this.state.list.map((item, index) => {
             item.key = index;
@@ -367,6 +388,7 @@ export default class modelList extends React.Component {
                 </span>
             ),
         }];
+
         return (
             <div id="page-wrapper">
                 <Spin spinning={this.state.loading} delay={100}>
@@ -461,8 +483,13 @@ export default class modelList extends React.Component {
 
                                 </Card>
                                 <div style={{position: 'relative',height:'500px'}}>
+                                     
                                     {
                                         this.state.moduleType? <Table dataSource={this.state.list} columns={columns} bordered={true}
+                                        pagination={false}
+                                        footer={()=>{
+                                            return (<Pagination style={{float:"right"}} defaultCurrent={this.state.startIndex} total={this.state.total} onChange={this.setpagindex} onShowSizeChange={this.onShowSizeChange}/>)
+                                        }}
                                         />:<ERGraphDemo  model_id={this.state.module_id}/>
                                     } 
                                 </div>
@@ -486,7 +513,8 @@ export default class modelList extends React.Component {
                             bordered={true} />
                     </Card>
                 </Modal>
-                <MyModal visible={this.state.visible2} on={()=>{this.setState({visible2:false,ModObj:null})}} go={(data)=>this.addModule(data)}  set={this.state.setModule} ModObj={this.state.ModObj}></MyModal>
+                
+                <MyModal visible={this.state.visible2} on={()=>{this.setState({visible2:false,ModObj:this.state.set!==false?this.state.ModData:null})}} go={(data)=>this.addModule(data)}  set={this.state.setModule} ModObj={this.state.ModObj}></MyModal>
                 {/* <Modal title="新建表格" visible={this.state.visible3} onOk={this.novisible3} onCancel={()=>this.setState({visible3:false})} >
                         <NewForm visible={this.state.visible3} module_id={this.state.Mysrc} go={(e)=>{
                             this.novisible3(e)
