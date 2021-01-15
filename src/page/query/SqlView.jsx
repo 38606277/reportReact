@@ -216,7 +216,7 @@ class SqlView extends React.Component {
                                 服务地址:
                             </Col>
                             <Col span={21}  style={{padding:'10px'}}>
-                            http://localhost:9609/reportServer/query/execQuery/{this.state.qry_id}/{this.state.class_id}
+                            http://localhost:9609/reportServer/query/execQuery/{this.state.class_id}/{this.state.qry_id}
                             </Col>
 
                         </Row>
