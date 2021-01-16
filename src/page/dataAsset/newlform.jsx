@@ -46,7 +46,6 @@ export default (props)=>{
       (async()=>{
         await HttpService.post('/reportServer/bdModelTableColumn/table/getModelTableById', JSON.stringify({table_id:path2[0].slice(1)})).then(res => {
           if (res.resultCode == "1000") {
-            console.log()
                     let tableLink=res.data.tableLink.length>0?res.data.tableLink.map(item=>{
                       return {
                         ...item,
@@ -65,6 +64,8 @@ export default (props)=>{
                         isNew: true,
                       }
                     })
+                    setistableLink(tableLink)
+                    setiscolumn(column)
                     setformName(res.data.table.table_name)
                     setnotes(res.data.table.table_title)
                     tableRef.current.initData(column)
@@ -105,6 +106,11 @@ export default (props)=>{
     const [tableData, setTableData] = useState([]);
     const [displayType, setDisplayType] = useState('list');
     const [index,setIndex]=useState(0)
+
+    //编辑 记录俩表变化
+
+    const [istableLink,setistableLink]=useState([]) 
+    const [iscolumn,setiscolumn]=useState([]) 
     //关系
     const [tableForm2] = Form.useForm();
     const [list2,setList2]=useState([])
@@ -135,6 +141,7 @@ export default (props)=>{
           <div>
             <Button type="primary" href="/#/dataAsset/modelList" style={{right:"50px"}}>返回</Button>
             <Button type="primary" onClick={ () =>{
+              console.log(tableData)
               mainForm.submit()
               mainForm2.submit()
               if(formName===""){
@@ -150,7 +157,7 @@ export default (props)=>{
                   }
                 })
               }
-              console.log(list)
+              console.log(tableData)
               // let deleteColumnList =tableData.length>0?tableData.map(item=>{
               //     return item.column_name
               // }):[]
@@ -158,24 +165,24 @@ export default (props)=>{
               //   return item.column_name
               //  }):[]
               // console.log(deleteColumnList)
-              HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path[0][0]==="L"?path[1]:path,table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path[0].slice(1):"",columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[]})).then(res => {
-                console.log(res)
-                if (res.resultCode == "1000") {   
-                    HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
-                        if (res.resultCode == "1000") {
-                          message.success('保存成功');
-                          // console.log(res)
-                          // props.history.push('/dataAsset/modelList')
-                        }
-                        else {
-                            message.error(res.message);
-                        }
-                    })
-                }
-                else {
-                    message.error(res.message);
-                }
-              })
+              // HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path[0][0]==="L"?path[1]:path,table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path[0].slice(1):"",columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[]})).then(res => {
+              //   console.log(res)
+              //   if (res.resultCode == "1000") {   
+              //       HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
+              //           if (res.resultCode == "1000") {
+              //             message.success('保存成功');
+              //             // console.log(res)
+              //             props.history.push('/dataAsset/modelList')
+              //           }
+              //           else {
+              //               message.error(res.message);
+              //           }
+              //       })
+              //   }
+              //   else {
+              //       message.error(res.message);
+              //   }
+              // })
               // console.log(tableData)
             }}>保存</Button>
           </div>
@@ -212,6 +219,7 @@ export default (props)=>{
                 icon={<MinusOutlined />}
                 onClick={() => {
                   //删除选中项orm)
+                  console.log(tableData)
                   if(formtext==="xxx1"){
                     return tableRef.current.removeRows()
                   }else if(formtext==="xxx3"){

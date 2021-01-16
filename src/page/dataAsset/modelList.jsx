@@ -488,7 +488,7 @@ export default class modelList extends React.Component {
                                         this.state.moduleType? <Table dataSource={this.state.list} columns={columns} bordered={true}
                                         pagination={false}
                                         footer={()=>{
-                                            return (<Pagination style={{float:"right"}} defaultCurrent={this.state.startIndex} total={this.state.total} onChange={this.setpagindex} onShowSizeChange={this.onShowSizeChange}/>)
+                                            return (<Pagination style={{float:'right'}} defaultCurrent={this.state.startIndex} total={this.state.total} onChange={this.setpagindex} onShowSizeChange={this.onShowSizeChange}/>)
                                         }}
                                         />:<ERGraphDemo  model_id={this.state.module_id}/>
                                     } 

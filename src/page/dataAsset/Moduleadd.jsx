@@ -47,13 +47,17 @@ export default (props)=>{
     const [S_list,setS_list]=useState([])//来源选择
         useEffect(()=>{
             setdata(visible)
-            if(ModObj&&set!==false){
-                setModName(ModObj.model_name);
-                setData_Source(ModObj.db_source);
-                setData_Class(ModObj.db_type);
-                ShandleChange(ModObj.db_type)
-                console.log(data_Source)
-            };
+           console.log(data)
+            if(set!==false){
+                if(ModObj){
+                    setModName(ModObj.model_name);
+                    setData_Source(ModObj.db_source);
+                    setData_Class(ModObj.db_type);
+                    ShandleChange(ModObj.db_type)
+                    console.log(data_Source)
+                };
+            }
+            
             (async ()=>{
                await HttpService.post('/reportServer/DBConnection/ListAll', JSON.stringify({})).then(res => {
                     const Clist=[]
