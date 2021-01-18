@@ -214,7 +214,7 @@ const TableForm = forwardRef((props, ref) => {
                         tableForm={tableForm}
                         text={text}
                         record={record}
-                        index={record[primaryKey]}
+                        index={record.value_id}
                         name="column_name"
                         rules={[{ required: true, message: 'Please input your name!' }]}
                         handleFieldChange={handleFieldChange}
@@ -235,7 +235,7 @@ const TableForm = forwardRef((props, ref) => {
                         tableForm={tableForm}
                         text={text}
                         record={record}
-                        index={record[primaryKey]}
+                        index={record.value_id}
                         name="column_title"
                         rules={[{ required: true, message: 'Please input your name!' }]}
                         handleFieldChange={handleFieldChange}
@@ -258,7 +258,7 @@ const TableForm = forwardRef((props, ref) => {
                         text={text}
                         record={record}
                         dictData={[...Obj['Mysql']]}
-                        index={record[primaryKey]}
+                        index={record.value_id}
                         keyName={'value'}
                         valueName={'text'}
                         name="column_type"
@@ -285,9 +285,9 @@ const TableForm = forwardRef((props, ref) => {
                   tableForm={tableForm}
                   text={text}
                   record={record}
-                  index={record[primaryKey]}
+                  index={record.value_id}
                   name="column_length"
-                  rules={[{ required: false, message: 'Please input your workId!' }]}
+                  rules={[{ required: true, message: 'Please input your workId!' }]}
                   handleFieldChange={handleFieldChange}
                   placeholder={"请输入长度"}
                 />
@@ -306,13 +306,37 @@ const TableForm = forwardRef((props, ref) => {
                         tableForm={tableForm}
                         text={text}
                         record={record}
-                        index={record[primaryKey]}
+                        index={record.value_id}
                         name="column_decimal"
-                        rules={[{ required: false, message: 'Please input your workId!' }]}
+                        rules={[{ required: true, message: 'Please input your workId!' }]}
                         handleFieldChange={handleFieldChange}
                         placeholder={"请输入精度"}
                   />
                 );
+            },
+        },
+        {
+            title: '键',
+            dataIndex: 'column_primaryKey',
+            key: 'column_primaryKey',
+            width: '10%',
+            name:"column_primaryKey",
+            className:styles.columnshow,
+            render: (text, record, index) => {
+                return (
+                    <Check tableForm={tableForm} name="column_primaryKey" text={text} handleFieldChange={handleFieldChange} record={record}/>
+                //   <InputEF
+                //   tableForm={tableForm}
+                //   text={text}
+                //   record={record}
+                //   index={record[primaryKey]}
+                //   name="column_isnull"
+                //   rules={[{ required: false, message: 'Please input your workId!' }]}
+                //   handleFieldChange={handleFieldChange}
+                //   placeholder={"是否为空"}
+                // />
+              );
+
             },
         },
         {

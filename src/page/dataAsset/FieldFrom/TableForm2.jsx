@@ -181,7 +181,7 @@ const TableForm = forwardRef((props, ref) => {
             dataIndex: 'link_table_name',
             key: 'link_table_name',
             width: '10%',
-            className:styles.columnshow,
+            // className:styles.columnshow,
             render: (text, record, index) => {
                 return (
                   <InputEF
@@ -190,9 +190,9 @@ const TableForm = forwardRef((props, ref) => {
                   record={record}
                   index={record.value_id}
                   name="link_table_name"
-                  rules={[{ required: false, message: 'Please input your workId!' }]}
+                  rules={[{ required: true, message: 'Please input your workId!' }]}
                   handleFieldChange={handleFieldChange}
-                  placeholder={""}
+                  placeholder={"关联表名"}
                 />
               );
 
@@ -203,7 +203,7 @@ const TableForm = forwardRef((props, ref) => {
             dataIndex: 'link_column_name',
             key: 'link_column_name',
             width: '10%',
-            className:styles.columnshow,
+            // className:styles.columnshow,
             render: (text, record, index) => {
                 return (
                   <InputEF
@@ -212,7 +212,7 @@ const TableForm = forwardRef((props, ref) => {
                   record={record}
                   index={record.value_id}
                   name="link_column_name"
-                  rules={[{ required: false, message: 'Please input your workId!' }]}
+                  rules={[{ required: true, message: 'Please input your workId!' }]}
                   handleFieldChange={handleFieldChange}
                   placeholder={""}
                 />

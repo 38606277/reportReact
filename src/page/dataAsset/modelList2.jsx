@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import style from './modelList.less'
 import Pagination from 'antd/lib/pagination';
-import { BarChartOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined ,SearchOutlined ,PlusOutlined} from '@ant-design/icons';
+import { BarChartOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined ,SearchOutlined ,PlusOutlined,MoreOutlined} from '@ant-design/icons';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import {
@@ -23,25 +23,35 @@ import {
     Popconfirm,
     message,
     Popover,
-    List
+    List,
+    Menu
 } from 'antd';
 // import 
 import HttpService from '../../util/HttpService.jsx';
+import MyModal from './Moduleadd.jsx'// 模型弹窗
 const backgroundcolor={//左侧背景
-    background:"#5e7ce0",
+    background:"#40a9ff",
     color:"#fff"
 }
+
+import ERGraphDemo from '../ERGraphDemo/index.tsx';
 export default ()=>{
-    const [table_name,setTable_name]=useState("")//表中文名
-    const [TableList,setTableList]=useState([])//左侧列表
-    const [table_title,setTable_title]=useState("")//表英文名
-    const [startIndex,setStartIndex]=useState(1)//当前第几页
-    const [perPage,setPerPage]=useState(10)//一页显示第三条
-    const [model_id,setModel_id]=useState(null)//模型id
-    const [ModData,setModData]=useState({})//获取默认模型信息
-    const [TableListinit,setTableListinit]=useState([])//左侧数据复值
-    const [TableListinit_name,setTableListinit_name]=useState("")//左侧搜索
-    const [backgroundindex,setbackgroundindex]=useState(0)//左侧选中
+    const [table_name,setTable_name]=useState("");//表中文名
+    const [TableList,setTableList]=useState([]);//左侧列表
+    const [table_title,setTable_title]=useState("");//表英文名
+    const [startIndex,setStartIndex]=useState(1);//当前第几页
+    const [perPage,setPerPage]=useState(10);//一页显示第几条
+    const [model_id,setModel_id]=useState(null);//模型id
+    const [ModData,setModData]=useState({});//获取默认模型信息
+    const [TableListinit,setTableListinit]=useState([]);//左侧数据复值
+    const [TableListinit_name,setTableListinit_name]=useState("");//左侧搜索
+    const [backgroundindex,setbackgroundindex]=useState(0);//左侧选中
+    const [list,setList]=useState([]);//列表
+    const [moduleType,setModuleType]=useState(true);//控制模型和列
+    const [total,setTotal]=useState(0);//一共多少条数据
+    const [visible2,setVisible2]=useState(false)//创建模型控制变量
+    const [ModObj,setModObj]=useState(null)
+    const [set,setSet]=useState(true)
     useEffect(()=>{
         (async()=>{
             await HttpService.post('/reportServer/bdModel/getAllList', null).then(res=>{
@@ -49,11 +59,12 @@ export default ()=>{
                     setTableListinit(res.data)
                     setTableList(res.data)
                     setModData(res.data[0])
-
+                    setModel_id(res.data[0].model_id)
+                    getTableList(1,10,"","",res.data[0].model_id)
                 }
             })
         })()
-    },[])
+    },[set])
     const getTableList =(startIndex,perPage,table_title,table_name,model_id)=>{//表list获取
         let obj={
             startIndex,
@@ -64,12 +75,10 @@ export default ()=>{
         }
         HttpService.post('/reportServer/bdModelTableColumn/table/getTableList',JSON.stringify(obj)).then(res => {///列表接口
             if (res.resultCode == "1000") {
-                this.setState({
-                    list:res.data.list,
-                    startIndex:1,
-                    perPage:10,
-                    total:res.data.total
-                });
+                setList(res.data.list)
+                setStartIndex(1)
+                setPerPage(10)
+                setTotal(res.data.total)
             }
             else {
                 message.error(res.message);
@@ -82,6 +91,8 @@ export default ()=>{
     const ClickmModelList=(obj,i)=>{//左侧点击
         setModData(obj)
         setbackgroundindex(i)
+        setModel_id(obj.model_id)
+        getTableList(1,10,"","",obj.model_id)
     }
 
     const TableListNamechang=e=>{
@@ -95,36 +106,133 @@ export default ()=>{
         setModData(arr[0]?arr[0]:{})
         setTableList(arr)
     }
-    const addTableList=()=>{
+    const addTableList=()=>{//新建模型按钮
+        setVisible2(true)
+        setSet(false)
+    }
+    const confirmModule=(id)=>{//删除磨练
+        console.log(id)
+    }
 
+    const setpagindex=(page, pageSize)=>{
+        setStartIndex(page)
+        setPerPage(pageSize)
+    }
+    const onShowSizeChange =(current, pageSize)=>{
+        setStartIndex(1)
+        setPerPage(pageSize)
+    }
+    const columns = [
+        {
+            title:"数据文名称",
+            dataIndex: 'table_title',
+            key: 'table_title',
+            className: 'table_title',
+        },
+        {
+            title: '数据名称',
+            dataIndex: 'table_name',
+            key: 'table_name',
+            className: 'headerRow',
+        }, {
+            title: '数据描述',
+            dataIndex: 'table_desc',
+            key: 'table_desc',
+            className: 'headerRow',
+        },
+        {
+            title: '创建时间',
+            dataIndex: 'create_date',
+            key: 'create_date',
+            className: 'create_date',
+        },
+        {
+            title: '操作',
+            dataIndex: '操作',
+            className: 'headerRow',
+            render: (text, record) => (
+                <span>
+                    <a  href={"#/dataAsset/newlform/"+"L"+record.table_id+"&"+model_id}>编辑</a>
+                    <Divider type="vertical" />
+                    <a onClick={() => this.showModal(record)} href="javascript:;">浏览数据</a>
+                    <Divider type="vertical" />
+                    <Popconfirm
+                        title="您确定要删除此表吗?"
+                        onConfirm={()=>deleteList(record.table_id)}
+                        okText="确定"
+                        cancelText="取消"
+                    ><a>删除</a> 
+                    </Popconfirm>
+                </span>
+            ),
+        }];
+    const search=()=>{//搜索
+        getTableList(  startIndex,perPage,table_title,table_name,model_id)
+    }
+    const deleteList=(table_id)=>{
+        console.log(table_id )
+    }
+    const addModule=(data)=>{
+        const {db_source,db_type,model_name}=data
+        if(model_name===""){
+            return message.error("请填写模型名称")
+        }
+        if(db_type==="请选择"){
+            return message.error("请填选择模型类型")
+        }
+        if(db_source===""){
+            return message.error("请填选择模型来源")
+        }
+        HttpService.post('/reportServer/bdModel/createModel', JSON.stringify(data)).then(res => {
+            if (res.resultCode == "1000") {   
+                HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
+                    if (res.resultCode == "1000") {
+                        setModData({...res.data[0]})
+                        setTableList(res.data)
+                        setTableListinit(res.data)
+                        setTableList(res.data)
+                        setModData(res.data[0])
+                        setModel_id(res.data[0].model_id)
+                        getTableList(1,10,"","",res.data[0].model_id)
+                        setVisible2(false)
+                    }
+                    else {
+                        message.error(res.message);
+                    }
+                })
+            }
+            else {
+                message.error(res.message);
+            }
+        })
+        console.log(data)
     }
     return (
         <Card title="数据模型">
             <Row>
                 <Col sm={4}>
-                        <Row style={{padding:"0 10px"}}>
-                            <Col sm={19} style={{fontSize:"14px"}}>
+                    <Card>
+                        <Row>
+                            <Col sm={19} style={{fontSize:"18px"}}>
                                 模型列表
                             </Col>
                             <Col sm={4}>
                                 <Popover content={()=>{
                                     return(<div>新建模型</div>)
                                 }}>
-                                    <Button shape="circle" icon={<PlusOutlined />} size="small" onClick={()=>{
+                                    <PlusOutlined style={{marginLeft: '15px'}}  onClick={()=>{
                                         addTableList()
-                                    }}></Button>
+                                    }}/>
                                 </Popover>
                             </Col>
                         </Row>
-                        <div className={style.TableListInput}>
-                            <Input style={{height:"22px",width:"175px"}} value={TableListinit_name} onChange={e=>{
+                            <Input className={style.TableListInput} value={TableListinit_name} onChange={e=>{
                                             TableListNamechang(e)
                             }}/>
-                        </div>
-                        <Row style={{padding:"0 10px"}}>
+                        <Row>
                             <List
                                 style={{
-                                    width:"100%",
+                                    width:"170px",
                                     fontSize:"14px"
                                 }}
                                 split={false}
@@ -142,42 +250,111 @@ export default ()=>{
                                             padding:"2px 10px",
                                             cursor:"pointer",
                                             margin:"4px 0",
+                                            borderRadius:"2px",
                                             ...backgroundindex===index?backgroundcolor:null
                                         }
                                     }
-                                >{item.model_name}</List.Item>}
+                                ><span>{item.model_name}</span> 
+                                      <Popover
+                                            trigger="click"
+                                            placement="bottomRight"
+                                            content={()=>{
+                                                return(
+                                                    <List>
+                                                        <li  onClick={()=>{
+                                                            setVisible2(true)
+                                                            setModObj(item)
+                                                            setSet(true)
+                                                            }}>编辑</li>
+                                                        <Popconfirm 
+                                                            title="确定要删除这个模块吗?"
+                                                            onConfirm={()=>confirmModule(item.model_id)}
+                                                            okText="删除"
+                                                            cancelText="取消"
+                                                        >
+                                                            <li >删除</li>
+                                                        </Popconfirm>
+                                                    </List>
+                                                )
+                                            }}
+                                        >
+                                                <MoreOutlined style={{color:backgroundindex===index?"#fff":"#40a9ff"}}/>
+                                        </Popover >
+                                </List.Item>}
                                 />
                         </Row>
+                    </Card>
                 </Col>
-                <Col sm={20}
-                    style={{
-                        padding:"10px",
-                        bordered:"1px solid #ccc"
-                    }}
-                >
+                <Col sm={20}>
                     <Row>
-                        <Form 
-                                name="horizontal_login" layout="inline"
-                        >
-                            <Form.Item name="note" label="模型名称" rules={[{ required: true }]}>
-                                <Input value={ModData.model_name} bordered={false} disabled/>
-                            </Form.Item>
-                            <Form.Item name="note" label="数据类型" rules={[{ required: true }]}>
-                                <Input value={ModData.db_type} bordered={false} disabled/>
-                            </Form.Item>
-                            <Form.Item name="note" label="数据来源" rules={[{ required: true }]}>
-                                <Input value={ModData.db_source} bordered={false} disabled/>
-                            </Form.Item>
-                            <Form.Item name="note" label="创建时间" rules={[{ required: true }]}>
-                                <Input value={ModData.update_date} bordered={false} disabled/>
-                            </Form.Item>
-                            <Form.Item name="note" label="创 建 人" rules={[{ required: true }]}>
-                                <Input value={ModData.update_by} bordered={false} disabled/>
-                            </Form.Item>
-                        </Form>
+                        <Card>
+                            <Form 
+                                    name="horizontal_login" layout="inline"
+                            >
+                                <Form.Item name="note" label="模型名称" rules={[{ required: true }]}>
+                                    <Input value={ModData.model_name} bordered={false} disabled/>
+                                </Form.Item>
+                                <Form.Item name="note" label="数据类型" rules={[{ required: true }]}>
+                                    <Input value={ModData.db_type} bordered={false} disabled/>
+                                </Form.Item>
+                                <Form.Item name="note" label="数据来源" rules={[{ required: true }]}>
+                                    <Input value={ModData.db_source} bordered={false} disabled/>
+                                </Form.Item>
+                                <Form.Item name="note" label="创建时间" rules={[{ required: true }]}>
+                                    <Input value={ModData.update_date} bordered={false} disabled/>
+                                </Form.Item>
+                                <Form.Item name="note" label="创 建 人" rules={[{ required: true }]}>
+                                    <Input value={ModData.update_by} bordered={false} disabled/>
+                                </Form.Item>
+                            </Form>
+                        </Card>
                     </Row>
+                        <Card>
+                            <Col xs={24} sm={24}>
+                                <Form
+                                    style={{float:"left"}}
+                                    name="horizontal_login" layout="inline"
+                                >
+                                    <Form.Item name="note" label="表中文名称" rules={[{ required: true }]} >
+                                        <Input value={table_title} onChange={e=>{setTable_title(e.target.value)}} />
+                                    </Form.Item>
+                                    <Form.Item name="note" label="表名英文" rules={[{ required: true }]}>
+                                        <Input value={table_name} onChange={e=>{setTable_name(e.target.value)}}/>
+                                    </Form.Item>
+                                    <Button type="primary" icon={<SearchOutlined />} onClick={()=>{
+                                        search()
+                                    }}>搜索</Button>
+                                </Form>
+                                    <Radio.Group style={{ float: "right", marginRight: "30px" }}  defaultValue="list" buttonStyle="solid">
+                                        <Radio.Button value="list" onClick={()=>setModuleType(true)}>列表</Radio.Button>
+                                        <Radio.Button value="column" onClick={()=>setModuleType(false)}>模型</Radio.Button>
+                                    </Radio.Group>
+                                    <Button type="primary"  style={{float:"right",marginRight:"10px"}} href={"#/dataAsset/newlform/"+"X"+model_id}>新建表格</Button>
+                            </Col>
+                        </Card>
+                        <Card style={
+                            {
+                                height:"500px"
+                            }
+                        }>
+                            {
+                                moduleType? <Table style={{display:'flow-root'}} dataSource={list} columns={columns} bordered={true}
+                                pagination={false}
+                                footer={()=>{
+                                    return (<div style={{display:"flow-root"}}>
+                                        <Pagination style={{float:'right'}} defaultCurrent={startIndex} total={total} onChange={setpagindex} onShowSizeChange={onShowSizeChange}/>
+                                    </div>)
+                                }}
+                                />:<ERGraphDemo  model_id={model_id}/>
+                            } 
+                        </Card>
                 </Col>
             </Row>
+            <MyModal visible={visible2} on={()=>{
+                setVisible2(false)
+                setModObj(null)
+                // this.setState({visible2:false,ModObj:this.state.set!==false?this.state.ModData:null,set:false})
+                }} go={(data)=>addModule(data)}  set={set} ModObj={ModObj}></MyModal>
         </Card>
     )
 }

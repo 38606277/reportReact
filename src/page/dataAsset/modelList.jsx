@@ -2,7 +2,7 @@ import React,{useState,useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import style from './modelList.less'
 import Pagination from 'antd/lib/pagination';
-import { BarChartOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined ,SearchOutlined ,PlusOutlined} from '@ant-design/icons';
+import { BarChartOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined ,SearchOutlined ,PlusOutlined,MoreOutlined} from '@ant-design/icons';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import {
@@ -398,32 +398,35 @@ export default class modelList extends React.Component {
                                 <div className={style.modulelist}>
                                     <div  className={style.modulelist_title}>
                                         <div className={style.modulelist_title_left}>模型列表</div>
-                                        <Popover
-                                            className={style.modulelist_title_right}
-                                            content={()=>{
-                                                return(
-                                                    <div>
-                                                        <Tag onClick={()=>this.setState({visible2:true,setModule:false,ModObj:null})}>新建</Tag>
-                                                        <Tag onClick={()=>this.setState({visible2:true,setModule:this.state.module_id,ModObj:this.state.ModObj})}>编辑</Tag>
-                                                        <Popconfirm 
-                                                             title="确定要删除这个模块吗?"
-                                                             onConfirm={()=>this.confirmModule(this.state.module_id)}
-                                                             okText="删除"
-                                                             cancelText="取消"
-                                                        >
-                                                            <Tag>删除</Tag>
-                                                        </Popconfirm>
-                                                    </div>
-                                                )
-                                            }}
-                                        >
-                                            <Tag  icon={<PlusOutlined />}>更多</Tag>
-                                        </Popover >
+                                        <Tag className={style.modulelist_title_right} onClick={()=>this.setState({visible2:true,setModule:false,ModObj:null,set:false})}>新建</Tag>
                                     </div>
                                     {   
                                         this.state.treeData.map((item,key)=>{
                                             return (<div key={key} style={{display:"flex",margin:"10px 0",padding:"1px 0",background:window.sessionStorage.H_leftColor*1===key?"#ccc":"",color:window.sessionStorage.H_leftColor*1===key?"#fff":""}}>
                                                 <div style={{flex:'5',cursor: "pointer"}} onClick={()=>this.setLeftMenu(key,item)}><span style={{display:"inline-block",width:"20px"}}></span>{item.model_name}</div>
+                                                <div>
+                                                <Popover
+                                                    placement="bottomRight"
+                                                    content={()=>{
+                                                        return(
+                                                            <div>
+                                                                <Tag onClick={()=>this.setState({visible2:true,setModule:item.model_id,ModObj:item,set:item})}>编辑</Tag>
+                                                                <Popconfirm 
+                                                                    title="确定要删除这个模块吗?"
+                                                                    onConfirm={()=>this.confirmModule(item.model_id)}
+                                                                    okText="删除"
+                                                                    cancelText="取消"
+                                                                >
+                                                                    <Tag>删除</Tag>
+                                                                </Popconfirm>
+                                                            </div>
+                                                        )
+                                                    }}
+                                                >
+                                                      <MoreOutlined />
+                                                </Popover >
+                                                    
+                                                </div>
                                             </div>)
                                         })
                                     }
@@ -514,7 +517,7 @@ export default class modelList extends React.Component {
                     </Card>
                 </Modal>
                 
-                <MyModal visible={this.state.visible2} on={()=>{this.setState({visible2:false,ModObj:this.state.set!==false?this.state.ModData:null})}} go={(data)=>this.addModule(data)}  set={this.state.setModule} ModObj={this.state.ModObj}></MyModal>
+                <MyModal visible={this.state.visible2} on={()=>{this.setState({visible2:false,ModObj:this.state.set!==false?this.state.ModData:null,set:false})}} go={(data)=>this.addModule(data)}  set={this.state.setModule} ModObj={this.state.set!==false?this.state.ModData:null}></MyModal>
                 {/* <Modal title="新建表格" visible={this.state.visible3} onOk={this.novisible3} onCancel={()=>this.setState({visible3:false})} >
                         <NewForm visible={this.state.visible3} module_id={this.state.Mysrc} go={(e)=>{
                             this.novisible3(e)

@@ -131,6 +131,7 @@ export default (props)=>{
       arr[formtext].current.addItem({
         id: `${formtext}${(Math.random() * 1000000).toFixed(0)}`,
         dict_id:obj[formtext].getFieldValue('dict_id'),
+        column_name:"",
         editable: true,
         isNew: true,
       });
@@ -149,15 +150,18 @@ export default (props)=>{
               }
               if(notes===""){
                 return message.error("请填写注释");
-              }
-              if(tableData.length>0){
-                tableData.forEach((item,index)=>{
-                  for(let i in item){
-                    console.log(i)
-                  }
-                })
-              }
-              console.log(tableData)
+              } 
+              // if(Rindex!==tableData2.length){
+              //   return message.error("关系您还有未填写内容");
+              // }
+              // if(tableData.length>0){
+              //   tableData.forEach((item,index)=>{
+              //     for(let i in item){
+              //       console.log(i)
+              //     }
+              //   })
+              // }
+              // console.log(tableData)
               // let deleteColumnList =tableData.length>0?tableData.map(item=>{
               //     return item.column_name
               // }):[]
@@ -165,24 +169,24 @@ export default (props)=>{
               //   return item.column_name
               //  }):[]
               // console.log(deleteColumnList)
-              // HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path[0][0]==="L"?path[1]:path,table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path[0].slice(1):"",columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[]})).then(res => {
-              //   console.log(res)
-              //   if (res.resultCode == "1000") {   
-              //       HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
-              //           if (res.resultCode == "1000") {
-              //             message.success('保存成功');
-              //             // console.log(res)
-              //             props.history.push('/dataAsset/modelList')
-              //           }
-              //           else {
-              //               message.error(res.message);
-              //           }
-              //       })
-              //   }
-              //   else {
-              //       message.error(res.message);
-              //   }
-              // })
+              HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path[0][0]==="L"?path[1]:path,table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path[0].slice(1):"",columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[]})).then(res => {
+                console.log(res)
+                if (res.resultCode == "1000") {   
+                    HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
+                        if (res.resultCode == "1000") {
+                          message.success('保存成功');
+                          // console.log(res)
+                          props.history.push('/dataAsset/modelList')
+                        }
+                        else {
+                            message.error(res.message);
+                        }
+                    })
+                }
+                else {
+                    message.error(res.message);
+                }
+              })
               // console.log(tableData)
             }}>保存</Button>
           </div>
@@ -218,12 +222,11 @@ export default (props)=>{
                 <Button
                 icon={<MinusOutlined />}
                 onClick={() => {
-                  //删除选中项orm)
-                  console.log(tableData)
+                  //删除选中项orm
                   if(formtext==="xxx1"){
                     return tableRef.current.removeRows()
                   }else if(formtext==="xxx3"){
-                    return tableRef.current.removeRows()
+                    return tableRef2.current.removeRows()
                   }
                 }}
                 ></Button>
@@ -231,6 +234,55 @@ export default (props)=>{
             </div>
             <div>
             <Form
+                style={{
+                  display:formtext==="xxx1"?"block":"none"
+                }}
+                form={mainForm}
+                onFinish={async (values) => {
+                  //验证tableForm
+                  tableForm.validateFields()
+                    .then(() => {
+                      //验证成功
+                      let postData={
+                        ...values,
+                        lineForm:tableData,
+                        lineDelete:tableRef.current.getDeleteData()
+                      }
+                      setList(postData)
+                      
+                    })
+                  
+                }} >
+
+                {/* <ProCard
+                > */}
+                  {displayType=='list'?
+                    <TableForm
+                      ref={tableRef}
+                      primaryKey='id' 
+                      value={tableData}
+                      formName={formName}
+                      setformName={setformName}
+                      onChange={(newTableData) => {
+                        //onChange实时回调最新的TableData 
+                        //手动获取方式 tableRef.current.getTableData()，可以节省onChange方法
+                        setTableData2(newTableData);
+                      }} 
+                      tableForm={tableForm} />
+                    :<TreeTableForm
+                      ref={tableRef2} 
+                      primaryKey='id' 
+                      value={tableData2}
+                      onChange={(newTableData) => {
+                        //onChange实时回调最新的TableData 
+                        //手动获取方式 tableRef.current.getTableData()，可以节省onChange方法
+                        setTableData2(newTableData);
+                      }} 
+                      tableForm={tableForm} /> 
+                  }
+                {/* </ProCard> */}
+              </Form>
+            {/* <Form
                 style={{
                   display:formtext==="xxx1"?"block":"none"
                 }}
@@ -250,8 +302,8 @@ export default (props)=>{
                   
                 }} >
 
-                {/* <ProCard
-                > */}
+                <ProCard
+                >
                   {displayType=='list'?
                     <TableForm
                       form={mainForm}
@@ -275,8 +327,8 @@ export default (props)=>{
                       }} 
                       tableForm={tableForm} /> 
                   }
-                {/* </ProCard> */}
-              </Form>
+                </ProCard>
+              </Form> */}
               <Form
                 style={{
                   display:formtext==="xxx3"?"block":"none"
@@ -292,7 +344,7 @@ export default (props)=>{
                         lineForm:tableData2,
                         lineDelete:tableRef2.current.getDeleteData()
                       }
-                      setList(postData)
+                      setList2(postData)
                       
                     })
                   
@@ -320,7 +372,7 @@ export default (props)=>{
                       onChange={(newTableData) => {
                         //onChange实时回调最新的TableData 
                         //手动获取方式 tableRef.current.getTableData()，可以节省onChange方法
-                        setTableData(newTableData);
+                        setTableData2(newTableData);
                       }} 
                       tableForm={tableForm2} /> 
                   }
