@@ -214,7 +214,7 @@ const TableForm = forwardRef((props, ref) => {
                         tableForm={tableForm}
                         text={text}
                         record={record}
-                        index={record.value_id}
+                        index={record.id}
                         name="column_name"
                         rules={[{ required: true, message: 'Please input your name!' }]}
                         handleFieldChange={handleFieldChange}
@@ -235,7 +235,7 @@ const TableForm = forwardRef((props, ref) => {
                         tableForm={tableForm}
                         text={text}
                         record={record}
-                        index={record.value_id}
+                        index={record.id}
                         name="column_title"
                         rules={[{ required: true, message: 'Please input your name!' }]}
                         handleFieldChange={handleFieldChange}
@@ -258,7 +258,7 @@ const TableForm = forwardRef((props, ref) => {
                         text={text}
                         record={record}
                         dictData={[...Obj['Mysql']]}
-                        index={record.value_id}
+                        index={record.id}
                         keyName={'value'}
                         valueName={'text'}
                         name="column_type"
@@ -285,7 +285,7 @@ const TableForm = forwardRef((props, ref) => {
                   tableForm={tableForm}
                   text={text}
                   record={record}
-                  index={record.value_id}
+                  index={record.id}
                   name="column_length"
                   rules={[{ required: true, message: 'Please input your workId!' }]}
                   handleFieldChange={handleFieldChange}
@@ -306,7 +306,7 @@ const TableForm = forwardRef((props, ref) => {
                         tableForm={tableForm}
                         text={text}
                         record={record}
-                        index={record.value_id}
+                        index={record.id}
                         name="column_decimal"
                         rules={[{ required: true, message: 'Please input your workId!' }]}
                         handleFieldChange={handleFieldChange}

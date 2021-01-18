@@ -31,6 +31,7 @@ import {
 } from 'antd';
 // import 
 import HttpService from '../../util/HttpService.jsx';
+import MI from './mecharts2.jsx'
 const data = [
   {
     key: '1',
@@ -78,6 +79,7 @@ export default ()=>{
     //  const {visible,handleOk,handleCancel}=props
     const [titleSelect,settitleSelect]=useState([])
     const [visible,setvisible]=useState(false)
+    const [visible2,setvisible2]=useState(false)
     const [text,setText]=useState("新建任务")
     const TitleSelect=(e)=>{
       if(e.length===0){
@@ -145,13 +147,21 @@ export default ()=>{
         )
       },
       {
-        title: '注册节点',
+        title: '下次触发',
         key: 'tags',
         dataIndex: 'tags',
         render: res => (
           <Popover placement="top" content={res} trigger="click">
             <Button>查看</Button>
           </Popover>
+        ),
+      },
+      {
+        title: '数据监控',
+        key: '1',
+        dataIndex: '1',
+        render: res => (
+            <Button onClick={()=>setvisible2(true)}>查看</Button>
         ),
       },
       {
@@ -234,6 +244,13 @@ export default ()=>{
             }}/>
             
             <Mymodal visible={visible} handleOk={setvisible} handleCancel={setvisible} text={text}/>
+            <Modal 
+              width="900px"
+              visible={visible2}
+              onOk={()=>{setvisible2(false)}} onCancel={()=>{setvisible2(false)}}
+            >
+              <MI />
+            </Modal>
         </Card>
     )
 }

@@ -47,6 +47,11 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/legend'
 import 'echarts/lib/chart/pie';
 const option = {
+    animation:false,
+    title: {
+        text: '数据监控',
+        left: 'center'
+    },
     tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -57,12 +62,13 @@ const option = {
         }
     },
     legend: {
-        data: ['合法次数', '非法次数']
+        left: 'left',
+        data: ['数据1', '数据2']
     },
-    toolbox: {
-        feature: {
-            saveAsImage: {}
-        }
+    xAxis: {
+        type: 'category',
+        splitLine: {show: false},
+        data: ['1', '2', '3', '4', '5', '6', '7', '8', '9']
     },
     grid: {
         left: '3%',
@@ -70,65 +76,133 @@ const option = {
         bottom: '3%',
         containLabel: true
     },
-    xAxis: [
-        {
-            type: 'category',
-            boundaryGap: false,
-            data: ["12: 00", "13: 00", "14: 00", "15: 00", "16: 00", "17: 00", "18: 00", "19: 00", "20: 00", "21: 00", "22: 00", "23: 00"]
-        }
-    ],
-    yAxis: [
+    yAxis:  [
         {
             type: 'value'
         }
     ],
     series: [
         {
-            name: '邮件营销',
+            name: '数据1',
             type: 'line',
-            stack: '总量',
-            areaStyle: {},
-            data: [120, 132, 101, 134, 90, 230, 210,123,132,22,23,3]
+            data:[89, 233, 239, 173, 241, 139, 194, 185, 35]
         },
-        // {
-        //     name: '联盟广告',
-        //     type: 'line',
-        //     stack: '总量',
-        //     areaStyle: {},
-        //     data: [220, 182, 191, 234, 290, 330, 310]
-        // },
-
+        {
+            name: '数据2',
+            type: 'line',
+            data: [100, 100,100,100, 100,100, 100, 100,100]
+        }
     ]
 };
+// const option = {
+
+//     tooltip: {
+//         trigger: 'item',
+//         formatter: '{a} <br/>{b} : {c}'
+//     },
+//     legend: {
+//         data: ['合法次数', '非法次数']
+//     },
+//     toolbox: {
+//         feature: {
+//             saveAsImage: {}
+//         }
+//     },
+//     grid: {
+//         left: '3%',
+//         right: '4%',
+//         bottom: '3%',
+//         containLabel: true
+//     },
+//     xAxis: [
+//         {
+//             type: 'category',
+//             boundaryGap: false,
+//             data: ["12: 00", "13: 00", "14: 00", "15: 00", "16: 00", "17: 00", "18: 00", "19: 00", "20: 00", "21: 00", "22: 00", "23: 00"]
+//         }
+//     ],
+//     yAxis: [
+//         {
+//             type: 'log',
+//             name: 'y',
+//             minorTick: {
+//                 show: true
+//             },
+//             minorSplitLine: {
+//                 show: true
+//             }
+//         }
+//     ],
+//     series: [
+//         {
+//             name: '合法次数',
+//             type: 'line',
+//             stack: '总量',
+//             areaStyle: {},
+//             data: [120, 132, 101, 134, 90, 230, 210,123,132,22,23,3]
+//         },
+//         {
+//             name: '非法次数',
+//             type: 'line',
+//             stack: '总量',
+//             areaStyle: {},
+//             data: [100, 100, 100, 100, 100, 100, 100]
+//         },
+
+//     ]
+// };
 export default (props)=>{
     const {title}=props
-    const [xAxis,setxAxis]=useState()
-    const [data,setData]=useState()
+    const tiem=useRef()
     const [options,setoptions]=useState({...option})
     const ms=useRef()
     const [main , setMain] = useState('')
+    const [isopen,setIsopen]=useState('')
+    const [S,setS]=useState(false)
     useEffect(()=>{
         setMain(ms.current)
         if(main !== ""){
             var myChart = echarts.init(main);
+            setIsopen(myChart)
             myChart.resize({ height: '256px',width:'840px' })
             myChart.setOption(options);
+            setS(true)
         }
-    },[main])
+    },[main,options])
+    useEffect(()=>{
+        if(S){
+            set()
+        }else{
+            setlist()
+        }
+        
+    },[S])
+    const set=()=>{
+        tiem.current =setInterval(()=>{
+            let myopent={...options}
+            let Xarr =myopent.xAxis.data
+            let Darr=myopent.series[0].data
+            Darr.shift()
+            Xarr.shift()
+            Xarr.push(Math.floor(Math.random()*11))
+            Darr.push(Math.floor(Math.random()*250))
+            myopent.xAxis.data=Xarr
+            console.log(Darr)
+            myopent.series[0].data=Darr
+            myopent.series[1].data=[100, 100, 100, 100, 100, 100, 100, 100, 100]
+            // console.log(myopent.xAxis.data)
+            setoptions({...myopent})
+            // isopen.setOption(myopent)
+        },1000)
+    }
     const setlist=()=>{
-        let myopent={...options}
-        let Xarr =myopent.xAxis[0].data
-        Xarr.shift()
-        myopent.xAxis[0].data=Xarr
-        console.log(myopent.xAxis[0].data)
-        // setxAxis(xAxis)
-        // console.log(options.xAxis[0].data)
+        clearInterval(tiem.current)
     }
     return (<Card title={'echarts'}>
         <div onClick={()=>{
             setlist()
         }}>
-            更新
+            停止
         </div>
         <div id="main" ref={ms}></div>
     </Card>)

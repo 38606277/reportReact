@@ -150,7 +150,7 @@ export default (props)=>{
               }
               if(notes===""){
                 return message.error("请填写注释");
-              } 
+              }
               // if(Rindex!==tableData2.length){
               //   return message.error("关系您还有未填写内容");
               // }
@@ -262,21 +262,20 @@ export default (props)=>{
                       primaryKey='id' 
                       value={tableData}
                       formName={formName}
-                      setformName={setformName}
                       onChange={(newTableData) => {
                         //onChange实时回调最新的TableData 
                         //手动获取方式 tableRef.current.getTableData()，可以节省onChange方法
-                        setTableData2(newTableData);
+                        setTableData(newTableData);
                       }} 
                       tableForm={tableForm} />
                     :<TreeTableForm
-                      ref={tableRef2} 
+                      ref={tableRef} 
                       primaryKey='id' 
-                      value={tableData2}
+                      value={tableData}
                       onChange={(newTableData) => {
                         //onChange实时回调最新的TableData 
                         //手动获取方式 tableRef.current.getTableData()，可以节省onChange方法
-                        setTableData2(newTableData);
+                        setTableData(newTableData);
                       }} 
                       tableForm={tableForm} /> 
                   }

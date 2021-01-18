@@ -6,7 +6,7 @@ import pyDataCompute from './pyDataCompute.jsx';
 import sparkDataCompute from './sparkDataCompute.jsx';
 import MQTT from './MQTT.jsx'
 import ServiceAll from './serviceAll.jsx'
-import Eacharts from './mecharts.jsx'
+import Eacharts from './mecharts2.jsx'
 export default class dataCompute extends React.Component{
     render(){
         return (
