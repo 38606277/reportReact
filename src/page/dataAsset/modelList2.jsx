@@ -49,6 +49,9 @@ export default ()=>{
     const [list,setList]=useState([]);//列表
     const [moduleType,setModuleType]=useState(true);//控制模型和列
     const [total,setTotal]=useState(0);//一共多少条数据
+    const [visible,setvisible]=useState(false)
+    const [tableData,settableData]=useState([])//浏览数据
+    const [tableColumn,settableColumn]=useState([])
     const [visible2,setVisible2]=useState(false)//创建模型控制变量
     const [ModObj,setModObj]=useState(null)
     const [set,setSet]=useState(true)
@@ -122,6 +125,56 @@ export default ()=>{
         setStartIndex(1)
         setPerPage(pageSize)
     }
+    const showModal =(record)=>{
+        setvisible(true)
+        //查询表格数据 
+        let param = {
+            dbtype_id:ModData.db_type,
+            host_id:ModData.db_source,
+            table_name:record.table_name
+        };
+        let url = "/reportServer/dataAsset/getValueByHostAndTable";
+        HttpService.post(url, JSON.stringify(param)).then(res => {
+            //生成列信息
+            let cols = [];
+            let columns = res.data[0];
+            let obj={
+                overflow: 'hidden',
+                display: 'block',
+                width: '200px',
+                height:'40px'
+            }
+            for (var key in columns) {
+
+                if(key==='fileDataBlob'){
+                    cols.push({
+                        title: key,
+                        dataIndex: key,
+                        render: text => <a style={{...obj}}>{text}</a>,
+                    })
+                }else{
+                    cols.push({
+                        title: key,
+                        dataIndex: key
+                    })
+                }
+
+            }
+            // for (j = 0, len = columns.length; j < len; j++) {
+            //     cols.push({
+            //         title: columns[j],
+            //         dataIndex: columns[j]
+            //     })
+            // }
+            settableData(res.data)
+            settableColumn(cols)
+            // 设置高亮
+        }, errMsg => {
+            this.setState({
+                list: []
+            });
+        });
+    }
     const columns = [
         {
             title:"数据文名称",
@@ -154,7 +207,7 @@ export default ()=>{
                 <span>
                     <a  href={"#/dataAsset/newlform/"+"L"+record.table_id+"&"+model_id}>编辑</a>
                     <Divider type="vertical" />
-                    <a onClick={() => this.showModal(record)} href="javascript:;">浏览数据</a>
+                    <a onClick={() => showModal(record)} href="javascript:;">浏览数据</a>
                     <Divider type="vertical" />
                     <Popconfirm
                         title="您确定要删除此表吗?"
@@ -350,6 +403,21 @@ export default ()=>{
                         </Card>
                 </Col>
             </Row>
+            <Modal
+                    title="表详情"
+                    width='900px'
+                    cancelText='取消'
+                    okText='确认'
+                    visible={visible}
+                    onOk={()=>{setvisible(false)}}
+                    onCancel={()=>{setvisible(false)}}
+                >
+                    <Card>
+                        <Table dataSource={tableData} columns={tableColumn}
+                            scroll={{ x: 1300 }}
+                            bordered={true} />
+                    </Card>
+                </Modal>
             <MyModal visible={visible2} on={()=>{
                 setVisible2(false)
                 setModObj(null)
