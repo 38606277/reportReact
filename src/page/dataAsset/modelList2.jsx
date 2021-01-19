@@ -114,7 +114,30 @@ export default ()=>{
         setSet(false)
     }
     const confirmModule=(id)=>{//删除磨练
-        console.log(id)
+        HttpService.post('/reportServer/bdModel/deleteModelById', JSON.stringify({"model_id":id})).then(res => {
+            console.log(res)
+            if (res.resultCode == "1000") {   
+                HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
+                    if (res.resultCode == "1000") {
+                        HttpService.post('/reportServer/bdModel/getAllList', null).then(res=>{
+                            if(res.resultCode==="1000"){
+                                setTableListinit(res.data)
+                                setTableList(res.data)
+                                setModData(res.data[0])
+                                setModel_id(res.data[0].model_id)
+                                getTableList(1,10,"","",res.data[0].model_id)
+                            }
+                        })
+                    }
+                    else {
+                        message.error(res.message);
+                    }
+                })
+            }
+            else {
+                message.error(res.message);
+            }
+        })
     }
 
     const setpagindex=(page, pageSize)=>{
@@ -223,7 +246,15 @@ export default ()=>{
         getTableList(  startIndex,perPage,table_title,table_name,model_id)
     }
     const deleteList=(table_id)=>{
-        console.log(table_id )
+        HttpService.post('/reportServer/bdModelTableColumn/table/deleteTableId', JSON.stringify({"table_id":table_id})).then(res => {
+            if (res.resultCode == "1000") {   
+                getTableList(  startIndex,perPage,table_title,table_name,model_id)
+                message.success('删除成功');
+            }
+            else {
+                message.error(res.message);
+            }
+        })
     }
     const addModule=(data)=>{
         const {db_source,db_type,model_name}=data

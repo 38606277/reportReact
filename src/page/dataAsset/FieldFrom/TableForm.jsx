@@ -8,7 +8,7 @@ import InputNumberEF from '../../../components/EditForm/InputNumberEF.jsx'
 import Check from './Check.jsx'
 const TableForm = forwardRef((props, ref) => {
     const Obj={
-        "Hive":[
+        "hive":[
             {value:"TINYINT",text:"TINYINT"},
             {value:"SMALLINT",text:"SMALLINT"},
             {value:"INT",text:"INT"},
@@ -32,8 +32,7 @@ const TableForm = forwardRef((props, ref) => {
         "hbase":[
             {value:"INTEGER",text:"INTEGER"},
             {value:"UNSIGNED_INT",text:"UNSIGNED_INT"},
-            {value:"BIGINT",text:"BIGINT"},
-            {value:"UNSIGNED_LONG",text:"UNSIGNED_LONG"},
+            {value:"BIGINT",text:"BIGINT"},   {value:"UNSIGNED_LONG",text:"UNSIGNED_LONG"},
             {value:"TINYINT",text:"TINYINT"},
             {value:"UNSIGNED_TINYINT",text:"UNSIGNED_TINYINT"},
             {value:"SMALLINT",text:"SMALLINT"},
@@ -94,7 +93,7 @@ const TableForm = forwardRef((props, ref) => {
         ]
 
     }
-    const { primaryKey, tableForm, value, onChange } = props;
+    const { primaryKey, tableForm, value, onChange,db_type } = props;
 
     const [data, setData] = useState(value);
     const [selectedRows, setSelectedRows] = useState([]);
@@ -216,7 +215,7 @@ const TableForm = forwardRef((props, ref) => {
                         record={record}
                         index={record.id}
                         name="column_name"
-                        rules={[{ required: true, message: 'Please input your name!' }]}
+                        rules={[{ required: true, message: '请输入字段名！' }]}
                         handleFieldChange={handleFieldChange}
                         placeholder={"请输入字段名"}
                     />
@@ -237,7 +236,7 @@ const TableForm = forwardRef((props, ref) => {
                         record={record}
                         index={record.id}
                         name="column_title"
-                        rules={[{ required: true, message: 'Please input your name!' }]}
+                        rules={[{ required: true, message: '请输入字段名！' }]}
                         handleFieldChange={handleFieldChange}
                         placeholder={"请输入字段名"}
                     />
@@ -246,7 +245,7 @@ const TableForm = forwardRef((props, ref) => {
 
         },
         {
-            title: '类型',
+            title: db_type==="hive"?"字典":'类型',
             dataIndex: 'column_type',
             key: 'column_type',
             width: '10%',
@@ -257,12 +256,12 @@ const TableForm = forwardRef((props, ref) => {
                         defaultValue={{value:"varbinary"}}
                         text={text}
                         record={record}
-                        dictData={[...Obj['Mysql']]}
+                        dictData={[...Obj[db_type]]}
                         index={record.id}
                         keyName={'value'}
                         valueName={'text'}
                         name="column_type"
-                        rules={[{ required: true, message: 'Please input your workId!' }]}
+                        rules={[{ required: true, message: '请选择类型!' }]}
                         handleFieldChange={handleFieldChange}
                         placeholder={"请选择"}
                     />
@@ -287,7 +286,7 @@ const TableForm = forwardRef((props, ref) => {
                   record={record}
                   index={record.id}
                   name="column_length"
-                  rules={[{ required: true, message: 'Please input your workId!' }]}
+                  rules={[{ required: true, message: '请输入长度' }]}
                   handleFieldChange={handleFieldChange}
                   placeholder={"请输入长度"}
                 />
@@ -308,7 +307,7 @@ const TableForm = forwardRef((props, ref) => {
                         record={record}
                         index={record.id}
                         name="column_decimal"
-                        rules={[{ required: true, message: 'Please input your workId!' }]}
+                        rules={[{ required: true, message: '请输入精度！' }]}
                         handleFieldChange={handleFieldChange}
                         placeholder={"请输入精度"}
                   />
