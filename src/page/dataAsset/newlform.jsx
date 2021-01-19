@@ -173,24 +173,24 @@ export default (props)=>{
               //   return item.column_name
               //  }):[]
               // console.log(deleteColumnList)
-              // HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path[0][0]==="L"?path[1]:path,table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path[0].slice(1):"",columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[]})).then(res => {
-              //   console.log(res)
-              //   if (res.resultCode == "1000") {   
-              //       HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
-              //           if (res.resultCode == "1000") {
-              //             message.success('保存成功');
-              //             // console.log(res)
-              //             props.history.push('/dataAsset/modelList')
-              //           }
-              //           else {
-              //               message.error(res.message);
-              //           }
-              //       })
-              //   }
-              //   else {
-              //       message.error(res.message);
-              //   }
-              // })
+              HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path[0][0]==="L"?path[1]:path,table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path[0].slice(1):"",columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[]})).then(res => {
+                console.log(res)
+                if (res.resultCode == "1000") {   
+                    HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
+                        if (res.resultCode == "1000") {
+                          message.success('保存成功');
+                          // console.log(res)
+                          props.history.push('/dataAsset/modelList')
+                        }
+                        else {
+                            message.error(res.message);
+                        }
+                    })
+                }
+                else {
+                    message.error(res.message);
+                }
+              })
               // console.log(tableData)
             }}>保存</Button>
           </div>
