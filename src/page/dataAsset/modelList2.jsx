@@ -141,6 +141,8 @@ export default ()=>{
     }
 
     const setpagindex=(page, pageSize)=>{
+        console.log(page,pageSize)
+        getTableList(page,pageSize,"","",model_id)
         setStartIndex(page)
         setPerPage(pageSize)
     }
