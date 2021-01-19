@@ -416,11 +416,7 @@ export default ()=>{
                                     <Button type="primary"  style={{float:"right",marginRight:"10px"}} href={"#/dataAsset/newlform/"+"X"+model_id}>新建表格</Button>
                             </Col>
                         </Card>
-                        <Card style={
-                            {
-                                height:"500px"
-                            }
-                        }>
+                        <Card>
                             {
                                 moduleType? <Table style={{display:'flow-root'}} dataSource={list} columns={columns} bordered={true}
                                 pagination={false}
@@ -429,7 +425,13 @@ export default ()=>{
                                         <Pagination style={{float:'right'}} defaultCurrent={startIndex} total={total} onChange={setpagindex} onShowSizeChange={onShowSizeChange}/>
                                     </div>)
                                 }}
-                                />:<ERGraphDemo  model_id={model_id}/>
+                                />:<div style={
+                                    {   
+                                        width:"100%",
+                                        position: 'relative',
+                                        height:"500px"
+                                    }
+                                } ><ERGraphDemo  model_id={model_id}/></div>
                             } 
                         </Card>
                 </Col>
