@@ -61,9 +61,8 @@ const options1=[{value:"服务器1"},{value:"服务器2"}]
 const options2=[{value:"主题1"},{value:"主题2"}]
 const options3=[{value:"数据库1"},{value:"数据库2"},{value:"数据库3"}]
 const options4=[{value:"表1"},{value:"表2"},{value:"表3"},{value:"表4"}]
-const options5=[{value:"项目1"},{value:"项目2"}]
-const options6=[{value:"请选择表sql1"},{value:"请选择表sql2"}]
-const options7=[{value:"启动"},{value:"停止"}]
+const options5=[{value:"请选择表sql1"},{value:"请选择表sql2"}]
+const options6=[{value:"启动"},{value:"停止"}]
 export default (props)=>{
     const {visible,handleOk,handleCancel,text}=props
     const editorsql=useRef()
@@ -225,7 +224,7 @@ export default (props)=>{
                             name="mqtt服务密码"
                             rules={[{ required: true, message: '请输入mqtt服务密码!' }]}
                             >
-                                <Input
+                                <Input.Password 
                                 size="middle"
                                     placeholder="请输入mqtt服务密码"
                             />
