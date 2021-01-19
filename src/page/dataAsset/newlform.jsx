@@ -83,7 +83,6 @@ export default (props)=>{
       await HttpService.post('/reportServer/bdModel/getModelById', JSON.stringify({model_id:path[0]==="L"?path.split("&")[1]:path.slice(1)})).then(res => {
         if (res.resultCode == "1000") {
           console.log(res)
-
           setdb_type(res.data.db_type)
           setmodel_name(res.data.model_name)
         }
@@ -94,7 +93,7 @@ export default (props)=>{
       // 
     })()
     
-  },[path,formName,model_name])
+  },[path,formName,model_name,db_type])
     //栏位
     const [path,setPath]=useState('');
     const [model_name,setmodel_name]=useState('')
@@ -108,7 +107,7 @@ export default (props)=>{
     const [tableData, setTableData] = useState([]);
     const [displayType, setDisplayType] = useState('list');
     const [index,setIndex]=useState(0)
-    const [db_type,setdb_type]=useState("")
+    const [db_type,setdb_type]=useState("hbase")
     //编辑 记录俩表变化
 
     const [istableLink,setistableLink]=useState([]) 
@@ -142,11 +141,12 @@ export default (props)=>{
     return(
         <Card  title={props.match.params.module_id[0]==="X"?"新建列表":"编辑列表"} extra={
           <div>
+            {console.log(db_type)}
             <Button type="primary" href="/#/dataAsset/modelList" style={{right:"50px"}}>返回</Button>
             <Button type="primary" onClick={ async () =>{
            
               mainForm.submit()
-              // mainForm2.submit()
+              mainForm2.submit()
               console.log(list)
               if(formName===""){
                 return  message.error("请填写表名");

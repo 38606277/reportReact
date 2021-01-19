@@ -57,13 +57,13 @@ const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
   };
-const options1=[{value:"执行器1"},{value:"执行器2"}]
-const options2=[{value:"第一个"},{value:"随机"},{value:"轮询"},{value:"一次性HASH"},{value:"不常使用"},{value:"最近使用"}]
-const options3=[{value:"单机串行"},{value:"丢弃后续调度"},{value:"丢弃后续调度"}]
-const options4=[{value:"DataX任务"},{value:"Shell任务"},{value:"Python任务"},{value:"PowerShell任务"}]
+const options1=[{value:"服务器1"},{value:"服务器2"}]
+const options2=[{value:"主题1"},{value:"主题2"}]
+const options3=[{value:"数据库1"},{value:"数据库2"},{value:"数据库3"}]
+const options4=[{value:"表1"},{value:"表2"},{value:"表3"},{value:"表4"}]
 const options5=[{value:"项目1"},{value:"项目2"}]
-const options6=[{value:"子任务1"},{value:"子任务2"}]
-const options7=[{value:"无"},{value:"主键自增"},{value:"时间自增"},{value:"HIVE分期"},]
+const options6=[{value:"请选择表sql1"},{value:"请选择表sql2"}]
+const options7=[{value:"启动"},{value:"停止"}]
 export default (props)=>{
     const {visible,handleOk,handleCancel,text}=props
     const editorsql=useRef()
@@ -94,8 +94,8 @@ export default (props)=>{
                         {...layout}
                     >
                         <Form.Item
-                            label="执行器"
-                            name="执行器"
+                            label="目标服务器"
+                            name="目标服务器"
                             rules={[{ required: true, message: 'Please input your username!' }]}
                         >
                             <Select
@@ -103,78 +103,77 @@ export default (props)=>{
                                 size="middle"
                                 showArrow
                                 allowClear
-                                placeholder="请选择执行器"
+                                placeholder="请选择目标服务器"
                                 options={options1}
                         />
                         </Form.Item>
                         <Form.Item
-                            label="路由策略"
-                            name="路由策略"
-                            rules={[{ required: true, message: 'Please input your username!' }]}
+                            label="主题选择"
+                            name="主题选择"
+                            rules={[{ required: true, message: '请选择主题' }]}
                         >
                             <Select
                                 style={{ width: '200px' }}
                                 size="middle"
                                 showArrow
                                 allowClear
-                                placeholder="请选择路由策略"
+                                placeholder="请选择主题"
                                 options={options2}
                         />
                         </Form.Item>
                         <Form.Item
-                            label="阻塞处理"
-                            name="阻塞处理"
-                            rules={[{ required: true, message: 'Please input your username!' }]}
+                            label="数据库选择"
+                            label="数据库选择"
+                            rules={[{ required: true, message: '请选择数据库' }]}
                         >
                             <Select
                                 style={{ width: '200px' }}
                                 size="middle"
                                 showArrow
                                 allowClear
-                                placeholder="请选择阻塞处理"
+                                placeholder="请选择目标数据库"
                                 options={options3}
                         />
                         </Form.Item>
                         <Form.Item
-                            label="任务类型"
-                            name="任务类型"
-                            rules={[{ required: true, message: 'Please input your username!' }]}
+                            label="表选择"
+                            name="表选择"
+                            rules={[{ required: true, message: '请选择表' }]}
                         >
                             <Select
                                 style={{ width: '200px' }}
                                 size="middle"
                                 showArrow
                                 allowClear
-                                placeholder="请选择任务类型"
+                                placeholder="请选择表"
                                 options={options4}
-                                onChange={setTaskType}
                         />
                         </Form.Item>
                         <Form.Item
-                            label="所属项目"
-                            name="所属项目"
-                            rules={[{ required: true, message: 'Please input your username!' }]}
+                            label="表sql"
+                            name="表sql"
+                            rules={[{ required: true, message: '请选择表sql!' }]}
                         >
                             <Select
                                 style={{ width: '200px' }}
                                 size="middle"
                                 showArrow
                                 allowClear
-                                placeholder="请选择所属项目"
+                                placeholder="请选择表sql"
                                 options={options5}
                         />
                         </Form.Item>
                         <Form.Item
-                            label="子任务"
-                            name="子任务"
-                            rules={[{ required: true, message: 'Please input your username!' }]}
+                            label="状态"
+                            name="状态"
+                            rules={[{ required: true, message: '请选择状态!' }]}
                         >
                             <Select
                                 style={{ width: '200px' }}
                                 size="middle"
                                 showArrow
                                 allowClear
-                                placeholder="请选择子任务"
+                                placeholder="请选择状态"
                                 options={options6}
                         />
                         </Form.Item>
@@ -212,25 +211,23 @@ export default (props)=>{
                             />
                             </Form.Item>
                         <Form.Item
-                            label="Cron"
-                            name="Cron"
-                            rules={[{ required: true, message: 'Please input your username!' }]}
+                            label="mqtt服务器用户名"
+                            name="mqtt服务器用户名"
+                            rules={[{ required: true, message: '请输入mqtt服务器登录用户名' }]}
                             >
                                 <Input
                                 size="middle"
-                                style={{ width: '228px' }}
-                                    placeholder="请输入Cron表达式"
-                            /> <Button type="primary" icon={<DisconnectOutlined />} size={"middle"}>
-                            </Button>
+                                    placeholder="mqtt服务器登录用户名"
+                            />
                         </Form.Item>
                         <Form.Item
-                            label="报警邮件"
-                            name="报警邮件"
-                            rules={[{ required: true, message: 'Please input your username!' }]}
+                            label="mqtt服务密码"
+                            name="mqtt服务密码"
+                            rules={[{ required: true, message: '请输入mqtt服务密码!' }]}
                             >
                                 <Input
                                 size="middle"
-                                    placeholder="请输入报警邮件用，隔开"
+                                    placeholder="请输入mqtt服务密码"
                             />
                         </Form.Item>
                         <Form.Item
@@ -245,15 +242,16 @@ export default (props)=>{
                             />
                         </Form.Item>
                         <Form.Item
-                            label="超时时间(分钟)"
-                            name="超时时间(分钟)"
-                            rules={[{ required: true, message: 'Please input your username!' }]}
+                            label="间隔时间"
+                            name="间隔时间"
+                            rules={[{ required: true, message: '请输入间隔时间' }]}
                             >
                                 <InputNumber
-                                style={{ width: '260px' }}
+                                style={{ width: '228px' }}
                                 size="middle"
-                                    placeholder="超时时间(分钟)"
+                                    placeholder="间隔时间"
                             />
+                            秒
                         </Form.Item>
                     </Form>
                 </Col>

@@ -46,7 +46,7 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/legend'
 import 'echarts/lib/chart/pie';
-var base = +new Date(2014, 9, 3);
+var base = +new Date(2018, 9, 3);
 var oneDay = 24 * 3600 * 1000;
 var date = [];
 

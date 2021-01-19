@@ -31,43 +31,52 @@ import {
 } from 'antd';
 // import 
 import HttpService from '../../util/HttpService.jsx';
-import MI from './mecharts2.jsx'
+import MI from './mecharts.jsx'
 const data = [
   {
     key: '1',
-    name: 'John Brown',
-    age: 32,
-    class:"mysqltomysql",
+    host: 'John Brown',
+    keepalibe: 32,
+    topic_id:"主题1",
     Cron:"1",
     route:"随机",
-    type:false,
+    state:0,
     types:"成功",
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
+    clientinid: 'New York No. 1 Lake Park',
+    targetTable: ['nice', 'developer'],
+    timeout:"否",
+    targetDB:["数据库1","数据库2"],
+    sql_script:["1"]
   },
   {
     key: '2',
-    name: 'Jim Green',
-    age: 42,
-    class:"mysqltomysql",
+    host: 'Jim Green',
+    keepalibe: 42,
+    topic_id:"主题2",
     Cron:"1",
     route:"随机",
-    type:true,
+    state:0,
     types:"成功",
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
+    clientinid: 'London No. 1 Lake Park',
+    targetTable: ['loser'],
+    timeout:"否",
+    targetDB:["数据库1","数据库2"],
+    sql_script:["1"]
   },
   {
     key: '3',
-    name: 'Joe Black',
-    age: 32,
-    class:"mysqltomysql",
+    host: 'Joe Black',
+    keepalibe: 32,
+    topic_id:"主题3",
     Cron:"1",
     route:"随机",
-    type:false,
+    state:1,
     types:"成功",
-    address: 'Sidney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
+    clientinid: 'Sidney No. 1 Lake Park',
+    targetTable: ['cool', 'teacher'],
+    timeout:"否",
+    targetDB:["数据库1","数据库2"],
+    sql_script:["1"]
   },
 ];
 const options = [{ value: 'gold' }, { value: 'lime' }, { value: 'green' }, { value: 'cyan' }];
@@ -93,35 +102,35 @@ export default ()=>{
     },[])
     const columns = [
       {
-        title: 'ID',
-        dataIndex: 'age',
-        key: 'age',
-      },
-      {
-        title: '项目名称',
-        dataIndex: 'name',
-        key: 'name',
+        title: '目标服务器',
+        dataIndex: 'host',
+        key: 'host',
         render: text => <a>{text}</a>,
       },
       {
-        title: '所属项目',
-        dataIndex: 'class',
-        key: 'class',
+        title: '主题',
+        dataIndex: 'topic_id',
+        key: 'topic_id',
       },
       {
-        title: 'Cron',
-        dataIndex: 'Cron',
-        key: 'Cron',
+        title: '任务名称',
+        dataIndex: 'clientinid',
+        key: 'clientinid',
       },
       {
-        title: '路由策略',
-        dataIndex: 'route',
-        key: 'route',
+        title: '是否超时',
+        dataIndex: 'timeout',
+        key: 'timeout',
+      },
+      {
+        title: '间隔时间',
+        dataIndex: 'keepalibe',
+        key: 'keepalibe',
       },
       {
         title: '状态',
-        dataIndex: 'type',
-        key: 'type',
+        dataIndex: 'state',
+        key: 'state',
         render:(tags,text)=>{
           return <Switch checkedChildren="开启" unCheckedChildren="停止" defaultChecked={tags} onChange={e=>{
             notification.open({
@@ -137,21 +146,43 @@ export default ()=>{
         }
       },
       {
-        title: '注册节点',
-        dataIndex: 'address',
-        key: 'address',
+        title: '目标数据库',
+        dataIndex: 'targetDB',
+        key: 'targetDB',
         render: res=>(
-          <Popover placement="top" content={res} trigger="click">
+          <Popover placement="top" content={
+            res.map(item=>{
+              return <Tag>{item}</Tag>
+            })
+          } trigger="click">
             <Button>查看</Button>
           </Popover>
         )
       },
       {
-        title: '下次触发',
-        key: 'tags',
-        dataIndex: 'tags',
+        title: '目标表',
+        key: 'targetTable',
+        dataIndex: 'targetTable',
         render: res => (
-          <Popover placement="top" content={res} trigger="click">
+          <Popover placement="top" content={
+            res.map(item=>{
+              return <Tag>{item}</Tag>
+            })
+          } trigger="click">
+            <Button>查看</Button>
+          </Popover>
+        ),
+      },
+      {
+        title: '表sql',
+        key: 'sql_script',
+        dataIndex: 'sql_script',
+        render: res => (
+          <Popover placement="top" content={
+            res.map(item=>{
+              return <Tag>{item}</Tag>
+            })
+          } trigger="click">
             <Button>查看</Button>
           </Popover>
         ),
@@ -163,11 +194,6 @@ export default ()=>{
         render: res => (
             <Button onClick={()=>setvisible2(true)}>查看</Button>
         ),
-      },
-      {
-        title: '状态',
-        dataIndex: 'types',
-        key: 'types',
       },
       {
         title: '操作',
@@ -200,7 +226,7 @@ export default ()=>{
     ];
     return (
         <Card title="MQTT任务管理">
-            <Table columns={columns} dataSource={data} title={()=>{
+            <Table columns={columns} dataSource={data}  title={()=>{
               return (<Row style={{marginBottom:"10px"}}>
                   <Col style={{...Lstyle}}>
                     <Input placeholder="任务名称" size="middle"/>
@@ -209,7 +235,7 @@ export default ()=>{
                     <Select
                       size="middle"
                       mode={titleSelect.length===0?"":"multiple"}
-                      placeholder="所属项目"
+                      placeholder="所属主题"
                       showArrow
                       defaultValue={titleSelect.length===0?null:titleSelect}
                       style={{ width: '200px' }}
