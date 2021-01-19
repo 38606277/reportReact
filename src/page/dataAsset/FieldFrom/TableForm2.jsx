@@ -127,7 +127,7 @@ const TableForm = forwardRef((props, ref) => {
                         record={record}
                         index={record.id}
                         name="name"
-                        rules={[{ required: true, message: 'Please input your name!' }]}
+                        rules={[{ required: true, message: '请输入字段名!' }]}
                         handleFieldChange={handleFieldChange}
                         placeholder={"请输入字段名"}
                     />
@@ -168,7 +168,7 @@ const TableForm = forwardRef((props, ref) => {
                         record={record}
                         index={record.id}
                         name="column_name"
-                        rules={[{ required: true, message: 'Please input your workId!' }]}
+                        rules={[{ required: true, message: '请输入字段名称' }]}
                         handleFieldChange={handleFieldChange}
                         placeholder={"字段名称"}
                     />
@@ -190,7 +190,7 @@ const TableForm = forwardRef((props, ref) => {
                   record={record}
                   index={record.id}
                   name="link_table_name"
-                  rules={[{ required: true, message: 'Please input your workId!' }]}
+                  rules={[{ required: true, message: '请输入关联表名！' }]}
                   handleFieldChange={handleFieldChange}
                   placeholder={"关联表名"}
                 />
@@ -212,7 +212,7 @@ const TableForm = forwardRef((props, ref) => {
                   record={record}
                   index={record.id}
                   name="link_column_name"
-                  rules={[{ required: true, message: 'Please input your workId!' }]}
+                  rules={[{ required: true, message: '请输入关联字段' }]}
                   handleFieldChange={handleFieldChange}
                   placeholder={""}
                 />

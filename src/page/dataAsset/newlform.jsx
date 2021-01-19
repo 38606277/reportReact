@@ -144,23 +144,10 @@ export default (props)=>{
           <div>
             <Button type="primary" href="/#/dataAsset/modelList" style={{right:"50px"}}>返回</Button>
             <Button type="primary" onClick={ async () =>{
-            
-              mainForm.submit()
-              mainForm2.submit()
-              tableForm.validateFields()
-              .then(() => {
-                //验证成功
-                let postData={
-                  lineForm:tableData,
-                  lineDelete:tableRef.current.getDeleteData()
-                }
-                console.log(list2)
-                
-              }) .catch(errorInfo => {
-                //验证失败
-                setList("失败")
-                message.error('保存失败您还有未填写内容');
-              });
+           
+              await mainForm.submit()
+               mainForm2.submit()
+              await console.log(list)
               if(formName===""){
                 return  message.error("请填写表名");
               }
@@ -257,7 +244,21 @@ export default (props)=>{
                 form={mainForm}
                 onFinish={async (values) => {
                   //验证tableForm
-                
+                    tableForm.validateFields()
+                    .then(() => {
+                      //验证成功
+                      let postData={
+                        ...values,
+                        lineForm:tableData,
+                        lineDelete:tableRef.current.getDeleteData()
+                      }
+                      setList("成功")
+                      
+                    }) .catch(errorInfo => {
+                      //验证失败
+                      setList("失败")
+                      message.error('保存失败您还有未填写内容');
+                    });
                   
                 }} >
 
@@ -343,7 +344,7 @@ export default (props)=>{
                 form={mainForm2}
                 onFinish={async (values) => {
                   //验证tableForm
-                   tableForm2.validateFields()
+                  tableForm2.validateFields()
                     .then(() => {
                       //验证成功
                       let postData={
