@@ -98,7 +98,7 @@ export default (props)=>{
             targetDB,
             targetTable,
             sql_script,
-            state,
+            state:state==="启动"?'1':'0',
             clientinid,
             username,
             password,
@@ -113,7 +113,8 @@ export default (props)=>{
             clientinid,
             username,
             password,
-            keepalibe]
+            keepalibe
+        ]
         const Tips=[
             "目标服务器不可为空",
             "主题不可为空",
