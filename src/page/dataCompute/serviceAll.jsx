@@ -36,7 +36,8 @@ import {
     Menu,
     Switch,
     notification,
-    Dropdown
+    Dropdown,
+    Statistic 
 } from 'antd';
 // import 
 import HttpService from '../../util/HttpService.jsx';
@@ -46,19 +47,24 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/title';
 import 'echarts/lib/component/legend'
 import 'echarts/lib/chart/pie';
-function onChange(e) {
-    console.log(`radio checked:${e.target.value}`);
-  }
-function handleChange(e){
-
-}
+import one from './setXList.js'
 
 
-
+const sele=["近12小时","近1天","近7天","近30天"]
+const sele2=["今日","本周","本月","本年"]
 export default (props)=>{
     const {title}=props
     const [xAxis,setxAxis]=useState(["12: 00", "13: 00", "14: 00", "15: 00", "16: 00", "17: 00", "18: 00", "19: 00", "20: 00", "21: 00", "22: 00", "23: 00"])
+    const [select,setSelect]=useState([...sele])
+    const [series,setseries]=useState([])
+    const ms=useRef()
+    const [main , setMain] = useState('')
+    const [types,setTypes]=useState(true)
+    const [text,settext]=useState("近12小时")
     const option = {
+        title:{
+            text: '数据监控',
+        },
         tooltip: {
             trigger: 'axis',
             axisPointer: {
@@ -66,14 +72,6 @@ export default (props)=>{
                 label: {
                     backgroundColor: '#fff'
                 }
-            }
-        },
-        legend: {
-            data: ['合法次数', '非法次数']
-        },
-        toolbox: {
-            feature: {
-                saveAsImage: {}
             }
         },
         grid: {
@@ -94,38 +92,78 @@ export default (props)=>{
                 type: 'value'
             }
         ],
-        series: [
-            {
-                name: '邮件营销',
-                type: 'line',
-                stack: '总量',
-                areaStyle: {},
-                data: [120, 132, 101, 134, 90, 230, 210]
-            },
-            {
-                name: '联盟广告',
-                type: 'line',
-                stack: '总量',
-                areaStyle: {},
-                data: [220, 182, 191, 234, 290, 330, 310]
-            },
-    
-        ]
+        series: [...series]
     };
-    const ms=useRef()
-    const [main , setMain] = useState('')
-    useEffect(()=>{
-        const Dates=new Date()
-        let Hour =Dates.getHours()
-        let arr=[Hour]
-        for(let i=0;i<11;i+=1){
-            let o=Hour-=1
-            arr.push(o>0?o:Math.abs(o))
+    function onChange(e) {
+        if(e.target.value==="a"){
+            setTypes(true)
+            settext("近12小时")
+            one("近12小时",setxAxis)
+        }else{
+            setTypes(false)
+            settext("今日")
+            one("今日",setxAxis)
+            setseries([{
+                name: '调用总次数',
+                type: 'line',
+                stack: '总量',
+                areaStyle: {},
+                data: [120, 132, 101, 134, 90, 230, 210, 230, 210, 210, 230, 210]}])
         }
-        const newarr=arr.map(item=>{
-            return item>9?item+": 00":"0"+item+": 00"
-        })
-        setxAxis(newarr)
+      }
+    function handleChange(e){
+        if(e==="调用总次数"){
+            console.log(series)
+            setseries([{
+                name: '调用总次数',
+                type: 'line',
+                stack: '总量',
+                areaStyle: {},
+                data: [120, 132, 101, 134, 90, 230, 210, 230, 210, 210, 230, 21]}])
+        }
+        if(e==="成功次数/失败次数"){
+            setseries([{
+                name: '成功次数',
+                type: 'line',
+                stack: '个数',
+                areaStyle: {},
+                data: [120, 132, 101, 134, 90, 230, 210, 230, 210, 210, 230, 210]
+            },
+            {
+                name: '失败次数',
+                type: 'line',
+                stack: '个数',
+                areaStyle: {},
+                data: [12, 1, 10, 1, 9, 20, 2, 2, 2, 21, 30, 0]
+            },
+            ])
+        }
+        if(e==="合法次数/非法次数"){
+            setseries([{
+                name: '合法次数',
+                type: 'line',
+                stack: '个数',
+                areaStyle: {},
+                data: [120, 13, 1, 1, 90, 230, 210, 230, 210, 0, 23, 210]
+            },
+            {
+                name: '非法次数',
+                type: 'line',
+                stack: '个数',
+                areaStyle: {},
+                data: [12, 1, 10, 1, 9, 20, 2, 2, 2, 221, 3, 0]
+            },
+            ])
+        }
+    }
+    useEffect(()=>{
+        one("近12小时",setxAxis)
+        setseries([{
+            name: '调用总次数',
+            type: 'line',
+            stack: '总量',
+            areaStyle: {},
+            data: [120, 132, 101, 134, 90, 230, 210, 230, 210, 210, 230, 210]}])
     },[])
     useEffect(()=>{
         setMain(ms.current)
@@ -134,41 +172,16 @@ export default (props)=>{
             myChart.resize({ height: '256px',width:'840px' })
             myChart.setOption(option);
         }
-    },[main,xAxis])
+    },[main,xAxis,series])
+    
     const getData=(e)=>{
-        const Dates=new Date()
-        if(e==="近12小时"){
-            let Hour =Dates.getHours()
-            let arr=[Hour]
-            for(let i=0;i<11;i+=1){
-                let o=Hour-=1
-                arr.push(o>0?o:Math.abs(o))
-            }
-            const newarr=arr.map(item=>{
-                    if(item===24){
-                        return "00:00"
-                    }
-                return item>9?item+": 00":"0"+item+": 00"
-            })
-            setxAxis(newarr)
-        }
-        if(e==="近1天"){
-            let Hour =Dates.getHours()
-            let arr=[Hour]
-            for(let i=0;i<11;i+=1){
-                let o=Hour+=1
-                arr.push(o>24?o-24:o)
-            }
-            const newarr=arr.map(item=>{
-                    if(item===24){
-                        return "00:00"
-                    }
-                return item>9?item+": 00":"0"+item+": 00"
-            })
-            setxAxis(newarr)
-        }
+        one(e,setxAxis)
+        settext(e)
+        
     }
-    return (<Card title={title+"总览"}>
+
+ 
+    return (<Card title={"数据服务总览"}>
         <div>
             <Radio.Group onChange={onChange} defaultValue="a" buttonStyle="solid">
                 <Radio.Button value="a">开发API</Radio.Button>
@@ -177,34 +190,116 @@ export default (props)=>{
             </Radio.Group>
             <Divider />
             <Row>
-                <Col sm={18}>
+                <Col sm={16}>
                     <Row>
                         <Col sm={16}>
                         <Radio.Group onChange={onChange} defaultValue="a" buttonStyle="solid" size="small">
-                            <Radio.Button value="a">调用趋势</Radio.Button>
-                            <Radio.Button value="b">发展趋势</Radio.Button>
+                            <Radio.Button value="a" onClick={()=>setSelect(sele)}>调用趋势</Radio.Button>
+                            <Radio.Button value="b" onClick={()=>setSelect(sele2)}>发展趋势</Radio.Button>
                         </Radio.Group>
                         </Col>
                         <Col sm={8}>
                             <Row>
-                                <Select defaultValue="近12小时" style={{ width: 120 ,float:"left",marginRight:"10px"}} size="small" onChange={getData}>
-                                    <Option value="近12小时">近12小时</Option>
-                                    <Option value="近1天">近1天</Option>
-                                    <Option value="近7天">近7天</Option>
-                                    <Option value="近30天">近30天</Option>
+                                <Select value={text} style={{ width: 120 ,float:"left",marginRight:"10px",marginLeft:types?"0px":"120px"}} size="small" onChange={(e)=>getData(e)}>
+                                    {
+                                        select.map((item,index)=>{
+                                            return (<Option value={item}>{item}</Option>)
+                                        })
+                                    }
                                 </Select>
-                                <Select defaultValue="调用总次数" style={{ width: 120,float:"left" }} size="small" onChange={handleChange}>
-                                    <Option value="调用总次数">调用总次数</Option>
-                                    <Option value="成功次数/失败次数">成功次数/失败次数</Option>
-                                    <Option value="合法次数/非法次数">合法次数/非法次数</Option>
-                                </Select>
+                                {
+                                    types? <Select defaultValue="调用总次数" style={{ width: 120,float:"left" }} size="small" onChange={handleChange}>
+                                                <Option value="调用总次数">调用总次数</Option>
+                                                <Option value="成功次数/失败次数">成功次数/失败次数</Option>
+                                                <Option value="合法次数/非法次数">合法次数/非法次数</Option>
+                                            </Select>:null
+                                }
+                               
                             </Row>
                         </Col>
                     </Row>
                     <div id="main" ref={ms}></div>
                 </Col>
-                <Col sm={6}>
-                    信息
+                <Col sm={7} style={{marginLeft:"10px"}}>
+                    <Row gutter={16}>
+                        <Col span={8}>
+                            <Card>
+                            <Statistic
+                                value={11.28}
+                                precision={2}
+                                valueStyle={{ color: '#3f8600' }}
+                            />
+                            <h3 style={{fontWeight:"600",textAlign:"center",fontSize:"18px"}}>已发布</h3>
+                            </Card>
+                        </Col>
+                        <Col span={8}>
+                    
+                        <Card>
+                            <Statistic
+                                value={11.28}
+                                precision={2}
+                                valueStyle={{ color: '#3f8600' }}
+                            />
+                              <h3 style={{fontWeight:"600",textAlign:"center",fontSize:"18px"}}>开发中</h3>
+                            </Card>
+                        
+                        </Col>
+                        <Col span={8}>
+                            <Card>
+                                <Statistic
+                                    value={11.28}
+                                    precision={2}
+                                    valueStyle={{ color: '#3f8600' }}
+                                />
+                                 <h3 style={{fontWeight:"600",textAlign:"center",fontSize:"18px"}}>申请者</h3>
+                                </Card>
+                        </Col>
+                    </Row>
+                    <Card>
+                        <Row gutter={16} justify="space-between">
+                            <Col>1.12~1.19 总调用</Col>
+                            <Col>0</Col>
+                        </Row>
+                        <Row>
+                         <Divider dashed></Divider>
+                        </Row>
+                        <Row justify="space-between">
+                            <Col>
+                                <Statistic
+                                    title="成功"
+                                    value={11.28}
+                                    precision={2}
+                                    valueStyle={{ color: '#3f8600' }}
+                                />
+                            </Col>
+                            <Col>
+                                <Statistic
+                                    title="失败"
+                                    value={11.28}
+                                    precision={2}
+                                    valueStyle={{ color: 'red' }}
+                                />
+                            </Col>
+                        </Row>
+                        <Row justify="space-between">
+                            <Col>
+                                <Statistic
+                                    title="合法"
+                                    value={11.28}
+                                    precision={2}
+                                    valueStyle={{ color: '#3f8600' }}
+                                />
+                            </Col>
+                            <Col>
+                                <Statistic
+                                    title="非法"
+                                    value={11.28}
+                                    precision={2}
+                                    valueStyle={{ color: 'red' }}
+                                />
+                            </Col>
+                        </Row>
+                    </Card>
                 </Col>
             </Row>
         </div>

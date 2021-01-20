@@ -40,19 +40,9 @@ import {
 } from 'antd';
 // import 
 import HttpService from '../../util/HttpService.jsx';
- 
-// const dbService = new DbService();
-var source = { app: ["name", "score", "birthDate"], version: ["name", "score", "birthDate"], dbos: ["name", "population", "size"] };
-const options = {
 
-    lineNumbers: true,                //显示行号  
-    mode: { name: "text/x-mysql" },          //定义mode  
-    extraKeys: { "Ctrl-Enter": "autocomplete" },//自动提示配置  
-    theme: "default",
-    hintOptions: {
-        tables: source
-    }
-};
+// const dbService = new DbService();
+
 const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
@@ -67,9 +57,6 @@ export default (props)=>{
     const {visible,handleOk,handleCancel,text}=props
     const editorsql=useRef()
     const [TaskType,setTaskType]=useState("")//任务类型
-    const ChangeCode=(code)=>{
-        console.log(code)
-    }
     useEffect(()=>{
 
     },[])
@@ -254,24 +241,6 @@ export default (props)=>{
                         </Form.Item>
                     </Form>
                 </Col>
-            </Row>
-            {
-               TaskType==="DataX任务"?
-                <Form.Item
-                label="JVM启动参数"
-                name="JVM启动参数"
-                rules={[{ required: true, message: 'Please input your username!' }]}
-                >
-                    <Input
-                        placeholder="JVM启动参数"
-                />
-                </Form.Item>:null
-                }
-            <Row>
-                 {
-                     TaskType?
-                     <CodeMirror ref={editorsql} value='' style={{ height: '600px', width: '100%', border: "2px solid red",background:"red"}} options={options} onChange={code =>ChangeCode(code)}/>:null
-                 }
             </Row>
       </Modal>
     )

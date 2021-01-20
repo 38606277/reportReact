@@ -6,6 +6,7 @@ import ProCard from '@ant-design/pro-card';
 import TableForm from './FieldFrom/TableForm';
 import TableForm2 from './FieldFrom/TableForm2'
 import HttpService from '../../util/HttpService.jsx';
+import { List } from 'antd/es/form/Form';
 // import ModuleTable from './ModuleTable'
 const Star={//红色*样式
   marginRight: '4px',
@@ -83,6 +84,7 @@ export default (props)=>{
       await HttpService.post('/reportServer/bdModel/getModelById', JSON.stringify({model_id:path[0]==="L"?path.split("&")[1]:path.slice(1)})).then(res => {
         if (res.resultCode == "1000") {
           console.log(res)
+
           setdb_type(res.data.db_type)
           setmodel_name(res.data.model_name)
         }
@@ -92,8 +94,8 @@ export default (props)=>{
     })
       // 
     })()
-    
-  },[path,formName,model_name,db_type])
+    console.log("list改变了",list)
+  },[path,formName,model_name])
     //栏位
     const [path,setPath]=useState('');
     const [model_name,setmodel_name]=useState('')
@@ -107,7 +109,7 @@ export default (props)=>{
     const [tableData, setTableData] = useState([]);
     const [displayType, setDisplayType] = useState('list');
     const [index,setIndex]=useState(0)
-    const [db_type,setdb_type]=useState("hbase")
+    const [db_type,setdb_type]=useState("")
     //编辑 记录俩表变化
 
     const [istableLink,setistableLink]=useState([]) 
@@ -137,24 +139,24 @@ export default (props)=>{
         isNew: true,
       });
     }
-    
+    const add=()=>{
+      console.log("我是点击的list",list)
+    }
     return(
         <Card  title={props.match.params.module_id[0]==="X"?"新建列表":"编辑列表"} extra={
           <div>
-            {console.log(db_type)}
+              {             console.log(list)}
             <Button type="primary" href="/#/dataAsset/modelList" style={{right:"50px"}}>返回</Button>
-            <Button type="primary" onClick={ async () =>{
-           
-              mainForm.submit()
-              mainForm2.submit()
-              console.log(list)
+            <Button type="primary" onClick={() =>{
+               mainForm.submit()
+            //  await add()
               if(formName===""){
                 return  message.error("请填写表名");
               }
               if(notes===""){
                 return message.error("请填写注释");
               }
-    
+              
               // if(Rindex!==tableData2.length){
               //   return message.error("关系您还有未填写内容");
               // }
@@ -173,24 +175,24 @@ export default (props)=>{
               //   return item.column_name
               //  }):[]
               // console.log(deleteColumnList)
-              // HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path[0][0]==="L"?path[1]:path,table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path[0].slice(1):"",columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[]})).then(res => {
-              //   console.log(res)
-              //   if (res.resultCode == "1000") {   
-              //       HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
-              //           if (res.resultCode == "1000") {
-              //             message.success('保存成功');
-              //             // console.log(res)
-              //             props.history.push('/dataAsset/modelList')
-              //           }
-              //           else {
-              //               message.error(res.message);
-              //           }
-              //       })
-              //   }
-              //   else {
-              //       message.error(res.message);
-              //   }
-              // })
+              HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path[0][0]==="L"?path[1]:path,table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path[0].slice(1):"",columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[]})).then(res => {
+                console.log(res)
+                if (res.resultCode == "1000") {   
+                    HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
+                        if (res.resultCode == "1000") {
+                          message.success('保存成功');
+                          // console.log(res)
+                          props.history.push('/dataAsset/modelList')
+                        }
+                        else {
+                            message.error(res.message);
+                        }
+                    })
+                }
+                else {
+                    message.error(res.message);
+                }
+              })
               // console.log(tableData)
             }}>保存</Button>
           </div>
@@ -214,6 +216,7 @@ export default (props)=>{
                     </Radio.Group>
                 </div>
                 <div style={{float:"right"}}>
+                
                 <Button
                     style={{
                       marginRight:"10px"
@@ -242,7 +245,7 @@ export default (props)=>{
                   display:formtext==="xxx1"?"block":"none"
                 }}
                 form={mainForm}
-                onFinish={async (values) => {
+                onFinish={(values) => {
                   //验证tableForm
                     tableForm.validateFields()
                     .then(() => {
@@ -253,7 +256,22 @@ export default (props)=>{
                         lineDelete:tableRef.current.getDeleteData()
                       }
                       setList("成功")
-                      
+                    }) .catch(errorInfo => {
+                      //验证失败
+                      setList("失败")
+                      message.error('保存失败您还有未填写内容');
+                    });
+
+                    tableForm.validateFields()
+                    .then(() => {
+                      //验证成功
+                      let postData={
+                        ...values,
+                        lineForm:tableData,
+                        lineDelete:tableRef.current.getDeleteData()
+                      }
+                      setList("成功")
+                      setList("成功")
                     }) .catch(errorInfo => {
                       //验证失败
                       setList("失败")
