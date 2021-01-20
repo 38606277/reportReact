@@ -251,7 +251,7 @@ export default (props)=>{
                                     precision={2}
                                     valueStyle={{ color: '#3f8600' }}
                                 />
-                                 <h3 style={{fontWeight:"600",textAlign:"center",fontSize:"18px"}}>申请者</h3>
+                                 <h3 style={{fontWeight:"600",textAlign:"center",fontSize:"18px",color:"#1890ff"}}>申请者</h3>
                                 </Card>
                         </Col>
                     </Row>

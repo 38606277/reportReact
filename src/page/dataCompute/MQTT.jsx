@@ -98,11 +98,6 @@ export default ()=>{
       settitleSelect(e)
     }
     useEffect(()=>{
-      ( async ()=>{
-        await HttpService.post("/reportServer/mqttTask/createMqttTask",null).then(res=>{
-          console.log(res)
-        })
-      })();
     },[])
     const columns = [
       {

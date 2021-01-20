@@ -275,7 +275,7 @@ export default (props)=>{
                     }) .catch(errorInfo => {
                       //验证失败
                       setList("失败")
-                      message.error('保存失败您还有未填写内容');
+                      // message.error('保存失败您还有未填写内容');
                     });
                   
                 }} >
@@ -374,7 +374,7 @@ export default (props)=>{
                     }) .catch(errorInfo => {
                       //验证失败
                       setList2("失败")
-                      message.error('保存失败您还有未填写内容');
+                      // message.error('保存失败您还有未填写内容');
                     });
                   
                 }} >
