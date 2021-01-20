@@ -49,22 +49,111 @@ const layout = {
   };
 const options1=[{value:"服务器1"},{value:"服务器2"}]
 const options2=[{value:"主题1"},{value:"主题2"}]
-const options3=[{value:"数据库1"},{value:"数据库2"},{value:"数据库3"}]
-const options4=[{value:"表1"},{value:"表2"},{value:"表3"},{value:"表4"}]
 const options5=[{value:"请选择表sql1"},{value:"请选择表sql2"}]
 const options6=[{value:"启动"},{value:"停止"}]
 export default (props)=>{
     const {visible,handleOk,handleCancel,text}=props
+    const [host,sethost]=useState("")//目标服务器
+    const [topic_id,settopic_id]=useState("")//主题
+    const [sql_script,setsql_script]=useState("")//texttarea
+    const [clientinid,setclientinid]=useState("")//任务名称
+    const [username,setusername]=useState("")//maqtt账号
+    const [password,setpassword]=useState("")//mqtt密码
+    const [keepalibe,setkeepalibe]=useState(1)
+    const [options3,setoptions3]=useState([])//数据库list
+    const [targetDB,settargetDB]=useState("")//库的内容
+    const [options4,setoptions4]=useState([])//表的list
+    const [targetTable,settargetTable]=useState("")//表的内容
+    const [state,setstate]=useState("")
     const editorsql=useRef()
     const [TaskType,setTaskType]=useState("")//任务类型
     useEffect(()=>{
-
+        (async ()=>{
+            await HttpService.post('/reportServer/DBConnection/ListAll', JSON.stringify({})).then(res => {
+                console.log(res)
+                const Clist=[]
+                // setdata(set)
+                res.forEach(item=>{
+                    let index=Clist.findIndex(items=>{return items.text===item.dbtype})
+                    if(index===-1){
+                        Clist.push({
+                            text:item.dbtype,
+                            value:item.dbtype,
+                        })
+                    }
+                })
+                setoptions3(Clist)
+            }, errMsg => {
+                // this.setState({
+                //     list: [], loading: false
+                // });
+            }); 
+        })()
     },[])
     const mhandleOk=()=>{
-        handleOk(false)
+        const obj={
+            id:null,
+            host,
+            topic_id,
+            targetDB,
+            targetTable,
+            sql_script,
+            state,
+            clientinid,
+            username,
+            password,
+            keepalibe
+        }
+        const arr=[host,
+            topic_id,
+            targetDB,
+            targetTable,
+            sql_script,
+            state,
+            clientinid,
+            username,
+            password,
+            keepalibe]
+        const Tips=[
+            "目标服务器不可为空",
+            "主题不可为空",
+            "未选择数据库",
+            "未选择表",
+            "texttarea可不为空",
+            "未选择状态",
+            "服务名称",
+            "mqtt服务器登录用户名不可为空",
+            "mqtt服务器密码不可为空",
+            "请填写执行间隔"
+        ]
+        if(Tips[arr.indexOf('')]){
+            message.warning(Tips[arr.indexOf('')])
+            return 
+            }
+
+        HttpService.post('/reportServer/mqttTask/createMqttTask', JSON.stringify({obj})).then(res => {
+            message.warning(res.message+res.resultCode)
+            console.log(res)
+        })
+       
+        // handleOk(false)
     }
     const mhandleCancel=()=>{
         handleCancel(false)
+    }
+    const changeclass =(e)=>{//数据库change事件
+        HttpService.post('/reportServer/DBConnection/ListAll', JSON.stringify({})).then(res => {
+            const Tlist=res.filter(item=>{
+                if(item.dbtype===e){
+                    return {
+                        value:item.name,
+                    }
+                }
+            })
+            setoptions4(Tlist.map(item=>{return { value:item.name,}}))
+        })
+        settargetDB(e)
+        settargetTable("")
     }
     return (
         <Modal
@@ -85,8 +174,11 @@ export default (props)=>{
                             rules={[{ required: true, message: '请输入目标服务器!' }]}
                         >
                                <Input
+                               value={host}
                                 size="middle"
-                                    placeholder="请输入目标服务器"
+                                style={{width:"220px"}}
+                                placeholder="请输入目标服务器"
+                                onChange={e=>sethost(e.target.value)}
                             />
                             {/* <Select
                                 style={{ width: '200px' }}
@@ -98,18 +190,25 @@ export default (props)=>{
                         /> */}
                         </Form.Item>
                         <Form.Item
-                            label="主题选择"
-                            name="主题选择"
-                            rules={[{ required: true, message: '请选择主题' }]}
+                            label="主题"
+                            name="主题"
+                            rules={[{ required: true, message: '请填写主题' }]}
                         >
-                            <Select
+                               <Input
+                                size="middle"
+                                value={topic_id}
+                                style={{width:"220px"}}
+                                placeholder="请填写主题"
+                                onChange={e=>settopic_id(e.target.value)}
+                            />
+                            {/* <Select
                                 style={{ width: '200px' }}
                                 size="middle"
                                 showArrow
                                 allowClear
                                 placeholder="请选择主题"
                                 options={options2}
-                        />
+                        /> */}
                         </Form.Item>
                         <Form.Item
                             label="数据库选择"
@@ -117,12 +216,15 @@ export default (props)=>{
                             rules={[{ required: true, message: '请选择数据库' }]}
                         >
                             <Select
-                                style={{ width: '200px' }}
+                                style={{ width: '220px' }}
                                 size="middle"
                                 showArrow
                                 allowClear
-                                placeholder="请选择目标数据库"
+                                value={targetDB}
                                 options={options3}
+                                onChange={(e)=>{
+                                    changeclass(e)
+                                }}
                         />
                         </Form.Item>
                         <Form.Item
@@ -131,27 +233,36 @@ export default (props)=>{
                             rules={[{ required: true, message: '请选择表' }]}
                         >
                             <Select
-                                style={{ width: '200px' }}
+                                style={{ width: '220px' }}
                                 size="middle"
                                 showArrow
                                 allowClear
                                 placeholder="请选择表"
                                 options={options4}
+                                value={targetTable}
+                                onChange={settargetTable}
                         />
                         </Form.Item>
                         <Form.Item
                             label="textarea"
                             name="textarea"
-                            rules={[{ required: true, message: '请选择表sql!' }]}
+                            rules={[{ required: true, message: '请填写textarea!' }]}
                         >
-                            <Select
+                            <Input
+                                size="middle"
+                                value={sql_script}
+                                onChange={e=>setsql_script(e.target.value)}
+                                style={{width:"220px"}}
+                                    placeholder="请填写textarea"
+                            />
+                            {/* <Select
                                 style={{ width: '200px' }}
                                 size="middle"
                                 showArrow
                                 allowClear
                                 placeholder="请选择表sql"
                                 options={options5}
-                        />
+                        /> */}
                         </Form.Item>
                         <Form.Item
                             label="状态"
@@ -159,31 +270,16 @@ export default (props)=>{
                             rules={[{ required: true, message: '请选择状态!' }]}
                         >
                             <Select
-                                style={{ width: '200px' }}
+                                style={{ width: '220px' }}
                                 size="middle"
                                 showArrow
                                 allowClear
+                                value={state}
                                 placeholder="请选择状态"
                                 options={options6}
+                                onChange={setstate}
                         />
                         </Form.Item>
-                        {
-                            TaskType==="DataX任务"?
-                            <Form.Item
-                            label="辅助参数"
-                            name="辅助参数"
-                            rules={[{ required: true, message: 'Please input your username!' }]}
-                            >
-                                <Select
-                                    style={{ width: '200px' }}
-                                    size="middle"
-                                    showArrow
-                                    allowClear
-                                    placeholder="请选择辅助参数"
-                                    options={options7}
-                            />
-                            </Form.Item>:null
-                            }
                     </Form>
                 </Col>
                 <Col sm={10} style={{marginLeft:"100px"}}>
@@ -196,8 +292,10 @@ export default (props)=>{
                             rules={[{ required: true, message: 'Please input your username!' }]}
                             >
                                 <Input
+                                value={clientinid}
                                 size="middle"
-                                    placeholder="请输入任务名称"
+                                onChange={e=>{setclientinid(e.target.value)}}
+                                placeholder="请输入任务名称"
                             />
                             </Form.Item>
                         <Form.Item
@@ -207,6 +305,8 @@ export default (props)=>{
                             >
                                 <Input
                                 size="middle"
+                                value={username}
+                                onChange={e=>setusername(e.target.value)}
                                     placeholder="mqtt服务器登录用户名"
                             />
                         </Form.Item>
@@ -217,10 +317,12 @@ export default (props)=>{
                             >
                                 <Input.Password 
                                 size="middle"
-                                    placeholder="请输入mqtt服务密码"
+                                value={password}
+                                onChange={e=>setpassword(e.target.value)}
+                                placeholder="请输入mqtt服务密码"
                             />
                         </Form.Item>
-                        <Form.Item
+                        {/* <Form.Item
                             label="失败重试次数"
                             name="失败重试次数"
                             rules={[{ required: true, message: 'Please input your username!' }]}
@@ -230,16 +332,18 @@ export default (props)=>{
                                 style={{ width: '260px' }}
                                     placeholder="请输入失败重试次数"
                             />
-                        </Form.Item>
+                        </Form.Item> */}
                         <Form.Item
                             label="间隔时间"
                             name="间隔时间"
                             rules={[{ required: true, message: '请输入间隔时间' }]}
                             >
                                 <InputNumber
+                                value={keepalibe}
+                                onChange={e=>{setkeepalibe(e.target.value)}}
                                 style={{ width: '228px' }}
                                 size="middle"
-                                    placeholder="间隔时间"
+                                placeholder="间隔时间"
                             />
                             秒
                         </Form.Item>

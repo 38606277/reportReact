@@ -198,7 +198,7 @@ export default (props)=>{
     const setlist=()=>{
         clearInterval(tiem.current)
     }
-    return (<Card title={'echarts'}>
+    return (<Card title={title}>
         <div onClick={()=>{
             setlist()
         }}>
