@@ -54,7 +54,7 @@ const options6=[{value:"启动"},{value:"停止"}]
 export default (props)=>{
     const {visible,handleOk,handleCancel,text}=props
     const [host,sethost]=useState("")//目标服务器
-    const [topic_id,settopic_id]=useState("")//主题
+    const [topic,settopic]=useState("")//主题
     const [sql_script,setsql_script]=useState("")//texttarea
     const [clientinid,setclientinid]=useState("")//任务名称
     const [username,setusername]=useState("")//maqtt账号
@@ -94,7 +94,7 @@ export default (props)=>{
         const obj={
             id:null,
             host,
-            topic_id,
+            topic,
             targetDB,
             targetTable,
             sql_script,
@@ -105,7 +105,7 @@ export default (props)=>{
             keepalibe
         }
         const arr=[host,
-            topic_id,
+            topic,
             targetDB,
             targetTable,
             sql_script,
@@ -197,10 +197,10 @@ export default (props)=>{
                         >
                                <Input
                                 size="middle"
-                                value={topic_id}
+                                value={topic}
                                 style={{width:"220px"}}
                                 placeholder="请填写主题"
-                                onChange={e=>settopic_id(e.target.value)}
+                                onChange={e=>settopic(e.target.value)}
                             />
                             {/* <Select
                                 style={{ width: '200px' }}
