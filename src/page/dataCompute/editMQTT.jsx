@@ -82,16 +82,20 @@ export default (props)=>{
                         <Form.Item
                             label="目标服务器"
                             name="目标服务器"
-                            rules={[{ required: true, message: 'Please input your username!' }]}
+                            rules={[{ required: true, message: '请输入目标服务器!' }]}
                         >
-                            <Select
+                               <Input
+                                size="middle"
+                                    placeholder="请输入目标服务器"
+                            />
+                            {/* <Select
                                 style={{ width: '200px' }}
                                 size="middle"
                                 showArrow
                                 allowClear
                                 placeholder="请选择目标服务器"
                                 options={options1}
-                        />
+                        /> */}
                         </Form.Item>
                         <Form.Item
                             label="主题选择"
@@ -136,8 +140,8 @@ export default (props)=>{
                         />
                         </Form.Item>
                         <Form.Item
-                            label="表sql"
-                            name="表sql"
+                            label="textarea"
+                            name="textarea"
                             rules={[{ required: true, message: '请选择表sql!' }]}
                         >
                             <Select

@@ -259,25 +259,8 @@ export default (props)=>{
                     }) .catch(errorInfo => {
                       //验证失败
                       setList("失败")
-                      message.error('保存失败您还有未填写内容');
-                    });
-
-                    tableForm.validateFields()
-                    .then(() => {
-                      //验证成功
-                      let postData={
-                        ...values,
-                        lineForm:tableData,
-                        lineDelete:tableRef.current.getDeleteData()
-                      }
-                      setList("成功")
-                      setList("成功")
-                    }) .catch(errorInfo => {
-                      //验证失败
-                      setList("失败")
                       // message.error('保存失败您还有未填写内容');
                     });
-                  
                 }} >
 
                 {/* <ProCard
