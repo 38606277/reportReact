@@ -8,7 +8,7 @@ import 'antd/dist/antd.css';
 import './App.css'
 import LocalStorge from './util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
-
+import * as serviceWorker from './serviceWorker';
 
 // import Layout from './page/main/Layout.jsx';
 
@@ -231,3 +231,4 @@ ReactDOM.render(
     <App />,
     document.getElementById('app')
 );
+serviceWorker.unregister();

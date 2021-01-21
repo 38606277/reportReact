@@ -116,13 +116,10 @@ export default ()=>{
         dataIndex: 'state',
         key: 'state',
         render:(tags,text)=>{
-          let state=tags===0?"停止":"开启"
+          let state=tags==="0"?false:true
           return <Switch checkedChildren="开启" unCheckedChildren="停止" defaultChecked={state} onChange={e=>{
-            console.log(e)
-            HttpService.post('/reportServer/mqttTask/updateState', JSON.stringify({id:text.id,state:tags===false?0:1})).then(res => {
-              console.log(res)
-         
-          
+            HttpService.post('/reportServer/mqttTask/updateState', JSON.stringify({id:text.id,state:e===false?"0":"1"})).then(res => {
+              getList(1,10,"","")
           }, errMsg => {
               // this.setState({
               //     list: [], loading: false
@@ -139,42 +136,6 @@ export default ()=>{
             });
           }}/>
         }
-      },
-      {
-        title: '目标数据库',
-        dataIndex: 'targetDB',
-        key: 'targetDB',
-        render: res=>(
-          <Popover placement="top" content={
-            res
-          } trigger="click">
-            <Button>查看</Button>
-          </Popover>
-        )
-      },
-      {
-        title: '目标表',
-        key: 'targetTable',
-        dataIndex: 'targetTable',
-        render: res => (
-          <Popover placement="top" content={
-            res
-          } trigger="click">
-            <Button>查看</Button>
-          </Popover>
-        ),
-      },
-      {
-        title: '表sql',
-        key: 'sql_script',
-        dataIndex: 'sql_script',
-        render: res => (
-          <Popover placement="top" content={
-            res
-          } trigger="click">
-            <Button>查看</Button>
-          </Popover>
-        ),
       },
       {
         title: '数据监控',
@@ -205,20 +166,10 @@ export default ()=>{
                 </a>
               </Menu.Item>
               <Menu.Item>
-                <a target="_blank" onClick={()=>
+                <a onClick={()=>
                   {
-                    HttpService.post('/reportServer/mqttTask/deleteMqttTaskById', JSON.stringify({id:ress.id})).then(res => {
-                      if(res.resultCode==="1000"){
-                        getList(1,10,"","")
-                        // setdata(res.data.list)
-                        // setTotal(res.data.total)
-                      }
-                  
-                  }, errMsg => {
-                      // this.setState({
-                      //     list: [], loading: false
-                      // });
-                  });
+                    console.log(ress.id)
+                    remoeList(ress.id)
                   }
                   }>
                   删除
@@ -245,6 +196,21 @@ export default ()=>{
   const onShowSizeChange =(current, pageSize)=>{
       setStartIndex(1)
       setPerPage(pageSize)
+  }
+  const remoeList=(id)=>{
+    getList(1,10,"","")
+    HttpService.post('/reportServer/mqttTask/deleteMqttTaskById', JSON.stringify({id:id})).then(res => {
+      if(res.resultCode==="1000"){
+      
+        // setdata(res.data.list)
+        // setTotal(res.data.total)
+      }
+  
+  }, errMsg => {
+      // this.setState({
+      //     list: [], loading: false
+      // });
+  });
   }
     return (
         <Card title="MQTT任务管理">

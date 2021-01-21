@@ -201,89 +201,48 @@ export default (props)=>{
                         {...layout}
                     >
                         <Form.Item
-                            label="任务名称"
-                            name="任务名称"
-                            rules={[{ required: true, message: 'Please input your username!' }]}
-                            >
-                                <Input
-                                value={clientinid}
-                                size="middle"
-                                style={{width:"220px"}}
-                                onChange={e=>{setclientinid(e.target.value)}}
-                                placeholder="请输入任务名称"
-                            />
-                        </Form.Item>
-                    </Form>
-                </Col>
-                <Col sm={10} style={{marginLeft:"10px"}}></Col>
-            </Row>
-            <Row>
-                <Col sm={10}>
-                    <Form
-                        {...layout}
-                    >
-                          <Form.Item
-                            label="textarea"
-                            name="textarea"
-                            rules={[{ required: true, message: '请填写textarea!' }]}
+                            label="目标服务器"
+                            name="目标服务器"
+                            rules={[{ required: true, message: '请输入目标服务器!' }]}
                         >
-                            <Input
+                               <Input
+                               value={host}
                                 size="middle"
-                                value={sql_script}
-                                onChange={e=>setsql_script(e.target.value)}
                                 style={{width:"220px"}}
-                                    placeholder="请填写textarea"
+                                placeholder="请输入目标服务器"
+                                onChange={e=>sethost(e.target.value)}
                             />
+                            {/* <Select
+                                style={{ width: '200px' }}
+                                size="middle"
+                                showArrow
+                                allowClear
+                                placeholder="请选择目标服务器"
+                                options={options1}
+                        /> */}
                         </Form.Item>
-                    </Form>
-                </Col>
-                <Col sm={10} style={{marginLeft:"10px"}}></Col>
-            </Row>
-            <Row>
-                <Col sm={10}>
-                    <Form
-                        {...layout}
-                    >
                         <Form.Item
-                                label="目标服务器"
-                                name="目标服务器"
-                                rules={[{ required: true, message: '请输入目标服务器!' }]}
-                            >
-                                <Input
-                                value={host}
-                                    size="middle"
-                                    style={{width:"220px"}}
-                                    placeholder="请输入目标服务器"
-                                    onChange={e=>sethost(e.target.value)}
-                                />
-                            </Form.Item>
-                    </Form>
-                </Col>
-                <Col sm={10} style={{marginLeft:"10px"}}>
-                    <Form
-                        {...layout}
-                    >
-                    <Form.Item
                             label="主题"
                             name="主题"
                             rules={[{ required: true, message: '请填写主题' }]}
                         >
-                                <Input
+                               <Input
                                 size="middle"
                                 value={topic}
+                                style={{width:"220px"}}
                                 placeholder="请填写主题"
                                 onChange={e=>settopic(e.target.value)}
                             />
+                            {/* <Select
+                                style={{ width: '200px' }}
+                                size="middle"
+                                showArrow
+                                allowClear
+                                placeholder="请选择主题"
+                                options={options2}
+                        /> */}
                         </Form.Item>
-                    </Form>
-                </Col>
-            </Row>
-            <Row>
-                <Col sm={10}>
-                    <Form
-                        {...layout}
-                    >
-                          <Form.Item
+                        <Form.Item
                             label="目标数据库"
                             label="目标数据库"
                             rules={[{ required: true, message: '请选择目标数据库' }]}
@@ -301,12 +260,6 @@ export default (props)=>{
                                 }}
                         />
                         </Form.Item>
-                    </Form>
-                </Col>
-                <Col sm={10} style={{marginLeft:"10px"}}>
-                    <Form
-                        {...layout}
-                    >
                         <Form.Item
                             label="目标表"
                             name="目标表"
@@ -314,6 +267,7 @@ export default (props)=>{
                         >
                             <Select
                                  placeholder="请选择目标表"
+                                style={{ width: '220px' }}
                                 size="middle"
                                 showArrow
                                 allowClear
@@ -323,54 +277,28 @@ export default (props)=>{
                                 onChange={settargetTable}
                         />
                         </Form.Item>
-                    </Form>
-                </Col>
-            </Row>
-            <Row>
-                <Col sm={10}>
-                    <Form
-                        {...layout}
-                    >
-                       <Form.Item
-                            label="mqtt服务器用户名"
-                            name="mqtt服务器用户名"
-                            rules={[{ required: true, message: '请输入mqtt服务器登录用户名' }]}
-                            >
-                                <Input
-                                size="middle"
-                                style={{width:"220px"}}
-                                value={username}
-                                onChange={e=>setusername(e.target.value)}
-                                    placeholder="mqtt服务器登录用户名"
-                            />
-                        </Form.Item>
-                    </Form>
-                </Col>
-                <Col sm={10} style={{marginLeft:"10px"}}>
-                    <Form
-                        {...layout}
-                    >
                         <Form.Item
-                            label="mqtt服务密码"
-                            name="mqtt服务密码"
-                            rules={[{ required: true, message: '请输入mqtt服务密码!' }]}
-                            >
-                                <Input.Password 
+                            label="textarea"
+                            name="textarea"
+                            rules={[{ required: true, message: '请填写textarea!' }]}
+                        >
+                            <Input
                                 size="middle"
-                                value={password}
-                                onChange={e=>setpassword(e.target.value)}
-                                placeholder="请输入mqtt服务密码"
+                                value={sql_script}
+                                onChange={e=>setsql_script(e.target.value)}
+                                style={{width:"220px"}}
+                                    placeholder="请填写textarea"
                             />
+                            {/* <Select
+                                style={{ width: '200px' }}
+                                size="middle"
+                                showArrow
+                                allowClear
+                                placeholder="请选择表sql"
+                                options={options5}
+                        /> */}
                         </Form.Item>
-                    </Form>
-                </Col>
-            </Row>
-            <Row>
-                <Col sm={10}>
-                    <Form
-                        {...layout}
-                    >
-                           <Form.Item
+                        <Form.Item
                             label="状态"
                             name="状态"
                             rules={[{ required: true, message: '请选择状态!' }]}
@@ -388,10 +316,57 @@ export default (props)=>{
                         </Form.Item>
                     </Form>
                 </Col>
-                <Col sm={10} style={{marginLeft:"10px"}}>
-                    <Form
-                        {...layout}
+                <Col sm={10} style={{marginLeft:"100px"}}>
+                    <Form 
+                           {...layout}
                     >
+                        <Form.Item
+                            label="任务名称"
+                            name="任务名称"
+                            rules={[{ required: true, message: 'Please input your username!' }]}
+                            >
+                                <Input
+                                value={clientinid}
+                                size="middle"
+                                onChange={e=>{setclientinid(e.target.value)}}
+                                placeholder="请输入任务名称"
+                            />
+                            </Form.Item>
+                        <Form.Item
+                            label="mqtt服务器用户名"
+                            name="mqtt服务器用户名"
+                            rules={[{ required: true, message: '请输入mqtt服务器登录用户名' }]}
+                            >
+                                <Input
+                                size="middle"
+                                value={username}
+                                onChange={e=>setusername(e.target.value)}
+                                    placeholder="mqtt服务器登录用户名"
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            label="mqtt服务密码"
+                            name="mqtt服务密码"
+                            rules={[{ required: true, message: '请输入mqtt服务密码!' }]}
+                            >
+                                <Input.Password 
+                                size="middle"
+                                value={password}
+                                onChange={e=>setpassword(e.target.value)}
+                                placeholder="请输入mqtt服务密码"
+                            />
+                        </Form.Item>
+                        {/* <Form.Item
+                            label="失败重试次数"
+                            name="失败重试次数"
+                            rules={[{ required: true, message: 'Please input your username!' }]}
+                            >
+                                <InputNumber
+                                size="middle"
+                                style={{ width: '260px' }}
+                                    placeholder="请输入失败重试次数"
+                            />
+                        </Form.Item> */}
                         <Form.Item
                             label="间隔时间"
                             name="间隔时间"
@@ -400,7 +375,7 @@ export default (props)=>{
                                 <InputNumber
                                 value={keepalibe}
                                 onChange={e=>{setkeepalibe(e.target.value)}}
-                                style={{ width: '220px' }}
+                                style={{ width: '228px' }}
                                 size="middle"
                                 placeholder="间隔时间"
                             />

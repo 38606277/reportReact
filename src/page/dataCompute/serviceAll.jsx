@@ -49,7 +49,7 @@ import 'echarts/lib/component/title';
 import 'echarts/lib/component/legend'
 import 'echarts/lib/chart/pie';
 import one from './setXList.js'
-
+import style from './serviceAll.less'
 
 const sele=["近12小时","近1天","近7天","近30天"]
 const sele2=["今日","本周","本月","本年"]
@@ -189,7 +189,6 @@ export default (props)=>{
 
  
     return (<Card title={"数据服务总览"}>
-        <div style={{minWidth:"1266px"}}>
             <Radio.Group onChange={onChange} defaultValue="a" buttonStyle="solid">
                 <Radio.Button value="a">开发API</Radio.Button>
                 <Divider type="vertical" />
@@ -309,76 +308,54 @@ export default (props)=>{
                         </Col>
                     </Row>
                 </Col>
-                <Col sm={7} style={{marginLeft:"10px"}}>
+                <div sm={7}  className={style.right}>
                     {
                         Rstatistic?
-                        <Row gutter={16}>
-                        <Col span={8}>
-                            <Card>
-                            <Statistic
-                                value={11.28}
-                                precision={2}
-                                valueStyle={{ color: '#3f8600' }}
-                            />
-                            <h3 style={{fontWeight:"600",textAlign:"center",fontSize:"18px"}}>已发布</h3>
-                            </Card>
-                        </Col>
-                        <Col span={8}>
-                    
-                        <Card>
-                            <Statistic
-                                value={11.28}
-                                precision={2}
-                                valueStyle={{ color: '#3f8600' }}
-                            />
-                              <h3 style={{fontWeight:"600",textAlign:"center",fontSize:"18px"}}>开发中</h3>
-                            </Card>
-                        
-                        </Col>
-                        <Col span={8}>
-                            <Card>
-                                <Statistic
-                                    value={11.28}
-                                    precision={2}
-                                    valueStyle={{ color: '#3f8600' }}
-                                />
-                                 <h3 style={{fontWeight:"600",textAlign:"center",fontSize:"18px"}}>申请者</h3>
-                                </Card>
-                        </Col>
+                        <Row gutter={16} className={style.rightTitle} justify="space-between">
+                            <div className={style.rightTitleList}>
+                                <div className={style.rightTitleListTitle}>11.23</div>
+                                <div className={style.rightTitleListText}>已发布</div>
+                            </div>
+                            <div className={style.border}></div>
+                            <div  className={style.rightTitleList}>
+                                <div className={style.rightTitleListTitle}>11.23</div>
+                                <div className={style.rightTitleListText}>已发布</div>
+                            </div>
+                            <div className={style.border}></div>
+                            <div  className={style.rightTitleList}>
+                                <div className={style.rightTitleListTitle}>11.23</div>
+                                <div className={style.rightTitleListText}>已发布</div>
+                            </div>
                     </Row>:
-                        <Card style={{textAlign:"center"}}>
-                                <Statistic
-                                    value={11.28}
-                                    precision={2}
-                                    valueStyle={{ color: '#3f8600' }}
-                                />
-                                <h3 style={{fontWeight:"600",textAlign:"center",fontSize:"18px"}}>已申请</h3>
-                        </Card>
+                        <div className={style.rightTitle}>
+                            <div>
+                                <div className={style.rightTitleListTitle2}>11.23</div>
+                                <div className={style.rightTitleListText2}>已申请</div>
+                            </div> 
+                        </div>
                     }
                    
-                    <Card style={{marginTop:"10px"}}>
+                    <Card className={style.rightBottom}>
                         <Row gutter={16} justify="space-between" >
-                            <Col>1.12~1.19 总调用</Col>
-                            <Col>0</Col>
+                            <Col style={{color:"#252b3a",fontSize:"14px"}}>1.12~1.19 总调用</Col>
+                            <Col className={style.rightBottomnumber}>0</Col>
                         </Row>
                         <Row>
-                         <Divider dashed></Divider>
+                         <Divider dashed style={{marginTop:"-1px"}}></Divider>
                         </Row>
                         <Row justify="space-between">
                             <Col>
                                 <Statistic
                                     title="成功"
-                                    value={118}
-                                    precision={2}
-                                    valueStyle={{ color: '#3f8600' }}
+                                    value={0}
+                                    valueStyle={{ color: '#50d4ab',fontSize:"18px"}}
                                 />
                             </Col>
                             <Col>
                                 <Statistic
                                     title="失败"
-                                    value={8}
-                                    precision={2}
-                                    valueStyle={{ color: 'red' }}
+                                    value={0}
+                                    valueStyle={{ color: '#ff6464' ,fontSize:"18px"}}
                                 />
                             </Col>
                         </Row>
@@ -386,23 +363,20 @@ export default (props)=>{
                             <Col>
                                 <Statistic
                                     title="合法"
-                                    value={1128}
-                                    precision={2}
-                                    valueStyle={{ color: '#3f8600' }}
+                                    value={0}
+                                    valueStyle={{ color: '#50d4ab' ,fontSize:"18px"}}
                                 />
                             </Col>
                             <Col>
                                 <Statistic
                                     title="非法"
-                                    value={11}
-                                    precision={2}
-                                    valueStyle={{ color: 'red' }}
+                                    value={0}
+                                    valueStyle={{ color: '#ff6464' ,fontSize:"18px"}}
                                 />
                             </Col>
                         </Row>
                     </Card>
-                </Col>
+                </div>
             </Row>
-        </div>
     </Card>)
 }
