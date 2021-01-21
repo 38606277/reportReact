@@ -91,6 +91,7 @@
     "less-loader": "^4.1.0",
     "lodash": "^4.17.10",
     "lodash-decorators": "^6.0.0",
+    "luckyexcel": "^1.0.1",
     "numeral": "^2.0.6",
     "nzh": "^1.0.4",
     "plotly.js": "^1.42.5",

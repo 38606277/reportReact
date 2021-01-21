@@ -364,7 +364,7 @@ export default ()=>{
                                                 )
                                             }}
                                         >
-                                                <MoreOutlined style={{color:backgroundindex===index?"#fff":"#40a9ff"}}/>
+                                                <MoreOutlined  className={style.MICNS} style={{color:backgroundindex===index?"#fff":"#40a9ff"}}/>
                                         </Popover >
                                 </List.Item>}
                                 />

@@ -32,53 +32,7 @@ import {
 // import 
 import HttpService from '../../util/HttpService.jsx';
 import MI from './mecharts.jsx'
-const data = [
-  {
-    key: '1',
-    host: 'John Brown',
-    keepalibe: 32,
-    topic_id:"主题1",
-    Cron:"1",
-    route:"随机",
-    state:0,
-    types:"成功",
-    clientinid: 'New York No. 1 Lake Park',
-    targetTable: ['nice', 'developer'],
-    timeout:"否",
-    targetDB:["数据库1","数据库2"],
-    sql_script:["1"]
-  },
-  {
-    key: '2',
-    host: 'Jim Green',
-    keepalibe: 42,
-    topic_id:"主题2",
-    Cron:"1",
-    route:"随机",
-    state:0,
-    types:"成功",
-    clientinid: 'London No. 1 Lake Park',
-    targetTable: ['loser'],
-    timeout:"否",
-    targetDB:["数据库1","数据库2"],
-    sql_script:["1"]
-  },
-  {
-    key: '3',
-    host: 'Joe Black',
-    keepalibe: 32,
-    topic_id:"主题3",
-    Cron:"1",
-    route:"随机",
-    state:1,
-    types:"成功",
-    clientinid: 'Sidney No. 1 Lake Park',
-    targetTable: ['cool', 'teacher'],
-    timeout:"否",
-    targetDB:["数据库1","数据库2"],
-    sql_script:["1"]
-  },
-];
+import { render } from 'less';
 const options = [{ value: 'gold' }, { value: 'lime' }, { value: 'green' }, { value: 'cyan' }];
 const options2 = [{ value: '任务1' }, { value: '任务2' }, { value: '任务3' }, { value: '任务4' }];
 const Lstyle={
@@ -90,6 +44,13 @@ export default ()=>{
     const [visible,setvisible]=useState(false)
     const [visible2,setvisible2]=useState(false)
     const [text,setText]=useState("新建任务")
+    const [data,setdata]=useState([])
+    const [topic,settopic]=useState("")//主题名称
+    const [clientinid,setclientinid]=useState("")//任务名称
+    const [startIndex,setStartIndex]=useState(1);//当前第几页
+    const [perPage,setPerPage]=useState(10);//一页显示第几条
+    const [total,setTotal]=useState(0);
+    const [datal,setDatal]=useState(null)
     const TitleSelect=(e)=>{
       if(e.length===0){
         settitleSelect("所属项目")
@@ -98,7 +59,24 @@ export default ()=>{
       settitleSelect(e)
     }
     useEffect(()=>{
+      (async()=>{
+          await getList(1,10,"","")
+      })()
     },[])
+    const getList=(startIndex,perPage,topic,clientinid)=>{//获取列表数据
+      HttpService.post('/reportServer/mqttTask/getMqttTaskList', JSON.stringify({startIndex,perPage,topic,clientinid})).then(res => {
+        console.log(res)
+        if(res.resultCode==="1000"){
+          setdata(res.data.list)
+          setTotal(res.data.total)
+        }
+    
+    }, errMsg => {
+        // this.setState({
+        //     list: [], loading: false
+        // });
+    });
+    }
     const columns = [
       {
         title: '目标服务器',
@@ -108,8 +86,15 @@ export default ()=>{
       },
       {
         title: '主题',
-        dataIndex: 'topic_id',
-        key: 'topic_id',
+        dataIndex: 'topic',
+        key: 'topic',
+        render:text=>{
+          return text.length>10? 
+            <Popover
+            content={<p>{text}</p>}
+            >{text.substring(0,11)}...</Popover>
+          :<div>{text}</div>
+        }
       },
       {
         title: '任务名称',
@@ -131,7 +116,18 @@ export default ()=>{
         dataIndex: 'state',
         key: 'state',
         render:(tags,text)=>{
-          return <Switch checkedChildren="开启" unCheckedChildren="停止" defaultChecked={tags} onChange={e=>{
+          let state=tags===0?"停止":"开启"
+          return <Switch checkedChildren="开启" unCheckedChildren="停止" defaultChecked={state} onChange={e=>{
+            console.log(e)
+            HttpService.post('/reportServer/mqttTask/updateState', JSON.stringify({id:text.id,state:tags===false?0:1})).then(res => {
+              console.log(res)
+         
+          
+          }, errMsg => {
+              // this.setState({
+              //     list: [], loading: false
+              // });
+          });
             notification.open({
               duration:2,
               message: text.name,
@@ -150,9 +146,7 @@ export default ()=>{
         key: 'targetDB',
         render: res=>(
           <Popover placement="top" content={
-            res.map(item=>{
-              return <Tag>{item}</Tag>
-            })
+            res
           } trigger="click">
             <Button>查看</Button>
           </Popover>
@@ -164,9 +158,7 @@ export default ()=>{
         dataIndex: 'targetTable',
         render: res => (
           <Popover placement="top" content={
-            res.map(item=>{
-              return <Tag>{item}</Tag>
-            })
+            res
           } trigger="click">
             <Button>查看</Button>
           </Popover>
@@ -178,9 +170,7 @@ export default ()=>{
         dataIndex: 'sql_script',
         render: res => (
           <Popover placement="top" content={
-            res.map(item=>{
-              return <Tag>{item}</Tag>
-            })
+            res
           } trigger="click">
             <Button>查看</Button>
           </Popover>
@@ -197,7 +187,7 @@ export default ()=>{
       {
         title: '操作',
         key: 'x',
-        render: (text, res) => (
+        render: (text, ress) => (
           <Dropdown
           trigger="click"
           overlay={()=>{
@@ -206,11 +196,32 @@ export default ()=>{
               <Menu.Item>
                 <a target="_blank" onClick={()=>
                   {
+                    setDatal(ress)
                     setvisible(true)
                     setText("编辑任务")
                   }
                   }>
-                  查看详情
+                  编辑
+                </a>
+              </Menu.Item>
+              <Menu.Item>
+                <a target="_blank" onClick={()=>
+                  {
+                    HttpService.post('/reportServer/mqttTask/deleteMqttTaskById', JSON.stringify({id:ress.id})).then(res => {
+                      if(res.resultCode==="1000"){
+                        getList(1,10,"","")
+                        // setdata(res.data.list)
+                        // setTotal(res.data.total)
+                      }
+                  
+                  }, errMsg => {
+                      // this.setState({
+                      //     list: [], loading: false
+                      // });
+                  });
+                  }
+                  }>
+                  删除
                 </a>
               </Menu.Item>
             </Menu>
@@ -223,37 +234,30 @@ export default ()=>{
         ),
       },
     ];
+    const search=()=>{//搜索
+      getList(1,10,topic,clientinid)
+    }
+    const setpagindex=(page, pageSize)=>{
+      console.log(page,pageSize)
+      setStartIndex(page)
+      setPerPage(pageSize)
+  }
+  const onShowSizeChange =(current, pageSize)=>{
+      setStartIndex(1)
+      setPerPage(pageSize)
+  }
     return (
         <Card title="MQTT任务管理">
             <Table columns={columns} dataSource={data}  title={()=>{
               return (<Row style={{marginBottom:"10px"}}>
                   <Col style={{...Lstyle}}>
-                    <Input placeholder="任务名称" size="middle"/>
+                    <Input placeholder="任务名称" size="middle" value={clientinid} onChange={e=>setclientinid(e.target.value)}/>
                   </Col>
                   <Col style={{...Lstyle}}>
-                    <Select
-                      size="middle"
-                      mode={titleSelect.length===0?"":"multiple"}
-                      placeholder="所属主题"
-                      showArrow
-                      defaultValue={titleSelect.length===0?null:titleSelect}
-                      style={{ width: '200px' }}
-                      options={options}
-                      onChange={(e)=>{TitleSelect(e)}}
-                    />
+                    <Input placeholder="主题" size="middle" value={topic} onChange={e=>settopic(e.target.value)}/>
                   </Col>
-                  <Col style={{...Lstyle}}>
-                    <Select
-                        style={{ width: '200px' }}
-                        size="middle"
-                        showArrow
-                        allowClear
-                        placeholder="任务类型"
-                        options={options2}
-                  />
-                  </Col> 
                   <Col>
-                    <Button type="primary" icon={<SearchOutlined />}>
+                    <Button type="primary" icon={<SearchOutlined />} onClick={()=>search()}>
                       搜索
                     </Button>
                   </Col>
@@ -266,9 +270,17 @@ export default ()=>{
                     </Button>
                   </Col>
               </Row>)
-            }}/>
+            }}
+            pagination={false}
+            footer={()=>{
+                return (<div style={{display:"flow-root"}}>
+                    <Pagination style={{float:'right'}} defaultCurrent={startIndex} total={total} onChange={setpagindex} onShowSizeChange={onShowSizeChange}/>
+                </div>)
+            }}
             
-            <Mymodal visible={visible} handleOk={setvisible} handleCancel={setvisible} text={text}/>
+            />
+            
+            <Mymodal visible={visible} handleOk={setvisible} handleCancel={setvisible} text={text} getList={getList} datal={datal} setDatal={setDatal}/>
             <Modal 
               width="900px"
               visible={visible2}

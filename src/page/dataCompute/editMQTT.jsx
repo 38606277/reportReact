@@ -47,12 +47,9 @@ const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
   };
-const options1=[{value:"服务器1"},{value:"服务器2"}]
-const options2=[{value:"主题1"},{value:"主题2"}]
-const options5=[{value:"请选择表sql1"},{value:"请选择表sql2"}]
 const options6=[{value:"启动"},{value:"停止"}]
 export default (props)=>{
-    const {visible,handleOk,handleCancel,text}=props
+    const {visible,handleOk,handleCancel,text,getList,datal,setDatal}=props
     const [host,sethost]=useState("")//目标服务器
     const [topic,settopic]=useState("")//主题
     const [sql_script,setsql_script]=useState("")//texttarea
@@ -61,15 +58,27 @@ export default (props)=>{
     const [password,setpassword]=useState("")//mqtt密码
     const [keepalibe,setkeepalibe]=useState(1)
     const [options3,setoptions3]=useState([])//数据库list
-    const [targetDB,settargetDB]=useState("")//库的内容
+    const [targetDB,settargetDB]=useState(null)//库的内容
     const [options4,setoptions4]=useState([])//表的list
-    const [targetTable,settargetTable]=useState("")//表的内容
-    const [state,setstate]=useState("")
+    const [targetTable,settargetTable]=useState(null)//表的内容
+    const [state,setstate]=useState("停止")
     const editorsql=useRef()
-    const [TaskType,setTaskType]=useState("")//任务类型
     useEffect(()=>{
+        if(datal){
+            sethost(datal.host)
+            settopic(datal.topic)
+            setsql_script(datal.sql_script)
+            setclientinid(datal.clientinid)
+            setusername(datal.username)
+            setpassword(datal.password)
+            setkeepalibe(datal.keepalibe)
+            settargetDB(datal.targetDB)
+            settargetTable(datal.targetTable)
+            const i=state===0?"停止":"启动"
+            setstate(i)
+        }
         (async ()=>{
-            await HttpService.post('/reportServer/DBConnection/ListAll', JSON.stringify({})).then(res => {
+            await HttpService.post('/reportServer/DBConnection/ListAll', null).then(res => {
                 console.log(res)
                 const Clist=[]
                 // setdata(set)
@@ -89,11 +98,12 @@ export default (props)=>{
                 // });
             }); 
         })()
-    },[])
+    },[datal])
     const mhandleOk=()=>{
         const obj={
-            id:null,
+            id:datal?datal.id:null,
             host,
+            topic_id:null,
             topic,
             targetDB,
             targetTable,
@@ -131,16 +141,37 @@ export default (props)=>{
             message.warning(Tips[arr.indexOf('')])
             return 
             }
-
-        HttpService.post('/reportServer/mqttTask/createMqttTask', JSON.stringify({obj})).then(res => {
-            message.warning(res.message+res.resultCode)
-            console.log(res)
+        const pattIp=/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\:([0-9]|[1-9]\d{1,3}|[1-5]\d{4}|6[0-5]{2}[0-3][0-5])$/
+        // console.log(pattIp.test(host))
+        HttpService.post('/reportServer/mqttTask/createMqttTask', JSON.stringify({...obj})).then(res => {
+            if(res.message==="保存成功"){
+                creact()
+                message.success(res.message);
+                getList(1,10,"","")
+                handleOk(false)
+                return 
+            }
+            message.error(res.message,1)
         })
        
-        // handleOk(false)
+        // 
     }
     const mhandleCancel=()=>{
+        creact()
         handleCancel(false)
+    }
+    const creact =()=>{//清空数据
+        sethost("")
+        settopic("")
+        setsql_script("")
+        setclientinid("")
+        setusername("")
+        setpassword("")
+        setkeepalibe(1)
+        settargetDB("")
+        settargetTable("")
+        setstate("")
+        setDatal(null)
     }
     const changeclass =(e)=>{//数据库change事件
         HttpService.post('/reportServer/DBConnection/ListAll', JSON.stringify({})).then(res => {
@@ -212,11 +243,12 @@ export default (props)=>{
                         /> */}
                         </Form.Item>
                         <Form.Item
-                            label="数据库选择"
-                            label="数据库选择"
-                            rules={[{ required: true, message: '请选择数据库' }]}
+                            label="目标数据库"
+                            label="目标数据库"
+                            rules={[{ required: true, message: '请选择目标数据库' }]}
                         >
                             <Select
+                                placeholder="请选择目标数据库"
                                 style={{ width: '220px' }}
                                 size="middle"
                                 showArrow
@@ -229,11 +261,12 @@ export default (props)=>{
                         />
                         </Form.Item>
                         <Form.Item
-                            label="表选择"
-                            name="表选择"
-                            rules={[{ required: true, message: '请选择表' }]}
+                            label="目标表"
+                            name="目标表"
+                            rules={[{ required: true, message: '请选择目标  表' }]}
                         >
                             <Select
+                                 placeholder="请选择目标表"
                                 style={{ width: '220px' }}
                                 size="middle"
                                 showArrow

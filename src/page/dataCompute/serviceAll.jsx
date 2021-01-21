@@ -37,7 +37,8 @@ import {
     Switch,
     notification,
     Dropdown,
-    Statistic 
+    Statistic,
+    Empty 
 } from 'antd';
 // import 
 import HttpService from '../../util/HttpService.jsx';
@@ -52,6 +53,9 @@ import one from './setXList.js'
 
 const sele=["近12小时","近1天","近7天","近30天"]
 const sele2=["今日","本周","本月","本年"]
+const select3=["成功率","失败率","合法率","失败率"]
+const select4=["时长平均总值","成功时长平均总值","失败时长平均总值"]
+const select5=["调用总次数","成功次数","失败次数","合法次数","非法次数"]
 export default (props)=>{
     const {title}=props
     const [xAxis,setxAxis]=useState(["12: 00", "13: 00", "14: 00", "15: 00", "16: 00", "17: 00", "18: 00", "19: 00", "20: 00", "21: 00", "22: 00", "23: 00"])
@@ -61,6 +65,13 @@ export default (props)=>{
     const [main , setMain] = useState('')
     const [types,setTypes]=useState(true)
     const [text,settext]=useState("近12小时")
+    const [Data1,setData1]=useState("近12小时")//调用比例
+    const [method1,setmethod1]=useState("成功率")//合法率
+    const [Data2,setData2]=useState("近12小时")//调用时间
+    const [method2,setmethod2]=useState("时长平均总值")//平局值
+    const [Data3,setData3]=useState("近12小时")//调用次数
+    const [method3,setmethod3]=useState("调用总次数")//调用总次数
+    const [Rstatistic,setRstatistic]=useState(true)
     const option = {
         title:{
             text: '数据监控',
@@ -95,6 +106,7 @@ export default (props)=>{
         series: [...series]
     };
     function onChange(e) {
+        setRstatistic(!Rstatistic)
         if(e.target.value==="a"){
             setTypes(true)
             settext("近12小时")
@@ -113,13 +125,8 @@ export default (props)=>{
       }
     function handleChange(e){
         if(e==="调用总次数"){
-            console.log(series)
-            setseries([{
-                name: '调用总次数',
-                type: 'line',
-                stack: '总量',
-                areaStyle: {},
-                data: [120, 132, 101, 134, 90, 230, 210, 230, 210, 210, 230, 21]}])
+           const arr =[{name: '调用总次数',type: 'line',stack: '总量',areaStyle: {},data: [120, 132, 101, 134, 90, 230, 210, 230, 210, 210, 230, 21]}]
+            setseries([...arr])
         }
         if(e==="成功次数/失败次数"){
             setseries([{
@@ -169,7 +176,7 @@ export default (props)=>{
         setMain(ms.current)
         if(main !== ""){
             var myChart = echarts.init(main);
-            myChart.resize({ height: '256px',width:'840px' })
+            myChart.resize({ height: '256px',width:'764px' })
             myChart.setOption(option);
         }
     },[main,xAxis,series])
@@ -182,7 +189,7 @@ export default (props)=>{
 
  
     return (<Card title={"数据服务总览"}>
-        <div>
+        <div style={{minWidth:"1266px"}}>
             <Radio.Group onChange={onChange} defaultValue="a" buttonStyle="solid">
                 <Radio.Button value="a">开发API</Radio.Button>
                 <Divider type="vertical" />
@@ -191,37 +198,121 @@ export default (props)=>{
             <Divider />
             <Row>
                 <Col sm={16}>
-                    <Row>
-                        <Col sm={16}>
-                        <Radio.Group onChange={onChange} defaultValue="a" buttonStyle="solid" size="small">
-                            <Radio.Button value="a" onClick={()=>setSelect(sele)}>调用趋势</Radio.Button>
-                            <Radio.Button value="b" onClick={()=>setSelect(sele2)}>发展趋势</Radio.Button>
-                        </Radio.Group>
-                        </Col>
-                        <Col sm={8}>
-                            <Row>
-                                <Select value={text} style={{ width: 120 ,float:"left",marginRight:"10px",marginLeft:types?"0px":"120px"}} size="small" onChange={(e)=>getData(e)}>
+                    <Card>
+                        <Row style={{marginBottom:"20px"}}>
+                            <Col sm={16}> 
+                            <Radio.Group onChange={onChange} defaultValue="a" buttonStyle="solid" size="small">
+                                <Radio.Button value="a" onClick={()=>setSelect(sele)}>调用趋势</Radio.Button>
+                                <Radio.Button value="b" onClick={()=>setSelect(sele2)}>发展趋势</Radio.Button>
+                            </Radio.Group>
+                            </Col>
+                            <Col sm={8}>
+                                <Row>
+                                    <Select value={text} style={{ width: 120 ,float:"left",marginRight:"10px",marginLeft:types?"0px":"120px"}} size="small" onChange={(e)=>getData(e)}>
+                                        {
+                                            select.map((item,index)=>{
+                                                return (<Option value={item}>{item}</Option>)
+                                            })
+                                        }
+                                    </Select>
                                     {
-                                        select.map((item,index)=>{
-                                            return (<Option value={item}>{item}</Option>)
-                                        })
+                                        types? <Select defaultValue="调用总次数" style={{ width: 120,float:"left" }} size="small" onChange={handleChange}>
+                                                    <Option value="调用总次数">调用总次数</Option>
+                                                    <Option value="成功次数/失败次数">成功次数/失败次数</Option>
+                                                    <Option value="合法次数/非法次数">合法次数/非法次数</Option>
+                                                </Select>:null
                                     }
-                                </Select>
-                                {
-                                    types? <Select defaultValue="调用总次数" style={{ width: 120,float:"left" }} size="small" onChange={handleChange}>
-                                                <Option value="调用总次数">调用总次数</Option>
-                                                <Option value="成功次数/失败次数">成功次数/失败次数</Option>
-                                                <Option value="合法次数/非法次数">合法次数/非法次数</Option>
-                                            </Select>:null
-                                }
-                               
-                            </Row>
+                                
+                                </Row>
+                            </Col>
+                        </Row>
+                        <Row><div id="main" ref={ms}></div></Row>
+                    </Card>
+                    <Row justify="space-between" style={{padding:"20px 0"}}>
+                        <Col sm={11}>
+                            <Card>
+                                <Row justify="space-between" align="middle"  style={{marginBottom:"10px"}}>
+                                    <Col style={{fontWeight:"600",fontSize:"18px"}}>调用比率top5</Col>
+                                    <Col>
+                                        <Row>
+                                            <Select value={Data1} style={{ width: 100 ,float:"left",marginRight:"10px"}} size="small" onChange={(e)=>setData1(e)}>
+                                                {
+                                                    select.map((item,index)=>{
+                                                        return (<Option value={item}>{item}</Option>)
+                                                    })
+                                                }
+                                            </Select>
+                                            <Select value={method1} style={{ width: 100 ,float:"left"}} size="small" onChange={(e)=>setmethod1(e)}>
+                                                {
+                                                    select3.map((item,index)=>{
+                                                        return (<Option value={item}>{item}</Option>)
+                                                    })
+                                                }
+                                            </Select>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                                < Empty description="暂无数据" style={{padding:"55px"}}/>
+                            </Card>
+                        </Col>
+                        <Col sm={11}>
+                            <Card>
+                                <Row justify="space-between" align="middle"  style={{marginBottom:"10px"}}>
+                                    <Col style={{fontWeight:"600",fontSize:"18px"}}>调用时间top5</Col>
+                                    <Col>
+                                        <Row>
+                                            <Select value={Data2} style={{ width: 100 ,float:"left",marginRight:"10px"}} size="small" onChange={(e)=>setData2(e)}>
+                                                {
+                                                    select.map((item,index)=>{
+                                                        return (<Option value={item}>{item}</Option>)
+                                                    })
+                                                }
+                                            </Select>
+                                            <Select value={method2} style={{ width: 100 ,float:"left"}} size="small" onChange={(e)=>setmethod2(e)}>
+                                                {
+                                                    select4.map((item,index)=>{
+                                                        return (<Option value={item}>{item}</Option>)
+                                                    })
+                                                }
+                                            </Select>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                                < Empty description="暂无数据" style={{padding:"55px"}}/>
+                            </Card>
+                        </Col>
+                        <Col sm={11} style={{marginTop:"20px"}}>
+                            <Card>
+                                <Row justify="space-between" align="middle"  style={{marginBottom:"10px"}}>
+                                    <Col style={{fontWeight:"600",fontSize:"18px"}}>调用次数top5</Col>
+                                    <Col>
+                                        <Row>
+                                            <Select value={Data3} style={{ width: 100 ,float:"left",marginRight:"10px"}} size="small" onChange={(e)=>setData3(e)}>
+                                                {
+                                                    select.map((item,index)=>{
+                                                        return (<Option value={item}>{item}</Option>)
+                                                    })
+                                                }
+                                            </Select>
+                                            <Select value={method3} style={{ width: 100 ,float:"left"}} size="small" onChange={(e)=>setmethod3(e)}>
+                                                {
+                                                    select5.map((item,index)=>{
+                                                        return (<Option value={item}>{item}</Option>)
+                                                    })
+                                                }
+                                            </Select>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                                < Empty description="暂无数据" style={{padding:"55px"}}/>
+                            </Card>
                         </Col>
                     </Row>
-                    <div id="main" ref={ms}></div>
                 </Col>
                 <Col sm={7} style={{marginLeft:"10px"}}>
-                    <Row gutter={16}>
+                    {
+                        Rstatistic?
+                        <Row gutter={16}>
                         <Col span={8}>
                             <Card>
                             <Statistic
@@ -251,12 +342,22 @@ export default (props)=>{
                                     precision={2}
                                     valueStyle={{ color: '#3f8600' }}
                                 />
-                                 <h3 style={{fontWeight:"600",textAlign:"center",fontSize:"18px",color:"#1890ff"}}>申请者</h3>
+                                 <h3 style={{fontWeight:"600",textAlign:"center",fontSize:"18px"}}>申请者</h3>
                                 </Card>
                         </Col>
-                    </Row>
-                    <Card>
-                        <Row gutter={16} justify="space-between">
+                    </Row>:
+                        <Card style={{textAlign:"center"}}>
+                                <Statistic
+                                    value={11.28}
+                                    precision={2}
+                                    valueStyle={{ color: '#3f8600' }}
+                                />
+                                <h3 style={{fontWeight:"600",textAlign:"center",fontSize:"18px"}}>已申请</h3>
+                        </Card>
+                    }
+                   
+                    <Card style={{marginTop:"10px"}}>
+                        <Row gutter={16} justify="space-between" >
                             <Col>1.12~1.19 总调用</Col>
                             <Col>0</Col>
                         </Row>
@@ -267,7 +368,7 @@ export default (props)=>{
                             <Col>
                                 <Statistic
                                     title="成功"
-                                    value={11.28}
+                                    value={118}
                                     precision={2}
                                     valueStyle={{ color: '#3f8600' }}
                                 />
@@ -275,7 +376,7 @@ export default (props)=>{
                             <Col>
                                 <Statistic
                                     title="失败"
-                                    value={11.28}
+                                    value={8}
                                     precision={2}
                                     valueStyle={{ color: 'red' }}
                                 />
@@ -285,7 +386,7 @@ export default (props)=>{
                             <Col>
                                 <Statistic
                                     title="合法"
-                                    value={11.28}
+                                    value={1128}
                                     precision={2}
                                     valueStyle={{ color: '#3f8600' }}
                                 />
@@ -293,7 +394,7 @@ export default (props)=>{
                             <Col>
                                 <Statistic
                                     title="非法"
-                                    value={11.28}
+                                    value={11}
                                     precision={2}
                                     valueStyle={{ color: 'red' }}
                                 />
