@@ -1,7 +1,4 @@
-
-
-
-
+import { message } from 'antd';
 export default class LocalStorage {
     // 跳转登录
     doLogin(){
@@ -58,7 +55,15 @@ export default class LocalStorage {
                 window.localStorage.removeItem(name);
                 let lasturl = window.location.href.split('#')[1] || '';
                 window.localStorage.setItem('lasurl', lasturl);
-                alert('登录信息已过期，请重新登录！');
+                //alert('登录信息已过期，请重新登录！');
+                message.destroy();
+                message.warning({
+                    content: '登录信息已过期，请重新登录',
+                    className: 'custom-class',
+                    style: {
+                      marginTop: '15vh',
+                    },
+                  }, 5);
                 return '';
             }else{
                 //console.log("data="+dataObj.data);
