@@ -93,9 +93,8 @@ export default (props)=>{
         }
     })
       // 
-    })()
-    console.log("list改变了",list)
-  },[path,formName,model_name])
+    })();
+  },[path,formName,model_name,list,list2,Type])
     //栏位
     const [path,setPath]=useState('');
     const [model_name,setmodel_name]=useState('')
@@ -121,6 +120,7 @@ export default (props)=>{
     const tableRef2 = useRef();
     const [tableData2, setTableData2] = useState([]);
     const [displayType2, setDisplayType2] = useState('list');
+    const [Type,setType]=useState(false)
     const obj={
         "xxx1":mainForm,
         "xxx3":mainForm2
@@ -138,17 +138,39 @@ export default (props)=>{
         editable: true,
         isNew: true,
       });
-    }
-    const add=()=>{
-      console.log("我是点击的list",list)
+      setType(false)
+      setList2("失败")
+      setList("失败")
     }
     return(
         <Card  title={props.match.params.module_id[0]==="X"?"新建列表":"编辑列表"} extra={
           <div>
-              {             console.log(list)}
+            {
+             (()=>{
+              if(list==="成功"&&list2==="成功"&&Type){
+                HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path[0][0]==="L"?path[1]:path,table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path[0].slice(1):"",columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[]})).then(res => {
+                    if (res.resultCode == "1000") {   
+                        HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
+                            if (res.resultCode == "1000") {
+                              message.success('保存成功');
+                              // console.log(res)
+                              props.history.push('/dataAsset/modelList')
+                            }
+                            else {
+                                message.error(res.message);
+                            }
+                        })
+                    }
+                    else {
+                        message.error(res.message);
+                    }
+                  })
+              }
+             })()
+            }
             <Button type="primary" href="/#/dataAsset/modelList" style={{right:"50px"}}>返回</Button>
             <Button type="primary" onClick={() =>{
-               mainForm.submit()
+            
             //  await add()
               if(formName===""){
                 return  message.error("请填写表名");
@@ -156,7 +178,9 @@ export default (props)=>{
               if(notes===""){
                 return message.error("请填写注释");
               }
-              
+              mainForm.submit()
+              mainForm2.submit()
+              setType(true)
               // if(Rindex!==tableData2.length){
               //   return message.error("关系您还有未填写内容");
               // }
@@ -175,24 +199,24 @@ export default (props)=>{
               //   return item.column_name
               //  }):[]
               // console.log(deleteColumnList)
-              HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path[0][0]==="L"?path[1]:path,table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path[0].slice(1):"",columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[]})).then(res => {
-                console.log(res)
-                if (res.resultCode == "1000") {   
-                    HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
-                        if (res.resultCode == "1000") {
-                          message.success('保存成功');
-                          // console.log(res)
-                          props.history.push('/dataAsset/modelList')
-                        }
-                        else {
-                            message.error(res.message);
-                        }
-                    })
-                }
-                else {
-                    message.error(res.message);
-                }
-              })
+              // HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path[0][0]==="L"?path[1]:path,table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path[0].slice(1):"",columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[]})).then(res => {
+              //   console.log(res)
+              //   if (res.resultCode == "1000") {   
+              //       HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
+              //           if (res.resultCode == "1000") {
+              //             message.success('保存成功');
+              //             // console.log(res)
+              //             props.history.push('/dataAsset/modelList')
+              //           }
+              //           else {
+              //               message.error(res.message);
+              //           }
+              //       })
+              //   }
+              //   else {
+              //       message.error(res.message);
+              //   }
+              // })
               // console.log(tableData)
             }}>保存</Button>
           </div>
@@ -235,6 +259,9 @@ export default (props)=>{
                   }else if(formtext==="xxx3"){
                     return tableRef2.current.removeRows()
                   }
+                  setType(false)
+                  setList2("失败")
+                  setList("失败")
                 }}
                 ></Button>
                 </div>
