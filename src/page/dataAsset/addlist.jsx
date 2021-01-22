@@ -175,16 +175,7 @@ import HttpService from '../../util/HttpService.jsx';
 import { Table, Input, InputNumber, Popconfirm, Form ,Card,Button,Modal,message,Tag} from 'antd';
 import LocalStorge  from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
-const originData = [];
 
-for (let i = 0; i < 100; i++) {
-  originData.push({
-    key: i.toString(),
-    name: `Edrward ${i}`,
-    age: 32,
-    address: `London Park no. ${i}`,
-  });
-}
 const addlist=(statlist)=>{//添加主
   const {setisModalVisible,setStr}=statlist
   setisModalVisible(true)
@@ -274,15 +265,15 @@ export default ()=>{
   const [editingKey, setEditingKey] = useState('');
   const [isModalVisible,setisModalVisible]=useState(false)//控制弹窗
   const [str,setStr]=useState('')//是主菜'单还是次菜单
-  const [username,setusername]=useState('');//主导航名称
+  const [func_name,setfunc_name]=useState('');//主导航名称
   const [urlname,seturlname]=useState('')//主导航路径
   const [iconname,seticonname]=useState('')//主导航ICon
   // const userId=localStorge.getStorage('userInfo').id;//获取用户id
   const inputList=[//弹框input数据
     {
       text:'导航名称',
-      variable:username,
-      method:setusername
+      variable:func_name,
+      method:setfunc_name
     },
     {
       text:'导航路径',
@@ -298,43 +289,24 @@ export default ()=>{
   const statlist={
     isModalVisible,setisModalVisible,
     str,setStr,
-    username,setusername,
+    func_name,setfunc_name,
     urlname,seturlname,
     iconname,seticonname
   }
-  let getlist = async () =>{
-    await HttpService.post('/reportServer/auth/getFunRuleListReact',JSON.stringify({type: "reactWeb"})).then(res=>{
-      console.log(res)
-      // let newdata=[]
-      // res.data.forEach((item,index)=>{
-      //   newdata.push(
-      //     {
-      //       ...item,
-      //       key:index,
-      //       children: item.children.map((items,indexs)=>{
-      //         return {
-      //           ...items,
-      //           key:index+"_"+indexs
-      //         }
-      //       })
-      //     }
-      //   ) 
-      // })
-      setData(res)
-    })
-  }
   useEffect(()=>{
     (async()=>{
-        await getList(1,10,"")
+        await getList()
     })();
-    getlist()
   },[])
-  const getList =(startIndex,perPage,func_name)=>{
-    const obj={
-      startIndex,perPage,func_name
-    }
-    HttpService.post('/reportServer/menu/getAllPage',JSON.stringify({...obj})).then(res=>{
+  const getList =()=>{
+    HttpService.post('/reportServer/menu/getAllList',null).then(res=>{
       console.log(res)
+      if(res.resultCode==="1000"){
+        let marr=res.data.map((item,index)=>{
+
+        })
+        setData(res.data)
+      }
       // let newdata=[]
       // res.data.forEach((item,index)=>{
       //   newdata.push(
@@ -354,7 +326,7 @@ export default ()=>{
   }
   useEffect(()=>{
     if(!isModalVisible){
-      setusername('')
+      setfunc_name('')
       seturlname('')
       seticonname('')
     }
@@ -402,25 +374,29 @@ export default ()=>{
   const columns = [
     {
       title: '导航名称',
-      dataIndex: 'title',
+      dataIndex: 'func_name',
       width: '25%',
+      key:"func_name",
       editable: true,
     },
     {
       title: '导航_icon',
       dataIndex: 'func_icon',
       width: '15%',
+      key:"func_icon",
       editable: true,
     },
     {
       title: '导航地址',
       dataIndex: 'func_url',
       width: '40%',
+      key:"func_url",
       editable: true,
     },
     {
       title: '操作',
       dataIndex: 'x',
+      key:"x",
       render: (_, record) => {
         const editable = isEditing(record);
         return editable ? (

@@ -3,7 +3,43 @@ import { Form, Input, Table, Button,Card,Tag, Col,Select, Radio,Pagination, mess
 import { PageContainer } from '@ant-design/pro-layout';
 import HttpService from '../../util/HttpService.jsx';
 import style from './DataMarket.less'
-const url=window.getServerUrl();
+
+const columns = [
+    {
+      title: '服务名称',
+      dataIndex: 'qry_name',
+      key: 'qry_name',
+      width: '25%',
+    },
+    {
+      title: '服务类型',
+      dataIndex: 'qry_type',
+      key: 'qry_type',
+      width: '25%',
+    },
+    {
+      title: '服务用途',
+      dataIndex: 'qry_desc',
+      key: 'qry_desc',
+      width: '25%',
+    },
+    {
+        title: '服务连接',
+        dataIndex: 'x',
+        key: 'x',
+        width: '25%',
+        render:((_,item)=>{
+            return <Popover
+            content={<a>http://localhost:9609/reportServer/query/execQuery/{item.qry_id}/{item.class_id}</a>}
+            >
+            <a>{
+                `http://localhost:9609/reportServer/query/execQuery/${item.qry_id}/${item.class_id}`.substring(0,30)
+                }...</a>
+            </Popover>
+           
+        })
+    }
+  ];
 export default (props)=>{
     const [classList,setClassList]=useState([])
     const [list,setList]=useState([])
@@ -31,7 +67,6 @@ export default (props)=>{
     }
     const getListAll=()=>{
         HttpService.post('/reportServer/query/getAllQueryName',null).then(res=>{
-            console.log(res.data)
             if(res.resultCode==="1000"){
                 setList(res.data)
             }
@@ -51,7 +86,15 @@ export default (props)=>{
                     })
                 }
             </Radio.Group>
-            <Row style={{marginTop:"20px"}}>
+            <Table columns={columns}
+                    dataSource={list}
+                    style={{
+                        marginTop:"20px"
+                    }}
+            >
+
+            </Table>
+            {/* <Row style={{marginTop:"20px"}}>
                 {
                     list.map((item,index)=>{
                         return (
@@ -83,7 +126,7 @@ export default (props)=>{
                                     }
                                 </div>
                                 <div>
-                                    <span style={{fontWeight:600,color:"#9448eb"}}>服务类型：</span>
+                                    <span style={{fontWeight:600,color:"#9448eb"}}>服务连接：</span>
                                     <Popover
                                     content={<a>http://localhost:9609/reportServer/query/execQuery/{item.qry_id}/{item.class_id}</a>}
                                     >
@@ -92,13 +135,11 @@ export default (props)=>{
                                         }...</a>
                                     </Popover>
                                 </div>
-                               
-                                
                             </Card>
                         )
                     })
                 }
-            </Row>
+            </Row> */}
         </Card>
     )
 }
