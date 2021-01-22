@@ -1,15 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, Space, Modal, message, Row, TreeSelect, Tree } from 'antd';
-import { EllipsisOutlined, QuestionCircleOutlined, SearchOutlined } from '@ant-design/icons';
 import ProTable from '@ant-design/pro-table';
-import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
-import { history } from 'umi';
-
-
-import HttpService from '@/utils/HttpService.jsx';
+import { PageContainer  } from '@ant-design/pro-layout';
+import HttpService from '../../util/HttpService.jsx';
 
 const { confirm } = Modal;
-
 
 //删除按钮事件
 const onDeleteClickListener = (selectedRowKeys) => {
@@ -38,7 +33,7 @@ const deleteByIds = ( selectedRowKeys) => {
         message.error('请选择需要删除的内容');
         return;
     }
-    HttpService.post('reportServer/mdmDict/deleteDictById', JSON.stringify({ dict_id: selectedRowKeys.toString() }))
+    HttpService.post('reportServer/codetable/deleteCodetableById', JSON.stringify({ dict_id: selectedRowKeys.toString() }))
         .then(res => {
             if (res.resultCode == "1000") {
                 //刷新
@@ -53,26 +48,21 @@ const deleteByIds = ( selectedRowKeys) => {
 //获取数据
 const fetchData = async (params, sort, filter) => {
     console.log('getByKeyword', params, sort, filter);
-    // current: 1, pageSize: 20
-    // let requestParam = {
-    //     startIndex: params.current,
-    //     perPage: params.pageSize,
-    //     ...params
-    // }
-    // const result = await HttpService.post('reportServer/mdmDict/getAllPage', JSON.stringify(requestParam));
-    // return Promise.resolve({
-    //     data: result.data.list,
-    //     total: result.data.total,
-    //     success: result.resultCode == "1000"
-    // });
+    let requestParam = {
+        startIndex: params.current,
+        perPage: params.pageSize,
+        ...params
+    }
+    const result = await HttpService.post('reportServer/codetable/getAllPage', JSON.stringify(requestParam));
+    return Promise.resolve({
+        data: result.data.list,
+        total: result.data.total,
+        success: result.resultCode == "1000"
+    });
 }
 
-const dictList = () => {
-
+const codetableList = () => {
     const ref = useRef();
-    const [visible, setVisible] = useState(false);
-    const [initData, setInitData] = useState({});
-
     //定义列
     const columns = [
         {
@@ -91,9 +81,7 @@ const dictList = () => {
             key: 'option',
             valueType: 'option',
             render: (text, record) => [
-                <Button type="primary" onClick={() => history.push('/mdm/dict/dict/'+`${record.dict_id}`)}>
-                      编辑
-                    </Button>,
+                <a href={`#/mdmcodetable/codetable/${record.dict_id}`}>编辑</a>,               
                 <Button onClick={() => onDeleteClickListener([record.dict_id])} >删除</Button>,
             ]
         },
@@ -138,9 +126,9 @@ const dictList = () => {
                     defaultCollapsed: true
                 }}
                 dateFormatter="string"
-                headerTitle="字典列表"
+                headerTitle="码表列表"
                  toolBarRender={(action, { selectedRows }) => [
-                    <Button type="primary" onClick={() => history.push('/mdm/dict/dict/null')}>
+                    <Button type="primary" href="#/mdmcodetable/codetable/null">
                       新建
                     </Button>
                   ]}
@@ -150,4 +138,4 @@ const dictList = () => {
     );
 }
 
-export default dictList;
+export default codetableList;

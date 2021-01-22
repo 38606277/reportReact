@@ -155,6 +155,17 @@ const dataComputeRouter = Loadable({
     delay:3000
 });
 
+const mdmDictRouter = Loadable({
+    loader: () => import(/* webpackChunkName: "mdmDictRouter" */ './page/mdmdict/mdmDictRouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+
+const mdmCodetableRouter = Loadable({
+    loader: () => import(/* webpackChunkName: "mdmDictRouter" */ './page/mdmcodetable/mdmCodetableRouter.jsx'),
+    loading: loading,
+    delay:3000
+});
 
 const mycorp =Loadable({//算发图
     loader:()=>import('./page/dataApp/mcorp copy.jsx'),
@@ -208,6 +219,8 @@ class App extends React.Component {
                             <Route path="/assetmap" component={assetmap}/> 
                             <Route path='/mycorp' component={mycorp}/>
                             <Route path='/addlist' component={addlist}/>
+                            <Route path='/mdmdict' component={mdmDictRouter}/>
+                            <Route path='/mdmcodetable' component={mdmCodetableRouter}/>
                         </Switch>
                     </Layout>
                 );

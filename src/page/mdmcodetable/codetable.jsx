@@ -3,8 +3,9 @@ import { message, Form, Button, Row, Col, Select, Input } from 'antd';
 import { PageContainer } from '@ant-design/pro-layout';
 import ProCard from '@ant-design/pro-card';
 import TableForm from './TableForm';
-import HttpService from '../../../util/HttpService';
-
+import TreeTableForm from './TreeTableForm';
+import HttpService from '../../util/HttpService.jsx';
+import { PlusOutlined,MinusOutlined } from '@ant-design/icons';
 const { Option } = Select;
 
 export default (props) => {
@@ -13,13 +14,12 @@ export default (props) => {
   const [mainForm] = Form.useForm();
   const tableRef = useRef();
   const [tableData, setTableData] = useState([]);
-  const [query, setQuery] = useState('redux');
   const [displayType, setDisplayType] = useState('list');
   const [isSelect,setIsSelect] = useState(false);
 
   useEffect(() => {
     if("null"!=props.match.params.dict_id && ""!=props.match.params.dict_id){
-      HttpService.post('reportServer/mdmDict/getDictByID', JSON.stringify({ dict_id: props.match.params.dict_id }))
+      HttpService.post('reportServer/codetable/getCodetableByID', JSON.stringify({ dict_id: props.match.params.dict_id }))
       .then(res => {
           if (res.resultCode == "1000") {
             setIsSelect(true);
@@ -63,7 +63,7 @@ export default (props) => {
               console.log('mainForm', mainForm)
               mainForm.submit()
             }}>提交</Button>,
-            // <Button key="back" onClick={()=>.push('/mdm/dict/dictList')}>返回</Button>,
+            <Button key="back" onClick={()=>window.location = '#/mdmcodetable/codetableList'}>返回</Button>,
           ]
         }
       }
@@ -80,12 +80,12 @@ export default (props) => {
                 lineForm:tableData,
                 lineDelete:tableRef.current.getDeleteData()
               }
-              HttpService.post('reportServer/mdmDict/saveDict', JSON.stringify(postData))
+              HttpService.post('reportServer/codetable/saveCodetable', JSON.stringify(postData))
               .then(res => {
                   if (res.resultCode == "1000") {
                       //刷新
                       message.success('提交成功');
-                      history.push("/mdm/dict/dictList");
+                      window.location.href="#/mdmcodetable/codetableList";
                   } else {
                       message.error(res.message);
                   }
@@ -106,33 +106,33 @@ export default (props) => {
                 <Input id='dict_id' name='dict_id' value={mainForm.dict_id} />
                 </Form.Item>
               <Form.Item
-                label="字典编码"
+                label="编码"
                 name="dict_code"
-                rules={[{ required: true, message: '请输入字典编码' }]}
+                rules={[{ required: true, message: '请输入编码' }]}
               >
-                <Input placeholder="请输入字典编码" />
+                <Input placeholder="请输入编码" />
               </Form.Item>
             </Col>
             <Col xl={{ span: 6, offset: 2 }} lg={{ span: 8 }} md={{ span: 12 }} sm={24}>
               <Form.Item
-                label="字典名称"
+                label="名称"
                 name="dict_name"
-                rules={[{ required: true, message: '请选择字典名称' }]}
+                rules={[{ required: true, message: '请选择名称' }]}
               >
                 <Input
                   style={{ width: '100%' }}
-                  placeholder="请输入字典名称"
+                  placeholder="请输入名称"
                 />
               </Form.Item>
             </Col>
             <Col xl={{ span: 8, offset: 2 }} lg={{ span: 10 }} md={{ span: 24 }} sm={24}>
               <Form.Item
-                label="字典类型"
+                label="类型"
                 name="dict_type"
-                rules={[{ required: true, message: '请选择字典类型' }]}
+                rules={[{ required: true, message: '请选择类型' }]}
               >
                 <Select
-                 placeholder="请选择字典类型" 
+                 placeholder="请选择类型" 
                  onChange={e => selectChage(e)}
                  disabled={isSelect}
                  >
@@ -163,12 +163,12 @@ export default (props) => {
                   editable: true,
                   isNew: true,
                 });
-              }}> 新建
+              }} icon={<PlusOutlined />}>
               </Button>,
-              <Button type='danger' style={{ margin: '12px' }} onClick={() => {
+              <Button style={{ margin: '12px' }} onClick={() => {
                 //删除选中项
                 tableRef.current.removeRows();
-              }}> 删除</Button>
+              }} icon={<MinusOutlined />}></Button>
             ]
           }
         >
