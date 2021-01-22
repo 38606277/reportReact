@@ -56,6 +56,7 @@ export default (props) => {
   }
   return (
     <PageContainer
+    style={{padding:'10px'}}
       header={
         {
           extra: [
