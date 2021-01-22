@@ -3,6 +3,7 @@ import { Button, Space, Modal, message, Row, TreeSelect, Tree } from 'antd';
 import ProTable from '@ant-design/pro-table';
 import { PageContainer  } from '@ant-design/pro-layout';
 import HttpService from '../../util/HttpService.jsx';
+import { FormOutlined, MinusCircleOutlined } from '@ant-design/icons';
 
 const { confirm } = Modal;
 
@@ -80,9 +81,9 @@ const codetableList = () => {
             width: 180,
             key: 'option',
             valueType: 'option',
-            render: (text, record) => [
-                <a href={`#/mdmcodetable/codetable/${record.dict_id}`}>编辑</a>,               
-                <Button onClick={() => onDeleteClickListener([record.dict_id])} >删除</Button>,
+            render: (text, record) => [            
+                <Button onClick={() => window.location.href="#/mdmcodetable/codetable/"+`${record.dict_id}`} icon={<FormOutlined />}></Button>,
+                <Button onClick={() => onDeleteClickListener([record.dict_id])}  icon={<MinusCircleOutlined />}></Button>,
             ]
         },
     ];
