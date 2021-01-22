@@ -32,7 +32,7 @@ const DictValueList = Loadable({
 });
 
 const MdmDictCreator = Loadable({
-    loader: () => import(/* webpackChunkName: "DictValueList" */ '../mdm/dict/dict.jsx'),
+    loader: () => import(/* webpackChunkName: "DictValueList" */ '../mdmdict/dict.jsx'),
     loading: loading,
     delay:3000
 });
