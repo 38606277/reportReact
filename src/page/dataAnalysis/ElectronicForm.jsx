@@ -257,6 +257,13 @@ export default (props)=>{
                 ]
               });
     },[])
+    useEffect(()=>{
+        (()=>{
+            HttpService.post("/query/getAllQueryClass","").then(res=>{
+                console.log(res)
+            })
+        })()
+    },[])
     const formClass=e=>{
         setClassName(e)
         const id=selectList.filter(item=>{
@@ -303,9 +310,13 @@ export default (props)=>{
             showinfobar:false,
             lang: 'zh',
             data:[
-                {
-                    "ct":{"fa":"General","t": "n"},"m":"1212"
-                }
+              {
+                  "celldata":[
+                    {r:0, c:1, v: "值1"},
+                    {r:10, c:11, v:"值2"},
+                    {r:10, c:11, v:{f:"=sum", v:"100"}}
+                ]
+              }
             ]
         })
         // newcondition2[0]?en.getCellValue(1, 1, {type:"m"}):null

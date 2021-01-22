@@ -324,8 +324,34 @@ export default ()=>{
     })
   }
   useEffect(()=>{
+    (async()=>{
+        await getList(1,10,"")
+    })();
     getlist()
   },[])
+  const getList =(startIndex,perPage,func_name)=>{
+    const obj={
+      startIndex,perPage,func_name
+    }
+    HttpService.post('/reportServer/menu/getAllPage',JSON.stringify({...obj})).then(res=>{
+      console.log(res)
+      // let newdata=[]
+      // res.data.forEach((item,index)=>{
+      //   newdata.push(
+      //     {
+      //       ...item,
+      //       key:index,
+      //       children: item.children.map((items,indexs)=>{
+      //         return {
+      //           ...items,
+      //           key:index+"_"+indexs
+      //         }
+      //       })
+      //     }
+      //   ) 
+      // })
+    })
+  }
   useEffect(()=>{
     if(!isModalVisible){
       setusername('')
