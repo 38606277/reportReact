@@ -185,7 +185,7 @@ export default (props)=>{
             setoptions4(Tlist.map(item=>{return { value:item.name,}}))
         })
         settargetDB(e)
-        settargetTable("")
+        settargetTable(null)
     }
     return (
         <Modal

@@ -17,6 +17,7 @@ import {
     Table,
     Divider,
     Button,
+    Tabs,
     Card,
     Tree,
     Input,
@@ -40,6 +41,7 @@ import {
     Statistic,
     Empty 
 } from 'antd';
+const { TabPane } = Tabs;
 // import 
 import HttpService from '../../util/HttpService.jsx';
 import echarts from 'echarts';
@@ -189,12 +191,18 @@ export default (props)=>{
 
  
     return (<Card title={"数据服务总览"}>
-            <Radio.Group onChange={onChange} defaultValue="a" buttonStyle="solid">
+          <Tabs defaultActiveKey="1" onChange={onChange}>
+            <TabPane tab="开发API" key="a">
+            </TabPane>
+            <TabPane tab="调用API" key="b">
+            </TabPane>
+        </Tabs>
+            {/* <Radio.Group onChange={onChange} defaultValue="a" buttonStyle="solid">
                 <Radio.Button value="a">开发API</Radio.Button>
                 <Divider type="vertical" />
                 <Radio.Button value="b">调用API</Radio.Button>
-            </Radio.Group>
-            <Divider />
+            </Radio.Group> */}
+            {/* <Divider /> */}
             <Row>
                 <Col sm={16}>
                     <Card>
@@ -327,7 +335,7 @@ export default (props)=>{
                                 <div className={style.rightTitleListText}>已发布</div>
                             </div>
                     </Row>:
-                        <div className={style.rightTitle}>
+                        <div className={style.rightTitle} style={{width:"326px",marginLeft:"-8px"}}>
                             <div>
                                 <div className={style.rightTitleListTitle2}>11.23</div>
                                 <div className={style.rightTitleListText2}>已申请</div>
