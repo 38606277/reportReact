@@ -299,7 +299,7 @@ export default ()=>{
                 <Col sm={4}>
                     <Card>
                         <Row>
-                            <Col sm={19} style={{fontSize:"18px"}}>
+                            <Col sm={19} style={{fontSize:"15px"}}>
                                 模型列表
                             </Col>
                             <Col sm={4}>
