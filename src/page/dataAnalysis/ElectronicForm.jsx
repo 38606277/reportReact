@@ -2,7 +2,7 @@ import React,{useState,useEffect,useRef} from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from 'antd/lib/pagination';
 import { BarChartOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined ,SearchOutlined ,PlusOutlined,CloseOutlined, CheckOutlined,DownOutlined,EditOutlined,DisconnectOutlined  } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
+// import { Form } from '@ant-design/compatible';
 
 import CodeMirror from 'react-codemirror';
 import 'codemirror/lib/codemirror.css';
@@ -15,6 +15,7 @@ import 'codemirror/theme/ambiance.css';
 import '@ant-design/compatible/assets/index.css';
 import {
     Table,
+    Form,
     Divider,
     Button,
     Checkbox,
@@ -220,6 +221,8 @@ export default (props)=>{
     const [Condition,setCondition]=useState([])//查询条件
     const [output,setOutput]=useState([])//输出参数
     const [myid,setMyid]=useState("")
+    const [mainForm] = Form.useForm()//Form
+    const [InputList,setInputList]=useState({})
     useEffect(()=>{
         const en = window.luckysheet
             en.create({
@@ -259,78 +262,66 @@ export default (props)=>{
     },[])
     useEffect(()=>{
         (()=>{
-            HttpService.post("/reportServer/select/getSelectClass",JSON.stringify({})).then(res=>{
+            HttpService.post("/reportServer/query/getAllQueryClass",JSON.stringify({})).then(res=>{
                 if(res.resultCode==="1000"){
                     setClass(res.data)
                 }
-                console.log(res)
             })
         })()
     },[])
     const formClass=e=>{
         setClassName(e)
-        HttpService.post("/reportServer/select/getSelectClassTree",JSON.stringify({userId:e})).then(res=>{
-            console.log(res)
+        HttpService.post("reportServer/query/getQueryByClassID/"+e+"",JSON.stringify({})).then(res=>{
             if(res.resultCode==="1000"){
-                // setClass(res.data)
+                setFname(res.data)
+                setName(null)
+                setCondition([])
+                setOutput([])
+                setInputList({})
             }
-            // console.log(res)
         })
-        // const id=selectList.filter(item=>{
-        //     return item.text===e
-        // })[0].id
-        // const newClassName=children.filter(item=>{
-        //     return item.id===id
-        // })
-        // setFname(newClassName)
-        setName(null)
-        setCondition([])
-        setOutput([])
+    
     }
     const formname=e=>{
         setName(e)
-        const id=children.filter(item=>{
-            return item.text===e
-        })[0].childrenid
-        const newcondition=condition.filter(item=>{
-            return item.id===id
+        HttpService.post("reportServer/query/getQueryParam/"+e,JSON.stringify({})).then(res=>{
+            if(res.resultCode==="1000"){
+                setCondition(res.data.in)
+                setOutput(res.data.out)
+                setInputList({}) 
+            }
         })
-        setMyid(id)
         setOutput([])
-        setCondition(newcondition)
     }
-    const conditionName=[
-        {
-            title:"参数名称",
-            dataIndex:"name",
-            key:"name"
-        },
-        {
-            title:"参数值",
-            dataIndex:"text",
-            key:"text"
-        }
-    ]
     const query=()=>{
         const en = window.luckysheet
-        const newcondition2=out.filter(item=>{
-            return item.id===myid
+        mainForm.submit()
+        console.log(InputList)
+        
+        HttpService.post("reportServer/query/execQuery/"+ClassName+"/"+Name,JSON.stringify([
+            {
+                "in":InputList
+            },
+            {startIndex: 1, perPage: 10, searchResult: ""}
+        ])).then(res=>{
+            console.log(res)
+            if(res.resultCode==="1000"){
+               
+            }
         })
-        en.create({
-            showinfobar:false,
-            lang: 'zh',
-            data:[
-              {
-                  "celldata":[
-                    {r:0, c:1, v: "值1"},
-                    {r:10, c:11, v:"值2"},
-                    {r:10, c:11, v:{f:"=sum", v:"100"}}
-                ]
-              }
-            ]
-        })
-        // newcondition2[0]?en.getCellValue(1, 1, {type:"m"}):null
-        setOutput(newcondition2)
+        // en.create({
+        //     showinfobar:false,
+        //     lang: 'zh',
+        //     data:[
+        //       {
+        //           "celldata":[
+        //             {r:0, c:1, v: "值1"},
+        //             {r:10, c:11, v:"值2"},
+        //             {r:10, c:11, v:{f:"=sum", v:"100"}}
+        //         ]
+        //       }
+        //     ]
+        // })
     }
     return (
         <Card>
@@ -372,7 +363,7 @@ export default (props)=>{
                                 {
                                     Class.map((item,index)=>{
                                         return(
-                                            <Option key={index} value={item.name}>{item.name}</Option >
+                                            <Option key={index} value={item.class_id}>{item.class_name}</Option >
                                         )
                                     })
                                 }
@@ -382,6 +373,7 @@ export default (props)=>{
                                 label="报表名称"
                                 name="报表名称"
                                 rules={[{ required: true, message: 'Please input your password!' }]}
+                                preserve={false}
                             >
                                 <Select
                                     style={{width:"140px"}}
@@ -397,7 +389,7 @@ export default (props)=>{
                                 {
                                     Fname[0]?Fname.map((item,index)=>{
                                         return (
-                                            <Option key={index} value={item.text}>{item.text}</Option >
+                                            <Option key={index} value={item.qry_id}>{item.qry_name}</Option >
                                         )
                                     }):null
                                 }
@@ -419,9 +411,48 @@ export default (props)=>{
                           const en = window.luckysheet
                         console.log(en.getAllSheets())
                     }}>获取数据</Button> */}
-                   <Table style={{width:"400px",marginLeft:"20px"}} pagination={false} bordered size="small" dataSource={Condition} columns={conditionName}></Table>
+                    <Form 
+                        form={mainForm}
+                        onFieldsChange={(a,e)=>{
+                            let obj={}
+                            for (let key in e) {
+                                obj[e[key].name[0]] = e[key].value;
+                            }
+                            setInputList(obj)
+                        }}
+                        {...layout}
+                        style={{
+                            marginLeft:"10px"
+                        }}
+                    >
+                        {
+                            Condition[0]?Condition.map((item,index)=>{
+                                return (
+                                    <Form.Item
+                                        label={item.in_name}
+                                        name={item.in_name}
+                                    >
+                                        <Input  />
+                                    </Form.Item>
+                                )
+                            }):<Empty />
+                        }
+                    </Form>
+                   {/* <Table style={{width:"400px",marginLeft:"20px"}} pagination={false} bordered size="small" dataSource={Condition} columns={conditionName}></Table> */}
                    <Divider plain orientation="left" style={{color:"burlywood"}}>输出参数</Divider>
-                   <Table style={{width:"400px",marginLeft:"20px"}} pagination={false} bordered size="small" dataSource={output} columns={conditionName}></Table>
+                   <List
+                    dataSource={output}
+                    bordered
+                    style={{
+                        marginLeft:"10px"
+                    }}
+                    renderItem={item => (
+                        <List.Item>
+                        <span style={{float:"right"}}>{item.out_name}:</span> 
+                        </List.Item>
+                    )}
+                    />
+                   {/* <Table style={{width:"400px",marginLeft:"20px"}} pagination={false} bordered size="small" dataSource={output} columns={conditionName}></Table> */}
                 </Col>
             </Row>
          </Card>

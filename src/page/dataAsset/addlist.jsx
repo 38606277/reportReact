@@ -175,14 +175,38 @@ import HttpService from '../../util/HttpService.jsx';
 import { Table, Input, InputNumber, Popconfirm, Form ,Card,Button,Modal,message,Tag} from 'antd';
 import LocalStorge  from '../../util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
-
+const getList =(setData)=>{
+  HttpService.post('/reportServer/menu/getAllList',null).then(res=>{
+    if(res.resultCode==="1000"){
+      setData(res.data)
+    }
+    // let newdata=[]
+    // res.data.forEach((item,index)=>{
+    //   newdata.push(
+    //     {
+    //       ...item,
+    //       key:index,
+    //       children: item.children.map((items,indexs)=>{
+    //         return {
+    //           ...items,
+    //           key:index+"_"+indexs
+    //         }
+    //       })
+    //     }
+    //   ) 
+    // })
+  })
+}
 const addlist=(statlist)=>{//添加主
+  // func_name  urlname iconname
   const {setisModalVisible,setStr}=statlist
+  console.log("chenggong")
   setisModalVisible(true)
   setStr('主')
 };
 const addSon=(record,statlist)=>{
-  const {setisModalVisible,setStr}=statlist
+  const {setisModalVisible,setStr,setFid}=statlist
+  setFid(record.func_id)
   setisModalVisible(true)
   setStr('次')
 }
@@ -195,14 +219,20 @@ const isNullVerification=(arr,obj,method,fn)=>{//非空验证
   method(false)
 }
 const handleOk=(statlist)=>{
-  const {setisModalVisible,username,urlname,iconname,setusername,seturlname,seticonname}=statlist
-  let TipsArr=[username,urlname]
+  const {setisModalVisible,urlname,iconname,func_name,str,Fid,setusername,seturlname,seticonname,addList}=statlist
+  let TipsArr=[func_name,urlname]
   const TipsObj={//非空校验
     0:'导航名称必填',
     1:'导航路径必填',
   }
   isNullVerification(TipsArr,TipsObj,setisModalVisible,()=>{
-    console.log(1)
+
+    if(str==="主"){
+      addList(null,0,func_name,urlname,iconname,null,null,null,null)
+    }else{
+      addList(null,Fid,func_name,urlname,iconname,null,null,null,null)
+    }
+    // console.log(1)
   })
 }
 const EditableCell = ({
@@ -251,14 +281,7 @@ const H_input = (props)=>{
       </div>
     )
 }
-const remoList =(record,getlist)=>{
-    console.log(record)
-  HttpService.post('/reportServer/menu/deleteMenuById',JSON.stringify([{func_id:5002}])).then(res=>{
-    console.log(res)
-  })
-  
-  // console.log(record)
-}
+
 export default ()=>{
   const [form] = Form.useForm();
   const [data, setData] = useState([]);
@@ -268,7 +291,43 @@ export default ()=>{
   const [func_name,setfunc_name]=useState('');//主导航名称
   const [urlname,seturlname]=useState('')//主导航路径
   const [iconname,seticonname]=useState('')//主导航ICon
+  const [Fid,setFid]=useState(null)
   // const userId=localStorge.getStorage('userInfo').id;//获取用户id
+  const addList =(func_id,func_pid,func_name,func_url,func_icon,func_type,func_desc,order,target)=>{
+    const obj={
+      func_id,
+      func_pid,
+      func_name,
+      func_url,
+      func_icon,
+      func_type:"reactWeb",
+      valid:1,
+      func_desc,
+      order,
+      target
+    }
+    HttpService.post('/reportServer/menu/saveMenu',JSON.stringify({...obj})).then(res=>{
+      if(res.resultCode==="1000"){
+        message.success(res.message);
+        getList(setData)
+      }else{
+        getList(setData)
+        return
+      }
+    })
+  }
+  const remoList =(record)=>{
+    HttpService.post('/reportServer/menu/deleteMenuById',JSON.stringify({func_id:record.func_id})).then(res=>{
+      if(res.resultCode==="1000"){
+        message.success(res.message);
+        getList(setData);
+      }else{
+        getList(setData);
+      }
+    })
+    
+    // console.log(record)
+  }
   const inputList=[//弹框input数据
     {
       text:'导航名称',
@@ -281,7 +340,7 @@ export default ()=>{
       method:seturlname
     },
     {
-      text:'导航名称',
+      text:'导航ICON',
       variable:iconname,
       method:seticonname
     }
@@ -291,36 +350,14 @@ export default ()=>{
     str,setStr,
     func_name,setfunc_name,
     urlname,seturlname,
-    iconname,seticonname
+    iconname,seticonname,
+    Fid,setFid,addList
   }
   useEffect(()=>{
     (async()=>{
-        await getList()
+        await getList(setData)
     })();
   },[])
-  const getList =()=>{
-    HttpService.post('/reportServer/menu/getAllList',null).then(res=>{
-      console.log(res)
-      if(res.resultCode==="1000"){
-        setData(res.data)
-      }
-      // let newdata=[]
-      // res.data.forEach((item,index)=>{
-      //   newdata.push(
-      //     {
-      //       ...item,
-      //       key:index,
-      //       children: item.children.map((items,indexs)=>{
-      //         return {
-      //           ...items,
-      //           key:index+"_"+indexs
-      //         }
-      //       })
-      //     }
-      //   ) 
-      // })
-    })
-  }
   useEffect(()=>{
     if(!isModalVisible){
       setfunc_name('')
@@ -331,6 +368,7 @@ export default ()=>{
   const isEditing = (record) => record.key === editingKey;
 
   const edit = (record) => {
+    console.log(record)
     form.setFieldsValue({
       // name: '',
       // age: '',
@@ -344,7 +382,14 @@ export default ()=>{
     let key=record.key
      try {
       const row = await form.validateFields();//获取当前三个input中的数据
-      console.log(record,row)
+      // console.log(record,row)
+      const obj= await{...record,...row}
+      console.log(1)
+      if(obj.func_name){
+       await addList(obj.func_id,obj.func_pid,obj.func_name,obj.func_url,obj.func_icon,obj.func_type,obj.valid,obj.func_desc,obj.order,obj.target)
+      }
+          // (func_id,func_pid,func_name,func_url,func_icon,func_type,valid,func_desc,order,target)
+      // 
       const newData = [...data];
       const index = newData.findIndex((item) => key === item.key);
 
@@ -419,7 +464,7 @@ export default ()=>{
         ) : ( 
           <a>
             <Tag disabled={editingKey !== ''} onClick={() => edit(record)} color="#87d068">修改</Tag>
-            <Tag color="red" onClick={()=>remoList(record,getlist)}>删除</Tag>
+            <Tag color="red" onClick={()=>remoList(record)}>删除</Tag>
             <Tag color="#108ee9" onClick={()=>{addSon(record,statlist)}}>添加</Tag>
           </a>
         );
