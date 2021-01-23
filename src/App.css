@@ -5355,3 +5355,33 @@ textarea.ant-input {
 
 /*# sourceMappingURL=umi.css.map*/
 
+
+
+/* 自定义 */
+.ant-pro-table-list-toolbar-container{
+    margin-bottom: 20px;
+}
+.ant-form-item-control-input-content{
+    box-sizing: border-box;
+    padding-right: 30px;
+}
+.ant-pro-table-list-toolbar-right{
+    float: right;
+    margin-right: 10px;
+}
+
+
+.ant-pro-page-container-children-content{
+    box-sizing: border-box;
+    padding:0px 20px;
+}
+.ant-pro-card-title{
+    font-size: 15px;
+    font-weight: 600;
+}
+.ant-pro-card-body{
+    margin-top: 5px;
+}
+.ant-table-selection{
+    justify-content: center
+}

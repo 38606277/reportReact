@@ -213,7 +213,7 @@ const out=[
 export default (props)=>{
     const luckysheets=useRef()
     const [main,setMain]=useState("")
-    const [Class,setClass]=useState([...selectList])//报表类别
+    const [Class,setClass]=useState([])//报表类别
     const [ClassName,setClassName]=useState(null)//报表类别change
     const [Name,setName]=useState(null)//报名change
     const [Fname,setFname]=useState([])//报表名称
@@ -259,20 +259,30 @@ export default (props)=>{
     },[])
     useEffect(()=>{
         (()=>{
-            HttpService.post("/query/getAllQueryClass","").then(res=>{
+            HttpService.post("/reportServer/select/getSelectClass",JSON.stringify({})).then(res=>{
+                if(res.resultCode==="1000"){
+                    setClass(res.data)
+                }
                 console.log(res)
             })
         })()
     },[])
     const formClass=e=>{
         setClassName(e)
-        const id=selectList.filter(item=>{
-            return item.text===e
-        })[0].id
-        const newClassName=children.filter(item=>{
-            return item.id===id
+        HttpService.post("/reportServer/select/getSelectClassTree",JSON.stringify({userId:e})).then(res=>{
+            console.log(res)
+            if(res.resultCode==="1000"){
+                // setClass(res.data)
+            }
+            // console.log(res)
         })
-        setFname(newClassName)
+        // const id=selectList.filter(item=>{
+        //     return item.text===e
+        // })[0].id
+        // const newClassName=children.filter(item=>{
+        //     return item.id===id
+        // })
+        // setFname(newClassName)
         setName(null)
         setCondition([])
         setOutput([])
@@ -323,7 +333,7 @@ export default (props)=>{
         setOutput(newcondition2)
     }
     return (
-        <Card title="电子表格">
+        <Card>
             <Row style={{overflow:"hidden"}}>
                 <Col sm={16} style={{position:"relative",height:"700px"}}>
                     <div
@@ -362,7 +372,7 @@ export default (props)=>{
                                 {
                                     Class.map((item,index)=>{
                                         return(
-                                            <Option key={index} value={item.text}>{item.text}</Option >
+                                            <Option key={index} value={item.name}>{item.name}</Option >
                                         )
                                     })
                                 }
@@ -414,7 +424,7 @@ export default (props)=>{
                    <Table style={{width:"400px",marginLeft:"20px"}} pagination={false} bordered size="small" dataSource={output} columns={conditionName}></Table>
                 </Col>
             </Row>
-        </Card>
+         </Card>
       
                 
 )

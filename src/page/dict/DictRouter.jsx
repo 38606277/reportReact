@@ -31,11 +31,7 @@ const DictValueList = Loadable({
     delay:3000
 });
 
-const MdmDictCreator = Loadable({
-    loader: () => import(/* webpackChunkName: "DictValueList" */ '../mdm/dict/dict.jsx'),
-    loading: loading,
-    delay:3000
-});
+
 // const DictValueInfo = Loadable({
 //     loader: () => import(/* webpackChunkName: "DictValueInfo" */ './DictValueInfo.jsx'),
 //     loading: loading,
@@ -53,7 +49,6 @@ export default class DictRouter extends React.Component{
             <Switch>
                  <Route path="/dict/DictList" component={DictList} />
                  <Route path="/dict/DictCreator/:action/:id" component={DictCreator} />
-                 <Route path="/dict/dict/:dict_id" component={MdmDictCreator} />
                  <Route path="/dict/DictViewData/:id" component={DictViewData} />
                  <Route path="/dict/DictValueList/:dictId" component={DictValueList} />
                  {/* <Route path="/dict/index" component={DictValueInfo} /> */}

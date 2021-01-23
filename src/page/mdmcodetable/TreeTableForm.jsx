@@ -1,9 +1,9 @@
 import { Table, Form, message, Input, Button } from 'antd';
 import React, { useState, useImperativeHandle, forwardRef, useEffect } from 'react';
 import styles from './style.less';
-import InputEF from '@/components/EditForm/InputEF';
+import InputEF from '../../components/EditForm/InputEF';
 import { PlusOutlined } from '@ant-design/icons';
-import styles2 from '@/components/EditForm/index.less';
+import styles2 from '../../components/EditForm/index.less';
 
 const TreeTableForm = forwardRef((props, ref) => {
 
@@ -108,7 +108,7 @@ const TreeTableForm = forwardRef((props, ref) => {
 
 
     const newMember = (newItem) => {
-        const newData = data?.map((item) => ({ ...item })) || [];
+        const newData = data.map((item) => ({ ...item })) || [];
         newData.push(newItem);
         setData(newData);
     };
@@ -368,7 +368,6 @@ const TreeTableForm = forwardRef((props, ref) => {
 
     const [checkStrictly, setCheckStrictly] = React.useState(true);
     return (
-        <>
             <Form
                 className={styles2.tableForm}
                 key='tableForm'
@@ -393,7 +392,6 @@ const TreeTableForm = forwardRef((props, ref) => {
                     }}
                 />
             </Form>
-        </>
     );
 });
 export default TreeTableForm;
