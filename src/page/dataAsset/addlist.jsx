@@ -302,9 +302,6 @@ export default ()=>{
     HttpService.post('/reportServer/menu/getAllList',null).then(res=>{
       console.log(res)
       if(res.resultCode==="1000"){
-        let marr=res.data.map((item,index)=>{
-
-        })
         setData(res.data)
       }
       // let newdata=[]
