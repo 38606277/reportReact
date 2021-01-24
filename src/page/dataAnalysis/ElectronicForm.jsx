@@ -304,24 +304,59 @@ export default (props)=>{
             },
             {startIndex: 1, perPage: 10, searchResult: ""}
         ])).then(res=>{
-            console.log(res)
+            
             if(res.resultCode==="1000"){
-               
+                console.log(res.data.list)
+                if(!res.data.list){
+                    return 
+                }
+                const arr=res.data.list
+                const TitleArr=[]
+                let l=-1
+                for (let key in arr[0]){
+                    l+=1
+                    TitleArr.push({
+                        r:0,
+                        c:l,
+                        v:{
+                            v:key,
+                            m:key+"",
+                            bg: "#fce5cd",
+                        }
+                    })
+                }
+                const Myarr=[]
+
+               for(let i=0;i<arr.length;i+=1){
+                   let U=[]
+                   let s=-1
+                   for (let y in arr[i]){
+                       s+=1
+                        U.push({
+                            r:i+1,
+                            c:s,
+                            v:arr[i][y]
+                        })
+                   }
+                   Myarr.push(...U)
+               }
+                setOutput(res.data.out)
+                     en.create({
+                            showinfobar:false,
+                            lang: 'zh',
+                            data:[
+                            {
+                                "celldata":[
+                                    ...TitleArr,
+                                    ...Myarr
+                                ]
+                            }
+                            ]
+                        })
+                    en.setHorizontalFrozen(false)
             }
         })
-        // en.create({
-        //     showinfobar:false,
-        //     lang: 'zh',
-        //     data:[
-        //       {
-        //           "celldata":[
-        //             {r:0, c:1, v: "值1"},
-        //             {r:10, c:11, v:"值2"},
-        //             {r:10, c:11, v:{f:"=sum", v:"100"}}
-        //         ]
-        //       }
-        //     ]
-        // })
+   
     }
     return (
         <Card>
