@@ -178,6 +178,12 @@ const dataxwebRouter = Loadable({
     delay:3000
 });
 
+const dataStandardRouter = Loadable({
+    loader: () => import(/* webpackChunkName: "dataStandardRouter" */ './page/dataStandard/dataStandardRouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+
 const mycorp =Loadable({//算发图
     loader:()=>import('./page/dataApp/mcorp copy.jsx'),
     loading: loading,
@@ -233,6 +239,7 @@ class App extends React.Component {
                             <Route path='/mdmdict' component={mdmDictRouter}/>
                             <Route path='/mdmcodetable' component={mdmCodetableRouter}/>
                             <Route path='/dataxweb' component={dataxwebRouter}/>
+                            <Route path='/dataStandardList' component={dataStandardRouter}/>
                         </Switch>
                     </Layout>
                 );
