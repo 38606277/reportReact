@@ -167,6 +167,13 @@ const mdmCodetableRouter = Loadable({
     delay:3000
 });
 
+
+const dataxwebRouter = Loadable({
+    loader: () => import(/* webpackChunkName: "dataxwebRouter" */ './page/dataxweb/dataxwebRouter.jsx'),
+    loading: loading,
+    delay:3000
+});
+
 const mycorp =Loadable({//算发图
     loader:()=>import('./page/dataApp/mcorp copy.jsx'),
     loading: loading,
@@ -221,6 +228,7 @@ class App extends React.Component {
                             <Route path='/addlist' component={addlist}/>
                             <Route path='/mdmdict' component={mdmDictRouter}/>
                             <Route path='/mdmcodetable' component={mdmCodetableRouter}/>
+                            <Route path='/dataxweb' component={dataxwebRouter}/>
                         </Switch>
                     </Layout>
                 );
