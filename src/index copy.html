@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewPort" content="width=device-width,initial-scale=1">
+    <meta name="author" content="Rosen">
+    <title>大数据平台</title>
+    <!-- <link rel='stylesheet' href='./dist/plugins/css/pluginsCss.css' />
+    <link rel='stylesheet' href='./dist/plugins/plugins.css' />
+    <link rel='stylesheet' href='./dist/css/luckysheet.css' />
+    <link rel='stylesheet' href='./dist/assets/iconfont/iconfont.css' /> -->
+    <!-- <script src="./dist/plugins/js/plugin.js"></script>
+    <script src="./dist/luckysheet.umd.js"></script> -->
+    <style type="text/css">  
+    
+        html{height:100%}  
+        body{height:100%;margin:0px;padding:0px}  
+        #container{height:100%}  
+        </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=3.0&ak=y5S6vt7YA4TBGDCuBXE5YyL8gZ6T2szk">
+   </script>
+    <script type="text/javascript">
+       function getServerUrl()
+        {
+            if(location.hostname)
+            {
+                return "http://"+location.hostname+":"+'9609'+"/";
+            }else
+            {
+                return 'http://localhost:'+'9609'+'/';
+            }
+        }
+        //  alert(getServerUrl());
+
+
+
+
+        //添加link标签
+        const headHTML = document.getElementsByTagName('head')[0].innerHTML
+        const script1 = document.createElement('script')
+              script1.src="./dist/plugins/js/plugin.js"
+        const script2 = document.createElement('script')
+              script2.src="./dist/luckysheet.umd.js"
+        //       headHTML  +="<link rel='stylesheet' href='./dist/plugins/css/pluginsCss.css' />      <link rel='stylesheet' href='./dist/plugins/plugins.css' /> <link rel='stylesheet' href='./dist/css/luckysheet.css' /> <link rel='stylesheet' href='./dist/assets/iconfont/iconfont.css' />";
+        // // document.getElementsByTagName('head')[0].innerHTML = headHTML;
+        document.getElementsByTagName('head')[0].appendChild(script1)
+        document.getElementsByTagName('head')[0].appendChild(script2)
+        const headHTML2 = document.getElementsByTagName('head')[0].innerHTML
+        console.log(headHTML2)
+    </script>
+</head>
+<body>
+    <!-- <img src="%PUBLIC_URL%/assets/bike.jpg" alt=""> -->
+    <div id="app"></div>
+    <!-- <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script> -->
+  
+   
+</body>
+</html>

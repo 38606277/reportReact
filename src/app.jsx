@@ -6,6 +6,10 @@ import Loadable from 'react-loadable';
 import loading from './util/loading.jsx'
 import 'antd/dist/antd.css';
 import './App.css'
+// import './dist/plugins/css/pluginsCss.css'
+// import './dist/plugins/plugins.css'
+// import './dist/css/luckysheet.css'
+// import './dist/assets/iconfont/iconfont.css'
 import LocalStorge from './util/LogcalStorge.jsx';
 const localStorge = new LocalStorge();
 import * as serviceWorker from './serviceWorker';

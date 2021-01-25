@@ -453,7 +453,9 @@ export default ()=>{
                             bordered={true} />
                     </Card>
                 </Modal>
-            <MyModal visible={visible2} on={()=>{
+            <MyModal
+            destroyOnClose={true}
+            visible={visible2} on={()=>{
                 setVisible2(false)
                 setModObj(null)
                 // this.setState({visible2:false,ModObj:this.state.set!==false?this.state.ModData:null,set:false})

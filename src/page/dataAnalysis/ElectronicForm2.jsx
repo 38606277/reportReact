@@ -44,6 +44,7 @@ import {
 } from 'antd';
 // import 
 import HttpService from '../../util/HttpService.jsx';
+import { createNonNullChain } from 'typescript';
 const luckyCss = {
     margin: '0px',
     padding: '0px',
@@ -51,13 +52,13 @@ const luckyCss = {
     width: '100%',
     height: '100%',
     left: '0px',
+    top: '0px'
 }
 const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
 };
 export default (props)=>{
-    const {onClose}=props
     const luckysheets=useRef()
     const [main,setMain]=useState("")
     const [Class,setClass]=useState([])//报表类别
@@ -71,25 +72,43 @@ export default (props)=>{
     const [InputList,setInputList]=useState({})
     useEffect(()=>{
         const en = window.luckysheet
-        console.log($)
             en.create({
                 showinfobar:false,
                 lang: 'zh',
-                showstatisticBar: false,
-                functionButton:"<button id='' class='btn btn-primary'  style='padding:3px 6px;font-size: 12px;margin-right: 10px;'>保存</button>",
                 data:[
                     {
-                        "name": "name",
-                        "color": "",
-                        "index": 0,
-                        "status": 0,
-                        "order": 0,
-                        "celldata": [],
-                        "config": {}
-                    },
+                        "ct": { //单元格值格式
+                            "fa": "General",  //格式名称为自动格式
+                            "t": "n" //格式类型为数字类型
+                        },
+                        "v": 233, //内容的原始值为 233
+                        "m": 233, //内容的显示值为 233
+                        "bg": "#f6b26b", //背景为 "#f6b26b"
+                        "ff": 1, // 字体为 "Arial"
+                        "fc": "#990000", //字体颜色为 "#990000"
+                        "bl": 1, //字体加粗
+                        "it": 1, //字体斜体
+                        "fs": 9, //字体大小为 9px
+                        "cl": 1, //启用删除线
+                        "ht": 0, //水平居中
+                        "vt": 0, //垂直居中
+                        "tr": 2, //文字旋转 -45°
+                        "tb": 2, //文本自动换行
+                        "ps": { //批注
+                            "left": 92, //批注框左边距
+                            "top": 10, //批注框上边距
+                            "width": 91, //批注框宽度
+                            "height": 48, //批注框高度
+                            "value": "I am a comment", //批准内容
+                            "isshow": true //批注框为显示状态
+                        },
+                        "f": "=SUM(233)" //单元格是一个求和公式
+                    }
                 ]
               });
-  
+        const wdom=document.getElementsByClassName("luckysheet")
+        wdom[0].style.width="100%"
+        console.log(wdom[0])
     },[])
     useEffect(()=>{
         (()=>{
@@ -177,7 +196,6 @@ export default (props)=>{
                             lang: 'zh',
                             data:[
                             {
-                                "name": "name",
                                 "celldata":[
                                     ...TitleArr,
                                     ...Myarr
@@ -191,20 +209,9 @@ export default (props)=>{
    
     }
     return (
-        <div style={{
-            width:"100%",
-            height:"100%",
-            boxSizing:"border-box",
-            padding:"20px"
-        }}>
-            <div style={{width:"100%",position:"relative"}}>
-            <div style={{textAlign:"center",fontWeight:600,fontSize:"18px"}}>表格查询</div>
-            <Button  type="primary" size="small" style={{position:"absolute",left:"10px",top:"0"}} onClick={()=>{
-                onClose(false)
-            }}>返回</Button>
-            </div>
-            <Row style={{overflowY:"scroll",height:"100%",boxSizing:"border-box",padding:"0 10px"}}>
-                <Col sm={16}>
+        <Card>
+            <Row style={{overflow:"hidden"}}>
+                <Col sm={16} style={{position:"relative"}}>
                     <div
                     id="luckysheet"
                     style={luckyCss}
@@ -333,7 +340,7 @@ export default (props)=>{
                    {/* <Table style={{width:"400px",marginLeft:"20px"}} pagination={false} bordered size="small" dataSource={output} columns={conditionName}></Table> */}
                 </Col>
             </Row>
-         </div>
+         </Card>
       
                 
 )

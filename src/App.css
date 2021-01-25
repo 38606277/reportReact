@@ -5385,3 +5385,16 @@ textarea.ant-input {
 .ant-table-selection{
     justify-content: center
 }
+
+
+
+/*  */
+#luckysheet-scrollbar-y{
+    z-index: 11;
+}
+#Hluckysheet{
+    width: 100%;
+}
+#luckysheet-icon-morebtn-div{
+    width: 50%;
+}

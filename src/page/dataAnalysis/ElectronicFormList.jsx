@@ -19,6 +19,7 @@ import {
     Button,
     Checkbox,
     Card,
+    Drawer,
     Tree,
     Input,
     Spin,
@@ -43,6 +44,7 @@ import {
 } from 'antd';
 // import 
 import HttpService from '../../util/HttpService.jsx';
+import ElectronicForm from './ElectronicForm.jsx'
 import style from './ElectronicFormList.less'
 const Lstyle={
     marginRight:"6px"
@@ -133,11 +135,28 @@ const data=[
     },
 ]
 export default (props)=>{
+    const FormListbox=useRef()
+    const [visible, setVisible] = useState(false)//抽屉显示影藏
+    const showDrawer = () => {
+        setVisible(true);
+      };
+    
+      const onClose = (types) => {
+        setVisible(types);
+      };
+    useEffect(()=>{
+        document.documentElement.style.overflow = 'hidden'
+        const h=document.getElementsByClassName('navbar-side')[0]
+        FormListbox.current.style.height=h.offsetHeight+'px'
+        FormListbox.current.style.overflowY="scroll"
+
+    },[FormListbox])
     return (
+        <div ref={FormListbox}>
     <Card title="电子表格" className={style.ElectronicFormList} headStyle={{fontWeight:"600",fontSize:"18px"}}>
         <Divider plain orientation="left" style={{fontWeight:700,marginTop:"-10px"}}>表格模板</Divider>
         <Row className={style.ElectronicFormListMole}>
-            <Card className={style.ElectronicFormListMole_List} onClick={()=>props.history.push("/dataAnalysis/ElectronicForm")}>
+            <Card className={style.ElectronicFormListMole_List} onClick={()=>showDrawer()}>
                 <div className={style.ElectronicFormListMole_List_title}>
                     <PlusOutlined className={style.ElectronicFormListMole_List_title_ICON}/>
                 </div>
@@ -179,6 +198,31 @@ export default (props)=>{
             
             />
         </Card>
-    </Card>           
+
+        <Drawer
+               placement="right"
+               visible={visible}
+               destroyOnClose={true}
+               closable={false}
+               width="100%"
+               bodyStyle={
+                    {padding:"0px"}
+                }
+               maskStyle={
+                {   
+                    padding:"0px",
+                    width:"100%",
+                    height:"100%"
+                }
+                
+               }
+        >
+              <ElectronicForm
+               onClose={onClose}
+               ></ElectronicForm>  
+        </Drawer>
+    </Card>   
+ 
+    </div>      
 )
 }
