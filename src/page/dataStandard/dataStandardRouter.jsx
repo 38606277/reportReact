@@ -17,8 +17,8 @@ export default class dataStandardRouter extends React.Component{
         return (
             <Switch>
                 <Route path="/dataStandard/dataStandard/:catalog_id/:standard_id" component={dataStandard} />
-                <Route path="/dataStandard/dataStandardList" component={dataStandardList} />
-                <Redirect exact from="/dataStandard" to="/dataStandard/dataStandardList"/> 
+                <Route path="/dataStandard/dataStandardList/:catalog_id" component={dataStandardList} />
+                <Redirect exact from="/dataStandard" to="/dataStandard/dataStandardList/0"/> 
             </Switch>
         )
     }

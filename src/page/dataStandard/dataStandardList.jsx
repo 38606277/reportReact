@@ -84,7 +84,7 @@ export default class modelList extends React.Component {
             total:0,
             // catalog_pid:'',
             // catalog_name:"",
-            catalog_id:""
+            catalog_id:props.match.params.catalog_id
         };
     }
     async componentDidMount() {
@@ -258,10 +258,11 @@ export default class modelList extends React.Component {
             startIndex:page,
             perPage:pageSize
         })
+        
     }
 
     newStatndLink = () => {
-        if(null==this.state.catalog_id || ""==this.state.catalog_id){
+        if(null==this.state.catalog_id || ""==this.state.catalog_id || "0"==this.state.catalog_id  || 'undefined' ==this.state.catalog_id){
             message.warning("请先选择目录再新建");
         }else{
             window.location.href="#/dataStandard/dataStandard/"+this.state.catalog_id+"/null";
@@ -327,11 +328,12 @@ export default class modelList extends React.Component {
                                     <Button icon={<PlusCircleOutlined />} style={{ float:'right' }} onClick={()=>this.setState({visible2:true,setModule:false,set:false})}></Button>
                                     <Search style={{ marginBottom: 8 }} placeholder="Search" onChange={this.onChange} />
                                     <Tree
-                                    onExpand={this.onExpand}
-                                    expandedKeys={this.state.expandedKeys}
-                                    autoExpandParent={this.state.autoExpandParent}
-                                    treeData={this.state.treeData}
-                                    onSelect={this.onTreeSelect}
+                                        defaultExpandAll
+                                        onExpand={this.onExpand}
+                                        expandedKeys={this.state.expandedKeys}
+                                        autoExpandParent={this.state.autoExpandParent}
+                                        treeData={this.state.treeData}
+                                        onSelect={this.onTreeSelect}
                                     />
                                 </div >  
                             </Col>

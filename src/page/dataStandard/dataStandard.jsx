@@ -20,9 +20,9 @@ export default (props) => {
   const [catalogId, setCatalogId] = useState();
   console.log(props.match.params)
   useEffect(() => {
- 
+    setCatalogId(props.match.params.catalog_id);
     if ("null" != props.match.params.standard_id && "" != props.match.params.standard_id && null!= props.match.params.standard_id) {
-        setCatalogId(props.match.params.catalog_id);
+        
         let params = {
             "standard_id":props.match.params.standard_id
         }
@@ -65,7 +65,7 @@ export default (props) => {
               console.log('mainForm', mainForm)
               mainForm.submit()
             }}>提交</Button>,
-            <Button key="back" onClick={()=>window.location = '#/dataStandard/dataStandardList'}>返回</Button>,
+            <Button key="back" onClick={()=>window.location = '#/dataStandard/dataStandardList/'+catalogId}>返回</Button>,
           ]
         }
       }
@@ -87,7 +87,7 @@ export default (props) => {
                   if (res.resultCode == "1000") {
                     //刷新
                     message.success('提交成功');
-                    window.location.href="#/dataStandard/dataStandardList";
+                    window.location.href="#/dataStandard/dataStandardList/"+catalogId;
                   } else {
                     message.error(res.message);
                   }
