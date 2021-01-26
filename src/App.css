@@ -5398,3 +5398,8 @@ textarea.ant-input {
 #luckysheet-icon-morebtn-div{
     width: 50%;
 }
+
+
+#luckysheet-input-box{
+    z-index: 999999999;
+}

@@ -45,6 +45,7 @@ import {
 // import 
 import HttpService from '../../util/HttpService.jsx';
 import ElectronicForm from './ElectronicForm.jsx'
+import AddMouldForm from './addMouldForm.jsx'
 import style from './ElectronicFormList.less'
 const Lstyle={
     marginRight:"6px"
@@ -136,7 +137,8 @@ const data=[
 ]
 export default (props)=>{
     const FormListbox=useRef()
-    const [visible, setVisible] = useState(false)//抽屉显示影藏
+    const [visible, setVisible] = useState(false)//数据查询显示影藏
+    const [visible2, setVisible2] = useState(false)//新建编辑表格显示影藏
     const showDrawer = () => {
         setVisible(true);
       };
@@ -153,10 +155,13 @@ export default (props)=>{
     },[FormListbox])
     return (
         <div ref={FormListbox}>
-    <Card title="电子表格" className={style.ElectronicFormList} headStyle={{fontWeight:"600",fontSize:"18px"}}>
+    <Card title="电子表格" className={style.ElectronicFormList} headStyle={{fontWeight:"600",fontSize:"18px"}}
+    
+    extra={<a onClick={()=>showDrawer()}>表格数据查询</a>}
+    >
         <Divider plain orientation="left" style={{fontWeight:700,marginTop:"-10px"}}>表格模板</Divider>
         <Row className={style.ElectronicFormListMole}>
-            <Card className={style.ElectronicFormListMole_List} onClick={()=>showDrawer()}>
+            <Card className={style.ElectronicFormListMole_List} onClick={()=>{setVisible2(true)}}>
                 <div className={style.ElectronicFormListMole_List_title}>
                     <PlusOutlined className={style.ElectronicFormListMole_List_title_ICON}/>
                 </div>
@@ -221,8 +226,28 @@ export default (props)=>{
                onClose={onClose}
                ></ElectronicForm>  
         </Drawer>
+        
+        <Drawer
+               placement="right"
+               visible={visible2}
+               destroyOnClose={true}
+               closable={false}
+               width="100%"
+               bodyStyle={
+                    {padding:"0px"}
+                }
+               maskStyle={
+                {   
+                    padding:"0px",
+                    width:"100%",
+                    height:"100%"
+                }
+                
+               }
+        >
+              <AddMouldForm setVisible2={setVisible2}></AddMouldForm>  
+        </Drawer>
     </Card>   
- 
     </div>      
 )
 }

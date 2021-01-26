@@ -197,13 +197,13 @@ export default (props)=>{
             boxSizing:"border-box",
             padding:"20px"
         }}>
-            <div style={{width:"100%",position:"relative"}}>
-            <div style={{textAlign:"center",fontWeight:600,fontSize:"18px"}}>表格查询</div>
-            <Button  type="primary" size="small" style={{position:"absolute",left:"10px",top:"0"}} onClick={()=>{
-                onClose(false)
-            }}>返回</Button>
+            <div style={{width:"100%",position:"relative",height:"42px",boxSizing:"border-box",borderBottom:"1px solid #ccc",marginBottom:"20px"}}>
+                <div style={{textAlign:"center",fontWeight:600,fontSize:"18px"}}>表格查询</div>
+                <Button  type="primary" size="small" style={{position:"absolute",left:"10px",top:"0"}} onClick={()=>{
+                    onClose(false)
+                }}>返回</Button>
             </div>
-            <Row style={{overflowY:"scroll",height:"100%",boxSizing:"border-box",padding:"0 10px"}}>
+            <Row style={{overflowY:"scroll",height:"94%",boxSizing:"border-box",padding:"0 10px"}}>
                 <Col sm={16}>
                     <div
                     id="luckysheet"

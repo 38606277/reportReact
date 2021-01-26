@@ -44,6 +44,7 @@ import {
 } from 'antd';
 // import 
 import HttpService from '../../util/HttpService.jsx';
+import DATA from './index.json'
 const luckyCss = {
     margin: '0px',
     padding: '0px',
@@ -65,28 +66,18 @@ export default (props)=>{
                 showinfobar:false,
                 enableAddBackTop:false,
                 lang: 'zh',
-                data:[
-                    {
-                        "name": "name",
-                        "color": "",
-                        "index": 0,
-                        "status": 0,
-                        "order": 0,
-                        "celldata": [],
-                        "config": {}
-                    },
-                ]
               });
   
     },[])
     useEffect(()=>{
     },[])
     const preservation=()=>{
+        document.write(JSON.stringify(en.getAllSheets()))
        console.log(en.getAllSheets())
     }
     return (    
-        <Card title="新建模板" extra={<Button onClick={()=>preservation()}>保存</Button>}>
-                <div style={{position:"relative",height:"800px"}}>
+        <Card title="新建模板" extra={<Button onClick={()=>preservation()}>保存</Button>} style={{height:"100%",overflowY:"scroll"}} bodyStyle={{height:"90%"}}>
+                <div style={{position:"relative",height:"100%"}}>
                     <div
                     id="luckysheet"
                     style={luckyCss}
