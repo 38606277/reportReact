@@ -84,10 +84,14 @@ export default class modelList extends React.Component {
             total:0,
             // catalog_pid:'',
             // catalog_name:"",
-            catalog_id:""
+            catalog_id:props.match.params.catalog_id
         };
     }
     async componentDidMount() {
+        this.localData();
+    }
+
+    async localData () {
         await HttpService.post('/reportServer/dataStandard/getCatalogList', JSON.stringify({catalog_pid:'0'})).then(res => {//模型接口
             if (res.resultCode == "1000") {
                 this.setState({
@@ -103,8 +107,9 @@ export default class modelList extends React.Component {
                 list: [], loading: false
             });
         });
-        await this.getTableList("","")
+        await this.getTableList()
     }
+
     componentDidUpdate(){//执行回调
         
     }
@@ -124,9 +129,9 @@ export default class modelList extends React.Component {
             catalog_pid:e.node.catalog_pid,
             catalog_name:e.node.title,
         }
-        this.setState({catalog_id:selectedKeys,ModObj:ModObjs},function(){
+        this.setState({catalog_id:selectedKeys[0],ModObj:ModObjs},function(){
             console.log(this.state.ModObj)
-            this.loadCubeList();
+            this.getTableList();
         });
         
       }
@@ -152,12 +157,12 @@ export default class modelList extends React.Component {
         let obj={
             startIndex:this.state.startIndex,
             perPage:this.state.perPage,
-            // standard_name:table_title,
-            // standard_title:table_name,
+            standard_name:"",
+            standard_code:"",
             catalog_id:this.state.catalog_id
         }
         console.log(obj)
-        HttpService.post('/reportServer/bdModelTableColumn/table/getTableList',JSON.stringify(obj)).then(res => {///列表接口SunShine:    
+        HttpService.post('/reportServer/dataStandard/getDataStandardList',JSON.stringify(obj)).then(res => {///列表接口SunShine:    
             console.log(res )
             if (res.resultCode == "1000") {
                 this.setState({
@@ -206,36 +211,18 @@ export default class modelList extends React.Component {
         HttpService.post('/reportServer/dataStandard/createCatalog', JSON.stringify(data)).then(res => {
             console.log((res))
             if (res.resultCode == "1000") {   
-                HttpService.post('/reportServer/dataStandard/getCatalogList', JSON.stringify({catalog_pid:'0'})).then(res => {
-            
-                    if (res.resultCode == "1000") {
-                        this.setState({
-                            treeData: res.data,
-                        });
-                        this.setState({visible2:false})
-                    }
-                    else {
-                        message.error(res.message);
-                    }
-                })
+                this.localData();
             }
             else {
                 message.error(res.message);
             }
         })
     }
-    confirmModule =(module_id)=>{//删除模型
-        HttpService.post('/reportServer/bdModel/deleteModelById', JSON.stringify({"model_id":module_id})).then(res => {
+    confirmModule =(catalog_id)=>{//删除模型
+        HttpService.post('/reportServer/dataStandard/deleteCatalogById', JSON.stringify({"catalog_id":catalog_id})).then(res => {
             console.log(res)
             if (res.resultCode == "1000") {   
-                HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
-                    if (res.resultCode == "1000") {
-                        this.getTableList()
-                    }
-                    else {
-                        message.error(res.message);
-                    }
-                })
+                this.localData();
             }
             else {
                 message.error(res.message);
@@ -244,7 +231,7 @@ export default class modelList extends React.Component {
         
     }
     deleteList (id){
-        HttpService.post('/reportServer/bdModelTableColumn/table/deleteTableId', JSON.stringify({"table_id":id})).then(res => {
+        HttpService.post('/reportServer/dataStandard/deleteDataStandardById', JSON.stringify({"standard_id":id})).then(res => {
             if (res.resultCode == "1000") {   
                 message.success('删除成功');
                 this.getTableList()
@@ -271,7 +258,17 @@ export default class modelList extends React.Component {
             startIndex:page,
             perPage:pageSize
         })
+        
     }
+
+    newStatndLink = () => {
+        if(null==this.state.catalog_id || ""==this.state.catalog_id || "0"==this.state.catalog_id  || 'undefined' ==this.state.catalog_id){
+            message.warning("请先选择目录再新建");
+        }else{
+            window.location.href="#/dataStandard/dataStandard/"+this.state.catalog_id+"/null";
+        }
+    }
+
     render() {
         this.state.list.map((item, index) => {
             item.key = index;
@@ -281,19 +278,19 @@ export default class modelList extends React.Component {
         const columns = [
         {
             title:"标准名称",
-            dataIndex: 'table_title',
-            key: 'table_title',
+            dataIndex: 'standard_name',
+            key: 'standard_name',
             className: 'table_title',
         },
         {
             title: '标准编码',
-            dataIndex: 'table_name',
-            key: 'table_name',
+            dataIndex: 'standard_code',
+            key: 'standard_code',
             className: 'headerRow',
         }, {
             title: '描述',
-            dataIndex: 'table_desc',
-            key: 'table_desc',
+            dataIndex: 'description',
+            key: 'description',
             className: 'headerRow',
         },
         {
@@ -308,11 +305,11 @@ export default class modelList extends React.Component {
             className: 'headerRow',
             render: (text, record) => (
                 <span>
-                    <a  href={"#/dataAsset/newlform/"+"L"+record.table_id+"&"+this.state.module_id}>编辑</a>
+                    <a  href={"#/dataStandard/dataStandard/"+record.catalog_id+"/"+record.standard_id}>编辑</a>
                     <Divider type="vertical" />
                     <Popconfirm
                         title="您确定要删除此表吗?"
-                        onConfirm={()=>this.deleteList(record.table_id)}
+                        onConfirm={()=>this.deleteList(record.standard_id)}
                         okText="确定"
                         cancelText="取消"
                     ><a>删除</a> 
@@ -331,11 +328,12 @@ export default class modelList extends React.Component {
                                     <Button icon={<PlusCircleOutlined />} style={{ float:'right' }} onClick={()=>this.setState({visible2:true,setModule:false,set:false})}></Button>
                                     <Search style={{ marginBottom: 8 }} placeholder="Search" onChange={this.onChange} />
                                     <Tree
-                                    onExpand={this.onExpand}
-                                    expandedKeys={this.state.expandedKeys}
-                                    autoExpandParent={this.state.autoExpandParent}
-                                    treeData={this.state.treeData}
-                                    onSelect={this.onTreeSelect}
+                                        defaultExpandAll
+                                        onExpand={this.onExpand}
+                                        expandedKeys={this.state.expandedKeys}
+                                        autoExpandParent={this.state.autoExpandParent}
+                                        treeData={this.state.treeData}
+                                        onSelect={this.onTreeSelect}
                                     />
                                 </div >  
                             </Col>
@@ -358,7 +356,7 @@ export default class modelList extends React.Component {
                                                 this.search()
                                             }}>搜索</Button>
                                         </Form>
-                                        <Button type="primary"  style={{float:"right",marginRight:"10px"}} href={"#/dataAsset/newlform/"+"X"+this.state.module_id}>新建</Button>
+                                        <Button type="primary"  style={{float:"right",marginRight:"10px"}} onClick={this.newStatndLink} >新建</Button>
                                         </Col>
                                     </Row>
                                 </Card>

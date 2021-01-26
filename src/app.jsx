@@ -239,7 +239,7 @@ class App extends React.Component {
                             <Route path='/mdmdict' component={mdmDictRouter}/>
                             <Route path='/mdmcodetable' component={mdmCodetableRouter}/>
                             <Route path='/dataxweb' component={dataxwebRouter}/>
-                            <Route path='/dataStandardList' component={dataStandardRouter}/>
+                            <Route path='/dataStandard' component={dataStandardRouter}/>
                         </Switch>
                     </Layout>
                 );
