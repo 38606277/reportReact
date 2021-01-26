@@ -3,8 +3,8 @@ import { Form, Input, Table, Button, Card, Col,Select, Radio,Pagination, message
 import { PageContainer} from '@ant-design/pro-layout';
 import {PlusOutlined,MinusOutlined} from '@ant-design/icons'
 import ProCard from '@ant-design/pro-card';
-import TableForm from './FieldFrom/TableForm';
-import TableForm2 from './FieldFrom/TableForm2'
+import TableForm from './FieldFrom/TableForm.jsx';
+import TableForm2 from './FieldFrom/TableForm2.jsx'
 import HttpService from '../../util/HttpService.jsx';
 import { List } from 'antd/es/form/Form';
 // import ModuleTable from './ModuleTable'

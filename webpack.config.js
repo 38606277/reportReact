@@ -46,6 +46,11 @@ module.exports = {
                 }
             },
             {
+                test: /\.(ts|tsx)$/,
+                exclude: /node-modules/,
+                loader:'ts-loader'
+            },
+            {
                 test: /\.(sa|sc|c)ss$/,
                 use: [
                     devMode ? 'style-loader' : MiniCssExtractPlugin.loader,
@@ -126,6 +131,9 @@ module.exports = {
                 ]
             }
         ]
+    },
+    resolve: {
+        extensions: [".js", ".jsx", ".json",".ts",".tsx",'.less']
     },
     performance: {
         hints: false

@@ -47,10 +47,9 @@ import HttpService from '../../util/HttpService.jsx';
 const luckyCss = {
     margin: '0px',
     padding: '0px',
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    left: '0px',
+    position: 'fixed',
+    width: '60%',
+    height: '600px'
 }
 const layout = {
     labelCol: { span: 8 },
@@ -73,10 +72,13 @@ export default (props)=>{
         const en = window.luckysheet
         console.log($)
             en.create({
+                showtoolbarConfig:{
+                    hou:false
+                },
                 showinfobar:false,
                 lang: 'zh',
-                showstatisticBar: false,
-                functionButton:"<button id='' class='btn btn-primary'  style='padding:3px 6px;font-size: 12px;margin-right: 10px;'>保存</button>",
+                // showstatisticBar: false,
+                // functionButton:"<button id='' class='btn btn-primary'  style='padding:3px 6px;font-size: 12px;margin-right: 10px;'>保存</button>",
                 data:[
                     {
                         "name": "name",
@@ -203,7 +205,7 @@ export default (props)=>{
                     onClose(false)
                 }}>返回</Button>
             </div>
-            <Row style={{overflowY:"scroll",height:"94%",boxSizing:"border-box",padding:"0 10px"}}>
+            <Row style={{overflowY:"scroll",height:"672px",boxSizing:"border-box",padding:"20px",boxSizing  :"border-box"}}>
                 <Col sm={16}>
                     <div
                     id="luckysheet"

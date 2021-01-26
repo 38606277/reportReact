@@ -1,6 +1,6 @@
 import React,{useState,useEffect,useRef} from 'react';
 import { Form, Input, Table, Button, Card, Select, Pagination, message, Tabs, Divider, Tag ,Layout,Popconfirm} from 'antd';
-import HttpService from '../../util/HttpService';
+import HttpService from '../../util/HttpService.jsx';
 const layout = {
     labelCol: { span: 7 },
     wrapperCol: { span: 15 },

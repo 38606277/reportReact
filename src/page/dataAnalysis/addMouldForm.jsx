@@ -64,7 +64,7 @@ export default (props)=>{
         // ant-menu ant-menu-light
             en.create({
                 showinfobar:false,
-                enableAddBackTop:false,
+                // enableAddBackTop:false,
                 lang: 'zh',
               });
   
