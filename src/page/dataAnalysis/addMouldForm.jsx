@@ -59,26 +59,51 @@ const layout = {
     wrapperCol: { span: 16 },
 };
 const en = window.luckysheet
+
 export default (props)=>{
+    const {setVisible2}=props
     useEffect(()=>{
         // ant-menu ant-menu-light
             en.create({
                 showinfobar:false,
                 // enableAddBackTop:false,
                 lang: 'zh',
+                plugins:['chart'],
+                data:[
+                    {
+                        "name": "name",
+                        "index": "0",
+                        "order":  0,
+                        "status": 1,
+                    },
+                ]
               });
   
     },[])
     useEffect(()=>{
     },[])
-    const preservation=()=>{
-        document.write(JSON.stringify(en.getAllSheets()))
-       console.log(en.getAllSheets())
+    const preservation=(e)=>{//保存
+        console.log()
+        if(e.target.innerHTML==='保存'&&e.target.id==="Hou_Mou"){
+            console.log('保存成功')
+            // HttpService.post('/reportServer/electronTable/createElectronTable',JSON.stringify({id:"",name:"模型名称3",obj:en.getAllSheets()})).then(res=>{
+            //     if(res.resultCode==="1000"){
+            //         setVisible2(false)
+            //         console.log(res)
+            //     }
+                
+            // })
+        }
     }
     return (    
-        <Card title="新建模板" extra={<Button onClick={()=>preservation()}>保存</Button>} style={{height:"100%",overflowY:"scroll"}} bodyStyle={{height:"90%"}}>
+        <Card title="新建模板" style={{height:"100%",overflowY:"scroll"}} bodyStyle={{height:"90%"}}>
+             <div onClick={()=>setVisible2(false)}>返回</div>
                 <div style={{position:"relative",height:"100%"}}>
+                   
                     <div
+                    onClick={e=>{
+                        preservation(e)
+                    }}
                     id="luckysheet"
                     style={luckyCss}
                     ></div>

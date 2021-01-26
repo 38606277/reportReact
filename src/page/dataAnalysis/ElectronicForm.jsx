@@ -70,13 +70,13 @@ export default (props)=>{
     const [InputList,setInputList]=useState({})
     useEffect(()=>{
         const en = window.luckysheet
-        console.log($)
             en.create({
                 showtoolbarConfig:{
                     hou:false
                 },
                 showinfobar:false,
                 lang: 'zh',
+                plugins:['chart'],
                 // showstatisticBar: false,
                 // functionButton:"<button id='' class='btn btn-primary'  style='padding:3px 6px;font-size: 12px;margin-right: 10px;'>保存</button>",
                 data:[

@@ -56,89 +56,71 @@ const FormList=[
         name:"计划表"
     }
 ] 
-const columns=[
-    {
-        title:"表名",
-        dataIndex: 'name',
-        key: 'name',
-    },
-    {
-        title:"创建人",
-        dataIndex: 'founder',
-        key: 'founder',
-    },
-    {
-        title:"创建时间",
-        dataIndex:"creationTime",
-        key:"creationTime"
-    },
-    {
-        title:"更新时间",
-        dataIndex:"revisionTime",
-        key:"revisionTime"
-    },
-    {
-        title:"操作",
-        dataIndex:"x",
-        key:"x",
-        render:(_,res)=>{
-            return (
-                <Dropdown overlay={
-                    <Menu>
-                    <Menu.Item>
-                      <a target="_blank" rel="noopener noreferrer">
-                        编辑
-                      </a>
-                    </Menu.Item>
-                    <Menu.Item>
-                      <a target="_blank" rel="noopener noreferrer">
-                        删除
-                      </a>
-                    </Menu.Item>
-                  </Menu>
-                }>
-                <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
-                    操作 <DownOutlined />
-                </a>
-              </Dropdown>
-            )
-        }
-    }
-]
-const data=[
-    {
-        id:1,
-        name:"财务报表",
-        founder:"zhangsan",
-        creationTime:"2021/01/21",
-        revisionTime:"2021/01/22"
-    },
-    {
-        id:1,
-        name:"财务报表2",
-        founder:"zhangsan",
-        creationTime:"2021/01/21",
-        revisionTime:"2021/01/22"
-    },
-    {
-        id:1,
-        name:"财务报表3",
-        founder:"zhangsan",
-        creationTime:"2021/01/21",
-        revisionTime:"2021/01/22"
-    },
-    {
-        id:1,
-        name:"财务报表4",
-        founder:"zhangsan",
-        creationTime:"2021/01/21",
-        revisionTime:"2021/01/22"
-    },
-]
+
+
 export default (props)=>{
     const FormListbox=useRef()
     const [visible, setVisible] = useState(false)//数据查询显示影藏
     const [visible2, setVisible2] = useState(false)//新建编辑表格显示影藏
+    const [startIndex,setStartIndex]=useState(1);//当前第几页
+    const [perPage,setPerPage]=useState(10);//一页显示第几条
+    const [total,setTotal]=useState(0);//一共多少条数据
+    const [data,setData]=useState([]);//修改list
+    const columns=[
+        {
+            title:"表名",
+            dataIndex: 'name',
+            key: 'name',
+        },
+        {
+            title:"创建时间",
+            dataIndex:"create_date",
+            key:"create_date"
+        },
+        {
+            title:"更新时间",
+            dataIndex:"update_date",
+            key:"update_date"
+        },
+        {
+            title:"操作",
+            dataIndex:"x",
+            key:"x",
+            render:(_,res)=>{
+                return (
+                    <Dropdown overlay={
+                        <Menu>
+                        <Menu.Item>
+                          <a target="_blank" rel="noopener noreferrer" onClick={()=>{
+                              HttpService.post("/reportServer/electronTable/getObjById",JSON.stringify({id:res.id})).then(res=>{
+                                  console.log(res)
+                              })
+                          }}>
+                            编辑
+                          </a>
+                        </Menu.Item>
+                        <Menu.Item>
+                          <a target="_blank" rel="noopener noreferrer" onClick={()=>{
+                               HttpService.post("/reportServer/electronTable/deleteElectronTableById",JSON.stringify({id:res.id})).then(res=>{
+                                   if(res.resultCode==="1000"){
+                                    getList(1,10,"")
+                                    message.success(res.message)
+                                   }
+                            })
+                          }}>
+                            删除
+                          </a>
+                        </Menu.Item>
+                      </Menu>
+                    }>
+                    <a className="ant-dropdown-link" onClick={e => e.preventDefault()}>
+                        操作 <DownOutlined />
+                    </a>
+                  </Dropdown>
+                )
+            }
+        }
+    ]
     const showDrawer = () => {
         setVisible(true);
       };
@@ -152,7 +134,28 @@ export default (props)=>{
         FormListbox.current.style.height=h.offsetHeight+'px'
         FormListbox.current.style.overflowY="scroll"
 
-    },[FormListbox])
+    },[FormListbox]);
+    useEffect(()=>{
+        getList(1,10,"")
+    },[])
+    const getList=(startIndex,perPage,name)=>{
+        HttpService.post('/reportServer/electronTable/getList',JSON.stringify({startIndex,perPage,name})).then(res=>{
+            if(res.resultCode==="1000"){
+                setData(res.data.list)
+                setTotal(res.data.total)
+            }
+        })
+    }
+    const setpagindex=(page, pageSize)=>{
+        console.log(page,pageSize)
+        getList(page,pageSize,"")
+        setStartIndex(page)
+        setPerPage(pageSize)
+    }
+    const onShowSizeChange =(current, pageSize)=>{
+        setStartIndex(1)
+        setPerPage(pageSize)
+    }
     return (
         <div ref={FormListbox}>
     <Card title="电子表格" className={style.ElectronicFormList} headStyle={{fontWeight:"600",fontSize:"18px"}}
@@ -197,7 +200,7 @@ export default (props)=>{
             pagination={false}
             footer={()=>{
                 return (<div style={{display:"flow-root"}}>
-                    {/* <Pagination style={{float:'right'}} defaultCurrent={startIndex} total={total} onChange={setpagindex} onShowSizeChange={onShowSizeChange}/> */}
+                    <Pagination style={{float:'right'}} defaultCurrent={startIndex} total={total} onChange={setpagindex} onShowSizeChange={onShowSizeChange}/>
                 </div>)
             }}
             
