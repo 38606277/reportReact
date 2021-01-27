@@ -4,15 +4,15 @@ import Pagination from 'antd/lib/pagination';
 import { BarChartOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined ,SearchOutlined ,PlusOutlined,CloseOutlined, CheckOutlined,DownOutlined,EditOutlined,DisconnectOutlined,AreaChartOutlined  } from '@ant-design/icons';
 import { Form } from '@ant-design/compatible';
 
-import CodeMirror from 'react-codemirror'; 
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/mode/sql/sql';
-import 'codemirror/theme/ambiance.css';
-import 'codemirror/addon/hint/show-hint.css';  
-import 'codemirror/addon/hint/show-hint.js';  
-import 'codemirror/addon/hint/sql-hint.js';  
-import 'codemirror/theme/ambiance.css'; 
-import '@ant-design/compatible/assets/index.css';
+// import CodeMirror from 'react-codemirror'; 
+// import 'codemirror/lib/codemirror.css';
+// import 'codemirror/mode/sql/sql';
+// import 'codemirror/theme/ambiance.css';
+// import 'codemirror/addon/hint/show-hint.css';  
+// import 'codemirror/addon/hint/show-hint.js';  
+// import 'codemirror/addon/hint/sql-hint.js';  
+// import 'codemirror/theme/ambiance.css'; 
+// import '@ant-design/compatible/assets/index.css';
 import {
     Table,
     Divider,
@@ -60,12 +60,14 @@ const FormList=[
 
 export default (props)=>{
     const FormListbox=useRef()
-    const [visible, setVisible] = useState(false)//数据查询显示影藏
-    const [visible2, setVisible2] = useState(false)//新建编辑表格显示影藏
+    const [visible, setVisible] = useState(false);//数据查询显示影藏
+    const [visible2, setVisible2] = useState(false);//新建编辑表格显示影藏
     const [startIndex,setStartIndex]=useState(1);//当前第几页
     const [perPage,setPerPage]=useState(10);//一页显示第几条
     const [total,setTotal]=useState(0);//一共多少条数据
     const [data,setData]=useState([]);//修改list
+    const [isType,setisType]=useState(false);//true为编辑false为新建
+    const [ID,setID]=useState(null);
     const columns=[
         {
             title:"表名",
@@ -92,9 +94,9 @@ export default (props)=>{
                         <Menu>
                         <Menu.Item>
                           <a target="_blank" rel="noopener noreferrer" onClick={()=>{
-                              HttpService.post("/reportServer/electronTable/getObjById",JSON.stringify({id:res.id})).then(res=>{
-                                  console.log(res)
-                              })
+                              setisType(true)
+                              setVisible2(true)
+                              setID(res.id)
                           }}>
                             编辑
                           </a>
@@ -129,9 +131,9 @@ export default (props)=>{
         setVisible(types);
       };
     useEffect(()=>{
-        document.documentElement.style.overflow = 'hidden'
+        // document.documentElement.style.overflow = 'hidden'
         const h=document.getElementsByClassName('navbar-side')[0]
-        FormListbox.current.style.height=h.offsetHeight+'px'
+        FormListbox.current.style.height=h.offsetHeight-10+'px'
         FormListbox.current.style.overflowY="scroll"
 
     },[FormListbox]);
@@ -156,6 +158,12 @@ export default (props)=>{
         setStartIndex(1)
         setPerPage(pageSize)
     }
+
+    const mReturn=()=>{//新建清空数据
+        setVisible2(false)
+        setisType(false)
+        setID(null)
+    }
     return (
         <div ref={FormListbox}>
     <Card title="电子表格" className={style.ElectronicFormList} headStyle={{fontWeight:"600",fontSize:"18px"}}
@@ -164,7 +172,10 @@ export default (props)=>{
     >
         <Divider plain orientation="left" style={{fontWeight:700,marginTop:"-10px"}}>表格模板</Divider>
         <Row className={style.ElectronicFormListMole}>
-            <Card className={style.ElectronicFormListMole_List} onClick={()=>{setVisible2(true)}}>
+            <Card className={style.ElectronicFormListMole_List} onClick={()=>{
+                setVisible2(true)
+                setisType(false)
+                }}>
                 <div className={style.ElectronicFormListMole_List_title}>
                     <PlusOutlined className={style.ElectronicFormListMole_List_title_ICON}/>
                 </div>
@@ -248,7 +259,7 @@ export default (props)=>{
                 
                }
         >
-              <AddMouldForm setVisible2={setVisible2}></AddMouldForm>  
+              <AddMouldForm isType={isType} mReturn={mReturn} getList={getList} id={ID}></AddMouldForm>  
         </Drawer>
     </Card>   
     </div>      

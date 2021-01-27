@@ -153,3 +153,16 @@ credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
   "namespace": "总账",
   "id": "a987"
 }
+
+
+
+###查询函数用ID
+POST http://localhost:9609/reportServer/mqttTask/findMqttTaskByIdAndNum HTTP/1.1
+content-type: application/json
+method: POST
+credentials: { UserCode: "system", Pwd: "KfTaJa3vfLE=" }
+
+{
+    id:"1",
+    pageSize:"10"
+}
