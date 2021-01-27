@@ -286,8 +286,7 @@ class SqlCreator extends React.Component {
         return (
             <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px' }}>
                 <Form layout="inline">
-                <SplitPane split="vertical" defaultSize={200} style={{position:'relative'}}>
-                    <Pane >
+                <SplitPane split="vertical"  minSize={50} defaultSize={100} style={{position:'relative'}}>
                         <Card bodyStyle={{ padding: '5px' }} title="标题列表">
                         {   
                             this.state.list==null?'':this.state.list.map((item,key)=>{
@@ -297,8 +296,6 @@ class SqlCreator extends React.Component {
                             })
                         }
                         </Card>
-                    </Pane>
-                    <Pane >
                         <Collapse defaultActiveKey={['1']} onChange={callback}>
                             <Panel header="输入SQL" key="1">
                                 <Button type="primary" onClick={() => this.handleSubmit()} style={{ marginRight: "10px" }}>保存</Button>
@@ -358,7 +355,6 @@ class SqlCreator extends React.Component {
                                 </Panel>
                             </Collapse>
                             
-                        </Pane>
                     </SplitPane>
                 </Form>
                 
