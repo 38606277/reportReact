@@ -220,7 +220,7 @@ export default (props)=>{
 
         <Drawer
                placement="right"
-               visible={visible}
+               visible={true}
                destroyOnClose={true}
                closable={false}
                width="100%"

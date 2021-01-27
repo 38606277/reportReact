@@ -44,19 +44,17 @@ import {
 } from 'antd';
 // import 
 import HttpService from '../../util/HttpService.jsx';
-import SplitPane  from 'react-split-pane'
 const luckyCss = {
     margin: '0px',
     padding: '0px',
-    position: 'relative',
-    width: '100%',
+    position: 'fixed',
+    width: '60%',
     height: '600px'
 }
 const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
 };
-const en = window.luckysheet
 export default (props)=>{
     const {onClose}=props
     const luckysheets=useRef()
@@ -71,7 +69,7 @@ export default (props)=>{
     const [mainForm] = Form.useForm()//Form
     const [InputList,setInputList]=useState({})
     useEffect(()=>{
-        
+        const en = window.luckysheet
             en.create({
                 showtoolbarConfig:{
                     hou:false
@@ -208,49 +206,14 @@ export default (props)=>{
                     onClose(false)
                 }}>返回</Button>
             </div>
-            <div style={{height:"672px",boxSizing:"border-box",padding:"20px",boxSizing  :"border-box"}}>
-            <SplitPane split="vertical" minSize={600}
-            style={
-                {
-                    boxSizing:"border-box",
-                    padding:"0 20px"
-                }
-            }
-                onChange={(size) => {
-                    en.create({
-                        showtoolbarConfig:{
-                            hou:false
-                        },
-                        showinfobar:false,
-                        lang: 'zh',
-                        plugins:['chart'],
-                        // showstatisticBar: false,
-                        // functionButton:"<button id='' class='btn btn-primary'  style='padding:3px 6px;font-size: 12px;margin-right: 10px;'>保存</button>",
-                        data:[
-                            {
-                                "name": "name",
-                                "color": "",
-                                "index": 0,
-                                "status": 0,
-                                "order": 0,
-                                "celldata": [],
-                                "config": {}
-                            },
-                        ]
-                      });
-                    // const dom=document.getElementsByClassName('luckysheet')
-                    // const dom2=document.getElementById('luckysheetTableContent')
-                    // dom[0].style.width=size+'px'
-                    // dom2.style.width=size+'px'
-                }}
-            >
-                <div>
+            <Row style={{overflowY:"scroll",height:"672px",boxSizing:"border-box",padding:"20px",boxSizing  :"border-box"}}>
+                <Col sm={16}>
                     <div
                     id="luckysheet"
                     style={luckyCss}
                     ></div>
-                </div>
-                <div>
+                </Col>
+                <Col sm={8}>
                     <Row style={{position:"relative",height:"32px"}}>
                       <Button style={{position:"absolute",right:"0px"}} onClick={()=>{
                           query()
@@ -325,7 +288,10 @@ export default (props)=>{
                         </Form>
                     </Row>
                     <Divider plain orientation="left" style={{color:"burlywood"}}>查询条件</Divider>
-
+                    {/* <Button onClick={()=>{
+                          const en = window.luckysheet
+                        console.log(en.getAllSheets())
+                    }}>获取数据</Button> */}
                     <Form 
                         form={mainForm}
                         onFieldsChange={(a,e)=>{
@@ -353,6 +319,7 @@ export default (props)=>{
                             }):<Empty />
                         }
                     </Form>
+                   {/* <Table style={{width:"400px",marginLeft:"20px"}} pagination={false} bordered size="small" dataSource={Condition} columns={conditionName}></Table> */}
                    <Divider plain orientation="left" style={{color:"burlywood"}}>输出参数</Divider>
                    <List
                     dataSource={output}
@@ -366,10 +333,9 @@ export default (props)=>{
                         </List.Item>
                     )}
                     />
-                </div>
-            </SplitPane>
-              
-            </div>
+                   {/* <Table style={{width:"400px",marginLeft:"20px"}} pagination={false} bordered size="small" dataSource={output} columns={conditionName}></Table> */}
+                </Col>
+            </Row>
          </div>
       
                 

@@ -15,6 +15,7 @@ import { BarChartOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined 
 // import '@ant-design/compatible/assets/index.css';
 import {
     Table,
+    Tabs ,
     Form,
     Divider,
     Button,
@@ -43,6 +44,7 @@ import {
     Empty,
     Steps 
 } from 'antd';
+const { TabPane } = Tabs;
 import Addhm from './addAlgorithm.jsx'
 import HttpService from '../../util/HttpService.jsx';
 const { Step } = Steps;
@@ -133,16 +135,46 @@ export default (props)=>{
         setModuleName("新建训练")
         setisModalVisible(true)
     }
+    const ModuleSe=(title)=>{
+        if(title==="模型校验"){
+            return
+        }
+        setModuleName(title)
+        setisModalVisible(true)
+    }
+    const callback=(key)=>{
+        setGroup(key)
+        console.log(key)
+    }
     return (    
         <Card title="模型列表">
-            <Steps>
-                <Step icon={<span></span>} title={
-                    <span>模型训练</span>
-                } />
-                <Step icon={<span></span>} title={<span>模型校验</span>} />
-                <Step icon={<span></span>} title={<span>模型预测</span>} />
+            <Steps current={5} progressDot={()=>{return <div style={{width:"8px",height:"8px",borderRadius:"50%",background:"#1890ff"}}></div>}}>
+                <Step title="模型训练" onClick={()=>ModuleSe('模型训练')}/>
+                <Step title="模型校验" onClick={()=>ModuleSe('模型校验')}/>
+                <Step title="模型预测" onClick={()=>ModuleSe('模型预测')}/>
             </Steps>
-            <Table 
+            <Tabs defaultActiveKey="a" onChange={callback} forceRender style={{marginTop:"10px"}}>
+                <TabPane tab="模型" key="a">
+                    <Table 
+                        dataSource={data} columns={columns1}
+                    >
+                    </Table>
+                </TabPane>
+                <TabPane tab="模型训练" key="b" style={{position:"relative"}}>
+                    <Button type="primary" style={{position:"absolute",right:"0px",top:"-50px"}}  onClick={()=>addtrain()}>新建训练</Button>
+                    <Table 
+                        dataSource={data} columns={columns1}
+                    >
+                    </Table>
+                </TabPane>
+                <TabPane tab="预测" key="c">
+                    <Table 
+                        dataSource={data} columns={columns1}
+                    >
+                    </Table>
+                </TabPane>
+            </Tabs>
+            {/* <Table 
                  dataSource={data} columns={columns1}
                 title={
                     ()=>{
@@ -157,7 +189,7 @@ export default (props)=>{
                     }
                 }
             >
-            </Table>
+            </Table> */}
             <Addhm isModalVisible={isModalVisible} handleOk={e=>handleOk(e)} title={moduleName} handleCancel={handleCancel}></Addhm>
          </Card>           
 )

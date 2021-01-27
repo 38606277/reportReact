@@ -43,7 +43,6 @@ import {
     Empty,
     Steps 
 } from 'antd';
-import SplitPane from 'react-split-pane'
 import Addhm from './addAlgorithm.jsx'
 import HttpService from '../../util/HttpService.jsx';
 const { Step } = Steps;
@@ -148,10 +147,6 @@ export default (props)=>{
                     </div>)
                 }}/>
                 <Addhm isModalVisible={isModalVisible} handleOk={e=>handleOk(e)} title={"训练模型"} handleCancel={handleCancel}></Addhm>
-                <SplitPane split="vertical" minSize={50}  primary="second">
-                    <h1>23131232</h1>
-                    <h1>2121</h1>
-                </SplitPane>
          </Card>           
 )
 }
