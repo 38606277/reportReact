@@ -9,7 +9,7 @@ import {
     Input,
     Divider,
     Avatar,
-    Checkbox,
+    Collapse ,
     List,
     Dropdown,
     Pagination,
@@ -33,7 +33,12 @@ import CodeMirror from 'react-codemirror';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/sql/sql';
 import 'codemirror/theme/ambiance.css';
-import FunctionService from '../../service/FunctionService.jsx'
+import 'codemirror/mode/shell/shell';
+import 'codemirror/addon/display/placeholder'; 
+import 'codemirror/addon/hint/show-hint.css'; // 用来做代码提示
+import 'codemirror/addon/hint/show-hint.js'; // 用来做代码提示
+import 'codemirror/addon/hint/sql-hint.js'; // 用来做代码提示
+
 import HttpService from '../../util/HttpService.jsx';
 import DbService from '../../service/DbService.jsx'
 import "@babel/polyfill";
@@ -41,19 +46,14 @@ import './Query.scss';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
-const RadioGroup = Radio.Group;
-const TextArea = Input.TextArea;
-const TabPane = Tabs.TabPane;
-const ButtonGroup = Button.ButtonGroup;
+const { Panel } = Collapse;
 
-
-const functionService = new FunctionService();
 const dbService = new DbService();
 var source = { app: ["name", "score", "birthDate"], version: ["name", "score", "birthDate"], dbos: ["name", "population", "size"] };
 const options = {
 
     lineNumbers: true,                //显示行号  
-    mode: { name: "text/x-mysql" },          //定义mode  
+    mode: "text/x-sql",          //定义mode  
     extraKeys: { "Ctrl-Enter": "autocomplete" },//自动提示配置  
     theme: "default",
     hintOptions: {
@@ -61,7 +61,9 @@ const options = {
     }
 };
 
-
+function  callback(key) {
+    console.log(key);
+  }
 const url = window.getServerUrl();
 class SqlCreator extends React.Component {
 
@@ -238,7 +240,7 @@ class SqlCreator extends React.Component {
             this.loadModelData();
         });
     }
-    
+   
     render() {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -247,77 +249,77 @@ class SqlCreator extends React.Component {
         };
         return (
             <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px' }}>
-                <Card title='sql计算服务' bordered={false} bodyStyle={{ padding: "5px" }} headStyle={{ height: '40px' }}>
-                    <Form layout="inline">
-                        <Row gutter={0}>
-                            <Col span={6}>
-                                <Card bodyStyle={{ padding: '5px' }} title="标题列表">
-                                {   
-                                    this.state.list==null?'':this.state.list.map((item,key)=>{
-                                        return (<div key={key} style={{display:"flex",margin:"10px 0",padding:"1px 0",background:window.sessionStorage.H_leftColor*1===key?"#ccc":"",color:window.sessionStorage.H_leftColor*1===key?"#fff":""}}>
-                                            <div style={{flex:'5',cursor: "pointer"}} onClick={()=>this.setLeftMenu(key,item)}><span style={{paddingLeft:'10px'}}>{key+1} </span><span style={{display:"inline-block",width:"20px"}}></span>{item.name}</div>
-                                        </div>)
-                                    })
-                                }
-                                </Card>
-                            </Col>
-                            <Col span={18}>
-                                <Card bodyStyle={{ padding: '8px' }} >
-                                    <Button type="primary" onClick={() => this.handleSubmit()} style={{ marginRight: "10px" }}>保存</Button>
-                                    <Button  onClick={() => this.resetInput()} style={{ marginRight: "10px" }}>重置</Button>
-                                    <Divider style={{ margin: "8px 0 8px 0" }} />
-                                    <Row>
+                <Form layout="inline">
+                    <Row gutter={0}>
+                        <Col span={6}>
+                            <Card bodyStyle={{ padding: '5px' }} title="标题列表">
+                            {   
+                                this.state.list==null?'':this.state.list.map((item,key)=>{
+                                    return (<div key={key} style={{display:"flex",margin:"10px 0",padding:"1px 0",background:window.sessionStorage.H_leftColor*1===key?"#ccc":"",color:window.sessionStorage.H_leftColor*1===key?"#fff":""}}>
+                                        <div style={{flex:'5',cursor: "pointer"}} onClick={()=>this.setLeftMenu(key,item)}><span style={{paddingLeft:'10px'}}>{key+1} </span><span style={{display:"inline-block",width:"20px"}}></span>{item.name}</div>
+                                    </div>)
+                                })
+                            }
+                            </Card>
+                        </Col>
+                        <Col span={18}>
+                        <Collapse defaultActiveKey={['1']} onChange={callback}>
+                            <Panel header="输入SQL" key="1">
+                                <Button type="primary" onClick={() => this.handleSubmit()} style={{ marginRight: "10px" }}>保存</Button>
+                                <Button  onClick={() => this.resetInput()} style={{ marginRight: "10px" }}>重置</Button>
+                                <Divider style={{ margin: "8px 0 8px 0" }} />
+                                <Row>
+                                    <FormItem >
+                                            {getFieldDecorator('id')( 
+                                                <Input id="id" name="id" value={this.state.id} style={{display:'none'}} />
+                                            )}
+                                        </FormItem>
+                                        
                                         <FormItem >
-                                                {getFieldDecorator('id')( 
-                                                    <Input id="id" name="id" value={this.state.id} style={{display:'none'}} />
-                                                )}
-                                            </FormItem>
-                                         
-                                            <FormItem >
-                                                {
-                                                    getFieldDecorator('name')(
-                                                        <Input  id="name" name="name" style={{display:'none'}}  />
-                                                    )
-                                                }
-                                            </FormItem>
-                                        <Col span={12}>
-                                            <FormItem label="选择数据库" {...formItemLayout} style={{ marginBottom: "5px" }}>
                                             {
-                                                getFieldDecorator('fromdb', {
-                                                    rules: [{ required: 'true', message: "必须选择数据库" }]
-                                                })(
-                                                    <Select setValue={this.form} style={{ minWidth: '300px' }}>
-                                                        {this.state.dbList.map(item => <Option key={item.name} value={item.name}>{item.name}</Option>)}
-                                                    </Select>
+                                                getFieldDecorator('name')(
+                                                    <Input  id="name" name="name" style={{display:'none'}}  />
                                                 )
                                             }
-                                                </FormItem>
-                                        </Col>
-                                        <Col>
-                                            {this.state.infoname==""?"":<div style={{paddingTop:'10px'}}>查询名称：&nbsp;&nbsp; {this.state.infoname}</div>}
-                                        </Col>
-                                    </Row>
-                                    <Row style={{ marginBottom: "5px" }}>
-                                        <span style={{ color: "black", fontWeight: "400", bottom: "2px" }}><span class="ant-form-item-required"></span>输入SQL</span>
-                                        <span style={{ float: "right", }}>
-                                            <Button icon={<ToolOutlined />} loading={this.state.loading} onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >查询</Button>
+                                        </FormItem>
+                                    <Col >
+                                            <Button icon={<ToolOutlined />} loading={this.state.loading} onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >执行</Button>
                                             <Button icon={<BarsOutlined />} onClick={() => this.sqlFormat()} style={{ marginRight: "10px" }}> 格式化</Button>
-                                        </span>
-                                    </Row>
-                                    <CodeMirror ref="editorsql" value='' style={{ height: '300px', width: '450px', border: "2px solid red" }} options={options} />
-                                </Card>
-                                <Card bodyStyle={{ padding: '8px' }} title="查询结果" >
+                                    </Col>
+                                    <Col span={12}>
+                                        <FormItem label="选择数据库" {...formItemLayout} style={{ marginBottom: "5px" }}>
+                                        {
+                                            getFieldDecorator('fromdb', {
+                                                rules: [{ required: 'true', message: "必须选择数据库" }]
+                                            })(
+                                                <Select setValue={this.form} style={{ minWidth: '300px' }}>
+                                                    {this.state.dbList.map(item => <Option key={item.name} value={item.name}>{item.name}</Option>)}
+                                                </Select>
+                                            )
+                                        }
+                                            </FormItem>
+                                    </Col>
+                                    <Col>
+                                        {this.state.infoname==""?"":<div style={{paddingTop:'10px'}}>查询名称：&nbsp;&nbsp; {this.state.infoname}</div>}
+                                    </Col>
+                                    
+                                </Row>
+                                <CodeMirror ref="editorsql" value='' style={{ height: '300px', width: '450px', border: "2px solid red" }} options={options} />
+                                </Panel>
+                            
+                                <Panel header="查询结果" key="2">
                                     <Table
                                         style={{width:'100%',overflow:'auto'}}
                                         columns={this.state.columnlist}
                                         dataSource={this.state.datalist}
                                         >
                                     </Table>
-                                </Card>
-                            </Col>
-                        </Row>
-                    </Form>
-                </Card>
+                                </Panel>
+                            </Collapse>
+                            
+                        </Col>
+                    </Row>
+                </Form>
                 <Modal
                     title="查询名"
                     visible={this.state.visible}
