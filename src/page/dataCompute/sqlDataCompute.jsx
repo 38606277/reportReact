@@ -1,7 +1,7 @@
 import React from 'react'
 import { Form, Icon as LegacyIcon } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import { BarsOutlined, ToolOutlined } from '@ant-design/icons';
+import { BarsOutlined, ToolOutlined,DownloadOutlined } from '@ant-design/icons';
 import {
     Card,
     Button,
@@ -26,7 +26,8 @@ import {
     Menu,
 } from 'antd';
 import moment from 'moment';
-import {SplitPane} from 'react-split-pane';
+import SplitPane, { Pane } from 'react-split-pane';
+import ExportJsonExcel from "js-export-excel";
 import 'moment/locale/zh-cn';
 
 import CodeMirror from 'react-codemirror';
@@ -65,6 +66,14 @@ function  callback(key) {
     console.log(key);
   }
 const url = window.getServerUrl();
+
+const genExtra = () => (
+    <DownloadOutlined onClick={event => {
+        // If you don't want click extra trigger collapse, you can prevent this:
+        event.downloadExcel();
+      }} />
+  );
+  
 class SqlCreator extends React.Component {
 
     state = {};
@@ -240,7 +249,34 @@ class SqlCreator extends React.Component {
             this.loadModelData();
         });
     }
-   
+    //导出到Excel
+    downloadExcel = () => {
+        // currentPro 是列表数据
+        const currentPro = this.state.columnlist;
+        if(null!=currentPro){
+            var option = {};
+            let dataTable = [], keyList = [];
+            if (currentPro) {
+                for (let i in currentPro) {
+                    dataTable.push(currentPro[i].title);
+                    keyList.push(currentPro[i].key);
+                }
+            }
+            const infofroms=this.props.form.getFieldsValue();
+            option.fileName = infofroms.fromdb+"-"+infofroms.name;
+            option.datas = [
+                {
+                    sheetData: this.state.datalist,
+                    sheetName: 'sheet',
+                    sheetFilter: keyList,
+                    sheetHeader: keyList,
+                }
+            ];
+            var toExcel = new ExportJsonExcel(option); //new
+            toExcel.saveExcel();
+        }
+    }
+  
     render() {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -250,19 +286,19 @@ class SqlCreator extends React.Component {
         return (
             <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px' }}>
                 <Form layout="inline">
-                    <Row gutter={0}>
-                        <Col span={6}>
-                            <Card bodyStyle={{ padding: '5px' }} title="标题列表">
-                            {   
-                                this.state.list==null?'':this.state.list.map((item,key)=>{
-                                    return (<div key={key} style={{display:"flex",margin:"10px 0",padding:"1px 0",background:window.sessionStorage.H_leftColor*1===key?"#ccc":"",color:window.sessionStorage.H_leftColor*1===key?"#fff":""}}>
-                                        <div style={{flex:'5',cursor: "pointer"}} onClick={()=>this.setLeftMenu(key,item)}><span style={{paddingLeft:'10px'}}>{key+1} </span><span style={{display:"inline-block",width:"20px"}}></span>{item.name}</div>
-                                    </div>)
-                                })
-                            }
-                            </Card>
-                        </Col>
-                        <Col span={18}>
+                <SplitPane split="vertical" defaultSize={200} style={{position:'relative'}}>
+                    <Pane >
+                        <Card bodyStyle={{ padding: '5px' }} title="标题列表">
+                        {   
+                            this.state.list==null?'':this.state.list.map((item,key)=>{
+                                return (<div key={key} style={{display:"flex",margin:"10px 0",padding:"1px 0",background:window.sessionStorage.H_leftColor*1===key?"#ccc":"",color:window.sessionStorage.H_leftColor*1===key?"#fff":""}}>
+                                    <div style={{flex:'5',cursor: "pointer"}} onClick={()=>this.setLeftMenu(key,item)}><span style={{paddingLeft:'10px'}}>{key+1} </span><span style={{display:"inline-block",width:"20px"}}></span>{item.name}</div>
+                                </div>)
+                            })
+                        }
+                        </Card>
+                    </Pane>
+                    <Pane >
                         <Collapse defaultActiveKey={['1']} onChange={callback}>
                             <Panel header="输入SQL" key="1">
                                 <Button type="primary" onClick={() => this.handleSubmit()} style={{ marginRight: "10px" }}>保存</Button>
@@ -307,9 +343,14 @@ class SqlCreator extends React.Component {
                                 <CodeMirror ref="editorsql" value='' style={{ height: '300px', width: '450px', border: "2px solid red" }} options={options} />
                                 </Panel>
                             
-                                <Panel header="查询结果" key="2">
+                                <Panel header="查询结果" key="2" extra={
+                                    <DownloadOutlined onClick={event => {
+                                        this.downloadExcel();
+                                        event.stopPropagation();
+                                        }} />
+                                }>
                                     <Table
-                                        style={{width:'100%',overflow:'auto'}}
+                                        style={{width:'100%', maxWidth:'1000px',overflow:'auto'}}
                                         columns={this.state.columnlist}
                                         dataSource={this.state.datalist}
                                         >
@@ -317,9 +358,10 @@ class SqlCreator extends React.Component {
                                 </Panel>
                             </Collapse>
                             
-                        </Col>
-                    </Row>
+                        </Pane>
+                    </SplitPane>
                 </Form>
+                
                 <Modal
                     title="查询名"
                     visible={this.state.visible}
