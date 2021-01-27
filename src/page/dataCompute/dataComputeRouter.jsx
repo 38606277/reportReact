@@ -12,7 +12,7 @@ export default class dataCompute extends React.Component{
     render(){
         return (
             <Switch>
-                <Route path="/dataCompute/sqlDataCompute" component={sqlDataCompute} />
+                 <Route path="/dataCompute/sqlDataCompute" component={sqlDataCompute} />
                  <Route path="/dataCompute/pyDataCompute" component={pyDataCompute} />
                  <Route path="/dataCompute/sparkDataCompute" component={sparkDataCompute} />
                  <Route path="/dataCompute/MQTT" component={MQTT} />
