@@ -188,8 +188,8 @@ class SqlCreator extends React.Component {
                 .then(res => {
                     this.setState({ loading: false });
                     if (res.resultCode == "1000") {
-                        if(null!=res.data){
-                            let obj = res.data[0];
+                        if(null!=res.data.data && res.data.result){
+                            let obj = res.data.data[0];
                             for(var key in obj){
                                 let json = {
                                     key: key, title: key.toUpperCase(), dataIndex: key 
@@ -198,10 +198,13 @@ class SqlCreator extends React.Component {
                             }
                             this.setState({
                                 columnlist:column,
-                                datalist:res.data
+                                datalist:res.data.data
                             });
+                            message.success(`查询成功！`)
+                        }else{
+                            message.error(res.data.info);
                         }
-                        message.success(`更新成功！`)
+                       
                     }
                     else
                         message.error(res.message);
