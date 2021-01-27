@@ -3,7 +3,7 @@ import React                from 'react';
 import Role                 from '../../../service/RoleService.jsx';
 import RuleService          from '../../../service/RuleService.jsx';
 
-import { Table, Button, Card, Tooltip, Input, message, Tree, Tabs, Select } from 'antd';
+import { Table, Button, Card, Tooltip, Input, message, Tree, Tabs, Select,Spin  } from 'antd';
 import Pagination           from 'antd/lib/pagination';
 
 const TreeNode = Tree.TreeNode;
@@ -33,9 +33,10 @@ class RuleInfo extends React.Component{
             selectedKeys: [],
             tabPosition: 'top',
             treeData:[],
-            activeKey:"select",
+            activeKey:"webFunc",
             roleName:'',
             panes,
+            loading: false 
         };
     }
     
@@ -184,7 +185,7 @@ class RuleInfo extends React.Component{
         // };
         return  this.parentNodes;
     }
-
+   
       renderTreeNodes = (data) => {
         return data.map((item) => {
           if (item.children) {
@@ -612,8 +613,12 @@ class RuleInfo extends React.Component{
       }
     saveSelectObject(){
             let param=[this.state.roleId,this.state.activeKey,this.state.checkedKeys];
+            this.setState({ loading: true });
             ruleSevie.saveAuthRules(param).then(response=>{
+                this.setState({ loading: false });
                 message.success("保存成功");
+            }).catch(function(){
+                this.setState({ loading: false });
             });
     }
     render(){
@@ -648,60 +653,63 @@ class RuleInfo extends React.Component{
        
         return (
             <div id="page-wrapper">
-            <Card title="角色列表"  style={{float:"left",width:"20%"}}>
-                <Tooltip>
-                    <Search
-                        style={{ maxWidth: 190,marginBottom:'10px' ,marginLeft: '-20px', marginRight: '-30px', border: '0'}}
-                        placeholder={this.state.roleName==''?'请输入...':this.state.roleName}
-                        enterButton="查询"
-                        onSearch={value => this.onSearch(value)}
-                        onChange={(e) => this.onValueChange(e)}
-                        value={this.state.roleName}
-                        />
-                </Tooltip>
-                <Table dataSource={dataSource} columns={columns}  pagination={false} 
-                showHeader={false} style={{ border: '0'}}/>
-                 <Pagination current={this.state.pageNum} 
-                    total={this.state.total} 
-                    onChange={(pageNum) => this.onPageNumChange(pageNum)}/> 
-            </Card>
-           
-            <Card title="权限列表" style={{float:"left",width:"80%"}}>
-                <Tabs defaultActiveKey="webFunc" onChange={this.onChangeTab} tabPosition={this.state.tabPosition}>
-                <TabPane tab="功能菜单" key="webFunc">
-                    {contents}
-                </TabPane>
-                <TabPane tab="Excel功能" key="func">
-                     {contents}
-                </TabPane>
-                <TabPane tab="数据查询" key="select">
-                    {contents}
-                </TabPane>
-                <TabPane tab="函数" key="function">
-                    {contents}
-                </TabPane>
-                <TabPane tab="多维分析" key="cube">
-                     {contents}
-                </TabPane>
-                <TabPane tab="仪表盘" key="dashboard">
-                    {contents}
-                </TabPane>
-                <TabPane tab="模板" key="template">
-                     {contents}
-                </TabPane>
-               
-               
-                <TabPane tab="数据权限" key="table">
-                    {contents}
-                    {/* <Tabs  onChange={this.onChangeTab} tabPosition={this.state.tabPosition}>
-                    {this.state.panes.map(pane => <TabPane tab={pane.title} key={pane.key}>{pane.content}</TabPane>)}
-                       
-                    </Tabs> */}
-                </TabPane>
-               
-                </Tabs>
-            </Card>
-             
+                <Spin spinning={this.state.loading} >
+                <Card title="角色列表"  style={{float:"left",width:"20%"}}>
+                    
+                    <Tooltip>
+                        <Search
+                            style={{ maxWidth: 190,marginBottom:'10px' ,marginLeft: '-20px', marginRight: '-30px', border: '0'}}
+                            placeholder={this.state.roleName==''?'请输入...':this.state.roleName}
+                            enterButton="查询"
+                            onSearch={value => this.onSearch(value)}
+                            onChange={(e) => this.onValueChange(e)}
+                            value={this.state.roleName}
+                            />
+                    </Tooltip>
+                    <Table dataSource={dataSource} columns={columns}  pagination={false} 
+                    showHeader={false} style={{ border: '0'}}/>
+                    <Pagination current={this.state.pageNum} 
+                        total={this.state.total} 
+                        onChange={(pageNum) => this.onPageNumChange(pageNum)}/> 
+                </Card>
+            
+                <Card title="权限列表" style={{float:"left",width:"80%"}}>
+                    <Tabs defaultActiveKey="webFunc" onChange={this.onChangeTab} tabPosition={this.state.tabPosition}>
+                    <TabPane tab="功能菜单" key="webFunc">
+                        {contents}
+                    </TabPane>
+                    <TabPane tab="Excel功能" key="func">
+                        {contents}
+                    </TabPane>
+                    <TabPane tab="数据查询" key="select">
+                        {contents}
+                    </TabPane>
+                    <TabPane tab="函数" key="function">
+                        {contents}
+                    </TabPane>
+                    <TabPane tab="多维分析" key="cube">
+                        {contents}
+                    </TabPane>
+                    <TabPane tab="仪表盘" key="dashboard">
+                        {contents}
+                    </TabPane>
+                    <TabPane tab="模板" key="template">
+                        {contents}
+                    </TabPane>
+                
+                
+                    <TabPane tab="数据权限" key="table">
+                        {contents}
+                        {/* <Tabs  onChange={this.onChangeTab} tabPosition={this.state.tabPosition}>
+                        {this.state.panes.map(pane => <TabPane tab={pane.title} key={pane.key}>{pane.content}</TabPane>)}
+                        
+                        </Tabs> */}
+                    </TabPane>
+                
+                    </Tabs>
+                
+                </Card>
+            </Spin>
             </div>
         )
     }
