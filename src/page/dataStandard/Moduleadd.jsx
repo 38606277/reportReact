@@ -27,32 +27,35 @@ const Star={//红色*样式
   }
 
 export default (props)=>{
-    const {visible,on,go,set,ModObj,treeData}=props
-    const [data,setdata]=useState(set)
+    const {visible,on,go,isNewCatalog,ModObj,treeData}=props
     const [selCatalogPid,setSelCatalogPid]=useState('请选择');//数据来源
     const [ModName,setModName]=useState('');//模型名称
     useEffect(() => {
         if (null!= ModObj && "" != ModObj) {
-            setSelCatalogPid(ModObj.catalog_id);
-            console.log(selCatalogPid);
+            if(isNewCatalog){
+                setSelCatalogPid(ModObj.catalog_pid);
+                setModName(ModObj.catalog_name);
+            }else{
+                setSelCatalogPid(ModObj.catalog_id);
+                setModName("");
+            }
         }
-    }, [ModObj])
+    }, [isNewCatalog,ModObj])
     const ok=()=>{
         go({
             catalog_pid:selCatalogPid,
             catalog_name:ModName,
-            catalog_id:set!==false?ModObj.catalog_id:null
+            catalog_id:isNewCatalog!==false?ModObj.catalog_id:null
         })
         setSelCatalogPid("请选择")
         setModName("")
     }
     const onSelctChange = value => {
-        console.log(value);
         setSelCatalogPid(value);
     }
 
     return (<Modal 
-            title={set!==false?"编辑目录":"新增目录"}
+            title={isNewCatalog!==false?"编辑目录":"新增目录"}
             width='600px'
             cancelText='取消'
             okText='确认'

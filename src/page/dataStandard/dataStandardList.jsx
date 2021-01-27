@@ -2,29 +2,14 @@ import React,{useState,useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import style from './dataStandard.less'
 import Pagination from 'antd/lib/pagination';
-import Icon, { PlusCircleOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined ,SearchOutlined ,PlusOutlined,MoreOutlined} from '@ant-design/icons';
+import Icon, { PlusCircleOutlined, EditOutlined , MinusCircleOutlined, ProfileOutlined ,SearchOutlined ,PlusOutlined,MoreOutlined} from '@ant-design/icons';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import {
-    Table,
-    Divider,
-    Button,
-    Card,
-    Tree,
-    Input,
-    Spin,
-    Row,
-    Col,
-    Select,
-    Tooltip,
-    Radio,
-    Modal,
-    Tag,
-    Popconfirm,
-    message,
-    Popover
-} from 'antd';
+import {Table, Divider, Button, Card, Tree, Input, Spin, Row, Col, Popconfirm, message } from 'antd';
 const { Search } = Input;
+
+const { TreeNode } = Tree;
+
 import HttpService from '../../util/HttpService.jsx';
 
 import MyModal from './Moduleadd.jsx'// 模型弹窗
@@ -51,39 +36,24 @@ export default class modelList extends React.Component {
             expandedKeys: [],
             searchValue: '',
             autoExpandParent: true,
-
-
+            NodeTreeItem:null,
             list: [],
             pageNum: 1,
             perPage: 10,
-            listType: 'list',
-            cube_name: '',
             loading: false,
             treeData: [],
-            buttontype: ['primary', 'default', 'default', 'default'],
             visible: false,
             visible2:false,//添加模型
-            visible3:false,//添加表
-            tableData: [],
-            tableColumn: [],
-            selectedKeys: ['0-0'],//树默认选中第一个
-            activeButton: 0,
-            //选项卡切换默认
-            Hcard: null,
-            moduleType:true,
-            leftColor:0,
             setModule:false,
-            ModData:{},
-            model_id:null,
             ModObj:null,
-            table_name:"",//模型名称
-            table_title:"",//模型中文名称
+            isNewCatalog:false,
+            catalog_code:"",//模型名称
             Mysrc:"",
             startIndex:1,
             perPage:10,
             total:0,
             // catalog_pid:'',
-            // catalog_name:"",
+            catalog_name:"",
             catalog_id:props.match.params.catalog_id
         };
     }
@@ -124,16 +94,16 @@ export default class modelList extends React.Component {
         });
       };
       onTreeSelect = (selectedKeys,e) => {
-        let ModObjs={
-            catalog_id:e.node.catalog_id,
-            catalog_pid:e.node.catalog_pid,
-            catalog_name:e.node.title,
+          if(null!=selectedKeys && selectedKeys.length>0){
+            let ModObjs={
+                catalog_id:e.node.catalog_id,
+                catalog_pid:e.node.catalog_pid,
+                catalog_name:e.node.title,
+            }
+            this.setState({catalog_id:selectedKeys[0],ModObj:ModObjs},function(){
+                this.getTableList();
+            });
         }
-        this.setState({catalog_id:selectedKeys[0],ModObj:ModObjs},function(){
-            console.log(this.state.ModObj)
-            this.getTableList();
-        });
-        
       }
     
       onChange = e => {
@@ -161,9 +131,7 @@ export default class modelList extends React.Component {
             standard_code:"",
             catalog_id:this.state.catalog_id
         }
-        console.log(obj)
         HttpService.post('/reportServer/dataStandard/getDataStandardList',JSON.stringify(obj)).then(res => {///列表接口SunShine:    
-            console.log(res )
             if (res.resultCode == "1000") {
                 this.setState({
                     list:res.data.list,
@@ -199,7 +167,6 @@ export default class modelList extends React.Component {
     }
 
     addModule =(data)=>{//添加模型编辑数据  未做非空
-        console.log(data);
         const {catalog_pid,catalog_name,catalog_id}=data
         if(catalog_name===""){
             return message.error("请填写模型名称")
@@ -207,9 +174,8 @@ export default class modelList extends React.Component {
         if(catalog_pid==="请选择"){
             return message.error("请填选择目录")
         }
-        
+        this.setState({visible2:false});
         HttpService.post('/reportServer/dataStandard/createCatalog', JSON.stringify(data)).then(res => {
-            console.log((res))
             if (res.resultCode == "1000") {   
                 this.localData();
             }
@@ -218,9 +184,8 @@ export default class modelList extends React.Component {
             }
         })
     }
-    confirmModule =(catalog_id)=>{//删除模型
+    delCatalog =(catalog_id)=>{//删除模型
         HttpService.post('/reportServer/dataStandard/deleteCatalogById', JSON.stringify({"catalog_id":catalog_id})).then(res => {
-            console.log(res)
             if (res.resultCode == "1000") {   
                 this.localData();
             }
@@ -243,9 +208,9 @@ export default class modelList extends React.Component {
     }
     
     search=()=>{
-        // const {table_title,table_name}=this.state
-        // this.getTableList(table_title,table_name)
-        // this.setState({table_title:"",table_name:""})
+        // const {catalog_name,catalog_name}=this.state
+        // this.getTableList(catalog_name,catalog_name)
+        // this.setState({catalog_name:"",catalog_name:""})
     }
     onShowSizeChange=(current, pageSize)=>{
         this.setState({
@@ -269,6 +234,96 @@ export default class modelList extends React.Component {
         }
     }
 
+    onRightClick = ({event,node}) => {
+        var x = event.currentTarget.offsetLeft + event.currentTarget.clientWidth;
+        var y = event.currentTarget.offsetTop+84 ;
+        // this.setState({
+        //     NodeTreeItem: {
+        //         pageX: x,
+        //         pageY: y,
+        //         catalog_id:node.props.eventKey,
+        //         catalog_pid:node.props.catalog_pid,
+        //         key: node.props.eventKey,
+        //         title: node.props.title
+        //     }
+        // });
+        let ModObjs={
+            catalog_id:node.props.eventKey,
+            catalog_pid:node.props.catalog_pid,
+            catalog_name:node.props.title
+        }
+        this.setState({catalog_id:node.props.eventKey,ModObj:ModObjs,
+            NodeTreeItem: {
+                pageX: x,
+                pageY: y,
+                catalog_id:node.props.eventKey,
+                catalog_pid:node.props.catalog_pid,
+                key: node.props.eventKey,
+                title: node.props.title
+            }},function(){
+            this.getTableList();
+        });
+
+      }
+      getNodeTreeMenu() {
+        const {pageX, pageY} = {...this.state.NodeTreeItem};
+        const tmpStyle = {
+          position: 'absolute',
+          maxHeight: 40,
+          textAlign: 'center',
+          left: `${pageX + 10}px`,
+          top: `${pageY}px`,
+          display: 'flex',
+          flexDirection: 'row',
+        };
+        const menu = (
+          <div
+            style={tmpStyle}
+          >
+              {this.state.NodeTreeItem.catalog_id == 0?'':(
+            <div style={{alignSelf: 'center', marginLeft: 10}} onClick={()=>this.setState({visible2:true,catalog_id:this.state.NodeTreeItem.catalog_id,setModule:false,isNewCatalog:false})}>
+                <PlusCircleOutlined />
+            </div>
+             )}
+            {this.state.NodeTreeItem.catalog_id == 0?'':(
+            <div style={{alignSelf: 'center', marginLeft: 10}} onClick={this.handleEditSub}>
+                <EditOutlined />
+            </div>
+             )}
+            {this.state.NodeTreeItem.catalog_id == 0?'':(
+            //     <Popconfirm
+            //     title="您确定要删除吗?"
+            //     onConfirm={this.handleDeleteSub}
+            //     okText="确定"
+            //     cancelText="取消"
+            // ><MinusCircleOutlined />
+            // </Popconfirm>
+              <div style={{alignSelf: 'center', marginLeft: 10}} onClick={this.handleDeleteSub}>
+                <MinusCircleOutlined />
+            </div>
+            )}
+          </div>
+        );
+        return (this.state.NodeTreeItem == null) ? '' : menu;
+      }
+     clearMenu = () => {
+        this.setState({
+          NodeTreeItem: null
+        })
+      }
+    
+      handleEditSub = (e) => {
+       console.log("click edit  id :", this.state.NodeTreeItem.catalog_id)
+
+        this.setState({visible2:true,setModule:this.state.NodeTreeItem.catalog_id,isNewCatalog:true},function(){
+            console.log(this.state.isNewCatalog)
+        });
+      }
+    
+      handleDeleteSub = (e) => {
+       this.delCatalog(this.state.NodeTreeItem.catalog_id);
+      }
+      
     render() {
         this.state.list.map((item, index) => {
             item.key = index;
@@ -317,24 +372,28 @@ export default class modelList extends React.Component {
                 </span>
             ),
         }];
-
         return (
             <div id="page-wrapper">
                 <Spin spinning={this.state.loading} delay={100}>
                     <Card title="数据标准" bodyStyle={{ backgroundColor: '#fafafa',boxSizing:"border-box" }}>
                         <Row>
-                            <Col sm={4} style={{backgroundColor:"#fff",boxSizing:"border-box",paddingTop:"2px"}}>
+                            <Col sm={4} style={{backgroundColor:"#fff",boxSizing:"border-box",paddingTop:"2px",overflow:'auto'}}>
                                 <div className={style.modulelist}>
-                                    <Button icon={<PlusCircleOutlined />} style={{ float:'right' }} onClick={()=>this.setState({visible2:true,setModule:false,set:false})}></Button>
+                                    <Button icon={<PlusCircleOutlined />} style={{ float:'right' }} onClick={()=>this.setState({visible2:true,setModule:false,isNewCatalog:false})}></Button>
                                     <Search style={{ marginBottom: 8 }} placeholder="Search" onChange={this.onChange} />
-                                    <Tree
-                                        defaultExpandAll
-                                        onExpand={this.onExpand}
-                                        expandedKeys={this.state.expandedKeys}
-                                        autoExpandParent={this.state.autoExpandParent}
-                                        treeData={this.state.treeData}
-                                        onSelect={this.onTreeSelect}
-                                    />
+                                    <div onClick={this.clearMenu}>
+                                        <Tree
+                                            defaultExpandAll
+                                            onExpand={this.onExpand}
+                                            expandedKeys={this.state.expandedKeys}
+                                            autoExpandParent={this.state.autoExpandParent}
+                                            treeData={this.state.treeData}
+                                            onSelect={this.onTreeSelect}
+                                            onRightClick={this.onRightClick}
+                                        >
+                                        </Tree>
+                                        {this.state.NodeTreeItem != null ? this.getNodeTreeMenu() : ""}
+                                        </div>
                                 </div >  
                             </Col>
                             <Col sm={20}>
@@ -347,10 +406,10 @@ export default class modelList extends React.Component {
                                             name="horizontal_login" layout="inline"
                                         >
                                             <Form.Item name="note" label="标准名称" rules={[{ required: true }]} >
-                                                <Input value={this.state.ModData.table_title} onChange={e=>{this.setState({table_title:e.target.value})}} />
+                                                <Input value={this.state.catalog_name} onChange={e=>{this.setState({catalog_name:e.target.value})}} />
                                             </Form.Item>
                                             <Form.Item name="note" label="标准编码" rules={[{ required: true }]}>
-                                                <Input value={this.state.ModData.table_name} onChange={e=>{this.setState({table_name:e.target.value})}}/>
+                                                <Input value={this.state.catalog_code} onChange={e=>{this.setState({catalog_code:e.target.value})}}/>
                                             </Form.Item>
                                             <Button type="primary" icon={<SearchOutlined />} onClick={()=>{
                                                 this.search()
@@ -373,7 +432,7 @@ export default class modelList extends React.Component {
 
                     </Card>
                 </Spin>
-                <MyModal visible={this.state.visible2} on={()=>{this.setState({visible2:false,ModObj:this.state.set!==false?this.state.ModData:null,set:false})}} go={(data)=>this.addModule(data)}  set={this.state.setModule} ModObj={this.state.ModObj} treeData={this.state.treeData}></MyModal>
+                <MyModal visible={this.state.visible2} on={()=>{this.setState({visible2:false,ModObj:this.state.isNewCatalog!==false?this.state.ModObj:null,isNewCatalog:false})}} go={(data)=>this.addModule(data)}  isNewCatalog={this.state.isNewCatalog} ModObj={this.state.ModObj} treeData={this.state.treeData}></MyModal>
             </div>
         );
     }
