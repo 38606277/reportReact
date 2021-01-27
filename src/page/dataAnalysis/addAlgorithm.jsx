@@ -83,7 +83,7 @@ export default (props)=>{
                     placeholder="请选择模型名称"
                 >
                    <Select
-                    style={{ width: 160 }}
+                    style={{ width: 180 }}
                    >
                         {
                             moduleName.map((item,index)=>{
@@ -99,7 +99,7 @@ export default (props)=>{
                     {...tailLayout}
                 >
                    <Select
-                    style={{ width: 160 }}
+                    style={{ width: 180 }}
                    >
                         {
                             moduleName.map((item,index)=>{
@@ -117,7 +117,7 @@ export default (props)=>{
                     {...tailLayout}
                 >
                    <Select
-                    style={{ width: 160 }}
+                    style={{ width: 180 }}
                    >
                         {
                             moduleName.map((item,index)=>{
@@ -133,7 +133,7 @@ export default (props)=>{
                     {...tailLayout}
                 >
                    <Select
-                    style={{ width: 160 }}
+                    style={{ width: 180 }}
                    >
                         {
                             moduleName.map((item,index)=>{
