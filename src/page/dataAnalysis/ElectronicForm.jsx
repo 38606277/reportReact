@@ -93,8 +93,7 @@ export default (props)=>{
                     },
                 ]
               });
-            const dom=document.getElementsByClassName('luckysheet')[0]
-            dom.style.width="100%"
+              
     },[en])
     useEffect(()=>{
         (()=>{
