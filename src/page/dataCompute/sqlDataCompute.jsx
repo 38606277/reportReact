@@ -65,21 +65,7 @@ class SqlCreator extends React.Component {
             //定义下拉查找的数据
             loading: false,
             visible: false, qry_file: null,
-            pageNum: 1, perPage: 10, totald: 0,name:"",id:"",fromdb:"",infoname:""
-        };
-        this.options = {
-            lineNumbers: true,                //显示行号  
-            mode:  {name: "text/x-mysql"},          //定义mode  
-            extraKeys: { "Tab": "autocomplete" },//自动提示配置  
-            theme: "default",
-            hintOptions: { // 自定义提示选项
-                completeSingle: false, // 当匹配只有一项的时候是否自动补全
-                tables: {
-                    users: ['name', 'score', 'birthDate'],
-                    countries: ['name', 'population', 'size'],
-                    score: ['zooao']
-                }
-            }
+            pageNum: 1, perPage: 10, totald: 0,name:"",id:"",fromdb:"",infoname:"",tables:{}
         };
     }
     componentDidMount() {
@@ -272,6 +258,18 @@ class SqlCreator extends React.Component {
         }
     }
   
+    tableAndColnameList(val){
+        //查询查询类别定义
+        HttpService.post("reportServer/selectsql/getTableAndColumnList", JSON.stringify({fromdb:val}))
+        .then(res => {
+            if (res.resultCode == '1000') {
+                this.setState({ tables: res.data.tables });
+            }
+            else
+                message.error(res.message);
+        });
+   }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -318,7 +316,7 @@ class SqlCreator extends React.Component {
                                             getFieldDecorator('fromdb', {
                                                 rules: [{ required: 'true', message: "必须选择数据库" }]
                                             })(
-                                                <Select setValue={this.form} style={{ minWidth: '300px' }}>
+                                                <Select setValue={this.form} style={{ minWidth: '300px' }} onChange={(value)=>this.tableAndColnameList(value)} >
                                                     {this.state.dbList.map(item => <Option key={item.name} value={item.name}>{item.name}</Option>)}
                                                 </Select>
                                             )
@@ -330,7 +328,20 @@ class SqlCreator extends React.Component {
                                     </Col>
                                     
                                 </Row>
-                                <CodeMirror ref="editorsql" value='' style={{ height: '300px', width: '450px', border: "2px solid red" }} options={this.options } />
+                                <CodeMirror 
+                                    ref="editorsql" 
+                                    value='' 
+                                    style={{ height: '300px', width: '450px', border: "2px solid red" }} 
+                                    options={{
+                                        lineNumbers: true,//显示行号  
+                                        mode: {name: "text/x-mysql"},//定义mode  
+                                        extraKeys: { "Tab": "autocomplete" },//快捷键自动提示配置  
+                                        theme: "default",
+                                        hintOptions: {// 自定义提示选项
+                                            completeSingle: false,// 当匹配只有一项的时候是否自动补全
+                                            tables:this.state.tables
+                                        }
+                                    }}/>
                                 </Panel>
                                 </Collapse>
                         <Collapse defaultActiveKey={['1']} onChange={callback} style={{background:"#fff",height:"100%",position:"relative",zIndex:"10"}}>
