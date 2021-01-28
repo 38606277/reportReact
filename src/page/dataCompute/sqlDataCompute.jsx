@@ -1,32 +1,9 @@
 import React from 'react'
 import { Form, Icon as LegacyIcon } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import { BarsOutlined, ToolOutlined,DownloadOutlined } from '@ant-design/icons';
-import {
-    Card,
-    Button,
-    Table,
-    Input,
-    Divider,
-    Avatar,
-    Collapse ,
-    List,
-    Dropdown,
-    Pagination,
-    Select,
-    Radio,
-    message,
-    Modal,
-    DatePicker,
-    InputNumber,
-    Switch,
-    Row,
-    Col,
-    Tabs,
-    Menu,
-} from 'antd';
-import moment from 'moment';
-import SplitPane, { Pane } from 'react-split-pane';
+import { BarsOutlined, SaveOutlined,DownloadOutlined,CaretRightOutlined,SyncOutlined } from '@ant-design/icons';
+import { Card, Button, Table, Input,  Collapse ,  Select, message,  Modal,  Row,  Col} from 'antd';
+import SplitPane  from 'react-split-pane';
 import ExportJsonExcel from "js-export-excel";
 import 'moment/locale/zh-cn';
 
@@ -50,36 +27,17 @@ const Option = Select.Option;
 const { Panel } = Collapse;
 const dbService = new DbService();
 
-function  callback(key) {
-    console.log(key);
-  }
 
-class SqlCreator extends React.Component {
+
+class SqlDataCompute extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            dbList:[],
-            list: [],
-            columnlist: [],
-            datalist: [],
             //定义下拉查找的数据
-            loading: false,
-            visible: false, qry_file: null,
-            pageNum: 1, perPage: 10, totald: 0,name:"",id:"",fromdb:"",infoname:""
-        };
-        this.options = {
-            lineNumbers: true,                //显示行号  
-            mode:  {name: "text/x-mysql"},          //定义mode  
-            extraKeys: { "Tab": "autocomplete" },//自动提示配置  
-            theme: "default",
-            hintOptions: { // 自定义提示选项
-                completeSingle: false, // 当匹配只有一项的时候是否自动补全
-                tables: {
-                    users: ['name', 'score', 'birthDate'],
-                    countries: ['name', 'population', 'size'],
-                    score: ['zooao']
-                }
-            }
+            dbList:[],list: [],columnlist: [],datalist: [],
+            loading: false,visible: false, 
+            pageNum: 1, perPage: 10, total: 0,
+            name:"",id:"",fromdb:"",infoname:"",tables:{}
         };
     }
     componentDidMount() {
@@ -110,7 +68,7 @@ class SqlCreator extends React.Component {
 
     resetInput(){
         this.props.form.setFieldsValue({name:"",fromdb:"",id:""});
-        this.setState({infoname:""});
+        this.setState({infoname:"",tables:{}});
     }
 
     async  handleSubmit() {
@@ -272,6 +230,18 @@ class SqlCreator extends React.Component {
         }
     }
   
+    tableAndColnameList(val){
+        //查询查询类别定义
+        HttpService.post("reportServer/selectsql/getTableAndColumnList", JSON.stringify({fromdb:val}))
+        .then(res => {
+            if (res.resultCode == '1000') {
+                this.setState({ tables: res.data.tables });
+            }
+            else
+                message.error(res.message);
+        });
+   }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         const formItemLayout = {
@@ -281,7 +251,7 @@ class SqlCreator extends React.Component {
         return (
             <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px' }}>
                 <div style={{height:"100%",position:"relative"}}>
-                <SplitPane split="vertical"  minSize={200} defaultSize={200} style={{position:'relative'}}>
+                <SplitPane split="vertical"  minSize={10} defaultSize={200} style={{position:'relative'}}>
                         <Card bodyStyle={{ padding: '5px' }} style={{height:"100%"}} title="标题列表">
                         {   
                             this.state.list==null?'':this.state.list.map((item,key)=>{
@@ -291,10 +261,10 @@ class SqlCreator extends React.Component {
                             })
                         }
                         </Card>
-                        <SplitPane split="horizontal" maxSize={424}>
-                        <Collapse defaultActiveKey={['1']} onChange={callback} style={{width:"100%"}}>
-                        <Panel header="输入SQL" key="1">
-                                <Row>
+                        <SplitPane split="horizontal" maxSize={424} defaultSize={400}>
+                        <Collapse defaultActiveKey={['1']} style={{width:"100%"}}>
+                            <Panel header="输入SQL" key="1">
+                                <Row style={{margin: '-11px', marginLeft: '1px'}}>
                                     <FormItem >
                                             {getFieldDecorator('id')( 
                                                 <Input id="id" name="id" value={this.state.id} style={{display:'none'}} />
@@ -307,18 +277,18 @@ class SqlCreator extends React.Component {
                                             )}
                                         </FormItem>
                                     <Col >
-                                        <Button type="primary" onClick={() => this.handleSubmit()} style={{ marginRight: "10px" }}>保存</Button>
-                                        <Button  onClick={() => this.resetInput()} style={{ marginRight: "10px" }}>重置</Button>
-                                        <Button icon={<ToolOutlined />} loading={this.state.loading} onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >执行</Button>
-                                        <Button icon={<BarsOutlined />} onClick={() => this.sqlFormat()} style={{ marginRight: "10px" }}> 格式化</Button>
+                                        <Button icon={<SaveOutlined />} size='small' type="primary" onClick={() => this.handleSubmit()} style={{ marginRight: "10px" }}>保存</Button>
+                                        <Button icon={<SyncOutlined />} onClick={() => this.resetInput()} size='small'  style={{ marginRight: "10px" }}>重置</Button>
+                                        <Button icon={<CaretRightOutlined />} size='small'  loading={this.state.loading} onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >执行</Button>
+                                        <Button icon={<BarsOutlined />} size='small'  onClick={() => this.sqlFormat()} style={{ marginRight: "10px" }}> 格式化</Button>
                                     </Col>
-                                    <Col span={12}>
-                                        <FormItem label="选择数据库" {...formItemLayout} style={{ marginBottom: "5px" }}>
+                                    <Col span={8}>
+                                        <FormItem label="选择数据库" {...formItemLayout} style={{ marginBottom: "8px",marginTop:'-8px' }}>
                                         {
                                             getFieldDecorator('fromdb', {
                                                 rules: [{ required: 'true', message: "必须选择数据库" }]
                                             })(
-                                                <Select setValue={this.form} style={{ minWidth: '300px' }}>
+                                                <Select setValue={this.form} style={{ minWidth: '150px' }} onChange={(value)=>this.tableAndColnameList(value)} >
                                                     {this.state.dbList.map(item => <Option key={item.name} value={item.name}>{item.name}</Option>)}
                                                 </Select>
                                             )
@@ -326,14 +296,27 @@ class SqlCreator extends React.Component {
                                             </FormItem>
                                     </Col>
                                     <Col>
-                                        {this.state.infoname==""?"":<div style={{paddingTop:'10px'}}>查询名称：&nbsp;&nbsp; {this.state.infoname}</div>}
+                                        {this.state.infoname==""?"":<div >查询名称：&nbsp;&nbsp; {this.state.infoname}</div>}
                                     </Col>
                                     
                                 </Row>
-                                <CodeMirror ref="editorsql" value='' style={{ height: '300px', width: '450px', border: "2px solid red" }} options={this.options } />
+                                <CodeMirror 
+                                    ref="editorsql" 
+                                    value='' 
+                                    style={{ height: '300px', width: '450px', border: "2px solid red" }} 
+                                    options={{
+                                        lineNumbers: true,//显示行号  
+                                        mode: {name: "text/x-mysql"},//定义mode  
+                                        extraKeys: { "Tab": "autocomplete" },//快捷键自动提示配置  
+                                        theme: "default",
+                                        hintOptions: {// 自定义提示选项
+                                            completeSingle: false,// 当匹配只有一项的时候是否自动补全
+                                            tables:this.state.tables
+                                        }
+                                    }}/>
                                 </Panel>
                                 </Collapse>
-                        <Collapse defaultActiveKey={['1']} onChange={callback} style={{background:"#fff",height:"100%",position:"relative",zIndex:"10"}}>
+                        <Collapse defaultActiveKey={['2']} style={{background:"#fff",height:"100%",position:"relative",zIndex:"10"}}>
                                 <Panel header="查询结果" key="2" extra={
                                     <DownloadOutlined onClick={event => {
                                         this.downloadExcel();
@@ -369,4 +352,4 @@ class SqlCreator extends React.Component {
     }
 
 }
-export default SqlCreator = Form.create({})(SqlCreator);
+export default SqlDataCompute = Form.create({})(SqlDataCompute);
