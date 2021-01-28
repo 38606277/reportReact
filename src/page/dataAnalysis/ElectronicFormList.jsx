@@ -143,6 +143,7 @@ export default (props)=>{
     const getList=(startIndex,perPage,name)=>{
         HttpService.post('/reportServer/electronTable/getList',JSON.stringify({startIndex,perPage,name})).then(res=>{
             if(res.resultCode==="1000"){
+                console.log(res.data.list)
                 setData(res.data.list)
                 setTotal(res.data.total)
             }
@@ -220,7 +221,7 @@ export default (props)=>{
 
         <Drawer
                placement="right"
-               visible={true}
+               visible={visible}
                destroyOnClose={true}
                closable={false}
                width="100%"
@@ -245,7 +246,7 @@ export default (props)=>{
                placement="right"
                visible={visible2}
                destroyOnClose={true}
-               closable={false}
+               onClose={mReturn}
                width="100%"
                bodyStyle={
                     {padding:"0px"}

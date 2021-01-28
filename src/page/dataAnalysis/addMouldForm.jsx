@@ -116,10 +116,9 @@ export default (props)=>{
         }
     }
     return (    
-        <Card title={!isType?"新建模板":"编辑模板"} style={{height:"100%",overflowY:"scroll"}} bodyStyle={{height:"90%"}}>
-             <div style={{display:"flow-root",position:"relative"}}>
-             <div style={{float:"left"}} onClick={()=> mReturn()}>返回</div>
-                 <Input style={{float:"left",width:"200px",top:"-20px",marginLeft:"50%",position:"absolute",left:"-100px"}} placeholder='请输入模型名称' value={FormName} onChange={e=>setFormName(e.target.value)}/>
+        <Card title={!isType?"新建模板":"编辑模板"} style={{height:"100%"}} bodyStyle={{height:"90%"}}>
+             <div style={{display:"flow-root",position:"relative",height:"20px"}}>
+                 <Input style={{float:"left",width:"200px",top:"-14px",marginLeft:"50%",position:"absolute",left:"-100px"}} placeholder='请输入模型名称' value={FormName} onChange={e=>setFormName(e.target.value)}/>
              </div>
              
                 <div style={{position:"relative",height:"100%"}}>

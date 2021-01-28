@@ -70,8 +70,8 @@ export default (props)=>{
     const [myid,setMyid]=useState("")
     const [mainForm] = Form.useForm()//Form
     const [InputList,setInputList]=useState({})
+    const [i,seti]=useState(0)
     useEffect(()=>{
-        
             en.create({
                 showtoolbarConfig:{
                     hou:false
@@ -93,8 +93,9 @@ export default (props)=>{
                     },
                 ]
               });
-  
-    },[])
+            const dom=document.getElementsByClassName('luckysheet')[0]
+            dom.style.width="100%"
+    },[en])
     useEffect(()=>{
         (()=>{
             HttpService.post("/reportServer/query/getAllQueryClass",JSON.stringify({})).then(res=>{
@@ -131,8 +132,6 @@ export default (props)=>{
     const query=()=>{
         const en = window.luckysheet
         mainForm.submit()
-        console.log(InputList)
-        
         HttpService.post("reportServer/query/execQuery/"+ClassName+"/"+Name,JSON.stringify([
             {
                 "in":InputList
@@ -202,42 +201,44 @@ export default (props)=>{
             boxSizing:"border-box",
             padding:"20px"
         }}>
-            <div style={{width:"100%",position:"relative",height:"42px",boxSizing:"border-box",borderBottom:"1px solid #ccc",marginBottom:"20px"}}>
+            <div style={{width:"100%",position:"relative",height:"42px",boxSizing:"border-box",borderBottom:"1px solid #ccc",marginBottom:"5px"}}>
                 <div style={{textAlign:"center",fontWeight:600,fontSize:"18px"}}>表格查询</div>
-                <Button  type="primary" size="small" style={{position:"absolute",left:"10px",top:"0"}} onClick={()=>{
+                <Button  type="primary" size="small" style={{position:"absolute",left:"10px",top:"18px"}} onClick={()=>{
                     onClose(false)
                 }}>返回</Button>
             </div>
-            <div style={{height:"672px",boxSizing:"border-box",padding:"20px",boxSizing  :"border-box"}}>
-            <SplitPane split="vertical" minSize={600}
+            <div style={{height:"600px",boxSizing:"border-box",padding:"0 20px",boxSizing  :"border-box",position:"relative"}}>
+            <Row style={{display:"flow-root",paddingBottom:"5px"}}>
+                <Button style={{float:"right"}} onClick={()=>{
+                    query()
+                }}>执行查询</Button>
+            </Row>
+            <SplitPane split="vertical"  defaultSize = { 450 } maxSize={600} minSize={350}  primary = "second"
             style={
                 {
                     boxSizing:"border-box",
-                    padding:"0 20px"
+                    padding:"0 20px",
                 }
             }
                 onChange={(size) => {
-                    en.create({
-                        showtoolbarConfig:{
-                            hou:false
-                        },
-                        showinfobar:false,
-                        lang: 'zh',
-                        plugins:['chart'],
-                        // showstatisticBar: false,
-                        // functionButton:"<button id='' class='btn btn-primary'  style='padding:3px 6px;font-size: 12px;margin-right: 10px;'>保存</button>",
-                        data:[
-                            {
-                                "name": "name",
-                                "color": "",
-                                "index": 0,
-                                "status": 0,
-                                "order": 0,
-                                "celldata": [],
-                                "config": {}
+                    seti(size)
+                    let arr=en.getAllSheets()
+                    console.log(arr)
+                    if(Math.abs(size-i)>=2){
+                        
+                        en.create({
+                            showtoolbarConfig:{
+                                hou:false
                             },
-                        ]
-                      });
+                            showinfobar:false,
+                            lang: 'zh',
+                            data:[{name:"name"}]
+                            // plugins:['chart'],
+                            // showstatisticBar: false,
+                            // functionButton:"<button id='' class='btn btn-primary'  style='padding:3px 6px;font-size: 12px;margin-right: 10px;'>保存</button>",
+                        });
+                        }
+           
                     // const dom=document.getElementsByClassName('luckysheet')
                     // const dom2=document.getElementById('luckysheetTableContent')
                     // dom[0].style.width=size+'px'
@@ -250,13 +251,7 @@ export default (props)=>{
                     style={luckyCss}
                     ></div>
                 </div>
-                <div>
-                    <Row style={{position:"relative",height:"32px"}}>
-                      <Button style={{position:"absolute",right:"0px"}} onClick={()=>{
-                          query()
-                      }}>执行查询</Button>
-                    </Row>
-                    <Row>
+                <div style={{overflowY:"scroll",height:"100%"}}>
                         <Form
                             style={{marginLeft:"20px"}}
                             {...layout}
@@ -323,7 +318,6 @@ export default (props)=>{
                                </Col>
                             </Row>
                         </Form>
-                    </Row>
                     <Divider plain orientation="left" style={{color:"burlywood"}}>查询条件</Divider>
 
                     <Form 
@@ -368,7 +362,6 @@ export default (props)=>{
                     />
                 </div>
             </SplitPane>
-              
             </div>
          </div>
       
