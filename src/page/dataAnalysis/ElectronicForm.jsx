@@ -253,7 +253,7 @@ export default (props)=>{
                 <div style={{overflowY:"scroll",height:"100%"}}>
                         <Form
                             style={{marginLeft:"20px"}}
-                            {...layout}
+                            // {...layout}
                             name="basic"
                             >
                             <Form.Item

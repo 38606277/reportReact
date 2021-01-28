@@ -141,8 +141,19 @@ export default ()=>{
         title: '数据监控',
         key: '1',
         dataIndex: '1',
-        render: res => (
-            <Button onClick={()=>setvisible2(true)}>查看</Button>
+        render: (res,text )=> (
+            <Button onClick={()=>{
+              HttpService.post('/reportServer/mqttTask/findMqttTaskByIdAndNum', JSON.stringify({id:text.id,pageSize:10})).then(res => {
+                console.log(res)
+                // getList(1,10,"","")
+            }, errMsg => {
+                // this.setState({
+                //     list: [], loading: false
+                // });
+            });
+             
+              // setvisible2(true)
+            }}>查看</Button>
         ),
       },
       {
@@ -201,9 +212,10 @@ export default ()=>{
     getList(1,10,"","")
     HttpService.post('/reportServer/mqttTask/deleteMqttTaskById', JSON.stringify({id:id})).then(res => {
       if(res.resultCode==="1000"){
-      
-        // setdata(res.data.list)
-        // setTotal(res.data.total)
+        console.log(res)
+        message.success('删除成功');
+        setdata(res.data.list)
+        setTotal(res.data.total)
       }
   
   }, errMsg => {

@@ -67,6 +67,7 @@ export default (props)=>{
     const [total,setTotal]=useState(0);//一共多少条数据
     const [data,setData]=useState([]);//修改list
     const [isType,setisType]=useState(false);//true为编辑false为新建
+    const [FormName,setFormName]=useState("")
     const [ID,setID]=useState(null);
     const columns=[
         {
@@ -140,6 +141,11 @@ export default (props)=>{
     useEffect(()=>{
         getList(1,10,"")
     },[])
+    useEffect(()=>{
+        if(FormName===""){
+            getList(1,10,"")
+        }
+    },[FormName])
     const getList=(startIndex,perPage,name)=>{
         HttpService.post('/reportServer/electronTable/getList',JSON.stringify({startIndex,perPage,name})).then(res=>{
             if(res.resultCode==="1000"){
@@ -164,6 +170,9 @@ export default (props)=>{
         setVisible2(false)
         setisType(false)
         setID(null)
+    }
+    const search=()=>{
+        getList(startIndex,perPage,FormName)
     }
     return (
         <div ref={FormListbox}>
@@ -200,10 +209,10 @@ export default (props)=>{
         <Table columns={columns} dataSource={data}  title={()=>{
               return (<Row style={{marginBottom:"10px"}}>
                   <Col style={{...Lstyle}}>
-                    <Input placeholder="表名" size="middle"/>
+                    <Input placeholder="表名" size="middle" value={FormName} onChange={e=>{setFormName(e.target.value)}}/>
                   </Col>
                   <Col>
-                    <Button type="primary" icon={<SearchOutlined />} onClick={()=>{}}>
+                    <Button type="primary" icon={<SearchOutlined />} onClick={()=>{search()}}>
                       搜索
                     </Button>
                   </Col>
