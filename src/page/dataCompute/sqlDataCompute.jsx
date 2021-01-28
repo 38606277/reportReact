@@ -27,22 +27,17 @@ const Option = Select.Option;
 const { Panel } = Collapse;
 const dbService = new DbService();
 
-function  callback(key) {
-    console.log(key);
-  }
 
-class SqlCreator extends React.Component {
+
+class SqlDataCompute extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            dbList:[],
-            list: [],
-            columnlist: [],
-            datalist: [],
             //定义下拉查找的数据
-            loading: false,
-            visible: false, qry_file: null,
-            pageNum: 1, perPage: 10, totald: 0,name:"",id:"",fromdb:"",infoname:"",tables:{}
+            dbList:[],list: [],columnlist: [],datalist: [],
+            loading: false,visible: false, 
+            pageNum: 1, perPage: 10, total: 0,
+            name:"",id:"",fromdb:"",infoname:"",tables:{}
         };
     }
     componentDidMount() {
@@ -256,7 +251,7 @@ class SqlCreator extends React.Component {
         return (
             <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px' }}>
                 <div style={{height:"100%",position:"relative"}}>
-                <SplitPane split="vertical"  minSize={200} defaultSize={200} style={{position:'relative'}}>
+                <SplitPane split="vertical"  minSize={10} defaultSize={200} style={{position:'relative'}}>
                         <Card bodyStyle={{ padding: '5px' }} style={{height:"100%"}} title="标题列表">
                         {   
                             this.state.list==null?'':this.state.list.map((item,key)=>{
@@ -267,8 +262,8 @@ class SqlCreator extends React.Component {
                         }
                         </Card>
                         <SplitPane split="horizontal" maxSize={424} defaultSize={400}>
-                        <Collapse defaultActiveKey={['1','2']} onChange={callback} style={{width:"100%"}}>
-                        <Panel header="输入SQL" key="1">
+                        <Collapse defaultActiveKey={['1']} style={{width:"100%"}}>
+                            <Panel header="输入SQL" key="1">
                                 <Row style={{margin: '-11px', marginLeft: '1px'}}>
                                     <FormItem >
                                             {getFieldDecorator('id')( 
@@ -321,7 +316,7 @@ class SqlCreator extends React.Component {
                                     }}/>
                                 </Panel>
                                 </Collapse>
-                        <Collapse defaultActiveKey={['1']} onChange={callback} style={{background:"#fff",height:"100%",position:"relative",zIndex:"10"}}>
+                        <Collapse defaultActiveKey={['2']} style={{background:"#fff",height:"100%",position:"relative",zIndex:"10"}}>
                                 <Panel header="查询结果" key="2" extra={
                                     <DownloadOutlined onClick={event => {
                                         this.downloadExcel();
@@ -357,4 +352,4 @@ class SqlCreator extends React.Component {
     }
 
 }
-export default SqlCreator = Form.create({})(SqlCreator);
+export default SqlDataCompute = Form.create({})(SqlDataCompute);
