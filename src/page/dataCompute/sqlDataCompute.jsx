@@ -1,32 +1,9 @@
 import React from 'react'
 import { Form, Icon as LegacyIcon } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import { BarsOutlined, ToolOutlined,DownloadOutlined } from '@ant-design/icons';
-import {
-    Card,
-    Button,
-    Table,
-    Input,
-    Divider,
-    Avatar,
-    Collapse ,
-    List,
-    Dropdown,
-    Pagination,
-    Select,
-    Radio,
-    message,
-    Modal,
-    DatePicker,
-    InputNumber,
-    Switch,
-    Row,
-    Col,
-    Tabs,
-    Menu,
-} from 'antd';
-import moment from 'moment';
-import SplitPane, { Pane } from 'react-split-pane';
+import { BarsOutlined, SaveOutlined,DownloadOutlined,CaretRightOutlined,SyncOutlined } from '@ant-design/icons';
+import { Card, Button, Table, Input,  Collapse ,  Select, message,  Modal,  Row,  Col} from 'antd';
+import SplitPane  from 'react-split-pane';
 import ExportJsonExcel from "js-export-excel";
 import 'moment/locale/zh-cn';
 
@@ -96,7 +73,7 @@ class SqlCreator extends React.Component {
 
     resetInput(){
         this.props.form.setFieldsValue({name:"",fromdb:"",id:""});
-        this.setState({infoname:""});
+        this.setState({infoname:"",tables:{}});
     }
 
     async  handleSubmit() {
@@ -289,10 +266,10 @@ class SqlCreator extends React.Component {
                             })
                         }
                         </Card>
-                        <SplitPane split="horizontal" maxSize={424}>
-                        <Collapse defaultActiveKey={['1']} onChange={callback} style={{width:"100%"}}>
+                        <SplitPane split="horizontal" maxSize={424} defaultSize={400}>
+                        <Collapse defaultActiveKey={['1','2']} onChange={callback} style={{width:"100%"}}>
                         <Panel header="输入SQL" key="1">
-                                <Row>
+                                <Row style={{margin: '-11px', marginLeft: '1px'}}>
                                     <FormItem >
                                             {getFieldDecorator('id')( 
                                                 <Input id="id" name="id" value={this.state.id} style={{display:'none'}} />
@@ -305,18 +282,18 @@ class SqlCreator extends React.Component {
                                             )}
                                         </FormItem>
                                     <Col >
-                                        <Button type="primary" onClick={() => this.handleSubmit()} style={{ marginRight: "10px" }}>保存</Button>
-                                        <Button  onClick={() => this.resetInput()} style={{ marginRight: "10px" }}>重置</Button>
-                                        <Button icon={<ToolOutlined />} loading={this.state.loading} onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >执行</Button>
-                                        <Button icon={<BarsOutlined />} onClick={() => this.sqlFormat()} style={{ marginRight: "10px" }}> 格式化</Button>
+                                        <Button icon={<SaveOutlined />} size='small' type="primary" onClick={() => this.handleSubmit()} style={{ marginRight: "10px" }}>保存</Button>
+                                        <Button icon={<SyncOutlined />} onClick={() => this.resetInput()} size='small'  style={{ marginRight: "10px" }}>重置</Button>
+                                        <Button icon={<CaretRightOutlined />} size='small'  loading={this.state.loading} onClick={() => this.onGenerateClick()} style={{ marginRight: "10px" }} >执行</Button>
+                                        <Button icon={<BarsOutlined />} size='small'  onClick={() => this.sqlFormat()} style={{ marginRight: "10px" }}> 格式化</Button>
                                     </Col>
-                                    <Col span={12}>
-                                        <FormItem label="选择数据库" {...formItemLayout} style={{ marginBottom: "5px" }}>
+                                    <Col span={8}>
+                                        <FormItem label="选择数据库" {...formItemLayout} style={{ marginBottom: "8px",marginTop:'-8px' }}>
                                         {
                                             getFieldDecorator('fromdb', {
                                                 rules: [{ required: 'true', message: "必须选择数据库" }]
                                             })(
-                                                <Select setValue={this.form} style={{ minWidth: '300px' }} onChange={(value)=>this.tableAndColnameList(value)} >
+                                                <Select setValue={this.form} style={{ minWidth: '150px' }} onChange={(value)=>this.tableAndColnameList(value)} >
                                                     {this.state.dbList.map(item => <Option key={item.name} value={item.name}>{item.name}</Option>)}
                                                 </Select>
                                             )
@@ -324,7 +301,7 @@ class SqlCreator extends React.Component {
                                             </FormItem>
                                     </Col>
                                     <Col>
-                                        {this.state.infoname==""?"":<div style={{paddingTop:'10px'}}>查询名称：&nbsp;&nbsp; {this.state.infoname}</div>}
+                                        {this.state.infoname==""?"":<div >查询名称：&nbsp;&nbsp; {this.state.infoname}</div>}
                                     </Col>
                                     
                                 </Row>
