@@ -34,10 +34,10 @@ class SqlDataCompute extends React.Component {
         super(props);
         this.state = {
             //定义下拉查找的数据
-            dbList:[],list: [],columnlist: [],datalist: [],
+            dbList:[],list: [],columnlist: [],datalist: [],typelist:[],
             loading: false,visible: false, 
             pageNum: 1, perPage: 10, total: 0,
-            name:"",id:"",fromdb:"",infoname:"",tables:{}
+            name:"",id:"",fromdb:"",infoname:"",tables:{},dbtype:""
         };
     }
     componentDidMount() {
@@ -50,6 +50,14 @@ class SqlDataCompute extends React.Component {
         dbService.getDbList().then(res => {
             this.setState({ dbList: res });
         });
+        HttpService.post("reportServer/mdmDict/getDictValueByDictCode", JSON.stringify({dict_code:"dbtype"}))
+         .then(res => {
+             if (res.resultCode == '1000') {
+                 this.setState({ typelist: res.data });
+             }
+             else
+                 message.error(res.message);
+         });
         this.nameList();
        
     }
@@ -67,7 +75,7 @@ class SqlDataCompute extends React.Component {
     }
 
     resetInput(){
-        this.props.form.setFieldsValue({name:"",fromdb:"",id:""});
+        this.props.form.setFieldsValue({name:"",fromdb:"",id:"",dbtype:""});
         this.setState({infoname:"",tables:{}});
     }
 
@@ -180,7 +188,7 @@ class SqlDataCompute extends React.Component {
         
     }
     setLeftMenu (val,item) {
-        this.props.form.setFieldsValue({name:item.name,fromdb:item.fromdb,id:item.id});
+        this.props.form.setFieldsValue({name:item.name,fromdb:item.fromdb,id:item.id,dbtype:item.dbtype});
         this.refs.editorsql.codeMirror.setValue(item.selectsql);
         this.setState({infoname:item.name});
     }
@@ -288,8 +296,21 @@ class SqlDataCompute extends React.Component {
                                             getFieldDecorator('fromdb', {
                                                 rules: [{ required: 'true', message: "必须选择数据库" }]
                                             })(
-                                                <Select setValue={this.form} style={{ minWidth: '150px' }} onChange={(value)=>this.tableAndColnameList(value)} >
+                                                <Select setValue={this.form} style={{ minWidth: '100px' }} onChange={(value)=>this.tableAndColnameList(value)} >
                                                     {this.state.dbList.map(item => <Option key={item.name} value={item.name}>{item.name}</Option>)}
+                                                </Select>
+                                            )
+                                        }
+                                            </FormItem>
+                                    </Col>
+                                    <Col>
+                                        <FormItem label="选择类型" {...formItemLayout} style={{ marginBottom: "8px",marginTop:'-8px' }}>
+                                        {
+                                            getFieldDecorator('dbtype', {
+                                                rules: [{ required: 'true', message: "必须选择类型" }]
+                                            })(
+                                                <Select setValue={this.form} style={{ minWidth: '100px' }} >
+                                                    {this.state.typelist.map(item => <Option key={item.value_name} value={item.value_name}>{item.value_name}</Option>)}
                                                 </Select>
                                             )
                                         }
