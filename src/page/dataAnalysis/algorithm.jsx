@@ -69,6 +69,16 @@ export default (props)=>{
     const [perPage,setPerPage]=useState(10);//一页显示第几条
     const [total,setTotal]=useState(1);//一共多少条数据
     const [isModalVisible,setisModalVisible]=useState(false)//新建表单控制
+    useEffect(()=>{
+        HttpService.post("reportServer/mdmDict/getDictValueByDictCode", JSON.stringify({dict_code:"algorithm_type"}))
+         .then(res => {
+             if (res.resultCode == '1000') {
+                console.log(res.data);
+             }
+             else
+                 message.error(res.message);
+         });
+    },[])
     const columns=[
         {
             title: '算法名称',

@@ -1,56 +1,28 @@
 import React,{useState,useEffect,useRef} from 'react';
-import { Link } from 'react-router-dom';
-import Pagination from 'antd/lib/pagination';
-import { BarChartOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined ,SearchOutlined ,PlusOutlined,CloseOutlined, CheckOutlined,DownOutlined,EditOutlined,DisconnectOutlined  } from '@ant-design/icons';
-// import { Form } from '@ant-design/compatible';
-
-import CodeMirror from 'react-codemirror';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/mode/sql/sql';
-import 'codemirror/theme/ambiance.css';
-import 'codemirror/addon/hint/show-hint.css';  
-import 'codemirror/addon/hint/show-hint.js';  
-import 'codemirror/addon/hint/sql-hint.js';  
-import 'codemirror/theme/ambiance.css'; 
-import '@ant-design/compatible/assets/index.css';
+import {LeftOutlined } from '@ant-design/icons';
 import {
-    Table,
     Form,
     Divider,
     Button,
     Checkbox,
-    Card,
-    Tree,
     Input,
-    Spin,
     Row,
     Col,
     Select,
     Tooltip,
-    InputNumber,
-    Radio,
-    Modal,
-    Popconfirm,
-    message,
-    Popover,
     List,
-    Menu,
-    Switch,
-    notification,
-    Dropdown,
-    Tag,
-    Statistic,
-    Empty 
+    Empty,
+    Drawer,
+     
 } from 'antd';
 // import 
 import HttpService from '../../util/HttpService.jsx';
-import SplitPane  from 'react-split-pane'
 const luckyCss = {
     margin: '0px',
     padding: '0px',
     position: 'relative',
     width: '100%',
-    height: '600px'
+    height: '100%'
 }
 const layout = {
     labelCol: { span: 8 },
@@ -71,6 +43,8 @@ export default (props)=>{
     const [mainForm] = Form.useForm()//Form
     const [InputList,setInputList]=useState({})
     const [i,seti]=useState(0)
+    const [visible, setVisible] = useState(false);
+
     useEffect(()=>{
             en.create({
                 showtoolbarConfig:{
@@ -175,6 +149,9 @@ export default (props)=>{
                }
                 setOutput(res.data.out)
                      en.create({
+                        showtoolbarConfig:{
+                            hou:false
+                        },
                             showinfobar:false,
                             lang: 'zh',
                             data:[
@@ -192,64 +169,57 @@ export default (props)=>{
         })
    
     }
+      const onClose1 = () => {
+        setVisible(false);
+    };
+    const queryBtn=(e)=>{
+        console.log(e.target.innerHTML)
+        if(e.target.innerHTML==='查询'){
+            setVisible(true)
+            console.log('查询')
+        }
+    }
+    
     return (
         
         <div style={{
             width:"100%",
             height:"100%",
             boxSizing:"border-box",
-            padding:"20px"
+            padding:'0 5px'
         }}>
-            <div style={{width:"100%",position:"relative",height:"42px",boxSizing:"border-box",borderBottom:"1px solid #ccc",marginBottom:"5px"}}>
-                <div style={{textAlign:"center",fontWeight:600,fontSize:"18px"}}>表格查询</div>
-                <Button  type="primary" size="small" style={{position:"absolute",left:"10px",top:"18px"}} onClick={()=>{
-                    onClose(false)
-                }}>返回</Button>
+            <div style={{width:"100%",position:"relative",height:"18px",boxSizing:"border-box",marginBottom:"2px"}}>
+                <div style={{textAlign:"center",fontSize:"10px"}}>表格查询</div>
+                <Tooltip  placement="right" title={<span>返回</span>}  >
+                    <LeftOutlined onClick={()=>{
+                        onClose(false)
+                    }}
+                    style={{position:"absolute",left:"5px",top:"0px",fontSize:"18px"}}
+                    />
+                </Tooltip>
             </div>
-            <div style={{height:"600px",boxSizing:"border-box",padding:"0 20px",boxSizing  :"border-box",position:"relative"}}>
-            <Row style={{display:"flow-root",paddingBottom:"5px"}}>
-                <Button style={{float:"right"}} onClick={()=>{
-                    query()
-                }}>执行查询</Button>
-            </Row>
-            <SplitPane split="vertical"  defaultSize = { 450 } maxSize={600} minSize={350}  primary = "second"
-            style={
-                {
-                    boxSizing:"border-box",
-                    padding:"0 20px",
-                }
-            }
-                onChange={(size) => {
-                    seti(size)
-                    let arr=en.getAllSheets()
-                    console.log(arr)
-                    if(Math.abs(size-i)>=2){
-                        
-                        en.create({
-                            showtoolbarConfig:{
-                                hou:false
-                            },
-                            showinfobar:false,
-                            lang: 'zh',
-                            data:[{name:"name"}]
-                            // plugins:['chart'],
-                            // showstatisticBar: false,
-                            // functionButton:"<button id='' class='btn btn-primary'  style='padding:3px 6px;font-size: 12px;margin-right: 10px;'>保存</button>",
-                        });
-                        }
-           
-                    // const dom=document.getElementsByClassName('luckysheet')
-                    // const dom2=document.getElementById('luckysheetTableContent')
-                    // dom[0].style.width=size+'px'
-                    // dom2.style.width=size+'px'
+            <div style={{height:"95%"}}>
+                <div
+                id="luckysheet"
+                style={luckyCss}
+                onClick={(e)=>{
+                    queryBtn(e)
                 }}
+                ></div>
+            </div>
+            <Drawer
+                placement="right"
+                closable={false}
+                onClose={onClose1}
+                visible={visible}
+                width={420}
             >
-                <div>
-                    <div
-                    id="luckysheet"
-                    style={luckyCss}
-                    ></div>
-                </div>
+            <div style={{height:"600px",boxSizing:"border-box",boxSizing  :"border-box",position:"relative",width:"400px"}}>
+                <Row style={{display:"flow-root",paddingBottom:"5px"}}>
+                    <Button style={{float:"right"}} onClick={()=>{
+                        query()
+                    }}>执行查询</Button>
+                </Row>
                 <div style={{overflowY:"scroll",height:"100%"}}>
                         <Form
                             style={{marginLeft:"20px"}}
@@ -360,10 +330,8 @@ export default (props)=>{
                     )}
                     />
                 </div>
-            </SplitPane>
             </div>
-         </div>
-      
-                
-)
+      </Drawer>
+         </div>            
+   )
 }

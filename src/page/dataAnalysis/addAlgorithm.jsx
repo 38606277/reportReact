@@ -70,17 +70,17 @@ export default (props)=>{
         <Modal title={title} width="800px" visible={isModalVisible} onOk={ok} onCancel={handle}>
             <Form.Item
                 style={{boxSizing:"border-box",padding:"0 50px"}}
-                label="算法名称"
-                name="算法名称"
+                label="模型名称"
+                name="模型名称"
             >
                 <Input />
             </Form.Item>
             <Divider  orientation="left" plain>输入数据</Divider>
             <Row justify="space-between" style={{boxSizing:"border-box",padding:"0 50px"}}>
                 <Form.Item
-                    label="模型名称"
-                    name="模型名称"
-                    placeholder="请选择模型名称"
+                    label="算法名称"
+                    name="算法名称"
+                    placeholder="请选择算法名称"
                 >
                    <Select
                     style={{ width: 180 }}
@@ -146,8 +146,8 @@ export default (props)=>{
             <Divider  orientation="left" plain>输出模型</Divider>
             <Row justify="space-between" style={{boxSizing:"border-box",padding:"0 50px"}}>
                 <Form.Item
-                    label="模型名称"
-                    name="模型名称"
+                    label="模型路径"
+                    name="模型路径"
                 >
                     <Input />
                 </Form.Item>

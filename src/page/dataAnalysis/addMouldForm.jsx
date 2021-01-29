@@ -1,7 +1,7 @@
 import React,{useState,useEffect,useRef} from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from 'antd/lib/pagination';
-import { BarChartOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined ,SearchOutlined ,PlusOutlined,CloseOutlined, CheckOutlined,DownOutlined,EditOutlined,DisconnectOutlined  } from '@ant-design/icons';
+import { LeftOutlined } from '@ant-design/icons';
 // import { Form } from '@ant-design/compatible';
 
 // import CodeMirror from 'react-codemirror';
@@ -40,11 +40,10 @@ import {
     Dropdown,
     Tag,
     Statistic,
-    Empty 
+    Empty
 } from 'antd';
 // import 
 import HttpService from '../../util/HttpService.jsx';
-import DATA from './index.json'
 const luckyCss = {
     margin: '0px',
     padding: '0px',
@@ -67,6 +66,10 @@ export default (props)=>{
         // ant-menu ant-menu-light
         if(!isType){
             en.create({
+                showtoolbarConfig:{
+                    hou:false,
+                    HOUQuery:false
+                },
                 showinfobar:false,
                 // enableAddBackTop:false,
                 lang: 'zh',
@@ -88,6 +91,10 @@ export default (props)=>{
                 if(res.resultCode==="1000"){
                     setFormName(res.data.name)
                     en.create({
+                        showtoolbarConfig:{
+                            hou:false,
+                            HOUQuery:false
+                        },
                         showinfobar:false,
                         // enableAddBackTop:false,
                         lang: 'zh',
@@ -99,7 +106,7 @@ export default (props)=>{
         }
     },[isType])
     const preservation=(e)=>{//保存
-        if(e.target.innerHTML==='保存'&&e.target.id==="Hou_Mou"){
+        // if(e.target.innerHTML==='保存'&&e.target.id==="Hou_Mou"){
             if(FormName===""){
                 return message.success('请填写模板名称')
             }
@@ -113,26 +120,40 @@ export default (props)=>{
                 }
                 
             })
-        }
+        // }
+    }
+    const myreturn = ()=>{
+        mReturn()
     }
     return (    
-        <Card title={!isType?"新建模板":"编辑模板"} style={{height:"100%"}} bodyStyle={{height:"90%"}}>
-             <div style={{display:"flow-root",position:"relative",height:"20px"}}>
-                 <Input style={{float:"left",width:"200px",top:"-14px",marginLeft:"50%",position:"absolute",left:"-100px"}} placeholder='请输入模型名称' value={FormName} onChange={e=>setFormName(e.target.value)}/>
-             </div>
+        <div style={
+            {
+                width:"100%",
+                height:"100%",
+                boxSizing:"border-box",
+                padding:"10px"
+            }
+        }>
+            <Row justify="space-between" align="middle" style={{marginBottom:"5px"}}>
+                <Tooltip  placement="right" title={<span>返回</span>}>
+                    <LeftOutlined onClick={()=>{
+                        myreturn()
+                    }}/>
+                </Tooltip>
+                 <Input style={{width:"200px"}} placeholder='请输入模型名称' value={FormName} onChange={e=>setFormName(e.target.value)}/>
+                 <Button  type="primary" onClick={()=>preservation()}>保存</Button>
+             </Row>
+          
              
-                <div style={{position:"relative",height:"100%"}}>
+                <div style={{position:"relative",height:"95%"}}>
                    
                     <div
-                    onClick={e=>{
-                        preservation(e)
-                    }}
                     id="luckysheet"
                     style={luckyCss}
                     ></div>
                 </div>
                 
-         </Card>
+         </div>
       
                 
 )

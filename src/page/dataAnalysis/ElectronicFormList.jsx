@@ -255,7 +255,7 @@ export default (props)=>{
                placement="right"
                visible={visible2}
                destroyOnClose={true}
-               onClose={mReturn}
+               closable={false}
                width="100%"
                bodyStyle={
                     {padding:"0px"}
