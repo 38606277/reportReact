@@ -8,7 +8,7 @@ import { FormOutlined, MinusCircleOutlined } from '@ant-design/icons';
 const { confirm } = Modal;
 
 //删除按钮事件
-const onDeleteClickListener = (selectedRowKeys) => {
+const onDeleteClickListener = (ref,selectedRowKeys) => {
     if (selectedRowKeys.length < 1) {
         message.error('请选择需要删除的内容');
         return;
@@ -21,7 +21,7 @@ const onDeleteClickListener = (selectedRowKeys) => {
         cancelText: '取消',
         okType: 'danger',
         onOk() {
-            deleteByIds(selectedRowKeys);
+           deleteByIds(ref,selectedRowKeys);
         },
         onCancel() {
 
@@ -30,7 +30,7 @@ const onDeleteClickListener = (selectedRowKeys) => {
 
 }
 //删除
-const deleteByIds = ( selectedRowKeys) => {
+const deleteByIds = (ref, selectedRowKeys) => {
     if (selectedRowKeys.length < 1) {
         message.error('请选择需要删除的内容');
         return;
@@ -39,8 +39,10 @@ const deleteByIds = ( selectedRowKeys) => {
         .then(res => {
             if (res.resultCode == "1000") {
                 //刷新
+                ref.current.clearSelected();
+                ref.current.reload();
                 // 清空选中项
-                fetchData({current:0,pageSize:10},"","");
+               // fetchData({current:0,pageSize:10},"","");
             } else {
                 message.error(res.message);
             }
@@ -89,7 +91,7 @@ const dictList = () => {
             valueType: 'option',
             render: (text, record) => [
                 <Button onClick={() => window.location.href="#/mdmdict/dict/"+`${record.dict_id}`} icon={<FormOutlined />}></Button>,
-                <Button onClick={() => onDeleteClickListener([record.dict_id])}  icon={<MinusCircleOutlined />}></Button>,
+                <Button onClick={() => onDeleteClickListener(ref,[record.dict_id])}  icon={<MinusCircleOutlined />}></Button>,
             ]
         },
     ];
