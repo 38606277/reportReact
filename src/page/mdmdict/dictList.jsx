@@ -13,6 +13,7 @@ const onDeleteClickListener = (selectedRowKeys) => {
         message.error('请选择需要删除的内容');
         return;
     }
+
     confirm({
         title: '温馨提示',
         content: `您确定要删除吗？`,
@@ -67,6 +68,11 @@ const dictList = () => {
     //定义列
     const columns = [
         {
+            title: '编号',
+            dataIndex: 'dict_id',
+            valueType: 'text',
+        },
+        {
             title: '编码',
             dataIndex: 'dict_code',
             valueType: 'text',
@@ -96,7 +102,7 @@ const dictList = () => {
                 actionRef={ref}
                 columns={columns}
                 request={fetchData}
-                rowKey="id"
+                rowKey="dict_id"
                 rowSelection={{
                     // 自定义选择项参考: https://ant.design/components/table-cn/#components-table-demo-row-selection-custom
                     // 注释该行则默认不显示下拉选项
@@ -117,7 +123,7 @@ const dictList = () => {
                         </span>
                     </Space>
                 )}
-                tableAlertOptionRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
+                tableAlertOptionRender={({ selectedRowKeys }) => (
                     <Space size={16}>
                         <a onClick={() => onDeleteClickListener(ref, selectedRowKeys)}> 批量删除</a>
                     </Space>
@@ -129,7 +135,7 @@ const dictList = () => {
                     defaultCollapsed: true
                 }}
                 dateFormatter="string"
-                headerTitle="字典列表"
+                headerTitle="枚举值列表"
                  toolBarRender={(action, { selectedRows }) => [
                     <Button type="primary" href="#/mdmdict/dict/null">
                       新建
