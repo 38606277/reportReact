@@ -84,6 +84,7 @@ export default (props)=>{
     const [Group,setGroup]=useState('a')
     const [isModalVisible,setisModalVisible]=useState(false)//模型弹出
     const [moduleName,setModuleName]=useState("")
+    const [ok,setOk]=useState(null)
     useEffect(()=>{
     },[])
     const columns1=[
@@ -118,6 +119,7 @@ export default (props)=>{
                             let inner=Group==="a"?"模型预测":"模型训练"
                             setModuleName(inner)
                             setisModalVisible(true)
+                            setOk(true)
                         }
                     }>{Group==="a"?"预测":"详情"}</a>
                 )
@@ -127,9 +129,11 @@ export default (props)=>{
     const handleOk=(e)=>{//ok点击
         console.log(e)
         setisModalVisible(false)
+        setOk(null)
     }
     const handleCancel=()=>{//取消
         setisModalVisible(false)
+        setOk(null)
     }
     const addtrain=()=>{//新建训练
         setModuleName("新建训练")
@@ -190,7 +194,7 @@ export default (props)=>{
                 }
             >
             </Table> */}
-            <Addhm isModalVisible={isModalVisible} handleOk={e=>handleOk(e)} title={moduleName} handleCancel={handleCancel}></Addhm>
+            <Addhm isModalVisible={isModalVisible} handleOk={e=>handleOk(e)} title={moduleName} ok={ok} handleCancel={handleCancel}></Addhm>
          </Card>           
 )
 }
