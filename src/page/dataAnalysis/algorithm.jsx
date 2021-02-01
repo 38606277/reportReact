@@ -36,7 +36,7 @@ import Addhm from './addAlgorithm.jsx'
 import HttpService from '../../util/HttpService.jsx';
 import style from './algorithm.less'
 import TagSelect from '../../components/TagSelect';
-
+import gehttp from './gehttp.jsx'
 export default (props)=>{
     const [startIndex,setStartIndex]=useState(1);//当前第几页
     const [perPage,setPerPage]=useState(10);//一页显示第几条
@@ -46,6 +46,7 @@ export default (props)=>{
     const [list,setList]=useState([])//所有算法
     const [Liststate,setListstate]=useState([])
     const [algorithm_name,setalgorithm_name]=useState("")//算法名称搜集
+    const [algorithm,setalgorithm]=useState(null)//算法名称
     useEffect(()=>{
         HttpService.post("reportServer/mdmDict/getDictValueByDictCode", JSON.stringify({dict_code:"algorithm_type"}))
          .then(res => {
@@ -53,7 +54,6 @@ export default (props)=>{
                 const arr=res.data.map(item=>{
                     return item.value_code
                 })
-                setListstate(arr)
                 setListClass(res.data)
              }
              else
@@ -80,10 +80,19 @@ export default (props)=>{
     }
     const handleOk=(e)=>{//ok点击
         console.log(e)
+        gehttp('/reportServer/aimodel/createAiModel',e).then(res=>{
+            if(res.resultCode==="1000"){
+                message.success(res.message)
+            }else{
+                message.warning(res.message)
+            }
+        })
         setisModalVisible(false)
+        setalgorithm(null)
     }
     const handleCancel=()=>{//取消
         setisModalVisible(false)
+        setalgorithm(null)
     }
 
     const getList=(startIndex,perPage,algorithm_name,algorithm_class_id)=>{
@@ -152,7 +161,7 @@ export default (props)=>{
                                     label="算法名称"
                                     name="算法名称"
                                 >
-                                    <Input style={{height:'22px '}} value={algorithm_name} onChange={e=>setalgorithm_name(e.target.value)}/>
+                                    <Input style={{height:'26px '}} value={algorithm_name} onChange={e=>setalgorithm_name(e.target.value)}/>
                         </Form.Item>
                         <Form.Item>
                             <Button type="primary" size="small" onClick={()=>search()}>搜索</Button>
@@ -184,13 +193,14 @@ export default (props)=>{
                             </Col>
                         </Row>
                         <Row style={{fontSize: '14px',fontWeight: 600,marginTop:"10px",height:"44px",cursor:'pointer'}}>
-                            <Tooltip placement="topRight" title={item.algorithm_name}>
+                            <Tooltip placement="right" title={item.algorithm_name}>
                                 {item.algorithm_name.length>13?item.algorithm_name.substr(0,14)+"...":item.algorithm_name}
                             </Tooltip>
                         </Row>
                         <p className={style.train}
                                 onClick={()=>{
                                     train()
+                                    setalgorithm({algorithm_id:item.algorithm_id,algorithm_name:item.algorithm_name})
                                 }}
                             >训练模型</p>
                         </Card>
@@ -200,7 +210,7 @@ export default (props)=>{
                 </Row>
                 <Pagination  current={startIndex} total={total} onChange={setpagindex} onShowSizeChange={onShowSizeChange}/>
             </Card>
-            <Addhm isModalVisible={isModalVisible} handleOk={e=>handleOk(e)} title={"训练模型"} handleCancel={handleCancel}></Addhm>
+            <Addhm isModalVisible={isModalVisible} handleOk={e=>handleOk(e)} title={"训练模型"} handleCancel={handleCancel} algorithm={algorithm}></Addhm>
          </Card>           
     )
 }

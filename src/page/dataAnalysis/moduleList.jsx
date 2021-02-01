@@ -46,7 +46,7 @@ import {
 } from 'antd';
 const { TabPane } = Tabs;
 import Addhm from './addAlgorithm.jsx'
-import HttpService from '../../util/HttpService.jsx';
+import gehttp from './gehttp.jsx'
 import Model from './Model.jsx'
 const { Step } = Steps;
 const data=[
@@ -91,33 +91,36 @@ export default (props)=>{
     const [isModalVisible,setisModalVisible]=useState(false)//模型弹出
     const [moduleName,setModuleName]=useState("")
     const [ok,setOk]=useState(null)
+    const [training,settraining]=useState([])//模板类型list
+    const [data,setdata]=useState(null)
     useEffect(()=>{
+        getList(1,10,"","")
     },[])
     const columns1=[
         {
             title: '模型名称',
-            dataIndex: 'name',
-            key: 'name',
+            dataIndex: 'model_name',
+            key: 'model_name',
         },
         {
             title: '模型类型',
-            dataIndex: 'type',
-            key: 'type',
+            dataIndex: 'x',
+            key: 'x',
         },
         {
             title: '模型文件',
-            dataIndex: 'pmml',
-            key: 'pmml',
+            dataIndex: 'datasource_id',
+            key: 'datasource_id',
         },
         {
             title: '数据集成',
-            dataIndex: 'list',
-            key: 'list',
+            dataIndex: 'dataset_id',
+            key: 'dataset_id',
         },
         {
             title: '状态',
-            dataIndex: 'e',
-            key: 'e',
+            dataIndex: 'statues',
+            key: 'statues',
             render:(_,res)=>{
                 return (
                     <a style={{color:"red"}}>未完成</a>
@@ -136,6 +139,7 @@ export default (props)=>{
                             setModuleName(inner)
                             setisModalVisible(true)
                             setOk(true)
+                            setdata(res)
                         }
                     }>{Group==="a"?"预测":"详情"}</a>
                 )
@@ -143,13 +147,22 @@ export default (props)=>{
         },
     ]
     const handleOk=(e)=>{//ok点击
-        console.log(e)
+        gehttp('/reportServer/aimodel/createAiModel',e).then(res=>{
+            if(res.resultCode==="1000"){
+                message.success(res.message)
+                getList(1,10,"","")
+            }else{
+               return message.warning(res.message)
+            }
+        })
         setisModalVisible(false)
         setOk(null)
+        setdata(null)
     }
     const handleCancel=()=>{//取消
         setisModalVisible(false)
         setOk(null)
+        setdata(null)
     }
     const addtrain=()=>{//新建训练
         setModuleName("新建训练")
@@ -166,6 +179,14 @@ export default (props)=>{
         setGroup(key)
         console.log(key)
     }
+    const getList =(startIndex,perPage,model_name,algorithm_id)=>{
+        gehttp('/reportServer/aimodel/getAiModelList',{startIndex,perPage,model_name,algorithm_id}).then(res=>{
+            if(res.resultCode==="1000"){
+                settraining(res.data.list)
+            }
+            console.log(res)
+        })
+    }
     return (    
         <Card title="模型列表">
             <Steps current={5} progressDot={()=>{return <div style={{width:"8px",height:"8px",borderRadius:"50%",background:"#1890ff"}}></div>}}>
@@ -180,7 +201,7 @@ export default (props)=>{
                 <TabPane tab="模型训练" key="b" style={{position:"relative"}}>
                     <Button type="primary" style={{position:"absolute",right:"0px",top:"-50px"}}  onClick={()=>addtrain()}>新建训练</Button>
                     <Table 
-                        dataSource={data} columns={columns1}
+                        dataSource={training} columns={columns1}
                     >
                     </Table>
                 </TabPane>
@@ -207,7 +228,7 @@ export default (props)=>{
                 }
             >
             </Table> */}
-            <Addhm isModalVisible={isModalVisible} handleOk={e=>handleOk(e)} title={moduleName} ok={ok} handleCancel={handleCancel}></Addhm>
+            <Addhm isModalVisible={isModalVisible} data={data} handleOk={e=>handleOk(e)} title={moduleName} ok={ok} handleCancel={handleCancel}></Addhm>
          </Card>           
 )
 }

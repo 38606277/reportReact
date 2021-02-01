@@ -45,20 +45,50 @@ import {
 } from 'antd';
 const {Option}=Select
 import HttpService from '../../util/HttpService.jsx';
+
 const tailLayout = {
     wrapperCol: { offset: 1, span: 9 },
   };
 export default (props)=>{
-    const {isModalVisible,handleOk,handleCancel,title,ok}=props
+    const {isModalVisible,handleOk,handleCancel,title,ok,algorithm,data}=props
     const [source,setsource]=useState([])//数据源
     const [Source,getSource]=useState(null)//获取数据源名称
     const [listTabl,setListTabl]=useState([])//数据表
     const [ListTabl,getListTable]=useState(null)//获取数据表
     const [moduleName,setmoduleName]=useState([])//算法名称list
     const [ModuleName,getModuleName]=useState(null)//获取算法名称
+    const [model_name,setmodel_name]=useState("")//模型名称
+    const [model_file_url,setmodel_file_url]=useState("")//输出路径
+    const [typ,settyp]=useState(false)//是否可用改
     useEffect(()=>{
+        if(data){
+            HttpService.post('/reportServer/algorithm/getAllList',JSON.stringify(null)).then(res=>{
+                if(res.resultCode==="1000"){
+                    console.log(res.data)
+                    const arr=res.data.map(item=>{
+                        return {
+                            text:item.algorithm_id,
+                            value:item.algorithm_name
+                        }
+                    })
+                    setsource(arr)
+                    setmodel_name(data.model_name)
+                    getListTable(data.dataset_id)
+                    getModuleName(arr[0].value)
+                    setmodel_file_url(data.model_file_url)
+                    getSource(data.datasource_id)
+                    settyp(true)
+                }
+            })
+            setmodel_name(data.model_name)
+            getListTable(data.dataset_id)
+            getModuleName(data.algorithm_id)
+            setmodel_file_url(data.setmodel_file_url)
+            getSource(data.datasource_id)
+            settyp(true)
+            return 
+        }
          HttpService.post('/reportServer/DBConnection/ListAll',JSON.stringify({})).then(res=>{
-            console.log(res)
             const arr=res.map(item=>{
                 return {
                     value:item.url,
@@ -72,28 +102,62 @@ export default (props)=>{
         })
         HttpService.post('/reportServer/algorithm/getAllList',JSON.stringify(null)).then(res=>{
             if(res.resultCode==="1000"){
+                console.log(res.data)
                 const arr=res.data.map(item=>{
                     return {
-                        text:item.algorithm_name,
+                        text:item.algorithm_id,
                         value:item.algorithm_name
                     }
                 })
                 setmoduleName(arr)
+                getModuleName(arr[0].value)
+                if(algorithm){
+                    return  getModuleName(algorithm.algorithm_name)
+                }
+              
             }
-            console.log(res)
         })
         
-    },[])
+    },[algorithm,data])
     const ok1=e=>{
-        handleOk(1221)
+        console.log(moduleName,ModuleName)
+        const algorithm_id=moduleName.filter(item=>{
+            if(item.value===ModuleName){
+                return item
+            }
+        })[0].text
+        if(model_name===""){
+            return message.warning('请填写模型名称')
+        }
+        handleOk({
+            model_id:"",
+            model_name:model_name,
+            comment:null,
+            dataset_id:ListTabl,
+            algorithm_id:algorithm_id,
+            create_date:"",
+            model_file_url:model_file_url,
+            datasource_id:Source,
+            statues:1
+        })
+        settyp(false)
+        setmodel_name("")
+        setmodel_file_url("")
+        getSource(null)
+        getListTable(null)
+        getModuleName(null)
     }
     const handle=()=>{
+        setmodel_name("")
+        setmodel_file_url("")
+        getSource(null)
+        getListTable(null)
+        getModuleName(null)
         handleCancel()
     }
-    const getlistTabl=(name,s)=>{
+    const getlistTabl=(name)=>{
          HttpService.post("reportServer/selectsql/getTableList", JSON.stringify({fromdb:name}))
         .then(res => {
-        console.log(res)
             if (res.resultCode == '1000') {
                 const arr=res.data.tables.map(item=>{
                     return{
@@ -103,8 +167,11 @@ export default (props)=>{
                 setListTabl(arr)
                 getListTable(arr[0].value)
             }
-            else
+            else{
                 setListTabl([])
+                getListTable(null)
+            }
+               
         })
     }
     return (    
@@ -114,7 +181,8 @@ export default (props)=>{
                 label="模型名称"
                 name="模型名称"
             >
-                <Input />
+                {console.log(data,model_name)}
+                <Input disabled={data?true:false} value={model_name} onChange={e=>{setmodel_name(e.target.value)}}/>
             </Form.Item>
             <Divider  orientation="left" plain>输入数据</Divider>
             <Row justify="space-between" style={{boxSizing:"border-box",padding:"0 50px"}}>
@@ -124,13 +192,18 @@ export default (props)=>{
                     placeholder="请选择算法名称"
                 >
                    <Select
+                   disabled={data?true:false} 
                     style={{ width: 180 }}
                     value={ModuleName}
-                    onChange={getModuleName}
+                    placeholder={ModuleName}
+                    onChange={e=>{
+                        console.log(e)
+                        getModuleName(e)
+                    }}
                    >
                         {
                             moduleName.map((item,index)=>{
-                               return <Option value={item.id}>{item.value}</Option>
+                               return <Option value={item.value}>{item.value}</Option>
                             })
                         }
                    </Select>
@@ -160,6 +233,7 @@ export default (props)=>{
                     {...tailLayout}
                 >
                    <Select
+                   disabled={data?true:false} 
                       placeholder={Source}
                       value={Source}
                       style={{ width: 180 }}
@@ -183,6 +257,7 @@ export default (props)=>{
                     
                 >
                    <Select
+                   disabled={data?true:false} 
                     placeholder={ListTabl}
                     value={ListTabl}
                     style={{ width: 180 }}
@@ -205,13 +280,13 @@ export default (props)=>{
                     label="模型路径"
                     name="模型路径"
                 >
-                    <Input />
+                    <Input disabled={data?true:false}  value={model_file_url} onChange={e=>{setmodel_file_url(e.target.value)}}/>
                 </Form.Item>
                 <Form.Item
                     label="模型类别"
                     name="模型类别"
                 >
-                    <Input />
+                    <Input disabled={data?true:false}  />
                 </Form.Item>
             </Row>
         </Modal>

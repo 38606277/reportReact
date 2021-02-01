@@ -103,7 +103,6 @@ export default (props)=>{
             if(FormName===""){
                 return message.success('请填写模板名称')
             }
-            console.log('保存成功')
             HttpService.post('/reportServer/electronTable/createElectronTable',JSON.stringify({id:!isType?"":id,name:FormName,obj:en.getAllSheets()})).then(res=>{
                 if(res.resultCode==="1000"){
                     getList(1,10,"")
@@ -111,7 +110,6 @@ export default (props)=>{
                     mReturn()
                     console.log(res)
                 }
-                
             })
         }
     }
