@@ -54,7 +54,8 @@ export default (props)=>{
     const [Source,getSource]=useState(null)//获取数据源名称
     const [listTabl,setListTabl]=useState([])//数据表
     const [ListTabl,getListTable]=useState(null)//获取数据表
-    const [moduleName,setmoduleName]=useState([])//算法名称
+    const [moduleName,setmoduleName]=useState([])//算法名称list
+    const [ModuleName,getModuleName]=useState(null)//获取算法名称
     useEffect(()=>{
          HttpService.post('/reportServer/DBConnection/ListAll',JSON.stringify({})).then(res=>{
             console.log(res)
@@ -64,12 +65,24 @@ export default (props)=>{
                     text:item.name
                 }
             })
-            setmoduleName(arr)
             setsource(arr)
             getSource(arr[0].text)
             getlistTabl(arr[0].text)
             
         })
+        HttpService.post('/reportServer/algorithm/getAllList',JSON.stringify(null)).then(res=>{
+            if(res.resultCode==="1000"){
+                const arr=res.data.map(item=>{
+                    return {
+                        text:item.algorithm_name,
+                        value:item.algorithm_name
+                    }
+                })
+                setmoduleName(arr)
+            }
+            console.log(res)
+        })
+        
     },[])
     const ok1=e=>{
         handleOk(1221)
@@ -112,6 +125,8 @@ export default (props)=>{
                 >
                    <Select
                     style={{ width: 180 }}
+                    value={ModuleName}
+                    onChange={getModuleName}
                    >
                         {
                             moduleName.map((item,index)=>{

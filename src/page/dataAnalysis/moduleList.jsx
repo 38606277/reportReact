@@ -47,37 +47,43 @@ import {
 const { TabPane } = Tabs;
 import Addhm from './addAlgorithm.jsx'
 import HttpService from '../../util/HttpService.jsx';
+import Model from './Model.jsx'
 const { Step } = Steps;
 const data=[
     {
         name:"模型名称",
         type:"类型1",
         pmml:"文件1",
-        list:"数据集1"
+        list:"数据集1",
+        type:1
     },
     {
         name:"模型名称2",
         type:"类型2",
         pmml:"文件2",
-        list:"数据集2"
+        list:"数据集2",
+        type:2
     },
     {
         name:"模型名称3",
         type:"类型3",
         pmml:"文件3",
-        list:"数据集3"
+        list:"数据集3",
+        type:1
     },
     {
         name:"模型名称4",
         type:"类型4",
         pmml:"文件4",
-        list:"数据集4"
+        list:"数据集4",
+        type:3
     },
     {
         name:"模型名称5",
         type:"类型5",
         pmml:"文件5",
-        list:"数据集5"
+        list:"数据集5",
+        type:4
     }
 ]
 export default (props)=>{
@@ -107,6 +113,16 @@ export default (props)=>{
             title: '数据集成',
             dataIndex: 'list',
             key: 'list',
+        },
+        {
+            title: '状态',
+            dataIndex: 'e',
+            key: 'e',
+            render:(_,res)=>{
+                return (
+                    <a style={{color:"red"}}>未完成</a>
+                )
+            }
         },
         {
             title: '操作',
@@ -159,10 +175,7 @@ export default (props)=>{
             </Steps>
             <Tabs defaultActiveKey="a" onChange={callback} forceRender style={{marginTop:"10px"}}>
                 <TabPane tab="模型" key="a">
-                    <Table 
-                        dataSource={data} columns={columns1}
-                    >
-                    </Table>
+                    <Model />
                 </TabPane>
                 <TabPane tab="模型训练" key="b" style={{position:"relative"}}>
                     <Button type="primary" style={{position:"absolute",right:"0px",top:"-50px"}}  onClick={()=>addtrain()}>新建训练</Button>

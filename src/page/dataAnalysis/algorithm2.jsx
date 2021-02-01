@@ -1,7 +1,18 @@
 import React,{useState,useEffect,useRef} from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from 'antd/lib/pagination';
-import { SlackOutlined} from '@ant-design/icons';
+import { BarChartOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined ,SearchOutlined ,PlusOutlined,CloseOutlined, CheckOutlined,DownOutlined,EditOutlined,DisconnectOutlined  } from '@ant-design/icons';
+// import { Form } from '@ant-design/compatible';
+
+// import CodeMirror from 'react-codemirror';
+// import 'codemirror/lib/codemirror.css';
+// import 'codemirror/mode/sql/sql';
+// import 'codemirror/theme/ambiance.css';
+// import 'codemirror/addon/hint/show-hint.css';  
+// import 'codemirror/addon/hint/show-hint.js';  
+// import 'codemirror/addon/hint/sql-hint.js';  
+// import 'codemirror/theme/ambiance.css'; 
+// import '@ant-design/compatible/assets/index.css';
 import {
     Table,
     Form,
@@ -44,16 +55,13 @@ export default (props)=>{
     const [isModalVisible,setisModalVisible]=useState(false)//新建表单控制
     const [listClass,setListClass]=useState([])//算法分类
     const [list,setList]=useState([])//所有算法
-    const [Liststate,setListstate]=useState([])
+    const [n,setN]=useState(-1)
+    const [Class_id,setClass_id]=useState("")//类别id
     const [algorithm_name,setalgorithm_name]=useState("")//算法名称搜集
     useEffect(()=>{
         HttpService.post("reportServer/mdmDict/getDictValueByDictCode", JSON.stringify({dict_code:"algorithm_type"}))
          .then(res => {
              if (res.resultCode == '1000') {
-                const arr=res.data.map(item=>{
-                    return item.value_code
-                })
-                setListstate(arr)
                 setListClass(res.data)
              }
              else
@@ -63,11 +71,7 @@ export default (props)=>{
     },[])
 
     const setpagindex=(page, pageSize)=>{
-        let str=""
-        Liststate.forEach(item=>{
-            str+=item+","
-        })
-        getList(page,pageSize,"",str.substr(0,str.length-1))
+        getList(page,pageSize,"",Class_id)
         setStartIndex(page)
         setPerPage(pageSize)
     }
@@ -96,52 +100,38 @@ export default (props)=>{
     }
 
     const search=()=>{
-        let str=""
-        Liststate.forEach(item=>{
-            str+=item+","
-        })
-        getList(startIndex,perPage,algorithm_name,str.substr(0,str.length-1))
+        getList(startIndex,perPage,algorithm_name,Class_id)
     }
     const train=()=>{
         setisModalVisible(true)
     }
-    const handleFormSubmit=e=>{
-        let str=""
-        e.forEach(item=>{
-            str+=item+","
-        })
-        getList(startIndex,perPage,algorithm_name,str.substr(0,str.length-1))
-        setListstate(e)
-    }
     return (    
         <Card title="算法" style={{height:"100%"}}>
-            <Row style={{marginBottom:"15px"}} align="middle">
-                <Col style={{marginRight:"10px"}}>
+            <Row style={{marginBottom:"15px"}}>
+                <Col>
                  <span className={style.addAlgorithmName}>算法分类 :</span>
                 </Col>
                 <Col>
-                <TagSelect value={Liststate} onChange={handleFormSubmit}>
-                    {
-                        listClass.map((item,index)=>{
-                            
-                            return (
-                                <TagSelect.Option value={item.value_code}>{item.value_name}</TagSelect.Option>
-                            )
-                        })
-                    }
-                </TagSelect>
-                </Col>
-            </Row>
-            <Row style={{marginBottom:"15px"}} align="middle">
-                <Col style={{marginRight:"10px"}}>
-                    <span className={style.addAlgorithmName}>语言 :</span>
-                    </Col>
-                    <Col>
-                    <TagSelect>
-                        <TagSelect.Option value="cat1">hive</TagSelect.Option>
-                        <TagSelect.Option value="cat2">hbase</TagSelect.Option>
-                        <TagSelect.Option value="cat3">Mysql</TagSelect.Option>
-                    </TagSelect>
+                 <span onClick={()=>{
+                    setN(-1)
+                    setClass_id("")
+                    setStartIndex(1)
+                    getList(1,10,"","")
+                }} class={[style.list,n===-1?style.colors:null].join(' ')} >全部</span>
+                {
+                    listClass.map((item,index)=>{
+                        return (
+                            <span className={[style.list,n===index?style.colors:null].join(' ')} key={index}
+                                onClick={()=>{
+                                    getList(1,10,"",item.value_code)
+                                    setClass_id(item.value_code)
+                                    setN(index)
+                                    setStartIndex(1)
+                                }}
+                            >{item.value_name}</span>
+                        )
+                    })
+                }
                 </Col>
             </Row>
             <Card title={  <Form
@@ -166,33 +156,14 @@ export default (props)=>{
                 <List
                     grid={{ gutter: 16, column: 4 }}
                     dataSource={list}
-                    renderItem={(item,index) => (
+                    renderItem={item => (
                     <List.Item>
-                        <Card cover={<img style={{width:"100%",height:"100%"}} src={require('./img/1 ('+(index+1)+').png')} alt=""/>}
-                            bodyStyle={{
-                                boxSizing:"border-box",
-                                padding:"0px 10px"
-                            }}
-                        >
-                        <Row align="middle" style={{borderBottom:"1px solid #ccc",padding:"6px 0",boxSizing:"border-box",fontSize:"12px"}} justify="space-between">
-                            <Row align="middle">
-                                <SlackOutlined />
-                                <span style={{marginLeft:"2px"}}>算法</span>
-                            </Row>
-                            <Col>
-                                <div style={{fontSize:"12px",width:"30px",height:"20px",background:"#5e7ce0",color:"#fff",textAlign:"center"}}>官方</div>
-                            </Col>
-                        </Row>
-                        <Row style={{fontSize: '14px',fontWeight: 600,marginTop:"10px",height:"44px",cursor:'pointer'}}>
-                            <Tooltip placement="topRight" title={item.algorithm_name}>
-                                {item.algorithm_name.length>13?item.algorithm_name.substr(0,14)+"...":item.algorithm_name}
-                            </Tooltip>
-                        </Row>
-                        <p className={style.train}
+                        <Card title={item.algorithm_name} className={style.lists}>
+                        <div className={style.train}
                                 onClick={()=>{
                                     train()
                                 }}
-                            >训练模型</p>
+                            >训练模型</div>
                         </Card>
                     </List.Item>
                     )}
