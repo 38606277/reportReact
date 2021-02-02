@@ -17,6 +17,12 @@ const QueryList = Loadable({
     delay:3000
 });
 
+const QueryOnlyList = Loadable({
+    loader: () => import(/* webpackChunkName: "QueryOnlyList" */ './QueryOnlyList.jsx'),
+    loading: loading,
+    delay:3000
+});
+
 const QueryListCard = Loadable({
     loader: () => import(/* webpackChunkName: "QueryListCard" */ './QueryListCard.jsx'),
     loading: loading,
@@ -107,6 +113,7 @@ class QueryRouter extends React.Component{
             <Switch>
                  <Route path="/query/ExecQuery/:paramv/:paramv2/:paramv3/:paramv4" component={ExecQuery} />
                  <Route path="/query/QueryList" component={QueryList} />
+                 <Route path="/query/QueryOnlyList" component={QueryOnlyList} />
                  <Route path="/query/QueryListCard" component={QueryListCard} />
                  <Route path="/query/QueryClass" component={QueryClass} />
                  <Route path="/query/CreateTemplate" component={CreateTemplate} />
