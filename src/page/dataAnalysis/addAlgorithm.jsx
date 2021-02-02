@@ -180,6 +180,8 @@ export default (props)=>{
                 name="模型名称"
             >
                 <Input disabled={data?true:false} value={model_name} onChange={e=>{setmodel_name(e.target.value)}}/>
+                <div style={{display:"none"}}>{model_name}</div>
+                {/* {model_name} */}
             </Form.Item>
             <Divider  orientation="left" plain>输入数据</Divider>
             <Row justify="space-between" style={{boxSizing:"border-box",padding:"0 50px"}}>

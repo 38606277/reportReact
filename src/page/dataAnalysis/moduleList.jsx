@@ -201,6 +201,9 @@ export default (props)=>{
         setStartIndex(1)
         setPerPage(pageSize)
     }
+    const searchTrain=()=>{
+        getList(startIndex,perPage,model_name,"")
+    }
     return (    
         <Card title="模型列表">
             <Steps current={5} progressDot={()=>{return <div style={{width:"8px",height:"8px",borderRadius:"50%",background:"#1890ff"}}></div>}}>
@@ -222,7 +225,7 @@ export default (props)=>{
                             >
                                 <Input style={{height:"26px"}} value={model_name} onChange={e=>{setmodel_name(e.target.value)}}/>
                             </Form.Item>
-                            <Button size="small" type="primary" style={{fontSize:"13px"}}>搜索</Button>
+                            <Button size="small" type="primary" style={{fontSize:"13px"}} onClick={()=>searchTrain()}>搜索</Button>
                         </Row>
                         <Button type="primary"   onClick={()=>addtrain()}>新建训练</Button>
                     </Row>

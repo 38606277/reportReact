@@ -6,7 +6,7 @@ import dataAssetList from './dataAssetList.jsx';
 import dataAssetInfo from './dataAssetInfo.jsx';
 import dataadd from './index.jsx'//新建
 import Xy from './Primordial.jsx'
-import modelList from './modelList2.jsx';
+import modelList from './modelList.jsx';
 import addList from './newlform.jsx'
 import addModule from './addModule.jsx'
 export default class dataAssetRouter extends React.Component{
