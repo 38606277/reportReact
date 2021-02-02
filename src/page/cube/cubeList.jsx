@@ -114,9 +114,11 @@ export default class CubeList extends React.Component {
             className:'headerRow',
             render: (text, record) => (
                 <span>
-                  <Link to={ `/cube/cubeInfo/${record.cube_id}` }>编辑</Link>
-                  <Divider type="vertical" />
-                  <a onClick={()=>this.deleteCube(`${record.cube_id}`)} href="javascript:;">删除</a>
+                    <Link to={ `/dashboard/DataAnalysis/${record.qry_id}/${record.class_id}/${record.cube_name}` }>查看</Link>
+                    <Divider type="vertical" />
+                    <Link to={ `/cube/cubeInfo/${record.cube_id}` }>编辑</Link>
+                    <Divider type="vertical" />
+                    <a onClick={()=>this.deleteCube(`${record.cube_id}`)} href="javascript:;">删除</a>
                 </span>
               ),
           }];

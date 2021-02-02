@@ -209,6 +209,11 @@ export default class QueryList extends React.Component {
                                                     }}>API接口</a>
                                                 </Menu.Item>
                                                 <Menu.Item>
+                                                  <a onClick={()=>{
+                                                        window.location.href="#/dashboard/DataAnalysis/"+record.qry_id+"/"+record.class_id+"/"+record.qry_name;
+                                                    }}>图形展示</a>
+                                                </Menu.Item>
+                                                <Menu.Item>
                                                     <a onClick={()=>{
                                                         if(record.qry_type=='sql'){
                                                             window.location.href="#/query/SqlCreator/update/"+record.qry_id;

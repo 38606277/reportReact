@@ -70,6 +70,11 @@ export default class RuleService{
         let url='/reportServer/auth/getAllCube';
         return HttpService.post(url,{});
     }
+    getAllQry(){
+        let url='/reportServer/auth/getAllQryName';
+        return HttpService.post(url,{});
+    }
+
     getAllDashBoard(){
         let url='/reportServer/auth/getAllDashBoard';
         return HttpService.post(url,{});

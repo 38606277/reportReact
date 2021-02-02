@@ -84,6 +84,11 @@ export default class QueryService {
         let param = {userId:userId};  
         return HttpService.post(url,JSON.stringify(param));
     }
+    getQrynameListInAuth(userId){
+        let url = "reportServer/auth/getQryNameListInAuth";
+        let param = {userId:userId};  
+        return HttpService.post(url,JSON.stringify(param));
+    }
     getDashboardListInAuth(userId){
         let url = "reportServer/auth/getDashboardListInAuth";
         let param = {userId:userId};  

@@ -482,6 +482,8 @@ class DataAnalysis extends React.Component {
             <div>
                 <Card bordered={false} title={this.state.cube_name} extra={ <div>
                             <a onClick={()=>this.execSelect()}>查询 </a>
+                            <Divider type="vertical" />
+                            <a href={"#/query/QueryList"}>返回 </a>
                             
                         </div>}>
                         {inColumn}
