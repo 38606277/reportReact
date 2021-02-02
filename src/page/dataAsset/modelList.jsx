@@ -415,7 +415,7 @@ export default ()=>{
                                         <Radio.Button value="list" onClick={()=>setModuleType(true)}>列表</Radio.Button>
                                         <Radio.Button value="column" onClick={()=>setModuleType(false)}>模型</Radio.Button>
                                     </Radio.Group>
-                                    <Button type="primary"  style={{float:"right",marginRight:"10px"}} href={"#/dataAsset/newlform/"+"X"+model_id}>新建表格</Button>
+                                    <Button type="primary"  style={{float:"right",marginRight:"10px"}} href={"#/dataAsset/newlform/"+"X"+model_id}>新建表</Button>
                             </Col>
                         </Card>
                         <Card>
