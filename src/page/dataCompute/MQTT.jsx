@@ -152,7 +152,7 @@ export default ()=>{
                 // });
             });
              
-              // setvisible2(true)
+              setvisible2(true)
             }}>查看</Button>
         ),
       },

@@ -62,30 +62,29 @@ export default (props)=>{
     const [typ,settyp]=useState(false)//是否可用改
     useEffect(()=>{
         if(data){
+            const a=data.model_file_url
+            setmodel_file_url(a)
+            setmodel_name(data.model_name)
+            getListTable(data.dataset_id)
+            getSource(data.datasource_id)
             HttpService.post('/reportServer/algorithm/getAllList',JSON.stringify(null)).then(res=>{
                 if(res.resultCode==="1000"){
-                    console.log(res.data)
                     const arr=res.data.map(item=>{
                         return {
                             text:item.algorithm_id,
                             value:item.algorithm_name
                         }
                     })
+                    let names=arr.filter(item=>{
+                        if(item.text===data.algorithm_id){
+                            return item
+                        }
+                    })[0].value
                     setsource(arr)
-                    setmodel_name(data.model_name)
-                    getListTable(data.dataset_id)
-                    getModuleName(arr[0].value)
-                    setmodel_file_url(data.model_file_url)
-                    getSource(data.datasource_id)
+                    getModuleName(names)
                     settyp(true)
                 }
             })
-            setmodel_name(data.model_name)
-            getListTable(data.dataset_id)
-            getModuleName(data.algorithm_id)
-            setmodel_file_url(data.setmodel_file_url)
-            getSource(data.datasource_id)
-            settyp(true)
             return 
         }
          HttpService.post('/reportServer/DBConnection/ListAll',JSON.stringify({})).then(res=>{
@@ -120,7 +119,6 @@ export default (props)=>{
         
     },[algorithm,data])
     const ok1=e=>{
-        console.log(moduleName,ModuleName)
         const algorithm_id=moduleName.filter(item=>{
             if(item.value===ModuleName){
                 return item
@@ -138,7 +136,7 @@ export default (props)=>{
             create_date:"",
             model_file_url:model_file_url,
             datasource_id:Source,
-            statues:1
+            statues:0
         })
         settyp(false)
         setmodel_name("")
@@ -181,7 +179,6 @@ export default (props)=>{
                 label="模型名称"
                 name="模型名称"
             >
-                {console.log(data,model_name)}
                 <Input disabled={data?true:false} value={model_name} onChange={e=>{setmodel_name(e.target.value)}}/>
             </Form.Item>
             <Divider  orientation="left" plain>输入数据</Divider>
@@ -280,7 +277,8 @@ export default (props)=>{
                     label="模型路径"
                     name="模型路径"
                 >
-                    <Input disabled={data?true:false}  value={model_file_url} onChange={e=>{setmodel_file_url(e.target.value)}}/>
+                    <Input disabled={data?true:false}  value={data?data.model_file_url:model_file_url} onChange={e=>{setmodel_file_url(e.target.value)}}/>
+                    <div style={{display:"none"}}>{data?data.model_file_url:model_file_url}</div>
                 </Form.Item>
                 <Form.Item
                     label="模型类别"

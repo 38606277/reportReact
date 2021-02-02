@@ -145,7 +145,7 @@ export default (props)=>{
                             setOk(true)
                             setdata(res)
                         }
-                    }>{Group==="c"?"预测":"详情"}</a>
+                    }>{Group==="a"?"预测":"详情"}</a>
                 )
             }
         },
@@ -213,33 +213,9 @@ export default (props)=>{
                     <Model />
                 </TabPane>
                 <TabPane tab="模型训练" key="b" style={{position:"relative"}}>
-                <Row align="middle" style={{marginBottom:"8px",boxSizing:"border-box",paddingLeft:"10px"}} justify="space-between">
-                    <Row align="middle">
-                        <Form.Item
-                                style={{marginBottom:"0px"}}
-                                label="模型名称"
-                                name="模型名称"
-                            >
-                                <Input style={{height:"26px"}} value={model_name} onChange={e=>{setmodel_name(e.target.value)}}/>
-                            </Form.Item>
-                            <Button size="small" type="primary" style={{fontSize:"13px"}}>搜索</Button>
-                        </Row>
-                        <Button type="primary"   onClick={()=>addtrain()}>新建训练</Button>
-                    </Row>
-                   
+                    <Button type="primary" style={{position:"absolute",right:"0px",top:"-50px"}}  onClick={()=>addtrain()}>新建训练</Button>
                     <Table 
                         dataSource={training} columns={columns1}
-                        pagination={false}
-                        footer={
-                            ()=>{
-                                return (
-                                    <div style={{display:"flow-root"}}>
-                                         <Pagination style={{float:"right"}}  current={startIndex} total={total} onChange={setpagindex} onShowSizeChange={onShowSizeChange}/>
-                                    </div>
-                                )
-                            }
-                        }
-                       
                     >
                     </Table>
                 </TabPane>
