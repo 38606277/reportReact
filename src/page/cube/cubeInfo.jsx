@@ -24,6 +24,7 @@ class CubeInfo extends React.Component{
             dictionaryList:[],
             qry_name:'',
             cube_sql:'',
+            class_id:''
         };
         this.handleSubmit = this.handleSubmit.bind(this);
       
@@ -40,6 +41,7 @@ class CubeInfo extends React.Component{
                       qry_id:response.data.qry_id,
                       class_name:response.data.class_name,
                       cube_sql:response.data.cube_sql,
+                      class_id:response.data.class_id
                 });
             }, errMsg => {
                 this.setState({
@@ -118,15 +120,17 @@ class CubeInfo extends React.Component{
 //模式窗口点击确认
   handleOk = (e) => {
     let values='';
+    let classid='';
     if(this.state.selectedRowKeys.length>0){
         const arr1=this.state.selectedRowKeys[0];
         const dataArr=arr1.split("&");
         values=dataArr[0];
         let qryname=dataArr[1];
-        this.props.form.setFieldsValue({['qry_id']:values,['class_name']:qryname});
+        classid=dataArr[2];
+        this.props.form.setFieldsValue({['qry_id']:values,['class_name']:qryname,['class_id']:classid});
         // this.props.form.setFieldsValue({['qry_name']:qryname});
     }
-    this.setState({visible: false,pageNumd:1,qry_id:values});
+    this.setState({visible: false,pageNumd:1,qry_id:values,class_id:classid});
   }
 //模式窗口点击取消
   handleCancel = (e) => {
@@ -187,7 +191,9 @@ class CubeInfo extends React.Component{
         }];
     if(null!=this.state.dictionaryList){
         this.state.dictionaryList.map((item,index)=>{
-            item.key=item.qry_id+"&"+item.qry_name;
+          
+            item.key=item.qry_id+"&"+item.qry_name+"&"+item.class_id;
+            console.log(item.key)
         });
     }
     return (
@@ -222,6 +228,12 @@ class CubeInfo extends React.Component{
                   })(
                     <Input readOnly onChange={e=>this.onValueChange(e)} 
                     addonAfter={<EllipsisOutlined onClick={e=>this.openModelClick()} />} />
+                  )}
+                </FormItem>
+
+                <FormItem style={{display:"none"}}>
+                  {getFieldDecorator('class_id')(
+                    <Input id="class_id" name="class_id" />
                   )}
                 </FormItem>
             </Col>
