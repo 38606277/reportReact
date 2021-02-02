@@ -61,15 +61,15 @@ export default class SiderBar extends React.Component {
     cubeformSubmenusChild(obj, index) {
         return (
             <SubMenu key={obj.func_name + obj.func_id}
-                onTitleClick={this.cubeClickMuen.bind(this, obj)}
+                onTitleClick={this.qrynameClickMuen.bind(this, obj)}
                 id='divtitle'
                 title={<span ><LegacyIcon type={obj.func_icon} />
                     <span>{obj.func_name}</span></span>}>
                 {
                     obj.cubeList == null ? '' : obj.cubeList.map(obj2 => (
-                        <Menu.Item key={obj2.cube_name + obj2.cube_id} >
-                            <Link to={'/dashboard/DataAnalysis/' + obj2.qry_id + '/' + obj2.class_id + '/' + obj2.cube_name}>
-                                <LegacyIcon type={obj2.icon == undefined ? 'table' : obj2.icon} /><span>{obj2.cube_name}</span>
+                        <Menu.Item key={obj2.qry_name + obj2.qry_id} >
+                            <Link to={'/dashboard/DataAnalysis/' + obj2.qry_id + '/' + obj2.class_id + '/' + obj2.qry_name}>
+                                <LegacyIcon type={obj2.icon == undefined ? 'table' : obj2.icon} /><span>{obj2.qry_name}</span>
                             </Link></Menu.Item>
                     ))
                 }
@@ -161,6 +161,18 @@ export default class SiderBar extends React.Component {
             });
         }
     }
+    //点击数据映射获取数据导航
+    qrynameClickMuen = (obj) => {
+        if (undefined == obj.cubeList) {
+            this.setState({ loading: true });
+            _query.getQrynameListInAuth(this.state.userId).then(response => {
+                this.setState({ loading: false });
+                obj['cubeList'] = response.data;
+                this.setState({ categoryList: this.state.categoryList });
+            });
+        }
+    }
+
     //点击数据图标分析获取数据导航
     dashBoardClickMuen = (obj) => {
         if (undefined == obj.dashboardList) {
