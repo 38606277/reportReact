@@ -21,7 +21,7 @@ import {
 import HttpService from '../../util/HttpService.jsx';
 const { Option } = Select;
 const Star={//红色*样式
-    marginRight: '4px',
+    paddingRight: '4px',
     color: '#ff4d4f',
     fontSize: '14px',
     fontFamily: 'SimSun, sans-serif',
@@ -30,10 +30,12 @@ const Star={//红色*样式
   const Hinput= props=>{
     const {ISname,value,chang}=props
     return (
-      <div style={{display:"flex",width:'480px',height:'30px',alignItems:'center'}}>
-        <span style={{marginRight:'5px'}}><span style={{...Star}}>*</span>{ISname} <span>： </span></span>
-        <Input style={{width:'390px'}} value={value} onChange={e=>chang(e.target.value)}/>
-      </div>
+      <Row style={{width:'480px',height:'30px'}} align="middle">
+        <div style={{paddingRight:'5px'}}>
+            <span style={{...Star}}>*</span>{ISname} <span>： </span>
+        </div>
+        <Input style={{width:'380px'}} value={value} onChange={e=>chang(e.target.value)}/>
+      </Row>
     )
   }
 
@@ -106,7 +108,6 @@ export default (props)=>{
     }
     return (<Modal 
             title={set!==false?"编辑模型":"新增模型"}
-            width='900px'
             cancelText='取消'
             okText='确认'
             visible={visible}
@@ -119,9 +120,9 @@ export default (props)=>{
             }}
         >
         <div style={{position:"relative"}}>
-                <Hinput value={ModName} chang={setModName} ISname={"模型名称"}/>
-                <div style={{display:"flex",margin:"10px 0px"}}>
-                    <div style={{display:"flex",width:'220px',height:'30px',alignItems:'center'}}>
+                  <Hinput value={ModName} chang={setModName} ISname={"模型名称"}/>
+                <Row justify="space-between" style={{margin:"10px 0px",width:"480px"}}>
+                    <Row style={{width:'220px',height:'30px'}} align="middle">
                         <span style={{marginRight:'5px'}}><span style={{...Star}}>*</span>数据类型 <span>： </span></span>
                         <Select defaultValue="请选择" style={{ width: 120 }} value={data_Class} onChange={ShandleChange}>
                             {
@@ -130,8 +131,8 @@ export default (props)=>{
                                 })
                             }
                         </Select>
-                    </div>
-                    <div style={{display:"flex",width:'220px',height:'30px',alignItems:'center'}}>
+                    </Row>
+                    <Row style={{width:'220px',height:'30px'}} align="middle">
                         <span style={{marginRight:'5px'}}><span style={{...Star}}>*</span>数据来源 <span>： </span></span>
                         <Select defaultValue="请选择" style={{ width: 120 }} value={data_Source} onChange={setData_Source}>
                             {
@@ -140,8 +141,8 @@ export default (props)=>{
                                 })
                             }
                         </Select>
-                    </div>
-                </div>
+                    </Row>
+                </Row>
 
             </div>
 

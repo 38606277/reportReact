@@ -35,7 +35,7 @@ const backgroundcolor={//左侧背景
 }
 
 import ERGraphDemo from '../ERGraphDemo/index.tsx';
-import NewLform from './newlform.jsx'
+// import NewLform from './newlform.jsx'
 export default ()=>{
     const [table_name,setTable_name]=useState("");//表中文名
     const [TableList,setTableList]=useState([]);//左侧列表
@@ -463,7 +463,7 @@ export default ()=>{
                 // this.setState({visible2:false,ModObj:this.state.set!==false?this.state.ModData:null,set:false})
                 }} go={(data)=>addModule(data)}  set={set} ModObj={ModObj}></MyModal>
                 setisModalVisible
-                <NewLform isModalVisible={isModalVisible} handleOk={()=>setisModalVisible(false)} handleCancel={()=>setisModalVisible(false)}/>
+                {/* <NewLform isModalVisible={isModalVisible} handleOk={()=>setisModalVisible(false)} handleCancel={()=>setisModalVisible(false)}/> */}
                 {/* isModalVisible,handleOk,handleCancel */}
         </Card>
     )

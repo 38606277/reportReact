@@ -1,7 +1,7 @@
 import { Table, Form, message,Checkbox } from 'antd';
 import React, { useState, useImperativeHandle, forwardRef, useEffect } from 'react';
 import styles from './style.less';
-import InputEF from '../../../components/EditForm/InputEF.jsx';
+import InputEF from './InputEF.jsx';
 import styles2 from '../../../components/EditForm/index.less';
 import SelectEF from '../../../components/EditForm/SelectEF.jsx';
 import InputNumberEF from './InputNumberEF.jsx'
@@ -101,7 +101,19 @@ const TableForm = forwardRef((props, ref) => {
     const [departmentDic, setDepartmentDic] = useState([]);
 
     useEffect(() => {
-        
+        setTimeout(3000);
+        setDepartmentDic([
+            {
+                dict_id: '1',
+                dict_name: "信息部",
+            }, {
+                dict_id: '2',
+                dict_name: "财务部",
+            }, {
+                dict_id: '3',
+                dict_name: "行政部",
+            }
+        ]);
 
 
     }, []);
@@ -270,18 +282,13 @@ const TableForm = forwardRef((props, ref) => {
                 //     text=255
                 //     console.log("默认值")
                 // }
-                // let inner =0
-                // if(record.column_type==="varchar"){
-                //     inner=255
-                // }
-                // console.log(obj[record.column_type])
                 return (
                   <InputNumberEF
                   tableForm={tableForm}
                   text={text}
                   record={record}
                   index={record.id}
-                //   defaultinner={inner}
+                //   defaultinner={obj[record.column_type]}
                   name="column_length"
                   rules={[{ required: true, message: '请输入长度' }]}
                   handleFieldChange={handleFieldChange}
@@ -319,7 +326,6 @@ const TableForm = forwardRef((props, ref) => {
             name:"column_primaryKey",
             className:styles.columnshow,
             render: (text, record, index) => {
-                console.log(text)
                 return (
                     <Check tableForm={tableForm} name="column_primaryKey" text={text} handleFieldChange={handleFieldChange} record={record}/>
                 //   <InputEF
@@ -367,7 +373,9 @@ const TableForm = forwardRef((props, ref) => {
             <Form
                 className={styles2.tableForm}
                 key='tableForm'
-                form={tableForm}>
+                form={tableForm}
+                >
+               
                 <Table
                     bordered={true}
                     rowKey={primaryKey}

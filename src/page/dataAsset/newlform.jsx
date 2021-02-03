@@ -31,10 +31,10 @@ const titleList=[
     },
 ]
 const Hinput= props=>{
-  const {ISname,value,chang}=props
+  const {ISname,value,chang,i}=props
   return (
     <div style={{display:"flex",width:'250px',height:'30px',alignItems:'center'}}>
-      <span style={{marginRight:'5px'}}><span style={{...Star}}>*</span>{ISname} <span>： </span></span>
+      <span style={{marginRight:'5px'}}><span style={{...Star}}>{i?null:"*"}</span>{ISname} <span>： </span></span>
       <Input bordered={chang?true:false}  disabled={chang?null:"disabled"} style={{width:'150px'}} value={value} onChange={chang?e=>chang(e.target.value):null}/>
     </div>
   )
@@ -43,8 +43,22 @@ const Hinput= props=>{
 export default (props)=>{
   const {module_id,isModalVisible,handleOk,handleCancel,getTableList}=props
   useEffect(()=>{
-    const path=module_id
-
+    const path=module_id;
+    if(module_id){
+    (async ()=>{
+      await HttpService.post('/reportServer/bdModel/getModelById', JSON.stringify({model_id:path[0]==="L"?path.split("&")[1]:path.slice(1)})).then(res => {
+        if (res.resultCode == "1000") {
+          if(res.data.db_type){
+            setdb_type(res.data.db_type)
+          }
+          setmodel_name(res.data.model_name)
+        }
+        else {
+            message.error(res.message);
+        }
+    })
+      // 
+    })();
     if(path[0]==="L"){
       const path2 =path.split("&");
       (async()=>{
@@ -81,22 +95,10 @@ export default (props)=>{
       })
       })()
     }
-    setPath(path[0]==="L"?path.split("&"):path.slice(1));
-    (async ()=>{
-      await HttpService.post('/reportServer/bdModel/getModelById', JSON.stringify({model_id:path[0]==="L"?path.split("&")[1]:path.slice(1)})).then(res => {
-        if (res.resultCode == "1000") {
-          if(res.data.db_type){
-            setdb_type(res.data.db_type)
-          }
-          setmodel_name(res.data.model_name)
-        }
-        else {
-            message.error(res.message);
-        }
-    })
-      // 
-    })();
-  },[module_id,path,formName,model_name,list,list2,Type])
+    setPath(module_id[0]==="L"?module_id.split("&"):module_id.slice(1));
+  }
+
+  },[path,formName,model_name,list,list2,Type,module_id])
     //栏位
     const [path,setPath]=useState('');
     const [model_name,setmodel_name]=useState('')
@@ -123,6 +125,7 @@ export default (props)=>{
     const [tableData2, setTableData2] = useState([]);
     const [displayType2, setDisplayType2] = useState('list');
     const [Type,setType]=useState(false)
+    const [s,sets]=useState('失败')
     const obj={
         "xxx1":mainForm,
         "xxx3":mainForm2
@@ -152,28 +155,64 @@ export default (props)=>{
       mainForm.submit()
       mainForm2.submit()
       setType(true)
+      setPath("")
+      console.log(s)
       
     }
     const no=()=>{
       const id=path  instanceof Array?path[1]:path
       getTableList(1,10,"","",id)
+      setPath("")
       setformName("")
       setnotes("")
       setTableData([])
       setTableData2([])
       setType(false)
-      console.log(11)
+      setformText('xxx1')
+      // console.log(11)
       handleCancel()
+    }
+    const  baocun =()=>{
+      const mypath =module_id[0]==="L"?module_id.split("&"):module_id.slice(1)
+      console.log(mypath)
+      HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:mypath[0]!=="X"?mypath:mypath[1],table_name:formName,table_title:notes,table_id:mypath[0]!=="X"?"":mypath[0].slice(1),columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[]})).then(res => {
+        if (res.resultCode == "1000") {   
+            HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
+                if (res.resultCode == "1000") {
+                  const id=path  instanceof Array?path[1]:path
+                  message.success('保存成功');
+                  // console.log(res)
+                  getTableList(1,10,"","",id)
+                  setformName("")
+                  setnotes("")
+                  setTableData([])
+                  setTableData2([])
+                  setType(false)
+                  setformText('xxx1')
+                  handleOk()
+                  sets('成功')
+                  // props.history.push('/dataAsset/modelList')
+                }
+                else {
+                    message.error(res.message);
+                }
+            })
+        }
+        else {
+            message.error(res.message);
+        }
+      })
     }
     return(
     
       <Modal width={1200} title={module_id[0]==="X"?"新建表":"编辑表"} visible={isModalVisible} onOk={()=>ok()} onCancel={()=>no()} destroyOnClose={true}>
-        <Card extra={
-          <div>
-            {
+        <Card 
+   
+        >
+                 
+            {/* {
              (()=>{
-               console.log(db_type)
-              const id=path  instanceof Array?path[1]:path
+            
               if(list==="成功"&&list2==="成功"&&Type){
                 // if(db_type==="hive"){
                 //   HttpService.post('/reportServer/dataModeling/createModelTable', JSON.stringify({model_id:path[0][0]==="L"?path[1]:path,table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path[0].slice(1):"",columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[]})).then(res => {
@@ -202,41 +241,19 @@ export default (props)=>{
                 //     }
                 //   })
                 // }
-                HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path[0][0]==="L"?path[1]:path,table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path[0].slice(1):"",columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[]})).then(res => {
-                    if (res.resultCode == "1000") {   
-                        HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
-                            if (res.resultCode == "1000") {
-                              message.success('保存成功');
-                              // console.log(res)
-                              getTableList(1,10,"","",id)
-                              setformName("")
-                              setnotes("")
-                              setTableData([])
-                              setTableData2([])
-                              setType(false)
-                              handleOk()
-                              // props.history.push('/dataAsset/modelList')
-                            }
-                            else {
-                                message.error(res.message);
-                            }
-                        })
-                    }
-                    else {
-                        message.error(res.message);
-                    }
-                  })
+                //
+                sets('成功')
+                return
+              
               }
              })()
-            }
-          </div>
-        }>
+            } */}
           <Form 
                    name="horizontal_login" layout="inline"
               > 
             <Hinput ISname={"模型名称"} value={model_name}/>  
             <Hinput ISname={"表名"} value={formName} chang={setformName}/>
-            <Hinput ISname={"注释"} value={notes} chang={setnotes}/>                 
+            <Hinput ISname={"注释"} value={notes} chang={setnotes} i={true}/>                 
           </Form>
             
             <div style={{display:'flow-root',backgroundColor: 'rgb(250, 250, 250)',margin:"20px 0"}}>
@@ -293,10 +310,11 @@ export default (props)=>{
                         lineDelete:tableRef.current.getDeleteData()
                       }
                       setList("成功")
+                      baocun()
                     }) .catch(errorInfo => {
                       //验证失败
                       setList("失败")
-                      // message.error('保存失败您还有未填写内容');
+                      message.error('保存失败您还有未填写内容');
                     });
                 }} >
 
@@ -390,6 +408,7 @@ export default (props)=>{
                         lineForm:tableData2,
                         lineDelete:tableRef2.current.getDeleteData()
                       }
+                      baocun()
                       setList2("成功")
                     }) .catch(errorInfo => {
                       //验证失败
