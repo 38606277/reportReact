@@ -281,7 +281,7 @@ const TableForm = forwardRef((props, ref) => {
                   text={text}
                   record={record}
                   index={record.id}
-                  defaultinner={inner}
+                //   defaultinner={inner}
                   name="column_length"
                   rules={[{ required: true, message: '请输入长度' }]}
                   handleFieldChange={handleFieldChange}
