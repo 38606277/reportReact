@@ -57,7 +57,6 @@ export default ()=>{
     const [ModObj,setModObj]=useState(null)
     const [set,setSet]=useState(true)
     const [isModalVisible,setisModalVisible]=useState(false)
-    const [url,seturl]=useState("X")
     useEffect(()=>{
         (async()=>{
             await HttpService.post('/reportServer/bdModel/getAllList', null).then(res=>{
@@ -70,7 +69,7 @@ export default ()=>{
                 }
             })
         })()
-    },[set,url])
+    },[set])
     const getTableList =(startIndex,perPage,table_title,table_name,model_id)=>{//表list获取
         let obj={
             startIndex,
@@ -128,7 +127,6 @@ export default ()=>{
                                 setTableList(res.data)
                                 setModData(res.data[0])
                                 setModel_id(res.data[0].model_id)
-                                seturl("X"+res.data[0].model_id)
                                 getTableList(1,10,"","",res.data[0].model_id)
                             }
                         })
@@ -206,7 +204,7 @@ export default ()=>{
     }
     const columns = [
         {
-            title:"数据中文名称",
+            title:"数据文名称",
             dataIndex: 'table_title',
             key: 'table_title',
             className: 'table_title',
@@ -234,11 +232,7 @@ export default ()=>{
             className: 'headerRow',
             render: (text, record) => (
                 <span>
-                    <a onClick={()=>{
-                        const myurl="L"+record.table_id+"&"+model_id
-                        seturl(myurl)
-                        setisModalVisible(true)
-                    }}>编辑</a>
+                    <a  href={"#/dataAsset/newlform/"+"L"+record.table_id+"&"+model_id}>编辑</a>
                     <Divider type="vertical" />
                     <a onClick={() => showModal(record)} href="javascript:;">浏览数据</a>
                     <Divider type="vertical" />
@@ -423,20 +417,12 @@ export default ()=>{
                                         <Radio.Button value="list" onClick={()=>setModuleType(true)}>列表</Radio.Button>
                                         <Radio.Button value="column" onClick={()=>setModuleType(false)}>模型</Radio.Button>
                                     </Radio.Group>
-                                    <Button type="primary"  style={{float:"right",marginRight:"10px"}} 
-                                        onClick={()=>{
-                                            const myurl ="X"+model_id
-                                            seturl(myurl)
-                                            setisModalVisible(true)
-                                           
-                                        }}
-                                    >新建表</Button>
+                                    <Button type="primary"  style={{float:"right",marginRight:"10px"}} href={"#/dataAsset/newlform/"+"X"+model_id}>新建表</Button>
                             </Col>
                         </Card>
                         <Card>
                             {
                                 moduleType? <Table style={{display:'flow-root'}} dataSource={list} columns={columns} bordered={true}
-                               
                                 pagination={false}
                                 footer={()=>{
                                     return (<div style={{display:"flow-root"}}>
@@ -476,7 +462,8 @@ export default ()=>{
                 setModObj(null)
                 // this.setState({visible2:false,ModObj:this.state.set!==false?this.state.ModData:null,set:false})
                 }} go={(data)=>addModule(data)}  set={set} ModObj={ModObj}></MyModal>
-                <NewLform isModalVisible={isModalVisible} handleOk={()=>setisModalVisible(false)} module_id={url} getTableList={getTableList} handleCancel={()=>setisModalVisible(false)}/>
+                setisModalVisible
+                <NewLform isModalVisible={isModalVisible} handleOk={()=>setisModalVisible(false)} handleCancel={()=>setisModalVisible(false)}/>
                 {/* isModalVisible,handleOk,handleCancel */}
         </Card>
     )

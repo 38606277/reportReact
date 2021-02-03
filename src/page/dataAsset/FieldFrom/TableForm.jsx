@@ -4,30 +4,30 @@ import styles from './style.less';
 import InputEF from '../../../components/EditForm/InputEF.jsx';
 import styles2 from '../../../components/EditForm/index.less';
 import SelectEF from '../../../components/EditForm/SelectEF.jsx';
-import InputNumberEF from '../../../components/EditForm/InputNumberEF.jsx'
+import InputNumberEF from './InputNumberEF.jsx'
 import Check from './Check.jsx'
 const TableForm = forwardRef((props, ref) => {
     const Obj={
         "hive":[
-            // {value:"TINYINT",text:"TINYINT"},
-            // {value:"SMALLINT",text:"SMALLINT"},
-            // {value:"INT",text:"INT"},
+            {value:"TINYINT",text:"TINYINT"},
+            {value:"SMALLINT",text:"SMALLINT"},
+            {value:"INT",text:"INT"},
             {value:"BIGINT",text:"BIGINT"},
-            // {value:"FLOAT",text:"FLOAT"},
+            {value:"FLOAT",text:"FLOAT"},
             {value:"DOUBLE",text:"DOUBLE"},
-            // {value:"DECIMAL",text:"DECIMAL"},
-            // {value:"TIMESTAMP",text:"TIMESTAMP"},
-            // {value:"DATE",text:"DATE"},
-            // {value:"INTERVAL",text:"INTERVAL"},
-            // {value:"STRING",text:"STRING"},
-            // {value:"VARCHAR",text:"VARCHAR"},
-            // {value:"CHAR",text:"CHAR"},
-            // {value:"BOOLEAN",text:"BOOLEAN"},
-            // {value:"BINARY",text:"BINARY"},
-            // {value:"ARRAY",text:"ARRAY"},
-            // {value:"MAP",text:"MAP"},
-            // {value:"STRUCT",text:"STRUCT"},
-            // {value:"UNIONTYPE",text:"UNIONTYPE"}
+            {value:"DECIMAL",text:"DECIMAL"},
+            {value:"TIMESTAMP",text:"TIMESTAMP"},
+            {value:"DATE",text:"DATE"},
+            {value:"INTERVAL",text:"INTERVAL"},
+            {value:"STRING",text:"STRING"},
+            {value:"VARCHAR",text:"VARCHAR"},
+            {value:"CHAR",text:"CHAR"},
+            {value:"BOOLEAN",text:"BOOLEAN"},
+            {value:"BINARY",text:"BINARY"},
+            {value:"ARRAY",text:"ARRAY"},
+            {value:"MAP",text:"MAP"},
+            {value:"STRUCT",text:"STRUCT"},
+            {value:"UNIONTYPE",text:"UNIONTYPE"}
         ],
         "hbase":[
             {value:"INTEGER",text:"INTEGER"},
@@ -101,19 +101,7 @@ const TableForm = forwardRef((props, ref) => {
     const [departmentDic, setDepartmentDic] = useState([]);
 
     useEffect(() => {
-        setTimeout(3000);
-        setDepartmentDic([
-            {
-                dict_id: '1',
-                dict_name: "信息部",
-            }, {
-                dict_id: '2',
-                dict_name: "财务部",
-            }, {
-                dict_id: '3',
-                dict_name: "行政部",
-            }
-        ]);
+        
 
 
     }, []);
@@ -275,16 +263,25 @@ const TableForm = forwardRef((props, ref) => {
             width: '10%',
             className:styles.columnshow,
             render: (text, record, index) => {
+                const obj={
+                    "varchar":255
+                }
                 // if(record.column_type){
                 //     text=255
                 //     console.log("默认值")
                 // }
+                let inner =0
+                if(record.column_type==="varchar"){
+                    inner=255
+                }
+                // console.log(obj[record.column_type])
                 return (
                   <InputNumberEF
                   tableForm={tableForm}
                   text={text}
                   record={record}
                   index={record.id}
+                  defaultinner={inner}
                   name="column_length"
                   rules={[{ required: true, message: '请输入长度' }]}
                   handleFieldChange={handleFieldChange}
@@ -307,7 +304,7 @@ const TableForm = forwardRef((props, ref) => {
                         record={record}
                         index={record.id}
                         name="column_decimal"
-                        rules={[{ required: true, message: '请输入精度！' }]}
+                        // rules={[{ required: true, message: '请输入精度！' }]}
                         handleFieldChange={handleFieldChange}
                         placeholder={"请输入精度"}
                   />

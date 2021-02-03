@@ -1,5 +1,5 @@
 import React,{useState,useEffect,useRef} from 'react'
-import { Form, Input, Table, Button, Card, Col,Select, Radio,Pagination, message, Modal} from 'antd';
+import { Form, Input, Table, Button, Card, Col,Select, Radio,Pagination, message, Tabs, Divider, Tag ,Layout,Popconfirm,Row,InputNumber,Checkbox} from 'antd';
 import { PageContainer} from '@ant-design/pro-layout';
 import {PlusOutlined,MinusOutlined} from '@ant-design/icons'
 import ProCard from '@ant-design/pro-card';
@@ -7,7 +7,6 @@ import TableForm from './FieldFrom/TableForm.jsx';
 import TableForm2 from './FieldFrom/TableForm2.jsx'
 import HttpService from '../../util/HttpService.jsx';
 import { List } from 'antd/es/form/Form';
-import { resolveOnChange } from 'antd/lib/input/Input';
 // import ModuleTable from './ModuleTable'
 const Star={//红色*样式
   marginRight: '4px',
@@ -41,10 +40,8 @@ const Hinput= props=>{
 }
 
 export default (props)=>{
-  const {module_id,isModalVisible,handleOk,handleCancel,getTableList}=props
   useEffect(()=>{
-    const path=module_id
-
+    const path=props.match.params.module_id
     if(path[0]==="L"){
       const path2 =path.split("&");
       (async()=>{
@@ -83,11 +80,12 @@ export default (props)=>{
     }
     setPath(path[0]==="L"?path.split("&"):path.slice(1));
     (async ()=>{
+      
       await HttpService.post('/reportServer/bdModel/getModelById', JSON.stringify({model_id:path[0]==="L"?path.split("&")[1]:path.slice(1)})).then(res => {
         if (res.resultCode == "1000") {
-          if(res.data.db_type){
-            setdb_type(res.data.db_type)
-          }
+          console.log(res)
+
+          setdb_type(res.data.db_type)
           setmodel_name(res.data.model_name)
         }
         else {
@@ -96,7 +94,7 @@ export default (props)=>{
     })
       // 
     })();
-  },[module_id,path,formName,model_name,list,list2,Type])
+  },[path,formName,model_name,list,list2,Type])
     //栏位
     const [path,setPath]=useState('');
     const [model_name,setmodel_name]=useState('')
@@ -144,78 +142,19 @@ export default (props)=>{
       setList2("失败")
       setList("失败")
     }
-    // {conosle.log(module_id)}
-    const ok=()=>{
-      if(formName===""){
-        return  message.error("请填写表名");
-      }
-      mainForm.submit()
-      mainForm2.submit()
-      setType(true)
-      
-    }
-    const no=()=>{
-      const id=path  instanceof Array?path[1]:path
-      getTableList(1,10,"","",id)
-      setformName("")
-      setnotes("")
-      setTableData([])
-      setTableData2([])
-      setType(false)
-      console.log(11)
-      handleCancel()
-    }
     return(
-    
-      <Modal width={1200} title={module_id[0]==="X"?"新建表":"编辑表"} visible={isModalVisible} onOk={()=>ok()} onCancel={()=>no()} destroyOnClose={true}>
-        <Card extra={
+        <Card  title={props.match.params.module_id[0]==="X"?"新建列表":"编辑列表"} extra={
           <div>
             {
              (()=>{
-               console.log(db_type)
-              const id=path  instanceof Array?path[1]:path
               if(list==="成功"&&list2==="成功"&&Type){
-                // if(db_type==="hive"){
-                //   HttpService.post('/reportServer/dataModeling/createModelTable', JSON.stringify({model_id:path[0][0]==="L"?path[1]:path,table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path[0].slice(1):"",columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[]})).then(res => {
-                //     if (res.resultCode == "1000") {   
-                //       console.log(resolveOnChange)
-                //         // HttpService.post('/reportServer/bdModel/createHiveTable', null).then(res => {
-                //         //     if (res.resultCode == "1000") {
-                //         //       message.success('保存成功');
-                //         //       // console.log(res)
-                //         //       getTableList(1,10,"","",id)
-                //         //       setformName("")
-                //         //       setnotes("")
-                //         //       setTableData([])
-                //         //       setTableData2([])
-                //         //       setType(false)
-                //         //       handleOk()
-                //         //       // props.history.push('/dataAsset/modelList')
-                //         //     }
-                //         //     else {
-                //         //         message.error(res.message);
-                //         //     }
-                //         // })
-                //     }
-                //     else {
-                //         message.error(res.message);
-                //     }
-                //   })
-                // }
                 HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path[0][0]==="L"?path[1]:path,table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path[0].slice(1):"",columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[]})).then(res => {
                     if (res.resultCode == "1000") {   
                         HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
                             if (res.resultCode == "1000") {
                               message.success('保存成功');
                               // console.log(res)
-                              getTableList(1,10,"","",id)
-                              setformName("")
-                              setnotes("")
-                              setTableData([])
-                              setTableData2([])
-                              setType(false)
-                              handleOk()
-                              // props.history.push('/dataAsset/modelList')
+                              props.history.push('/dataAsset/modelList')
                             }
                             else {
                                 message.error(res.message);
@@ -229,6 +168,57 @@ export default (props)=>{
               }
              })()
             }
+            <Button type="primary" href="/#/dataAsset/modelList" style={{right:"50px"}}>返回</Button>
+            <Button type="primary" onClick={() =>{
+            
+            //  await add()
+              if(formName===""){
+                return  message.error("请填写表名");
+              }
+              if(notes===""){
+                return message.error("请填写注释");
+              }
+              mainForm.submit()
+              mainForm2.submit()
+              setType(true)
+              // if(Rindex!==tableData2.length){
+              //   return message.error("关系您还有未填写内容");
+              // }
+              // if(tableData.length>0){
+              //   tableData.forEach((item,index)=>{
+              //     for(let i in item){
+              //       console.log(i)
+              //     }
+              //   })
+              // }
+              // console.log(tableData)
+              // let deleteColumnList =tableData.length>0?tableData.map(item=>{
+              //     return item.column_name
+              // }):[]
+              // let deleteTableLinkList =tableData2.length>0?tableData2.map(item=>{
+              //   return item.column_name
+              //  }):[]
+              // console.log(deleteColumnList)
+              // HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:path[0][0]==="L"?path[1]:path,table_name:formName,table_title:notes,table_id:path[0][0]==="L"?path[0].slice(1):"",columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[]})).then(res => {
+              //   console.log(res)
+              //   if (res.resultCode == "1000") {   
+              //       HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
+              //           if (res.resultCode == "1000") {
+              //             message.success('保存成功');
+              //             // console.log(res)
+              //             props.history.push('/dataAsset/modelList')
+              //           }
+              //           else {
+              //               message.error(res.message);
+              //           }
+              //       })
+              //   }
+              //   else {
+              //       message.error(res.message);
+              //   }
+              // })
+              // console.log(tableData)
+            }}>保存</Button>
           </div>
         }>
           <Form 
@@ -431,6 +421,5 @@ export default (props)=>{
             </div>
             {/* <EditOut></EditOut> */}
         </Card>
-        </Modal >
     )
 }
