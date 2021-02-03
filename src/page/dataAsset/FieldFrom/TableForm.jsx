@@ -270,10 +270,10 @@ const TableForm = forwardRef((props, ref) => {
                 //     text=255
                 //     console.log("默认值")
                 // }
-                let inner =0
-                if(record.column_type==="varchar"){
-                    inner=255
-                }
+                // let inner =0
+                // if(record.column_type==="varchar"){
+                //     inner=255
+                // }
                 // console.log(obj[record.column_type])
                 return (
                   <InputNumberEF
@@ -319,6 +319,7 @@ const TableForm = forwardRef((props, ref) => {
             name:"column_primaryKey",
             className:styles.columnshow,
             render: (text, record, index) => {
+                console.log(text)
                 return (
                     <Check tableForm={tableForm} name="column_primaryKey" text={text} handleFieldChange={handleFieldChange} record={record}/>
                 //   <InputEF
