@@ -196,13 +196,6 @@ const addlist=Loadable(
         delay:3000
     }
 )
-const Dragging=Loadable(
-    {
-        loader:()=>import('./page/Dragging/index.jsx'),
-        loading:loading,
-        delay:3000 
-    }
-)
 function LoadPage(url) {
     //    console.log(Loadable({
     //         loader: () => import(url),
@@ -247,7 +240,6 @@ class App extends React.Component {
                             <Route path='/mdmcodetable' component={mdmCodetableRouter}/>
                             <Route path='/dataxweb' component={dataxwebRouter}/>
                             <Route path='/dataStandard' component={dataStandardRouter}/>
-                            <Route path='/Dragging' component={Dragging}/>
                         </Switch>
                     </Layout>
                 );
