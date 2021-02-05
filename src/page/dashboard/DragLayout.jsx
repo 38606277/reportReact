@@ -87,7 +87,7 @@ export default class DragLayout extends PureComponent {
     this.setState({visible:true,obj:l})
   }
   borders(e){
-    console.log(e)
+    console.log(e.target.innerHTML)
   }
   generateDOM = () => {
     return _.map(this.state.widgets, (l, i) => {
