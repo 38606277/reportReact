@@ -179,7 +179,7 @@ export default (props)=>{
         if (res.resultCode == "1000") {   
             HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
                 if (res.resultCode == "1000") {
-                  const id=path  instanceof Array?path[1]:path
+                  const id=mypath[0]!=="X"?mypath:mypath[1]
                   message.success('保存成功');
                   // console.log(res)
                   getTableList(1,10,"","",id)

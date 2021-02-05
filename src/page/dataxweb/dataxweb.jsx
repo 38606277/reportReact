@@ -1,6 +1,6 @@
 import React        from 'react';
 import { Drawer } from 'antd';
-
+import {CloseOutlined} from '@ant-design/icons'
 
 export default class invest extends React.Component{
     constructor(props){
@@ -21,12 +21,14 @@ export default class invest extends React.Component{
     render() {
         return (
             <Drawer
-                title="数据采集"
                 width="100%"
                 onClose={this.onClose}
                 visible={this.state.visible}
-                bodyStyle={{ paddingBottom: 0 }}>
-                    <iframe style={{border:0,width:"100%",height:630,}} src='http://192.168.1.102:9527/index.html#/dashboard'/>
+                closeIcon={<CloseOutlined style={{color:"#fff"}}/>}
+                bodyStyle={{ padding: 0 }}>
+                    <div style={{width:"100%",height:"100%"}}>
+                    <iframe style={{border:0,width:"100%",height:"100%"}} src='http://192.168.1.102:9527/index.html#/dashboard'/>
+                    </div>
             </Drawer>
         );
   }

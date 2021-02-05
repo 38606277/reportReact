@@ -164,8 +164,8 @@ export default ()=>{
             host_id:ModData.db_source,
             table_name:record.table_name
         };
-        let url = "/reportServer/dataAsset/getValueByHostAndTable";
-        HttpService.post(url, JSON.stringify(param)).then(res => {
+        HttpService.post('/reportServer/dataAsset/getValueByHostAndTable', JSON.stringify(param)).then(res => {
+            console.log(res)
             //生成列信息
             let cols = [];
             let columns = res.data[0];
@@ -201,9 +201,7 @@ export default ()=>{
             settableColumn(cols)
             // 设置高亮
         }, errMsg => {
-            this.setState({
-                list: []
-            });
+            setList([])
         });
     }
     const columns = [
@@ -426,7 +424,6 @@ export default ()=>{
                                     <Button
                                         type="primary" size="small"  style={{marginRight:"10px"}} 
                                         onClick={()=>{
-                                            console.log(1)
                                             setTbatchForm(true)
                                         }}
                                     >批量建表</Button>

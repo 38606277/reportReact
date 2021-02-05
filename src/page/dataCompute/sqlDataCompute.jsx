@@ -42,7 +42,7 @@ class SqlDataCompute extends React.Component {
     }
     componentDidMount() {
         //初始100%
-        const h=document.getElementsByClassName('navbar-side')[0].offsetHeight
+        const h=document.getElementsByClassName('navbar-side')[0].offsetHeight-10
         const dom =document.getElementById('page-wrapper')
         dom.style.height=h+"px"
         this.resetInput();
@@ -257,7 +257,7 @@ class SqlDataCompute extends React.Component {
             wrapperCol: { span: 14 }
         };
         return (
-            <div id="page-wrapper" style={{ background: '#ECECEC', padding: '0px' }}>
+            <div id="page-wrapper" style={{ background: '#fff', padding: '0px' }}>
                 <div style={{height:"100%",position:"relative"}}>
                 <SplitPane split="vertical"  minSize={10} defaultSize={200} style={{position:'relative'}}>
                         <Card bodyStyle={{ padding: '5px' }} style={{height:"100%"}} title="标题列表">
@@ -270,7 +270,7 @@ class SqlDataCompute extends React.Component {
                         }
                         </Card>
                         <SplitPane split="horizontal" maxSize={424} defaultSize={400}>
-                        <Collapse defaultActiveKey={['1']} style={{width:"100%"}}>
+                        <Collapse defaultActiveKey={['1']} style={{width:"100%",height:"50%"}}>
                             <Panel header="输入SQL" key="1">
                                 <Row style={{margin: '-11px', marginLeft: '1px'}}>
                                     <FormItem >
@@ -345,7 +345,8 @@ class SqlDataCompute extends React.Component {
                                         }} />
                                 }>
                                     <Table
-                                        style={{width:'100%', maxWidth:'1000px',overflow:'auto'}}
+                                        style={{maxWidth:"1060px",maxHeight:'500px',overflow:"auto"}}
+                                        size="small"
                                         columns={this.state.columnlist}
                                         dataSource={this.state.datalist}
                                         >

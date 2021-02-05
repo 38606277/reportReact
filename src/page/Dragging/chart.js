@@ -12,7 +12,7 @@ export function getBarChart() {
       bottom: '3%',
       containLabel: true
     },
-    xAxis: {
+    xAxis: [{
       type: 'category',
       data: ['2014', '2015', '2016', '2017', '2018', '2019'],
       axisLine:{
@@ -27,7 +27,7 @@ export function getBarChart() {
         }
       },
       axisTick: {show: false}
-    },
+    }],
     yAxis: [{
       type: 'value',
       splitLine:{show: false},
