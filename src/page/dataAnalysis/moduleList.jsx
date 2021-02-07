@@ -211,7 +211,7 @@ export default (props)=>{
                 <Step title="模型校验" onClick={()=>ModuleSe('模型校验')}/>
                 <Step title="模型预测" onClick={()=>ModuleSe('模型预测')}/>
             </Steps>
-            <Tabs defaultActiveKey="a" onChange={callback} forceRender style={{marginTop:"10px"}}>
+            <Tabs defaultActiveKey="a" type="card" onChange={callback} forceRender style={{marginTop:"10px"}}>
                 <TabPane tab="模型" key="a">
                     <Model />
                 </TabPane>

@@ -79,17 +79,13 @@ export default (props)=>{
         }
         (async ()=>{
             await HttpService.post('/reportServer/DBConnection/ListAll', null).then(res => {
-                console.log(res)
                 const Clist=[]
                 // setdata(set)
                 res.forEach(item=>{
-                    let index=Clist.findIndex(items=>{return items.text===item.dbtype})
-                    if(index===-1){
-                        Clist.push({
-                            text:item.dbtype,
-                            value:item.dbtype,
-                        })
-                    }
+                    Clist.push({
+                        text:item.name,
+                        value:item.name,
+                    })
                 })
                 setoptions3(Clist)
             }, errMsg => {
@@ -174,15 +170,15 @@ export default (props)=>{
         setDatal(null)
     }
     const changeclass =(e)=>{//数据库change事件
-        HttpService.post('/reportServer/DBConnection/ListAll', JSON.stringify({})).then(res => {
-            const Tlist=res.filter(item=>{
-                if(item.dbtype===e){
-                    return {
-                        value:item.name,
-                    }
-                }
-            })
-            setoptions4(Tlist.map(item=>{return { value:item.name,}}))
+        HttpService.post('/reportServer/selectsql/getTableList', JSON.stringify({fromdb:e})).then(res => {
+            console.log(res)
+             if (res.resultCode == '1000') {
+                setoptions4(res.data.tables.map(item=>{return {
+                    value:item
+                }}));
+            }
+            else
+                message.error(res.message);
         })
         settargetDB(e)
         settargetTable(null)

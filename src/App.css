@@ -5363,7 +5363,7 @@ textarea.ant-input {
 }
 .ant-form-item-control-input-content{
     box-sizing: border-box;
-    padding-right: 30px;
+    /* padding-right: 30px; */
 }
 .ant-pro-table-list-toolbar-right{
     float: right;
@@ -5455,5 +5455,6 @@ textarea.ant-input {
   .Resizer.disabled:hover {
     border-color: transparent;
   }
-  
-  
+  .trigger{
+    color: #cccc;
+  }

@@ -289,7 +289,7 @@ export default class DashboardCreator extends React.Component {
 
                             </Col>
                             <Col span={6} style={{ border: 'border: "1px solid #785"' }}>
-                                <Table dataSource={this.state.list} size="small" bordered pagination={false} >
+                                {/* <Table dataSource={this.state.list} size="small" bordered pagination={false} >
                                     <Column
                                         title="属性"
                                         dataIndex="name"
@@ -304,7 +304,7 @@ export default class DashboardCreator extends React.Component {
                                     />
 
 
-                                </Table>
+                                </Table> */}
                             </Col>
                         </Row>
 

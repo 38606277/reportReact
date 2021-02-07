@@ -29,6 +29,7 @@ import {
 // import 
 import HttpService from '../../util/HttpService.jsx';
 import MyModal from './Moduleadd.jsx'// 模型弹窗
+import BatchForm from './batchForm.jsx'//批量编辑表
 const backgroundcolor={//左侧背景
     background:"#40a9ff",
     color:"#fff"
@@ -58,6 +59,7 @@ export default ()=>{
     const [set,setSet]=useState(true)
     const [isModalVisible,setisModalVisible]=useState(false)
     const [url,seturl]=useState("X")
+    const [TbatchForm,setTbatchForm]=useState(false)//批量建表
     useEffect(()=>{
         (async()=>{
             await HttpService.post('/reportServer/bdModel/getAllList', null).then(res=>{
@@ -162,8 +164,8 @@ export default ()=>{
             host_id:ModData.db_source,
             table_name:record.table_name
         };
-        let url = "/reportServer/dataAsset/getValueByHostAndTable";
-        HttpService.post(url, JSON.stringify(param)).then(res => {
+        HttpService.post('/reportServer/dataAsset/getValueByHostAndTable', JSON.stringify(param)).then(res => {
+            console.log(res)
             //生成列信息
             let cols = [];
             let columns = res.data[0];
@@ -199,9 +201,7 @@ export default ()=>{
             settableColumn(cols)
             // 设置高亮
         }, errMsg => {
-            this.setState({
-                list: []
-            });
+            setList([])
         });
     }
     const columns = [
@@ -302,7 +302,11 @@ export default ()=>{
         console.log(data)
     }
     return (
-        <Card title="数据模型">
+        <Card title="数据模型" bodyStyle={
+            {
+                padding:"0px"
+            }
+        }>
             <Row>
                 <Col sm={4}>
                     <Card>
@@ -380,60 +384,65 @@ export default ()=>{
                     </Card>
                 </Col>
                 <Col sm={20}>
-                    <Row>
-                        <Card>
-                            <Form 
-                                    name="horizontal_login" layout="inline"
-                            >
-                                <Form.Item name="note" label="模型名称" rules={[{ required: true }]}>
-                                    <Input value={ModData.model_name} bordered={false} disabled/>
-                                </Form.Item>
-                                <Form.Item name="note" label="数据类型" rules={[{ required: true }]}>
-                                    <Input value={ModData.db_type} bordered={false} disabled/>
-                                </Form.Item>
-                                <Form.Item name="note" label="数据来源" rules={[{ required: true }]}>
-                                    <Input value={ModData.db_source} bordered={false} disabled/>
-                                </Form.Item>
-                                <Form.Item name="note" label="创建时间" rules={[{ required: true }]}>
-                                    <Input value={ModData.update_date} bordered={false} disabled/>
-                                </Form.Item>
-                                <Form.Item name="note" label="创 建 人" rules={[{ required: true }]}>
-                                    <Input value={ModData.update_by} bordered={false} disabled/>
-                                </Form.Item>
-                            </Form>
-                        </Card>
-                    </Row>
-                        <Card>
-                            <Col xs={24} sm={24}>
+                    <Card bodyStyle={{
+                        padding:"0px 10px"
+                    }}>
+                        <Form 
+                                name="horizontal_login" layout="inline"
+                        >
+                            <Form.Item name="note" label="数据类型" rules={[{ required: true }]}>
+                                <Input value={ModData.db_type} bordered={false} disabled/>
+                            </Form.Item>
+                            <Form.Item name="note" label="数据来源" rules={[{ required: true }]}>
+                                <Input value={ModData.db_source} bordered={false} disabled/>
+                            </Form.Item>
+                        </Form>
+                    </Card>
+                        <Row style={{
+                         padding:"2px 10px"
+                        }}
+                            justify="space-between"
+                            align="middle"
+                        >
                                 <Form
-                                    style={{float:"left"}}
                                     name="horizontal_login" layout="inline"
                                 >
-                                    <Form.Item name="note" label="表中文名称" rules={[{ required: true }]} >
-                                        <Input value={table_title} onChange={e=>{setTable_title(e.target.value)}} />
+                                    <Form.Item name="note" label="表中文名称" rules={[{ required: true }]}>
+                                        <Input size="small" value={table_title} onChange={e=>{setTable_title(e.target.value)}} />
                                     </Form.Item>
                                     <Form.Item name="note" label="表名英文" rules={[{ required: true }]}>
-                                        <Input value={table_name} onChange={e=>{setTable_name(e.target.value)}}/>
+                                        <Input size="small" value={table_name} onChange={e=>{setTable_name(e.target.value)}}/>
                                     </Form.Item>
-                                    <Button type="primary" icon={<SearchOutlined />} onClick={()=>{
-                                        search()
-                                    }}>搜索</Button>
+                                    <Form.Item>
+                                        <Button type="primary" size="small" icon={<SearchOutlined />} onClick={()=>{
+                                            search()
+                                        }}>搜索</Button>
+                                    </Form.Item>
+                                    
                                 </Form>
-                                    <Radio.Group style={{ float: "right", marginRight: "30px" }}  defaultValue="list" buttonStyle="solid">
-                                        <Radio.Button value="list" onClick={()=>setModuleType(true)}>列表</Radio.Button>
-                                        <Radio.Button value="column" onClick={()=>setModuleType(false)}>模型</Radio.Button>
-                                    </Radio.Group>
-                                    <Button type="primary"  style={{float:"right",marginRight:"10px"}} 
+                                <Row>
+                                    <Button
+                                        type="primary" size="small"  style={{marginRight:"10px"}} 
+                                        onClick={()=>{
+                                            setTbatchForm(true)
+                                        }}
+                                    >批量建表</Button>
+                                    <Button type="primary" size="small"  style={{marginRight:"10px"}} 
                                         onClick={()=>{
                                             const myurl ="X"+model_id
                                             seturl(myurl)
                                             setisModalVisible(true)
-                                           
+                                            
                                         }}
                                     >新建表</Button>
-                            </Col>
-                        </Card>
-                        <Card>
+                                    <Radio.Group size="small"  defaultValue="list" buttonStyle="solid">
+                                        <Radio.Button size="small" value="list" onClick={()=>setModuleType(true)}>列表</Radio.Button>
+                                        <Radio.Button size="small" value="column" onClick={()=>setModuleType(false)}>模型</Radio.Button>
+                                    </Radio.Group>
+                                </Row>
+                             
+                        </Row>
+                        <div>
                             {
                                 moduleType? <Table style={{display:'flow-root'}} dataSource={list} columns={columns} bordered={true}
                                
@@ -451,7 +460,7 @@ export default ()=>{
                                     }
                                 } ><ERGraphDemo  model_id={model_id}/></div>
                             } 
-                        </Card>
+                        </div>
                 </Col>
             </Row>
             <Modal
@@ -478,6 +487,7 @@ export default ()=>{
                 }} go={(data)=>addModule(data)}  set={set} ModObj={ModObj}></MyModal>
                 <NewLform isModalVisible={isModalVisible} handleOk={()=>setisModalVisible(false)} module_id={url} getTableList={getTableList} handleCancel={()=>setisModalVisible(false)}/>
                 {/* isModalVisible,handleOk,handleCancel */}
+                <BatchForm TbatchForm={TbatchForm} ModData={ModData} n={()=>setTbatchForm(false)} y={()=>{setTbatchForm(false)}}/>
         </Card>
     )
 }
