@@ -25,7 +25,11 @@ const dataAssetMap = Loadable({
     loading: loading,
     delay:3000
 });
-
+const dashboard = Loadable({
+    loader: () => import(/* webpackChunkName: "dashboard" */ './dashboard.jsx'),
+    loading: loading,
+    delay: 3000
+});
 
 export default class DashboardRouter extends React.Component {
     render() {
@@ -37,6 +41,7 @@ export default class DashboardRouter extends React.Component {
                 <Route path="/dashboard/DataAnalysis/:qry_id/:class_id/:cube_name" component={DataAnalysis}/>
                 <Route path="/dashboard/DashboardCreator" component={FormCreator}/>
                 <Route path="/dashboard/DashboardList" component={DashboardList}/>
+                <Route path="/dashboard/dashboard" component={dashboard} />
                 
             </Switch>
         )
