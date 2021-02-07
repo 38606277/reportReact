@@ -13,17 +13,17 @@ import {
 } from '@ant-design/icons';
 
 // import { Form } from '@ant-design/compatible';
+import { Form, Icon as LegacyIcon } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-
-import { Card, Button, Tooltip, Table, Input, Select, FormItem, Layout, Row, Col,Drawer,Form} from 'antd';
+import { Card, Button, Tooltip, Table, Input, Select, Layout, Row, Col,Drawer} from 'antd';
 
 import HttpService from '../../util/HttpService.jsx';
 import "./DashboardCreator.scss";
-
+import Properties from  './properties.jsx'
 import Map from './Map.jsx'
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
-
-export default class DragLayout extends PureComponent {
+const FormItem = Form.Item;
+ class DragLayout extends PureComponent {
   static defaultProps = {
     cols: { lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 },
     rowHeight: 100,
@@ -45,10 +45,50 @@ export default class DragLayout extends PureComponent {
       xList:[],//x轴数据
       y:"",//获取y轴名称
       yList:[],//y周数据
-      obj:{}
+      obj:{},
     }
   }
+  columns(){
+    return[
+      {
+        title: 'key',
+        dataIndex: 'key',
+        key: 'key',
+      },
+      {
+        title: 'value',
+        dataIndex: 'value',
+        key: 'value',
+        render:_=>{
+          const { getFieldDecorator } = this.props.form;
+          return (
+            <FormItem style={{margin:0}}>
+              {
+                getFieldDecorator(_)(
+                  <Input name={_} setValue={this.form}/>
+                )
+              }
+            </FormItem>
+            
+          )
+        }
+      }
+    ];
+  }
+  data(){
+    return [
+      {
+        key:"x轴",
+        value:"x"
+      },
+      {
+        key:'内部数据',
+        value:"data"
+      }
+    ]
+  }
   componentDidMount(){
+    console.log(this.form)
     const box=this.refs.Layout
     const layout=this.refs.layout
     const h=document.getElementsByClassName('navbar-side')[0].offsetHeight-box.getBoundingClientRect().y
@@ -86,8 +126,17 @@ export default class DragLayout extends PureComponent {
   setlist(l){
     this.setState({visible:true,obj:l})
   }
-  borders(e){
-    console.log(e.target.innerHTML)
+  borders(e,id){
+    // if(e.taeget.innerHTML!=="x"){
+      const boxList=document.getElementsByClassName('react-grid-item')
+      boxList.forEach((item,inde) => {
+        if(item.id===id){
+          item.style.border="1px solid #096dd9"
+        }else{
+          item.style.border="1px solid #ccc"
+        }
+      });
+    // }
   }
   generateDOM = () => {
     return _.map(this.state.widgets, (l, i) => {
@@ -100,7 +149,7 @@ export default class DragLayout extends PureComponent {
         />:<Map/>
       )
       return (
-        <div key={l.i} data-grid={l} id={l.i} onClick={(e)=>this.borders(e)} onDoubleClick={(e)=>this.setlist(l)}>
+        <div key={l.i} data-grid={l} id={l.i} onClick={(e)=>this.borders(e,l.i)} onDoubleClick={()=>this.setlist(l)}>
           <span className='remove' onClick={this.onRemoveItem.bind(this, i)}>x</span>
           {component}
         </div>
@@ -147,6 +196,7 @@ export default class DragLayout extends PureComponent {
   }
 
   onLayoutChange(layout, layouts) {
+    console.log(layout,layouts)
     this.saveToLS("layouts", layouts);
     this.setState({ layouts });
   }
@@ -272,14 +322,15 @@ export default class DragLayout extends PureComponent {
              {...this.props}
              layouts={this.state.layouts}
              onLayoutChange={(layout, layouts) =>
-               this.onLayoutChange(layout, layouts)
+                this.onLayoutChange(layout, layouts)
              }
            >
              {this.generateDOM()}
            </ResponsiveReactGridLayout>
          </div>
          </Card>
-         <Drawer
+         <Properties visible={visible}   onClose={()=>this.onClose()}/>
+         {/* <Drawer
           title="查询数据"
           placement="right"
           closable={false}
@@ -287,22 +338,16 @@ export default class DragLayout extends PureComponent {
           visible={visible}
           width={420}
         >
-            {/* <Row>
-              <Button onClick={()=>{
-                    const myarr =JSON.parse(JSON.stringify(this.state.widgets))
-
-                    let i=0
-                    console.log(this.state.obj)
-                    for(let o=0;o<myarr.length;o+=1){
-                      let item=myarr[o]
-                      if(item.i===this.state.obj.i){
-                        console.log(i)
-                        i=0
-                      }
-                    }
-                    console.log(i)
-              }}>找下标</Button>
-            </Row> */}
+            <Row style={{display:"flow-root"}}>
+              <Button
+                style={{
+                  float:"right"
+                }}
+              onClick={()=>{
+                const mydata=this.props.form.getFieldsValue()
+                console.log(mydata)
+              }}>植入数据</Button>
+            </Row>
             <Form.Item
                 label="报表类别"
                 name="报表类别"
@@ -380,8 +425,14 @@ export default class DragLayout extends PureComponent {
                 }
             </Select>
             </Form.Item>
-        </Drawer>
+            <Table dataSource={this.data()} columns={this.columns()} bordered pagination={false}>
+
+            </Table>
+        </Drawer> */}
      </Card>
  </div >
    );}
 }
+
+
+export default DragLayout=Form.create({})(DragLayout)
