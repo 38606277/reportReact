@@ -6,11 +6,11 @@ export default class LocalStorage {
     }
     // 成功提示
     successTips(successMsg) {
-        alert(successMsg || '操作成功！');
+        message.success(successMsg || '操作成功！');
     }
     // 错误提示
     errorTips(errMsg) {
-        alert(errMsg || '好像哪里不对了~');
+        message.warning(errMsg || '好像哪里不对了~');
     }
     // 获取URL参数
     getUrlParam(name){
@@ -40,7 +40,7 @@ export default class LocalStorage {
         }
         // 其他不支持的类型
         else {
-            alert('该类型不能用于本地存储');
+            message.warning('该类型不能用于本地存储');
         }
     }
     // 取出本地存储内容

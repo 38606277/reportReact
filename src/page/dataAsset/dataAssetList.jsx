@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from 'antd/lib/pagination';
-import { BarChartOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined } from '@ant-design/icons';
+import { BarChartOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import {
@@ -100,10 +100,12 @@ export default class dataAssetList extends React.Component {
             cube_name: '',
             loading: false,
             treeData: [],
-            buttontype: ['primary', 'default', 'default', 'default'],
+            buttontype: ['primary', 'default', 'default', 'default', 'default'],
             visible: false,
             tableData: [],
             tableColumn: [],
+            tableColumnModel: [],
+            tableDataModel: [],
             selectedKeys:['0-0'],//树默认选中第一个
             activeButton:0,
             //选项卡切换默认
@@ -218,22 +220,20 @@ export default class dataAssetList extends React.Component {
         let param = {};
         let url = "";
         if (this.state.activeButton == 0) {
-            param = { catalog_id: info.node.props.dataRef.id };
+            param = { catalog_id: info.node.dataRef.id,dbType:info.node.dataRef.dbtype };
             url = "/reportServer/dataAsset/getTablesByCatalog";
-
         } else if (this.state.activeButton == 1) {
-            param = { source_id: info.node.props.dataRef.name };
+            param = { source_id: info.node.dataRef.name,dbType:info.node.dataRef.dbtype };
             url = "/reportServer/dataAsset/getTablesBySource";
-
         } else if (this.state.activeButton == 2) {
-
-
-            param = { dbtype_id: info.node.props.dataRef.name };
+            param = { dbtype_id: info.node.dataRef.name,dbType:info.node.dataRef.dbtype };
             url = "/reportServer/dataAsset/getTablesByDbType";
-
         } else if (this.state.activeButton == 3) {
-            param = { host_id: info.node.props.dataRef.name };
+            param = { host_id: info.node.dataRef.name,dbType:info.node.dataRef.dbtype };
             url = "/reportServer/dataAsset/getTablesByHost";
+        } else if (this.state.activeButton == 4) {
+            param = { host_id: info.node.dataRef.name,dbType:info.node.dataRef.dbtype };
+            url = "/reportServer/dbTableColumn/getTableList";
         }
         HttpService.post(url, JSON.stringify(param)).then(res => {
             this.setState({ list: res.data });
@@ -255,28 +255,38 @@ export default class dataAssetList extends React.Component {
             0:{
                 url:"/reportServer/dataAsset/getTablesByCatalog",
                 id:'catalog_id',
-                l:'id'
+                l:'id',
+                type:'dbType'
             },
             1:{
                 url:"/reportServer/dataAsset/getTablesBySource",
                 id:'source_id',
-                l:'name'
+                l:'name',
+                type:'dbType'
             },
             2:{
                 url:"/reportServer/dataAsset/getTablesByDbType",
                 id:"dbtype_id",
-                l:'name'
+                l:'name',
+                type:'dbType'
             },
             3:{
                 url:"/reportServer/dataAsset/getTablesByHost",
                 id:'host_id',
-                l:'name'
+                l:'name',
+                type:'dbType'
+            },
+            4:{
+                url:"/reportServer/dbTableColumn/getTableList",
+                id:'host_id',
+                l:'name',
+                type:'dbtype'
             }
         }
         let param = {
             FLEX_VALUE_SET_ID: viewID
         };
-        if (buttontype == 3) {
+        if (buttontype == 3 || buttontype == 4) {
             //数据源
             let param = {};
             let url = "reportServer/DBConnection/ListAll";
@@ -315,7 +325,8 @@ export default class dataAssetList extends React.Component {
         }
         let url =obj[number].url,
             data={
-                    [obj[number].id]:this.state.Hcard[obj[number].l]
+                    [obj[number].id]:this.state.Hcard[obj[number].l],
+                    dbType:this.state.Hcard[obj[number].type]
                 }
             await HttpService.post(url, JSON.stringify(data)).then(res => {//默认点击修改数据
                 this.setState({ list: res.data });
@@ -377,11 +388,10 @@ export default class dataAssetList extends React.Component {
         });
 
     showModal = (record) => {
-        console.log(record)
         this.setState({
             visible: true,
-            tableColumn: [],
-            tableData: []
+            tableColumnModel: [],
+            tableDataModel: []
         });
         //查询表格数据 
         let param = {
@@ -424,7 +434,7 @@ export default class dataAssetList extends React.Component {
             //         dataIndex: columns[j]
             //     })
             // }
-            this.setState({ tableColumn: cols, tableData: res.data });
+            this.setState({ tableColumnModel: cols, tableDataModel: res.data });
 
             // 设置高亮
         }, errMsg => {
@@ -518,7 +528,10 @@ export default class dataAssetList extends React.Component {
                                         <Button type={this.state.buttontype[2]} icon={<LineChartOutlined />} onClick={() => this.onViewClick(2, 2,2)} />
                                     </Tooltip>
                                     <Tooltip placement="top" title="数据源视图">
-                                        <Button type={this.state.buttontype[3]} icon={<PieChartOutlined />} onClick={() => this.onViewClick(4, 3,3)} />
+                                        <Button type={this.state.buttontype[3]} icon={<PieChartOutlined />} onClick={() => this.onViewClick(3, 3,3)} />
+                                    </Tooltip>
+                                    <Tooltip placement="top" title="数据源视图">
+                                        <Button type={this.state.buttontype[4]} icon={<UnorderedListOutlined />} onClick={() => this.onViewClick(4, 4,4)} />
                                     </Tooltip>
 
 
@@ -555,20 +568,15 @@ export default class dataAssetList extends React.Component {
 
                                 </Card>
                                 <Table dataSource={this.state.list} columns={columns} bordered={true} />
-                                {/* <Pagination current={this.state.pageNum}
-                                    total={this.state.total}
-                                    onChange={(pageNum) => this.onPageNumChange(pageNum)} /> */}
+                               
                             </Col>
                         </Row>
 
                     </Card>
                 </Spin>
 
-                <Button type="primary" onClick={this.showModal}>
-                    Open Modal
-             </Button>
                 <Modal
-                    title="Basic Modal"
+                    title="数据查看"
                     width='900px'
                     cancelText='取消'
                     okText='确认'
@@ -577,7 +585,7 @@ export default class dataAssetList extends React.Component {
                     onCancel={this.handleCancel}
                 >
                     <Card>
-                        <Table dataSource={this.state.tableData} columns={this.state.tableColumn}
+                        <Table dataSource={this.state.tableDataModel} columns={this.state.tableColumnModel}
                             scroll={{ x: 1300 }}
                             bordered={true} />
                         {/* <Pagination current={this.state.pageNum}
