@@ -2,19 +2,24 @@ import React from 'react';
 import DB from '../../../service/DbService.jsx'
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
-import { Input, Select, Button, Card, Row, Col, message } from 'antd';
+import { Input, Select, Button, Card, Row, Col, message,Avatar ,Modal ,List ,Pagination  } from 'antd';
 import LocalStorge from '../../../util/LogcalStorge.jsx';
+import HttpService from '../../../util/HttpService.jsx';
 const localStorge = new LocalStorge();
 const FormItem = Form.Item;
 const Option = Select.Option;
 const db = new DB();
 
+const url = window.getServerUrl();
 class DbInfo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       confirmDirty: false,
-      _name: this.props.match.params.name
+      _name: this.props.match.params.name,
+      loading: false,
+      visible: false, icon: null,
+      pageNumd: 1, perPaged: 10, totald: 0, imgList: []
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleConfirmBlur = this.handleConfirmBlur.bind(this);
@@ -26,7 +31,7 @@ class DbInfo extends React.Component {
       db.getDb(this.state._name).then(response => {
         // this.setState(response);
         this.props.form.setFieldsValue(response);
-
+        this.setState({icon:response.icon});
       }, errMsg => {
         this.setState({});
         localStorge.errorTips(errMsg);
@@ -106,6 +111,54 @@ class DbInfo extends React.Component {
     });
 
   }
+  openImage = () => {
+    this.setState({
+        visible: true,
+        imgList: [],
+        totald: 0, selectedRowKeys: []
+    }, function () {
+        this.loadModelData();
+    });
+  }
+   //调用模式窗口内的数据查询
+   loadModelData() {
+    let page = {};
+    page.pageNum = this.state.pageNumd;
+    page.perPage = this.state.perPaged;
+    HttpService.post("/reportServer/uploadFile/getAll", JSON.stringify(page)).then(response => {
+        this.setState({ imgList: response.data.list, totald: response.data.total });
+    }, errMsg => {
+        this.setState({
+            imgList: []
+        });
+    });
+  }
+  // 字典页数发生变化的时候
+  onPageNumdChange(pageNumd) {
+      this.setState({
+          pageNumd: pageNumd
+      }, () => {
+          this.loadModelData();
+      });
+  } 
+  clickimg(usefilepath, name) {
+      this.props.form.setFieldsValue({ icon: usefilepath });
+      this.setState({
+          visible: false,
+          icon: usefilepath
+      });
+  }
+  //模式窗口点击取消
+  handleCancel = (e) => {
+      this.setState({
+          visible: false
+      });
+  }
+  handleOk = (e) => {
+      this.setState({
+          visible: false
+      });
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
     const formItemLayout = {
@@ -153,8 +206,12 @@ class DbInfo extends React.Component {
                     <Select name='dbtype' style={{ width: 120 }} onChange={(value) => this.onSelectChange('dbtype', value)}>
                       <Option value='Oracle' >Oracle</Option>
                       <Option value='Mysql' >Mysql</Option>
-                      <Option value='DB2' >DB2</Option>
-                      <Option value='mongoDB' >mongoDB</Option>
+                      {/* <Option value='DB2' >DB2</Option>
+                      <Option value='mongoDB' >mongoDB</Option> */}
+                      <Option value='TAOS' >TAOS</Option>
+                      <Option value='HBASE' >HBASE</Option>
+                      <Option value='HIVE' >HIVE</Option>
+                      <Option value='SQLServer' >SQLServer</Option>
                     </Select>
                   )}
                 </FormItem>
@@ -214,7 +271,7 @@ class DbInfo extends React.Component {
                   )}
                 </FormItem>
               </Col>
-              <Col xs={24} sm={12}>
+              {/* <Col xs={24} sm={12}>
                 <FormItem {...formItemLayout} label='图标'>
                   {getFieldDecorator('icon', {
                     rules: [{ required: true, message: '请选择图标!', whitespace: true }],
@@ -222,7 +279,21 @@ class DbInfo extends React.Component {
                     <Input type='text' name='icon' />
                   )}
                 </FormItem>
-              </Col>
+              </Col> */}
+              <Col xs={24} sm={12}>
+                    <FormItem label="关联图片" style={{ marginLeft: '14px' }}  >
+                      {getFieldDecorator('icon', {
+                        rules: [{ required: true, message: '请选择图标!', whitespace: true }],
+                      })(
+                        <Input style={{ minWidth: '300px',display:'none' }} name="icon" id="icon" value={this.state.icon} onClick={this.openImage} />
+                      )}
+                      {this.state.icon == null ?
+                          <Avatar src={require("./../../../asset/logo.png")} onClick={this.openImage} />
+                          : <Avatar src={url + "/report/" + this.state.icon} onClick={this.openImage} />}
+                             
+                    </FormItem>
+                </Col>
+                
             </Row>
             <Row>
               <Col xs={24} sm={12}>
@@ -242,6 +313,26 @@ class DbInfo extends React.Component {
             </FormItem>
           </Form>
         </Card>
+        <div>
+            <Modal title="图片选择" visible={this.state.visible} onOk={this.handleOk} onCancel={this.handleCancel}>
+                <List
+                    itemLayout="horizontal"
+                    dataSource={this.state.imgList}
+                    renderItem={item => (
+                        <List.Item>
+                            <List.Item.Meta
+                                avatar={<Avatar src={url + "/report/" + item.usefilepath} />}
+                                description={<a onClick={() => this.clickimg(item.usefilepath, item.filename)} >{item.filename}</a>}
+                            />
+                        </List.Item>
+                    )}
+                />
+
+                <Pagination current={this.state.pageNumd}
+                    total={this.state.totald}
+                    onChange={(pageNumd) => this.onPageNumdChange(pageNumd)} />
+            </Modal>
+        </div>
       </div>
     );
   }
