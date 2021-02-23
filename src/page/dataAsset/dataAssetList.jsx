@@ -94,7 +94,7 @@ export default class dataAssetList extends React.Component {
         super(props);
         this.state = {
             list: [],
-            pageNum: 1,
+            startIndex: 1,
             perPage: 10,
             listType: 'list',
             cube_name: '',
@@ -109,7 +109,8 @@ export default class dataAssetList extends React.Component {
             selectedKeys:['0-0'],//树默认选中第一个
             activeButton:0,
             //选项卡切换默认
-            Hcard:null
+            Hcard:null,
+            total:0
         };
     }
     componentDidMount() {
@@ -159,11 +160,11 @@ export default class dataAssetList extends React.Component {
         });
     }
     // 页数发生变化的时候
-    onPageNumChange(pageNum) {
+    onPageNumChange(startIndex) {
         this.setState({
-            pageNum: pageNum
+            startIndex: startIndex
         }, () => {
-            this.loadCubeList();
+            this.loadHostTable();
         });
     }
     // 数据变化的时候
@@ -176,13 +177,18 @@ export default class dataAssetList extends React.Component {
     }
     // 搜索
     onSearch(cube_name) {
+        console.log(cube_name)
+        let tableDatas = this.state.list.filter(eval(item => item.table_name.includes(cube_name) ));
+        console.log(tableDatas)
         let listType = cube_name === '' ? 'list' : 'search';
         this.setState({
             listType: listType,
-            pageNum: 1,
-            cube_name: cube_name
+            startIndex: 1,
+            cube_name: cube_name,
+            list:tableDatas
         }, () => {
-            this.loadCubeList();
+            //this.loadCubeList();
+            
         });
     }
     deleteCube(id) {
@@ -342,21 +348,6 @@ export default class dataAssetList extends React.Component {
 
 
     }
-    viewData(record) {
-
-        let param = { host_id: record.host_id, table_name: record.table_name };
-        let url = "/reportServer/dataAsset/getValueByHostAndTable";
-        HttpService.post(url, JSON.stringify(param)).then(res => {
-            this.setState({ list: res.data });
-            // 设置高亮
-        }, errMsg => {
-            this.setState({
-                list: []
-            });
-        });
-    }
-
-
 
     activeButton = i => {
 
@@ -391,21 +382,26 @@ export default class dataAssetList extends React.Component {
         this.setState({
             visible: true,
             tableColumnModel: [],
-            tableDataModel: []
+            tableDataModel: [],
+            temphost_id:record.host_id,
+            temptable_name:record.table_name,
+            tempdbtype_id:record.dbtype_id
         });
         //查询表格数据 
         let param = {
             host_id: record.host_id,
             table_name: record.table_name,
-            dbtype_id: record.dbtype_id
+            dbtype_id: record.dbtype_id,
+            startIndex:this.state.startIndex,
+            perPage:this.state.perPage
         };
         console.log(param)
         let url = "/reportServer/dataAsset/getValueByHostAndTable";
         HttpService.post(url, JSON.stringify(param)).then(res => {
-
+            
             //生成列信息
             let cols = [];
-            let columns = res.data[0];
+            let columns = res.data.list[0];
             let obj={
                 overflow: 'hidden',
                 display: 'block',
@@ -434,7 +430,7 @@ export default class dataAssetList extends React.Component {
             //         dataIndex: columns[j]
             //     })
             // }
-            this.setState({ tableColumnModel: cols, tableDataModel: res.data });
+            this.setState({ tableColumnModel: cols, tableDataModel: res.data.list ,total:res.data.total});
 
             // 设置高亮
         }, errMsg => {
@@ -442,8 +438,62 @@ export default class dataAssetList extends React.Component {
                 list: []
             });
         });
-
     };
+
+    loadHostTable = () => {
+        //查询表格数据 
+        let param = {
+            host_id:this.state.temphost_id,
+            table_name: this.state.temptable_name,
+            dbtype_id:this.state.tempdbtype_id,
+            startIndex:this.state.startIndex,
+            perPage:this.state.perPage
+        };
+        console.log(param)
+        let url = "/reportServer/dataAsset/getValueByHostAndTable";
+        HttpService.post(url, JSON.stringify(param)).then(res => {
+            
+            //生成列信息
+            let cols = [];
+            let columns = res.data.list[0];
+            let obj={
+                overflow: 'hidden',
+                display: 'block',
+                width: '200px',
+                height:'40px'
+            }
+            for (var key in columns) {
+
+                if(key==='fileDataBlob'){
+                    cols.push({
+                        title: key,
+                        dataIndex: key,
+                        render: text => <a style={{...obj}}>{text}</a>,
+                    })
+                }else{
+                    cols.push({
+                        title: key,
+                        dataIndex: key
+                    })
+                }
+
+            }
+            // for (j = 0, len = columns.length; j < len; j++) {
+            //     cols.push({
+            //         title: columns[j],
+            //         dataIndex: columns[j]
+            //     })
+            // }
+            this.setState({ tableColumnModel: cols, tableDataModel: res.data.list ,total:res.data.total});
+
+            // 设置高亮
+        }, errMsg => {
+            this.setState({
+                list: []
+            });
+        });
+    };
+
 
     handleOk = e => {
         console.log(e);
@@ -550,7 +600,7 @@ export default class dataAssetList extends React.Component {
                                 </Tree>
                             </Col>
                             <Col sm={20}>
-                                <Card bodyStyle={{ padding: "8px", backgroundColor: '#fafafa' }}>
+                                {this.state.activeButton!=5?<Card bodyStyle={{ padding: "8px", backgroundColor: '#fafafa' }} >
 
                                     <Row>
                                         <Col xs={24} sm={12}>
@@ -566,7 +616,7 @@ export default class dataAssetList extends React.Component {
                                         </Col>
                                     </Row>
 
-                                </Card>
+                                </Card>:""}
                                 <Table dataSource={this.state.list} columns={columns} bordered={true} />
                                
                             </Col>
@@ -587,10 +637,10 @@ export default class dataAssetList extends React.Component {
                     <Card>
                         <Table dataSource={this.state.tableDataModel} columns={this.state.tableColumnModel}
                             scroll={{ x: 1300 }}
-                            bordered={true} />
-                        {/* <Pagination current={this.state.pageNum}
+                            bordered={true} pagination={false}/>
+                        <Pagination current={this.state.startIndex}
                             total={this.state.total}
-                            onChange={(pageNum) => this.onPageNumChange(pageNum)} /> */}
+                            onChange={(startIndex) => this.onPageNumChange(startIndex)} />
                     </Card>
                 </Modal>
             </div>
