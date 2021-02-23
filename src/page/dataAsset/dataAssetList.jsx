@@ -3,7 +3,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from 'antd/lib/pagination';
 import { BarChartOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined, UnorderedListOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.css';
 import {
     Table,
@@ -15,79 +14,15 @@ import {
     Spin,
     Row,
     Col,
-    Select,
     Tooltip,
     Modal,
 } from 'antd';
 import CubeService from '../../service/CubeService.jsx';
 import HttpService from '../../util/HttpService.jsx';
-import { forInRight } from 'lodash';
 const _cubeService = new CubeService();
 const Search = Input.Search;
-const FormItem = Form.Item;
 const { TreeNode } = Tree;
-const { Option } = Select;
 
-
-const treeData = [
-    {
-        title: '人力资源',
-        key: '0-0',
-        children: [
-            {
-                title: '0-0-0',
-                key: '0-0-0',
-                children: [
-                    { title: '0-0-0-0', key: '0-0-0-0' },
-                    { title: '0-0-0-1', key: '0-0-0-1' },
-                    { title: '0-0-0-2', key: '0-0-0-2' },
-                ],
-            },
-            {
-                title: '0-0-1',
-                key: '0-0-1',
-                children: [
-                    { title: '0-0-1-0', key: '0-0-1-0' },
-                    { title: '0-0-1-1', key: '0-0-1-1' },
-                    { title: '0-0-1-2', key: '0-0-1-2' },
-                ],
-            },
-            {
-                title: '0-0-2',
-                key: '0-0-2',
-            },
-        ],
-    },
-    {
-        title: '财务',
-        key: '0-1',
-        children: [
-            { title: '0-1-0-0', key: '0-1-0-0' },
-            { title: '0-1-0-1', key: '0-1-0-1' },
-            { title: '0-1-0-2', key: '0-1-0-2' },
-        ],
-    },
-    {
-        title: '投资',
-        key: '0-2',
-    },
-];
-
-function onChange(value) {
-    console.log(`selected ${value}`);
-}
-
-function onBlur() {
-    console.log('blur');
-}
-
-function onFocus() {
-    console.log('focus');
-}
-
-function onSearch(val) {
-    console.log('search:', val);
-}
 
 export default class dataAssetList extends React.Component {
     constructor(props) {
@@ -102,15 +37,15 @@ export default class dataAssetList extends React.Component {
             treeData: [],
             buttontype: ['primary', 'default', 'default', 'default', 'default'],
             visible: false,
-            tableData: [],
-            tableColumn: [],
+            oldlist: [],
             tableColumnModel: [],
             tableDataModel: [],
             selectedKeys:['0-0'],//树默认选中第一个
             activeButton:0,
             //选项卡切换默认
             Hcard:null,
-            total:0
+            total:0,
+            sortedInfo:null
         };
     }
     componentDidMount() {
@@ -123,7 +58,6 @@ export default class dataAssetList extends React.Component {
         let param = {
             FLEX_VALUE_SET_ID: 4
         };
-
         HttpService.post('/reportServer/FlexValue/getFlexValuesTree', JSON.stringify(param)).then(res => {
             if (res.resultCode == "1000") {
                 this.setState({
@@ -177,9 +111,8 @@ export default class dataAssetList extends React.Component {
     }
     // 搜索
     onSearch(cube_name) {
-        console.log(cube_name)
-        let tableDatas = this.state.list.filter(eval(item => item.table_name.includes(cube_name) ));
-        console.log(tableDatas)
+        let newList = this.state.oldlist;
+        let tableDatas = newList.filter(eval(item => item.table_name.includes(cube_name) ));
         let listType = cube_name === '' ? 'list' : 'search';
         this.setState({
             listType: listType,
@@ -218,7 +151,6 @@ export default class dataAssetList extends React.Component {
         this.setState({ checkedKeys });
     };
 
-
     //树节点选中时
     onSelect = (selectedKeys, info) => {
         console.log('onSelect', info);
@@ -242,10 +174,7 @@ export default class dataAssetList extends React.Component {
             url = "/reportServer/dbTableColumn/getTableList";
         }
         HttpService.post(url, JSON.stringify(param)).then(res => {
-            this.setState({ list: res.data });
-            // alert(JSON.stringify(this.state.treeData));
-            // 设置高亮
-            //   this.activeButton(buttontype);
+            this.setState({ list: res.data,oldlist:res.data });
         }, errMsg => {
             this.setState({
                 list: []
@@ -298,7 +227,6 @@ export default class dataAssetList extends React.Component {
             let url = "reportServer/DBConnection/ListAll";
             await HttpService.post(url, param).then(response => {
                 this.setState({Hcard:{...response[0]},treeData: response })
-                // alert(JSON.stringify(this.state.treeData));
                 // 设置高亮
                 this.activeButton(buttontype);
             }, errMsg => {
@@ -335,8 +263,7 @@ export default class dataAssetList extends React.Component {
                     dbType:this.state.Hcard[obj[number].type]
                 }
             await HttpService.post(url, JSON.stringify(data)).then(res => {//默认点击修改数据
-                this.setState({ list: res.data });
-                // alert(JSON.stringify(this.state.treeData));
+                this.setState({ list: res.data,oldlist:res.data });
                 // 设置高亮
                 //   this.activeButton(buttontype);
             }, errMsg => {
@@ -362,9 +289,6 @@ export default class dataAssetList extends React.Component {
         }
         this.setState({ buttontype: aButtonType, activeButton: i });
     }
-
-
-
 
     renderTreeNodes = data =>
         data.map(item => {
@@ -509,18 +433,34 @@ export default class dataAssetList extends React.Component {
         });
     };
 
-
+    handleChange = (pagination, filters, sorter) => {
+        console.log('Various parameters', pagination, filters, sorter);
+        this.setState({
+          sortedInfo: sorter,
+        });
+      };
+      setTableNameSort = () => {
+        this.setState({
+          sortedInfo: {
+            order: 'descend',
+            columnKey: 'table_name',
+          },
+        });
+      };
     render() {
         this.state.list.map((item, index) => {
             item.key = index;
-        })
-        const dataSource = this.state.list;
-        let self = this;
+        });
+        //console.log(this.state.list);
+        let { sortedInfo ,dataSource } = this.state;
+        sortedInfo = sortedInfo || {};
         const columns = [{
             title: '数据名称',
             dataIndex: 'table_name',
             key: 'table_name',
             className: 'headerRow',
+            sorter: (a, b) => a.table_name - b.table_name,
+            sortOrder: sortedInfo.columnKey === 'table_name' && sortedInfo.order,
         }, {
             title: '数据描述',
             dataIndex: 'table_desc',
@@ -548,13 +488,13 @@ export default class dataAssetList extends React.Component {
             className: 'headerRow',
             render: (text, record) => (
                 <span>
-                    <Link to={`/dataAsset/dataAssetInfo/${record.table_id}`}>编辑</Link>
+                    <Link to={`/dataAsset/dataAssetInfo/${record.table_id}`}>描述</Link>
                     <Divider type="vertical" />
                     <a onClick={() => this.showModal(record)} href="javascript:;">浏览数据</a>
                     <Divider type="vertical" />
                     <Link to={`/cube/cubeInfo/${record.cube_id}`}>分析</Link>
-                    <Divider type="vertical" />
-                    <a onClick={() => this.deleteCube(`${record.cube_id}`)} href="javascript:;">删除</a>
+                    {/* <Divider type="vertical" />
+                    <a onClick={() => this.deleteCube(`${record.cube_id}`)} href="javascript:;">删除</a> */}
                 </span>
             ),
         }];
@@ -617,7 +557,7 @@ export default class dataAssetList extends React.Component {
                                     </Row>
 
                                 </Card>:""}
-                                <Table dataSource={this.state.list} columns={columns} bordered={true} />
+                                <Table dataSource={this.state.list} columns={columns} bordered={true} onChange={this.handleChange}  />
                                
                             </Col>
                         </Row>
