@@ -173,11 +173,12 @@ export default class dataAssetList extends React.Component {
             param = { host_id: info.node.dataRef.name,dbType:info.node.dataRef.dbtype };
             url = "/reportServer/dbTableColumn/getTableList";
         }
+        this.setState({loading:true});
         HttpService.post(url, JSON.stringify(param)).then(res => {
-            this.setState({ list: res.data,oldlist:res.data });
+            this.setState({ list: res.data,oldlist:res.data,loading:false });
         }, errMsg => {
             this.setState({
-                list: []
+                list: [],loading:false
             });
         });
 
@@ -262,14 +263,15 @@ export default class dataAssetList extends React.Component {
                     [obj[number].id]:this.state.Hcard[obj[number].l],
                     dbType:this.state.Hcard[obj[number].type]
                 }
+                this.setState({loading:true});
             await HttpService.post(url, JSON.stringify(data)).then(res => {//默认点击修改数据
-                this.setState({ list: res.data,oldlist:res.data });
+                this.setState({ list: res.data,oldlist:res.data,loading:false });
                 // 设置高亮
                 //   this.activeButton(buttontype);
             }, errMsg => {
                 this.setState({
                     list: [],
-                    selectedKeys:["0-0"]
+                    loading:false
                 });
             });
 
@@ -568,7 +570,7 @@ export default class dataAssetList extends React.Component {
                     </Card>
                 </Spin>
 
-                <Modal
+                {/* <Modal
                     title="数据查看"
                     width='900px'
                     cancelText='取消'
@@ -585,7 +587,7 @@ export default class dataAssetList extends React.Component {
                             total={this.state.total}
                             onChange={(startIndex) => this.onPageNumChange(startIndex)} />
                     </Card>
-                </Modal>
+                </Modal> */}
             </div>
         );
     }
