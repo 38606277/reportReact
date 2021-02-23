@@ -303,65 +303,68 @@ export default class dataAssetList extends React.Component {
         });
 
     showModal = (record) => {
-        this.setState({
-            visible: true,
-            tableColumnModel: [],
-            tableDataModel: [],
-            temphost_id:record.host_id,
-            temptable_name:record.table_name,
-            tempdbtype_id:record.dbtype_id
-        });
-        //查询表格数据 
-        let param = {
-            host_id: record.host_id,
-            table_name: record.table_name,
-            dbtype_id: record.dbtype_id,
-            startIndex:this.state.startIndex,
-            perPage:this.state.perPage
-        };
-        console.log(param)
-        let url = "/reportServer/dataAsset/getValueByHostAndTable";
-        HttpService.post(url, JSON.stringify(param)).then(res => {
+        window.open("#/dataAsset/dataAssetListInfo/"+record.host_id+"/"+record.table_name+"/"+record.dbtype_id);
+
+
+        // this.setState({
+        //     visible: true,
+        //     tableColumnModel: [],
+        //     tableDataModel: [],
+        //     temphost_id:record.host_id,
+        //     temptable_name:record.table_name,
+        //     tempdbtype_id:record.dbtype_id
+        // });
+        // //查询表格数据 
+        // let param = {
+        //     host_id: record.host_id,
+        //     table_name: record.table_name,
+        //     dbtype_id: record.dbtype_id,
+        //     startIndex:this.state.startIndex,
+        //     perPage:this.state.perPage
+        // };
+        // console.log(param)
+        // let url = "/reportServer/dataAsset/getValueByHostAndTable";
+        // HttpService.post(url, JSON.stringify(param)).then(res => {
             
-            //生成列信息
-            let cols = [];
-            let columns = res.data.list[0];
-            let obj={
-                overflow: 'hidden',
-                display: 'block',
-                width: '200px',
-                height:'40px'
-            }
-            for (var key in columns) {
+        //     //生成列信息
+        //     let cols = [];
+        //     let columns = res.data.list[0];
+        //     let obj={
+        //         overflow: 'hidden',
+        //         display: 'block',
+        //         width: '200px',
+        //         height:'40px'
+        //     }
+        //     for (var key in columns) {
 
-                if(key==='fileDataBlob'){
-                    cols.push({
-                        title: key,
-                        dataIndex: key,
-                        render: text => <a style={{...obj}}>{text}</a>,
-                    })
-                }else{
-                    cols.push({
-                        title: key,
-                        dataIndex: key
-                    })
-                }
+        //         if(key==='fileDataBlob'){
+        //             cols.push({
+        //                 title: key,
+        //                 dataIndex: key,
+        //                 render: text => <a style={{...obj}}>{text}</a>,
+        //             })
+        //         }else{
+        //             cols.push({
+        //                 title: key,
+        //                 dataIndex: key
+        //             })
+        //         }
 
-            }
-            // for (j = 0, len = columns.length; j < len; j++) {
-            //     cols.push({
-            //         title: columns[j],
-            //         dataIndex: columns[j]
-            //     })
-            // }
-            this.setState({ tableColumnModel: cols, tableDataModel: res.data.list ,total:res.data.total});
+        //     }
+        //     // for (j = 0, len = columns.length; j < len; j++) {
+        //     //     cols.push({
+        //     //         title: columns[j],
+        //     //         dataIndex: columns[j]
+        //     //     })
+        //     // }
+        //     this.setState({ tableColumnModel: cols, tableDataModel: res.data.list ,total:res.data.total});
 
-            // 设置高亮
-        }, errMsg => {
-            this.setState({
-                list: []
-            });
-        });
+        //     // 设置高亮
+        // }, errMsg => {
+        //     this.setState({
+        //         list: []
+        //     });
+        // });
     };
 
     loadHostTable = () => {
