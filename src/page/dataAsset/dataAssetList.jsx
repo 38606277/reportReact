@@ -493,7 +493,7 @@ export default class dataAssetList extends React.Component {
             className: 'headerRow',
             render: (text, record) => (
                 <span>
-                    <Link to={`/dataAsset/dataAssetInfo/${record.table_id}`}>描述</Link>
+                    <Link to={`/dataAsset/dataAssetInfonew/${record.host_id}/${record.dbtype_id}/${record.table_name}`}>描述</Link>
                     <Divider type="vertical" />
                     <a onClick={() => this.showModal(record)} href="javascript:;">浏览数据</a>
                     <Divider type="vertical" />
