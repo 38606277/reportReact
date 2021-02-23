@@ -106,7 +106,28 @@ class DbView extends React.Component{
                   </FormItem>
               </Col>
           </Row>
-         
+          <Row>
+             <Col xs={24} sm={12}>
+                  <FormItem {...formItemLayout} label="描述">
+                   
+                      {this.state.desc}
+                  </FormItem>
+              </Col>
+              <Col xs={24} sm={12}>
+                  <FormItem {...formItemLayout} label='图标' >
+                   
+                      {this.state.icon}
+                  </FormItem>
+              </Col>
+          </Row>
+          <Row>
+             <Col xs={24} sm={12}>
+                  <FormItem {...formItemLayout} label="类别">
+                   
+                      {this.state.dbclass}
+                  </FormItem>
+              </Col>
+          </Row>
           <FormItem {...tailFormItemLayout}>
           <Button href="#/dbs"  type="primary">返回</Button>
           </FormItem>

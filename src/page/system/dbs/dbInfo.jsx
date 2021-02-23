@@ -182,6 +182,7 @@ class DbInfo extends React.Component {
                 </FormItem>
               </Col>
             </Row>
+            
             <Row>
               <Col xs={24} sm={12}>
                 <FormItem {...formItemLayout} label='用户名'>
@@ -203,7 +204,37 @@ class DbInfo extends React.Component {
                 </FormItem>
               </Col>
             </Row>
-
+            <Row>
+              <Col xs={24} sm={12}>
+                <FormItem {...formItemLayout} label='描述' >
+                  {getFieldDecorator('desc', {
+                    rules: [{ required: true, message: '请输入描述!', whitespace: true }],
+                  })(
+                    <Input type='text' name='desc' />
+                  )}
+                </FormItem>
+              </Col>
+              <Col xs={24} sm={12}>
+                <FormItem {...formItemLayout} label='图标'>
+                  {getFieldDecorator('icon', {
+                    rules: [{ required: true, message: '请选择图标!', whitespace: true }],
+                  })(
+                    <Input type='text' name='icon' />
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={24} sm={12}>
+                <FormItem {...formItemLayout} label='类别' >
+                  {getFieldDecorator('dbclass', {
+                    rules: [{ required: true, message: '请输入类别!', whitespace: true }],
+                  })(
+                    <Input type='text' name='dbclass' />
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
             <FormItem {...tailFormItemLayout}>
               <Button type="primary" onClick={() => this.clickTest()}>测试</Button>
               <Button type="primary" htmlType="submit" style={{ marginLeft: '30px' }}>保存</Button>
