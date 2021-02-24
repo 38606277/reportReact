@@ -176,7 +176,7 @@ export default (props)=>{
     const  baocun =()=>{
       const mypath =module_id[0]==="L"?module_id.split("&"):module_id.slice(1)
       console.log(mypath)
-      HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:mypath[0]!=="X"?mypath:mypath[1],table_name:formName,table_title:notes,table_id:mypath[0]!=="X"?"":mypath[0].slice(1),columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[],dbtype_id:model.db_type,source_id:"",host_id:model.db_source,url:'url'})).then(res => {
+      HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:mypath[0]!=="X"?mypath:mypath[1],table_name:formName,table_title:notes,table_id:mypath[0]!=="X"?"":mypath[0].slice(1),columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[],dbtype_id:model.db_type,source_id:"",host_id:model.db_source,url:'url',catalog_id:""})).then(res => {
         if (res.resultCode == "1000") {   
             HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
                 if (res.resultCode == "1000") {
