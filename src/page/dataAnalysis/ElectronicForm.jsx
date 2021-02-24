@@ -53,8 +53,6 @@ export default (props)=>{
                 showinfobar:false,
                 lang: 'zh',
                 plugins:['chart'],
-                // showstatisticBar: false,
-                // functionButton:"<button id='' class='btn btn-primary'  style='padding:3px 6px;font-size: 12px;margin-right: 10px;'>保存</button>",
                 data:[
                     {
                         "name": "name",

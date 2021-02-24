@@ -77,6 +77,8 @@ export default (props)=>{
                 data:[
                     {
                         "name": "name",
+                        "row": 36,
+                        "column": 20,
                         "index": "0",
                         "order":  0,
                         "status": 1,

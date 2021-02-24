@@ -51,7 +51,8 @@ export default (props)=>{
           if(res.data.db_type){
             setdb_type(res.data.db_type)
           }
-          setmodel_name(res.data.model_name)
+          console.log(res.data)
+          setmodel(res.data)
         }
         else {
             message.error(res.message);
@@ -98,10 +99,10 @@ export default (props)=>{
     setPath(module_id[0]==="L"?module_id.split("&"):module_id.slice(1));
   }
 
-  },[path,formName,model_name,list,list2,Type,module_id])
+  },[path,formName,model,list,list2,Type,module_id])
     //栏位
     const [path,setPath]=useState('');
-    const [model_name,setmodel_name]=useState('')
+    const [model,setmodel]=useState({})
     const [formtext,setformText]=useState('xxx1')
     const [formName,setformName]=useState('')//表名
     const [notes,setnotes]=useState('')//注释
@@ -175,7 +176,7 @@ export default (props)=>{
     const  baocun =()=>{
       const mypath =module_id[0]==="L"?module_id.split("&"):module_id.slice(1)
       console.log(mypath)
-      HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:mypath[0]!=="X"?mypath:mypath[1],table_name:formName,table_title:notes,table_id:mypath[0]!=="X"?"":mypath[0].slice(1),columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[]})).then(res => {
+      HttpService.post('/reportServer/bdModelTableColumn/table/createModelTable', JSON.stringify({model_id:mypath[0]!=="X"?mypath:mypath[1],table_name:formName,table_title:notes,table_id:mypath[0]!=="X"?"":mypath[0].slice(1),columnlist:[...tableData],linkList:[...tableData2],deleteColumnList:[],deleteTableLinkList:[],dbtype_id:model.db_type,source_id:"",host_id:model.db_source,url:'url'})).then(res => {
         if (res.resultCode == "1000") {   
             HttpService.post('/reportServer/bdModel/getAllList', null).then(res => {
                 if (res.resultCode == "1000") {
@@ -251,7 +252,7 @@ export default (props)=>{
           <Form 
                    name="horizontal_login" layout="inline"
               > 
-            <Hinput ISname={"模型名称"} value={model_name}/>  
+            <Hinput ISname={"模型名称"} value={model.model_name}/>  
             <Hinput ISname={"表名"} value={formName} chang={setformName}/>
             <Hinput ISname={"注释"} value={notes} chang={setnotes} i={true}/>                 
           </Form>

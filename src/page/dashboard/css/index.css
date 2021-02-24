@@ -426,38 +426,23 @@ a {
 }
 
 
-/* 地图  */
-
-.map {
-    height: 24.1rem;
-    margin-bottom: 14rem;
+/* 中间部分样式 */
+.hdata{
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
 }
-
-.map h3 {
-    line-height: 1;
-    padding: 0.667rem 0;
-    margin: 0;
-    font-size: 0.833rem;
+.hdata_left,.hdata_right{
+    text-align: center;
+    flex: 4.5;
+}
+.hdata_left,.hdata_right .item span{
+    color:#4c9bfd
+}
+.hdata_left .item h4 ,.hdata_right .item h4{
     color: #fff;
+    font-size: 18.672px;
+    font-weight:500
 }
-
-.map .icon-cube {
-    color: #68d8fe;
-}
-
-.map .chart {
-    flex: 1;
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-.map .geo {
-    width: 100%;
-    height: 100%;
-}
-
-
 /* 用户模块 */
 
 .users {
