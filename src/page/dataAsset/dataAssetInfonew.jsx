@@ -34,7 +34,7 @@ export default (props) => {
   const [tableData, setTableData] = useState([]);
   const [loading,setLoading]=useState(false);
   let [Asset_location,setAsset_location]=useState('')//资产位置
-  let [cube_classlist,setcube_classlist]=useState([...classlist]);
+  let [cube_classlist,setcube_classlist]=useState([]);
 
   useEffect(() => {
     let mylist= async()=>{
@@ -57,11 +57,28 @@ export default (props) => {
             message.error(res.message);
         }
       })
+
    }
    mylist()
-
+   loadCubeList()
   },[]);
-
+  const loadCubeList = () => {
+        let param = {
+            FLEX_VALUE_SET_ID: 4
+        };
+        HttpService.post('/reportServer/FlexValue/getFlexValuesTree', JSON.stringify(param)).then(res => {
+            if (res.resultCode == "1000") {
+              setcube_classlist(res.data);
+            }
+            else {
+                message.error(res.message);
+            }
+        }, errMsg => {
+            this.setState({
+                list: [], loading: false
+            });
+        });
+    }
   const selectChage = (e) =>{
     setDisplayType(e);
    
@@ -132,7 +149,7 @@ export default (props) => {
             <Col xl={{ span: 6, offset: 2 }} lg={{ span: 8 }} md={{ span: 12 }} sm={24}>
               <Form.Item
                 label="说明"
-                name="table_title"
+                name="table_desc"
                 rules={[{ required: true, message: '请选择说明' }]}
               >
                 <Input
@@ -150,7 +167,7 @@ export default (props) => {
                 <Select defaultValue="请选择" style={{ width: 164,marginLeft:5 }} onChange={setAsset_location}>
                 {
                   cube_classlist.map((item,index)=>{
-                    return <Option value={item.value} key={index}>{item.text}</Option>
+                    return <Option value={item.id} key={index}>{item.name}</Option>
                   })
                 }
                 </Select>
