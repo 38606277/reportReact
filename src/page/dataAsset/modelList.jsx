@@ -299,7 +299,6 @@ export default ()=>{
                 message.error(res.message);
             }
         })
-        console.log(data)
     }
     return (
         <Card title="数据模型" bodyStyle={

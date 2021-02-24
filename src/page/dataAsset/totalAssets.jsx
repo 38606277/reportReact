@@ -22,7 +22,7 @@ import {
 import { EditOutlined, EllipsisOutlined, VerticalAlignBottomOutlined,BranchesOutlined } from '@ant-design/icons';
 import HttpService from '../../util/HttpService.jsx';
 const url=window.getServerUrl();
-export default ()=>{
+export default (props)=>{
     const [data,setdata]=useState([])
     useEffect(()=>{
         console.log(1)
@@ -32,6 +32,11 @@ export default ()=>{
             setdata(res)
         })
     },[])
+    const pushs=(data)=>{
+        console.log(data)
+        // :host_id/:dbType
+        props.history.push('/dataAnalysis/SystemData/'+data.name+"/"+data.dbtype)
+    }
     return (
         <Card title="数据资产"
         bodyStyle={{
@@ -54,6 +59,9 @@ export default ()=>{
                         position:"relative"
                     }}>
                         <Card 
+                            onClick={()=>{
+                                pushs(item)
+                            }}
                             headStyle={{
                                 height:"20px",
                                 border:"none",

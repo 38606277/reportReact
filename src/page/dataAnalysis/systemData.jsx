@@ -21,7 +21,7 @@ import {
 } from 'antd';
 import { InsertRowLeftOutlined } from '@ant-design/icons';
 import HttpService from '../../util/HttpService.jsx';
-export default ()=>{
+export default (props)=>{
     const [tabPosition,settabPosition]=useState('')
     const [mcol,setmcol]=useState([])
     const [list,setlist]=useState([])
@@ -33,10 +33,11 @@ export default ()=>{
         const sHeight=box.current.offsetTop
         const mHeight=bHeight-sHeight-70
         box.current.style.height=mHeight-80+'px'
-            HttpService.post('/reportServer/dbTableColumn/getTableList',JSON.stringify({dbType: "Mysql",host_id: "form"})).then(res=>{
+        const obj =props.match.params
+            HttpService.post('/reportServer/dbTableColumn/getTableList',JSON.stringify(obj)).then(res=>{
                 if(res.resultCode==='1000'){
                     const arr=[...res.data]
-                    Bo.current.style.maxWidth=box.current.offsetWidth+"px"
+                    Bo.current.style.mixWidth=box.current.offsetWidth+"px"
                     const listnum=Math.floor(mHeight/40)//一个col放几个list
                     const colnum=Math.ceil(arr.length/listnum)//col的个数
                     box.current.style.width=colnum*(200+15)+'px'
@@ -112,13 +113,12 @@ export default ()=>{
                         </Radio.Group>
                         <div ref={Bo}
                             style={{
-                                overflowX:"auto"
+                                overflowX:"auto",
+                                borderTop:"1px solid #f0f0f0"
                             }}
                         >
                      <Spin spinning={spinning}>
-                        <Row ref={box} style={{
-                            borderTop:"1px solid #f0f0f0"
-                        }}>
+                        <Row ref={box}>
                             {
                                 mcol.length>0?mcol.map((item,index)=>{
                                     return (
