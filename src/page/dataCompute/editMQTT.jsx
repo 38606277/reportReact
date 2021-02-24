@@ -170,10 +170,10 @@ export default (props)=>{
         setDatal(null)
     }
     const changeclass =(e)=>{//数据库change事件
-        HttpService.post('/reportServer/selectsql/getTableList', JSON.stringify({fromdb:e})).then(res => {
+        HttpService.post('/reportServer/dbTableColumn/getTableListString', JSON.stringify({fromdb:e})).then(res => {
             console.log(res)
              if (res.resultCode == '1000') {
-                setoptions4(res.data.tables.map(item=>{return {
+                setoptions4(res.data.map(item=>{return {
                     value:item
                 }}));
             }
