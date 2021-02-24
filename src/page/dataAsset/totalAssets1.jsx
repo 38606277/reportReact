@@ -30,48 +30,14 @@ export default (props)=>{
         })
     },[])
     const pushs=(data)=>{
+        console.log(data)
+        // :host_id/:dbType
         props.history.push('/dataAnalysis/SystemData/'+data.name+"/"+data.dbtype)
     }
     return (
         <Card title="数据资产"
             >
-            <Row>
-                <Col sm={11}>
-                    <Card title="标题名称">
-                        <Row>
-                            <Col sm={11}>
-                                <Statistic
-                                    title="Active"
-                                    value={11.28}
-                                    precision={2}
-                                    valueStyle={{ color: '#3f8600' ,textAlign:"center"}}
-                                    suffix="%"
-                                />
-                            </Col>
-                            <Col sm={2}></Col>
-                            <Col sm={11}>
-                                <Statistic
-                                    title="Active"
-                                    value={11.28}
-                                    precision={2}
-                                    valueStyle={{ color: '#3f8600' }}
-                                    suffix="%"
-                                />
-                            </Col>
-                        </Row>
-                    </Card>
-                </Col>
-                <Col sm={2}></Col>
-                <Col sm={11}>
-                    <Card>
-                        adwa
-                    </Card>
-                </Col>
-            </Row>
-            <List
-                style={{
-                    marginTop:"20px"
-                }}
+             <List
                     grid={{
                     gutter:14,
                     xs: 1,
@@ -87,7 +53,6 @@ export default (props)=>{
                         position:"relative"
                     }}>
                         <Card 
-                            size="small"
                             onClick={()=>{
                                 pushs(item)
                             }}
@@ -134,7 +99,7 @@ export default (props)=>{
                             ]
                         }
                         >
-                          {/* <Row style={{
+                          <Row style={{
                               boxSizing:'border-box',
                               padding:"0px 10px"
                           }} gutter={16} justify="space-between">
@@ -144,7 +109,7 @@ export default (props)=>{
                                 <Col span={12}>
                                 <Statistic title="行数" value={93} />
                                 </Col>
-                            </Row> */}
+                            </Row>
                         </Card>
                     </List.Item>
                     )}

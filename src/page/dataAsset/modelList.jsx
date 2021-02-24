@@ -147,7 +147,7 @@ export default ()=>{
     }
 
     const setpagindex=(page, pageSize)=>{
-        console.log(page,pageSize)
+        console.log(model_id)
         getTableList(page,pageSize,"","",model_id)
         setStartIndex(page)
         setPerPage(pageSize)
@@ -237,6 +237,7 @@ export default ()=>{
                     <a onClick={()=>{
                         const myurl="L"+record.table_id+"&"+model_id
                         seturl(myurl)
+                
                         setisModalVisible(true)
                     }}>编辑</a>
                     <Divider type="vertical" />
@@ -266,6 +267,7 @@ export default ()=>{
             }
         })
     }
+
     const addModule=(data)=>{
         const {db_source,db_type,model_name}=data
         if(model_name===""){
@@ -299,6 +301,11 @@ export default ()=>{
                 message.error(res.message);
             }
         })
+    }
+    const handleCancel=(id)=>{
+        console.log(id)
+        setisModalVisible(false)
+        setModel_id(id)
     }
     return (
         <Card title="数据模型" bodyStyle={
@@ -484,7 +491,7 @@ export default ()=>{
                 setModObj(null)
                 // this.setState({visible2:false,ModObj:this.state.set!==false?this.state.ModData:null,set:false})
                 }} go={(data)=>addModule(data)}  set={set} ModObj={ModObj}></MyModal>
-                <NewLform isModalVisible={isModalVisible} handleOk={()=>setisModalVisible(false)} module_id={url} getTableList={getTableList} handleCancel={()=>setisModalVisible(false)}/>
+                <NewLform isModalVisible={isModalVisible} handleOk={(e)=>handleCancel(e)} module_id={url} getTableList={getTableList} handleCancel={(e)=>handleCancel(e)}/>
                 {/* isModalVisible,handleOk,handleCancel */}
                 <BatchForm TbatchForm={TbatchForm} ModData={ModData} n={()=>setTbatchForm(false)} y={()=>{setTbatchForm(false)}}/>
         </Card>

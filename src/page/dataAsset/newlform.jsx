@@ -99,7 +99,7 @@ export default (props)=>{
     setPath(module_id[0]==="L"?module_id.split("&"):module_id.slice(1));
   }
 
-  },[path,formName,model,list,list2,Type,module_id])
+  },[path,formName,model,Type,module_id])
     //栏位
     const [path,setPath]=useState('');
     const [model,setmodel]=useState({})
@@ -149,15 +149,25 @@ export default (props)=>{
       setList("失败")
     }
     // {conosle.log(module_id)}
-    const ok=()=>{
+    const qq=()=>{
+      if(list==='失败'&&list2==="失败"){
+        console.log('失败了')
+      }else if(list==='成功'&&list2==="成功"){
+        baocun()
+        console.log('成功了')
+      }
+    }
+    const ok=async ()=>{
       if(formName===""){
         return  message.error("请填写表名");
       }
-      mainForm.submit()
-      mainForm2.submit()
+      await mainForm.submit()
+      await mainForm2.submit()
       setType(true)
       setPath("")
-      console.log(s)
+      // console.log(list)
+     await qq()
+      // console.log(s)
       
     }
     const no=()=>{
@@ -171,7 +181,7 @@ export default (props)=>{
       setType(false)
       setformText('xxx1')
       // console.log(11)
-      handleCancel()
+      handleCancel(id)
     }
     const  baocun =()=>{
       const mypath =module_id[0]==="L"?module_id.split("&"):module_id.slice(1)
@@ -190,7 +200,7 @@ export default (props)=>{
                   setTableData2([])
                   setType(false)
                   setformText('xxx1')
-                  handleOk()
+                  handleOk(id)
                   sets('成功')
                   // props.history.push('/dataAsset/modelList')
                 }
@@ -300,9 +310,9 @@ export default (props)=>{
                   display:formtext==="xxx1"?"block":"none"
                 }}
                 form={mainForm}
-                onFinish={(values) => {
+                onFinish={async (values) => {
                   //验证tableForm
-                    tableForm.validateFields()
+                   await tableForm.validateFields()
                     .then(() => {
                       //验证成功
                       let postData={
@@ -311,7 +321,6 @@ export default (props)=>{
                         lineDelete:tableRef.current.getDeleteData()
                       }
                       setList("成功")
-                      baocun()
                     }) .catch(errorInfo => {
                       //验证失败
                       setList("失败")
@@ -401,7 +410,7 @@ export default (props)=>{
                 form={mainForm2}
                 onFinish={async (values) => {
                   //验证tableForm
-                  tableForm2.validateFields()
+                  await tableForm2.validateFields()
                     .then(() => {
                       //验证成功
                       let postData={
@@ -409,7 +418,6 @@ export default (props)=>{
                         lineForm:tableData2,
                         lineDelete:tableRef2.current.getDeleteData()
                       }
-                      baocun()
                       setList2("成功")
                     }) .catch(errorInfo => {
                       //验证失败

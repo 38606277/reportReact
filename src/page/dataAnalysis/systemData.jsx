@@ -17,7 +17,7 @@ import {
     Spin ,
     Dropdown,
     Menu,
-    Card
+    Card,
 } from 'antd';
 import { InsertRowLeftOutlined } from '@ant-design/icons';
 import HttpService from '../../util/HttpService.jsx';
@@ -40,7 +40,7 @@ export default (props)=>{
                     Bo.current.style.mixWidth=box.current.offsetWidth+"px"
                     const listnum=Math.floor(mHeight/40)//一个col放几个list
                     const colnum=Math.ceil(arr.length/listnum)//col的个数
-                    box.current.style.width=colnum*(200+15)+'px'
+                    box.current.style.width=colnum*(260+15)+'px'
                     const colarr=[]
                     const marr=[]
                     for(let u=0;u<colnum;u+=1){
@@ -78,16 +78,23 @@ export default (props)=>{
                             }
                         }
                     >
-                        <Row
-                            style={{
-                                borderBottom:"1px solid #f0f0f0"
-                            }}
-                        >
+                        <Row>
+                            <Radio.Group 
+                                style={{
+                                    marginLeft:'10px'
+                                }}
+                                buttonStyle="solid" value={tabPosition} onChange={(e)=>changeTabPosition(e.target.value)}
+                            >
+                                <Radio.Button value="top">新建</Radio.Button>
+                                <Radio.Button value="bottom">导入</Radio.Button>
+                                <Radio.Button value="left">设计</Radio.Button>
+                                <Radio.Button value="right">导出</Radio.Button>
+                            </Radio.Group>
                             <Form
                                 name="customized_form_controls"
                                 layout="inline"
                                 style={{
-                                    marginLeft:'6px'
+                                    marginLeft:'10px'
                                 }}
                             >
                                 <Form.Item name="FName" label="表名">
@@ -100,25 +107,17 @@ export default (props)=>{
                                 </Form.Item>
                             </Form>
                         </Row>
-                        <Radio.Group 
-                            style={{
-                                marginLeft:'4px'
-                            }}
-                            buttonStyle="solid" value={tabPosition} onChange={(e)=>changeTabPosition(e.target.value)}
-                        >
-                            <Radio.Button value="top">新建</Radio.Button>
-                            <Radio.Button value="bottom">导入</Radio.Button>
-                            <Radio.Button value="left">设计</Radio.Button>
-                            <Radio.Button value="right">导出</Radio.Button>
-                        </Radio.Group>
                         <div ref={Bo}
                             style={{
-                                overflowX:"auto",
-                                borderTop:"1px solid #f0f0f0"
+                                overflowX:"auto"
                             }}
                         >
                      <Spin spinning={spinning}>
-                        <Row ref={box}>
+                        <Row ref={box}
+                            style={{
+                                borderTop:"1px solid #f0f0f0"
+                            }}
+                        >
                             {
                                 mcol.length>0?mcol.map((item,index)=>{
                                     return (
@@ -162,7 +161,7 @@ export default (props)=>{
                                                                     </Menu>
                                                                 )
                                                             }} placement="bottomLeft">
-                                                                <Button icon={<InsertRowLeftOutlined style={{color:"#096dd9"}}/>} style={{display:"block",margin:"10px 0",width:"200px",border: 'none',textAlign:"left"}}>{items.table_name}</Button>
+                                                                <Button type="text" icon={<InsertRowLeftOutlined style={{color:"#096dd9"}}/>} style={{display:"block",margin:"10px 0",width:"260px",border: 'none',textAlign:"left"}}>{items.table_name}</Button>
                                                     </Dropdown>
                                                    )
                                                }):null

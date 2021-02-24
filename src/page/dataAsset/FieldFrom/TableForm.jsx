@@ -8,6 +8,19 @@ import InputNumberEF from './InputNumberEF.jsx'
 import Check from './Check.jsx'
 const TableForm = forwardRef((props, ref) => {
     const Obj={
+        "TAOS":[
+                {value:"TIMESTAMP",text:"TIMESTAMP"},
+                {value:"INT",text:"INT"},
+                {value:"BIGINT",text:"BIGINT"},
+                {value:"FLOAT",text:"FLOAT"},
+                {value:"DOUBLE",text:"DOUBLE"},
+                {value:"BINARY",text:"BINARY"},
+                {value:"SMALLINT",text:"SMALLINT"},
+                {value:"TINYINT",text:"TINYINT"},
+                {value:"BOOL",text:"BOOL"},
+                {value:"NCHAR",text:"NCHAR"}
+
+        ],
         "hive":[
             {value:"TINYINT",text:"TINYINT"},
             {value:"SMALLINT",text:"SMALLINT"},
