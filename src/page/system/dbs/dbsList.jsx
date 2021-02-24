@@ -58,6 +58,14 @@ class DbsList extends React.Component {
             dataIndex: 'dbtype',
             key: 'dbtype'
         }, {
+            title: '描述',
+            dataIndex: 'desc',
+            key: 'desc'
+        }, {
+            title: '类别',
+            dataIndex: 'dbclass',
+            key: 'dbclass'
+        }, {
             title: '操作',
             dataIndex: '操作',
             render: (text, record) => (

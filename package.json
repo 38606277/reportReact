@@ -5,7 +5,6 @@
   "private": true,
   "repository": "git@gitee.com:happymmall/admin-v2-fe.git",
   "author": "Rosen <gaorunsheng1@126.com>",
-  "homepage":".",
   "license": "MIT",
   "scripts": {
     "eject": "react-scripts eject",

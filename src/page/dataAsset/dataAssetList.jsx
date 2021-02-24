@@ -2,8 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from 'antd/lib/pagination';
-import { BarChartOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined } from '@ant-design/icons';
-import { Form } from '@ant-design/compatible';
+import { BarChartOutlined, LineChartOutlined, PieChartOutlined, ProfileOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import '@ant-design/compatible/assets/index.css';
 import {
     Table,
@@ -15,99 +14,38 @@ import {
     Spin,
     Row,
     Col,
-    Select,
     Tooltip,
     Modal,
 } from 'antd';
 import CubeService from '../../service/CubeService.jsx';
 import HttpService from '../../util/HttpService.jsx';
-import { forInRight } from 'lodash';
 const _cubeService = new CubeService();
 const Search = Input.Search;
-const FormItem = Form.Item;
 const { TreeNode } = Tree;
-const { Option } = Select;
 
-
-const treeData = [
-    {
-        title: '人力资源',
-        key: '0-0',
-        children: [
-            {
-                title: '0-0-0',
-                key: '0-0-0',
-                children: [
-                    { title: '0-0-0-0', key: '0-0-0-0' },
-                    { title: '0-0-0-1', key: '0-0-0-1' },
-                    { title: '0-0-0-2', key: '0-0-0-2' },
-                ],
-            },
-            {
-                title: '0-0-1',
-                key: '0-0-1',
-                children: [
-                    { title: '0-0-1-0', key: '0-0-1-0' },
-                    { title: '0-0-1-1', key: '0-0-1-1' },
-                    { title: '0-0-1-2', key: '0-0-1-2' },
-                ],
-            },
-            {
-                title: '0-0-2',
-                key: '0-0-2',
-            },
-        ],
-    },
-    {
-        title: '财务',
-        key: '0-1',
-        children: [
-            { title: '0-1-0-0', key: '0-1-0-0' },
-            { title: '0-1-0-1', key: '0-1-0-1' },
-            { title: '0-1-0-2', key: '0-1-0-2' },
-        ],
-    },
-    {
-        title: '投资',
-        key: '0-2',
-    },
-];
-
-function onChange(value) {
-    console.log(`selected ${value}`);
-}
-
-function onBlur() {
-    console.log('blur');
-}
-
-function onFocus() {
-    console.log('focus');
-}
-
-function onSearch(val) {
-    console.log('search:', val);
-}
 
 export default class dataAssetList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             list: [],
-            pageNum: 1,
+            startIndex: 1,
             perPage: 10,
             listType: 'list',
             cube_name: '',
             loading: false,
             treeData: [],
-            buttontype: ['primary', 'default', 'default', 'default'],
+            buttontype: ['primary', 'default', 'default', 'default', 'default'],
             visible: false,
-            tableData: [],
-            tableColumn: [],
+            oldlist: [],
+            tableColumnModel: [],
+            tableDataModel: [],
             selectedKeys:['0-0'],//树默认选中第一个
             activeButton:0,
             //选项卡切换默认
-            Hcard:null
+            Hcard:null,
+            total:0,
+            sortedInfo:null
         };
     }
     componentDidMount() {
@@ -120,7 +58,6 @@ export default class dataAssetList extends React.Component {
         let param = {
             FLEX_VALUE_SET_ID: 4
         };
-
         HttpService.post('/reportServer/FlexValue/getFlexValuesTree', JSON.stringify(param)).then(res => {
             if (res.resultCode == "1000") {
                 this.setState({
@@ -157,11 +94,11 @@ export default class dataAssetList extends React.Component {
         });
     }
     // 页数发生变化的时候
-    onPageNumChange(pageNum) {
+    onPageNumChange(startIndex) {
         this.setState({
-            pageNum: pageNum
+            startIndex: startIndex
         }, () => {
-            this.loadCubeList();
+            this.loadHostTable();
         });
     }
     // 数据变化的时候
@@ -174,13 +111,17 @@ export default class dataAssetList extends React.Component {
     }
     // 搜索
     onSearch(cube_name) {
+        let newList = this.state.oldlist;
+        let tableDatas = newList.filter(eval(item => item.table_name.includes(cube_name) ));
         let listType = cube_name === '' ? 'list' : 'search';
         this.setState({
             listType: listType,
-            pageNum: 1,
-            cube_name: cube_name
+            startIndex: 1,
+            cube_name: cube_name,
+            list:tableDatas
         }, () => {
-            this.loadCubeList();
+            //this.loadCubeList();
+            
         });
     }
     deleteCube(id) {
@@ -210,7 +151,6 @@ export default class dataAssetList extends React.Component {
         this.setState({ checkedKeys });
     };
 
-
     //树节点选中时
     onSelect = (selectedKeys, info) => {
         console.log('onSelect', info);
@@ -218,31 +158,27 @@ export default class dataAssetList extends React.Component {
         let param = {};
         let url = "";
         if (this.state.activeButton == 0) {
-            param = { catalog_id: info.node.props.dataRef.id };
+            param = { catalog_id: info.node.dataRef.id,dbType:info.node.dataRef.dbtype };
             url = "/reportServer/dataAsset/getTablesByCatalog";
-
         } else if (this.state.activeButton == 1) {
-            param = { source_id: info.node.props.dataRef.name };
+            param = { source_id: info.node.dataRef.name,dbType:info.node.dataRef.dbtype };
             url = "/reportServer/dataAsset/getTablesBySource";
-
         } else if (this.state.activeButton == 2) {
-
-
-            param = { dbtype_id: info.node.props.dataRef.name };
+            param = { dbtype_id: info.node.dataRef.name,dbType:info.node.dataRef.dbtype };
             url = "/reportServer/dataAsset/getTablesByDbType";
-
         } else if (this.state.activeButton == 3) {
-            param = { host_id: info.node.props.dataRef.name };
+            param = { host_id: info.node.dataRef.name,dbType:info.node.dataRef.dbtype };
             url = "/reportServer/dataAsset/getTablesByHost";
+        } else if (this.state.activeButton == 4) {
+            param = { host_id: info.node.dataRef.name,dbType:info.node.dataRef.dbtype };
+            url = "/reportServer/dbTableColumn/getTableList";
         }
+        this.setState({loading:true});
         HttpService.post(url, JSON.stringify(param)).then(res => {
-            this.setState({ list: res.data });
-            // alert(JSON.stringify(this.state.treeData));
-            // 设置高亮
-            //   this.activeButton(buttontype);
+            this.setState({ list: res.data,oldlist:res.data,loading:false });
         }, errMsg => {
             this.setState({
-                list: []
+                list: [],loading:false
             });
         });
 
@@ -255,34 +191,43 @@ export default class dataAssetList extends React.Component {
             0:{
                 url:"/reportServer/dataAsset/getTablesByCatalog",
                 id:'catalog_id',
-                l:'id'
+                l:'id',
+                type:'dbType'
             },
             1:{
                 url:"/reportServer/dataAsset/getTablesBySource",
                 id:'source_id',
-                l:'name'
+                l:'name',
+                type:'dbType'
             },
             2:{
                 url:"/reportServer/dataAsset/getTablesByDbType",
                 id:"dbtype_id",
-                l:'name'
+                l:'name',
+                type:'dbType'
             },
             3:{
                 url:"/reportServer/dataAsset/getTablesByHost",
                 id:'host_id',
-                l:'name'
+                l:'name',
+                type:'dbType'
+            },
+            4:{
+                url:"/reportServer/dbTableColumn/getTableList",
+                id:'host_id',
+                l:'name',
+                type:'dbtype'
             }
         }
         let param = {
             FLEX_VALUE_SET_ID: viewID
         };
-        if (buttontype == 3) {
+        if (buttontype == 3 || buttontype == 4) {
             //数据源
             let param = {};
             let url = "reportServer/DBConnection/ListAll";
             await HttpService.post(url, param).then(response => {
                 this.setState({Hcard:{...response[0]},treeData: response })
-                // alert(JSON.stringify(this.state.treeData));
                 // 设置高亮
                 this.activeButton(buttontype);
             }, errMsg => {
@@ -315,37 +260,23 @@ export default class dataAssetList extends React.Component {
         }
         let url =obj[number].url,
             data={
-                    [obj[number].id]:this.state.Hcard[obj[number].l]
+                    [obj[number].id]:this.state.Hcard[obj[number].l],
+                    dbType:this.state.Hcard[obj[number].type]
                 }
+                this.setState({loading:true});
             await HttpService.post(url, JSON.stringify(data)).then(res => {//默认点击修改数据
-                this.setState({ list: res.data });
-                // alert(JSON.stringify(this.state.treeData));
+                this.setState({ list: res.data,oldlist:res.data,loading:false });
                 // 设置高亮
                 //   this.activeButton(buttontype);
             }, errMsg => {
                 this.setState({
                     list: [],
-                    selectedKeys:["0-0"]
+                    loading:false
                 });
             });
 
 
     }
-    viewData(record) {
-
-        let param = { host_id: record.host_id, table_name: record.table_name };
-        let url = "/reportServer/dataAsset/getValueByHostAndTable";
-        HttpService.post(url, JSON.stringify(param)).then(res => {
-            this.setState({ list: res.data });
-            // 设置高亮
-        }, errMsg => {
-            this.setState({
-                list: []
-            });
-        });
-    }
-
-
 
     activeButton = i => {
 
@@ -361,9 +292,6 @@ export default class dataAssetList extends React.Component {
         this.setState({ buttontype: aButtonType, activeButton: i });
     }
 
-
-
-
     renderTreeNodes = data =>
         data.map(item => {
             if (item.children) {
@@ -377,25 +305,86 @@ export default class dataAssetList extends React.Component {
         });
 
     showModal = (record) => {
-        console.log(record)
-        this.setState({
-            visible: true,
-            tableColumn: [],
-            tableData: []
-        });
+        window.open("#/dataAsset/dataAssetListInfo/"+record.host_id+"/"+record.table_name+"/"+record.dbtype_id);
+
+
+        // this.setState({
+        //     visible: true,
+        //     tableColumnModel: [],
+        //     tableDataModel: [],
+        //     temphost_id:record.host_id,
+        //     temptable_name:record.table_name,
+        //     tempdbtype_id:record.dbtype_id
+        // });
+        // //查询表格数据 
+        // let param = {
+        //     host_id: record.host_id,
+        //     table_name: record.table_name,
+        //     dbtype_id: record.dbtype_id,
+        //     startIndex:this.state.startIndex,
+        //     perPage:this.state.perPage
+        // };
+        // console.log(param)
+        // let url = "/reportServer/dataAsset/getValueByHostAndTable";
+        // HttpService.post(url, JSON.stringify(param)).then(res => {
+            
+        //     //生成列信息
+        //     let cols = [];
+        //     let columns = res.data.list[0];
+        //     let obj={
+        //         overflow: 'hidden',
+        //         display: 'block',
+        //         width: '200px',
+        //         height:'40px'
+        //     }
+        //     for (var key in columns) {
+
+        //         if(key==='fileDataBlob'){
+        //             cols.push({
+        //                 title: key,
+        //                 dataIndex: key,
+        //                 render: text => <a style={{...obj}}>{text}</a>,
+        //             })
+        //         }else{
+        //             cols.push({
+        //                 title: key,
+        //                 dataIndex: key
+        //             })
+        //         }
+
+        //     }
+        //     // for (j = 0, len = columns.length; j < len; j++) {
+        //     //     cols.push({
+        //     //         title: columns[j],
+        //     //         dataIndex: columns[j]
+        //     //     })
+        //     // }
+        //     this.setState({ tableColumnModel: cols, tableDataModel: res.data.list ,total:res.data.total});
+
+        //     // 设置高亮
+        // }, errMsg => {
+        //     this.setState({
+        //         list: []
+        //     });
+        // });
+    };
+
+    loadHostTable = () => {
         //查询表格数据 
         let param = {
-            host_id: record.host_id,
-            table_name: record.table_name,
-            dbtype_id: record.dbtype_id
+            host_id:this.state.temphost_id,
+            table_name: this.state.temptable_name,
+            dbtype_id:this.state.tempdbtype_id,
+            startIndex:this.state.startIndex,
+            perPage:this.state.perPage
         };
         console.log(param)
         let url = "/reportServer/dataAsset/getValueByHostAndTable";
         HttpService.post(url, JSON.stringify(param)).then(res => {
-
+            
             //生成列信息
             let cols = [];
-            let columns = res.data[0];
+            let columns = res.data.list[0];
             let obj={
                 overflow: 'hidden',
                 display: 'block',
@@ -424,7 +413,7 @@ export default class dataAssetList extends React.Component {
             //         dataIndex: columns[j]
             //     })
             // }
-            this.setState({ tableColumn: cols, tableData: res.data });
+            this.setState({ tableColumnModel: cols, tableDataModel: res.data.list ,total:res.data.total});
 
             // 设置高亮
         }, errMsg => {
@@ -432,8 +421,8 @@ export default class dataAssetList extends React.Component {
                 list: []
             });
         });
-
     };
+
 
     handleOk = e => {
         console.log(e);
@@ -449,18 +438,34 @@ export default class dataAssetList extends React.Component {
         });
     };
 
-
+    handleChange = (pagination, filters, sorter) => {
+        console.log('Various parameters', pagination, filters, sorter);
+        this.setState({
+          sortedInfo: sorter,
+        });
+      };
+      setTableNameSort = () => {
+        this.setState({
+          sortedInfo: {
+            order: 'descend',
+            columnKey: 'table_name',
+          },
+        });
+      };
     render() {
         this.state.list.map((item, index) => {
             item.key = index;
-        })
-        const dataSource = this.state.list;
-        let self = this;
+        });
+        //console.log(this.state.list);
+        let { sortedInfo ,dataSource } = this.state;
+        sortedInfo = sortedInfo || {};
         const columns = [{
             title: '数据名称',
             dataIndex: 'table_name',
             key: 'table_name',
             className: 'headerRow',
+            sorter: (a, b) => a.table_name - b.table_name,
+            sortOrder: sortedInfo.columnKey === 'table_name' && sortedInfo.order,
         }, {
             title: '数据描述',
             dataIndex: 'table_desc',
@@ -488,13 +493,13 @@ export default class dataAssetList extends React.Component {
             className: 'headerRow',
             render: (text, record) => (
                 <span>
-                    <Link to={`/dataAsset/dataAssetInfo/${record.table_id}`}>编辑</Link>
+                    <Link to={`/dataAsset/dataAssetInfonew/${record.host_id}/${record.dbtype_id}/${record.table_name}`}>描述</Link>
                     <Divider type="vertical" />
                     <a onClick={() => this.showModal(record)} href="javascript:;">浏览数据</a>
                     <Divider type="vertical" />
                     <Link to={`/cube/cubeInfo/${record.cube_id}`}>分析</Link>
-                    <Divider type="vertical" />
-                    <a onClick={() => this.deleteCube(`${record.cube_id}`)} href="javascript:;">删除</a>
+                    {/* <Divider type="vertical" />
+                    <a onClick={() => this.deleteCube(`${record.cube_id}`)} href="javascript:;">删除</a> */}
                 </span>
             ),
         }];
@@ -518,7 +523,10 @@ export default class dataAssetList extends React.Component {
                                         <Button type={this.state.buttontype[2]} icon={<LineChartOutlined />} onClick={() => this.onViewClick(2, 2,2)} />
                                     </Tooltip>
                                     <Tooltip placement="top" title="数据源视图">
-                                        <Button type={this.state.buttontype[3]} icon={<PieChartOutlined />} onClick={() => this.onViewClick(4, 3,3)} />
+                                        <Button type={this.state.buttontype[3]} icon={<PieChartOutlined />} onClick={() => this.onViewClick(3, 3,3)} />
+                                    </Tooltip>
+                                    <Tooltip placement="top" title="数据源视图">
+                                        <Button type={this.state.buttontype[4]} icon={<UnorderedListOutlined />} onClick={() => this.onViewClick(4, 4,4)} />
                                     </Tooltip>
 
 
@@ -537,7 +545,7 @@ export default class dataAssetList extends React.Component {
                                 </Tree>
                             </Col>
                             <Col sm={20}>
-                                <Card bodyStyle={{ padding: "8px", backgroundColor: '#fafafa' }}>
+                                {this.state.activeButton!=5?<Card bodyStyle={{ padding: "8px", backgroundColor: '#fafafa' }} >
 
                                     <Row>
                                         <Col xs={24} sm={12}>
@@ -553,22 +561,17 @@ export default class dataAssetList extends React.Component {
                                         </Col>
                                     </Row>
 
-                                </Card>
-                                <Table dataSource={this.state.list} columns={columns} bordered={true} />
-                                {/* <Pagination current={this.state.pageNum}
-                                    total={this.state.total}
-                                    onChange={(pageNum) => this.onPageNumChange(pageNum)} /> */}
+                                </Card>:""}
+                                <Table dataSource={this.state.list} columns={columns} bordered={true} onChange={this.handleChange}  />
+                               
                             </Col>
                         </Row>
 
                     </Card>
                 </Spin>
 
-                <Button type="primary" onClick={this.showModal}>
-                    Open Modal
-             </Button>
-                <Modal
-                    title="Basic Modal"
+                {/* <Modal
+                    title="数据查看"
                     width='900px'
                     cancelText='取消'
                     okText='确认'
@@ -577,14 +580,14 @@ export default class dataAssetList extends React.Component {
                     onCancel={this.handleCancel}
                 >
                     <Card>
-                        <Table dataSource={this.state.tableData} columns={this.state.tableColumn}
+                        <Table dataSource={this.state.tableDataModel} columns={this.state.tableColumnModel}
                             scroll={{ x: 1300 }}
-                            bordered={true} />
-                        {/* <Pagination current={this.state.pageNum}
+                            bordered={true} pagination={false}/>
+                        <Pagination current={this.state.startIndex}
                             total={this.state.total}
-                            onChange={(pageNum) => this.onPageNumChange(pageNum)} /> */}
+                            onChange={(startIndex) => this.onPageNumChange(startIndex)} />
                     </Card>
-                </Modal>
+                </Modal> */}
             </div>
         );
     }

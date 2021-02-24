@@ -14,44 +14,48 @@ import {
     List,
     Empty,
     Drawer,
-    Tree,
+    Spin ,
     Dropdown,
     Menu,
     Card
 } from 'antd';
 import { InsertRowLeftOutlined } from '@ant-design/icons';
-
+import HttpService from '../../util/HttpService.jsx';
 export default ()=>{
     const [tabPosition,settabPosition]=useState('')
     const [mcol,setmcol]=useState([])
     const [list,setlist]=useState([])
+    const [spinning,setspinning]=useState(true)
     const box=useRef()
-    let arr=[]
-    for(let i=0;i<100;i+=1){
-        arr.push("表"+i)
-    }
+    const Bo=useRef()
     useEffect(()=>{
-        
-        if(box){
-            const bHeight=document.getElementsByClassName("navbar-side")[0].offsetHeight
-            const sHeight=box.current.offsetTop
-            const mHeight=bHeight-sHeight-70
-            box.current.style.height=mHeight+'px'
-            box.current.style.maxWidth=box.current.offsetWidth+"px"
-            const listnum=Math.floor(mHeight/40)//一个col放几个list
-            const colnum=Math.ceil(arr.length/listnum)//col的个数
-            const colarr=[]
-            const marr=[]
-            for(let u=0;u<colnum;u+=1){
-                marr.push(arr.splice(0,13))
-                colarr.push(u)
-            }
-            setmcol(colarr)
-            setlist(marr)
-        
-           console.log(bHeight,sHeight,listnum,colnum,colarr.length,marr)
+        const bHeight=document.getElementsByClassName("navbar-side")[0].offsetHeight
+        const sHeight=box.current.offsetTop
+        const mHeight=bHeight-sHeight-70
+        box.current.style.height=mHeight-80+'px'
+            HttpService.post('/reportServer/dbTableColumn/getTableList',JSON.stringify({dbType: "Mysql",host_id: "form"})).then(res=>{
+                if(res.resultCode==='1000'){
+                    const arr=[...res.data]
+                    Bo.current.style.maxWidth=box.current.offsetWidth+"px"
+                    const listnum=Math.floor(mHeight/40)//一个col放几个list
+                    const colnum=Math.ceil(arr.length/listnum)//col的个数
+                    box.current.style.width=colnum*(200+15)+'px'
+                    const colarr=[]
+                    const marr=[]
+                    for(let u=0;u<colnum;u+=1){
+                        marr.push([...arr.splice(0,13)])
+                        colarr.push(u)
+                    }
+                    setmcol(colarr)
+                    setlist(marr)
+                }
+            })
+    },[])
+    useEffect(()=>{
+        if(list.length>0){
+            setspinning(false)
         }
-    },[box])
+    },[list])
     const changeTabPosition=(e)=>{
         settabPosition(e)
     }
@@ -64,10 +68,7 @@ export default ()=>{
             }
         >
             <Row>
-                <Col sm={4}>
-                    占位    
-                </Col>
-                <Col sm={20}>
+                <Col sm={24}>
                     <Card
                           bodyStyle={
                             {
@@ -109,18 +110,24 @@ export default ()=>{
                             <Radio.Button value="left">设计</Radio.Button>
                             <Radio.Button value="right">导出</Radio.Button>
                         </Radio.Group>
+                        <div ref={Bo}
+                            style={{
+                                overflowX:"auto"
+                            }}
+                        >
+                     <Spin spinning={spinning}>
                         <Row ref={box} style={{
                             borderTop:"1px solid #f0f0f0"
                         }}>
                             {
-                                mcol.map((item,index)=>{
+                                mcol.length>0?mcol.map((item,index)=>{
                                     return (
                                         <Col style={{
                                             marginTop:"-10px",
                                             marginRight:"15px"
                                         }}>
                                             {
-                                               list[index].map((items,indexs)=>{
+                                               list.length>0?list[index].map((items,indexs)=>{
                                                    return (
                                                      <Dropdown
                                                                 trigger="contextMenu"
@@ -155,16 +162,19 @@ export default ()=>{
                                                                     </Menu>
                                                                 )
                                                             }} placement="bottomLeft">
-                                                                <Button icon={<InsertRowLeftOutlined style={{color:"#096dd9"}}/>} style={{display:"block",margin:"10px 0",width:"100px",border: 'none',textAlign:"left"}}>{items}</Button>
+                                                                <Button icon={<InsertRowLeftOutlined style={{color:"#096dd9"}}/>} style={{display:"block",margin:"10px 0",width:"200px",border: 'none',textAlign:"left"}}>{items.table_name}</Button>
                                                     </Dropdown>
                                                    )
-                                               })
+                                               }):null
                                             }
                                         </Col>
                                     )
-                                })
-                            }
+                                }):null
+                            } 
                         </Row>
+                        </Spin>
+                        </div>
+                    
                     </Card>
                 </Col>
             </Row>

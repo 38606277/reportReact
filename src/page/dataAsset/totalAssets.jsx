@@ -20,30 +20,18 @@ import {
     Card
 } from 'antd';
 import { EditOutlined, EllipsisOutlined, VerticalAlignBottomOutlined,BranchesOutlined } from '@ant-design/icons';
-const data = [
-    {
-      title: 'form',
-    },
-    {
-      title: 'bb',
-    },
-    {
-      title: 'hive',
-    },
-    {
-      title: 'hbase',
-    },
-    {
-      title: 'jlerp',
-    },
-    {
-      title: 'saaa',
-    },
-    {
-        title: 'lee',
-      },
-  ];
+import HttpService from '../../util/HttpService.jsx';
+const url=window.getServerUrl();
 export default ()=>{
+    const [data,setdata]=useState([])
+    useEffect(()=>{
+        console.log(1)
+        HttpService.post('/reportServer/DBConnection/ListAll',{}).then(res=>{
+            console.log(2)
+            console.log(res)
+            setdata(res)
+        })
+    },[])
     return (
         <Card title="数据资产"
         bodyStyle={{
@@ -67,22 +55,27 @@ export default ()=>{
                     }}>
                         <Card 
                             headStyle={{
-                                height:"30px",
-                                border:"none"
+                                height:"20px",
+                                border:"none",
+                                paddingLeft:'10px'
+                            }}
+                            bodyStyle={{
+                                paddingTop:"10px",
+                                paddingBottom:"10px"
                             }}
                             hoverable
                             title={
                                 <Row align="middle">
                                     <Col>
-                                        <img style={{height:"20px"}} src="https://ss3.bdstatic.com/70cFv8Sh_Q1YnxGkpoWK1HF6hhy/it/u=1681145256,1460339721&fm=26&gp=0.jpg" alt=""/>
+                                        <img style={{height:"15px"}} src={url+"/report"+item.icon} alt=""/>
                                     </Col>
                                     <Col style={{
                                         marginLeft:"14px"
                                     }}>
-                                        <h2
+                                        <h3
                                             style={{textAlign:"center",margin:"0px"}}
-                                        >{item.title}
-                                        </h2>
+                                        >{item.desc}
+                                        </h3>
                                     </Col>
                             </Row>
                             }
@@ -105,7 +98,10 @@ export default ()=>{
                         }
                         >
                           
-                          <Row gutter={16}>
+                          <Row style={{
+                              boxSizing:'border-box',
+                              padding:"0px 10px"
+                          }} gutter={16} justify="space-between">
                                 <Col span={12}>
                                 <Statistic title="Feedback" value={1128}/>
                                 </Col>
