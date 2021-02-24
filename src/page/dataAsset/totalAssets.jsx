@@ -22,6 +22,16 @@ import {
 import { EditOutlined, EllipsisOutlined, VerticalAlignBottomOutlined,BranchesOutlined } from '@ant-design/icons';
 import HttpService from '../../util/HttpService.jsx';
 const url=window.getServerUrl();
+const mycolor=()=>{
+    let mycolr1="#",
+        m=0
+    const clr=[0,1,2,3,4,5,6,7,8,9,"a","b","c","d","e","f"]
+    while(m<6){
+        m+=1
+        mycolr1+=clr[Math.floor(Math.random()*clr.length)]
+    }
+    return mycolr1
+}
 export default (props)=>{
     const [data,setdata]=useState([])
     useEffect(()=>{
@@ -35,34 +45,34 @@ export default (props)=>{
     return (
         <Card title="数据资产"
             >
-            <Row>
-                <Col sm={11}>
-                    <Card title="标题名称">
-                        <Row>
-                            <Col sm={11}>
-                                <Statistic
-                                    title="Active"
-                                    value={11.28}
-                                    precision={2}
-                                    valueStyle={{ color: '#3f8600' ,textAlign:"center"}}
-                                    suffix="%"
-                                />
-                            </Col>
-                            <Col sm={2}></Col>
-                            <Col sm={11}>
-                                <Statistic
-                                    title="Active"
-                                    value={11.28}
-                                    precision={2}
-                                    valueStyle={{ color: '#3f8600' }}
-                                    suffix="%"
-                                />
-                            </Col>
-                        </Row>
-                    </Card>
+            <Row justify="space-between">
+                <Col>
+                    <Row>
+                        <Col>
+                            <Statistic
+                                title="Active"
+                                value={11.28}
+                                precision={2}
+                                valueStyle={{ color: '#3f8600' }}
+                                suffix="%"
+                            />
+                        </Col>
+                        <Col 
+                            style={{
+                                marginLeft:"20px"
+                            }}
+                        >   
+                            <Statistic
+                                title="Active"
+                                value={11.28}
+                                precision={2}
+                                valueStyle={{ color: '#3f8600' }}
+                                suffix="%"
+                            />
+                        </Col>
+                    </Row>
                 </Col>
-                <Col sm={2}></Col>
-                <Col sm={11}>
+                <Col>
                     <Card>
                         adwa
                     </Card>
@@ -84,9 +94,14 @@ export default (props)=>{
                     dataSource={data}
                     renderItem={item => (
                     <List.Item style={{
-                        position:"relative"
+                        position:"relative",
                     }}>
                         <Card 
+                            style={
+                                {
+                                    background:mycolor(),
+                                }
+                            }
                             size="small"
                             onClick={()=>{
                                 pushs(item)
@@ -110,41 +125,24 @@ export default (props)=>{
                                         marginLeft:"14px"
                                     }}>
                                         <h3
-                                            style={{textAlign:"center",margin:"0px"}}
+                                            style={{textAlign:"center",margin:"0px",color:'#fff'}}
                                         >{item.desc}
                                         </h3>
                                     </Col>
                             </Row>
                             }
-                        actions={
-                            [
-                                
-                                <Tooltip placement="top" title={<span>下载</span>}>
-                                    <VerticalAlignBottomOutlined />
-                                </Tooltip>,
-                                <Tooltip placement="top" title={<span>编辑</span>}>
-                                    <EditOutlined key="edit" />
-                                </Tooltip>,
-                                 <Tooltip placement="top" title={<span>分享</span>}>
-                                    <BranchesOutlined />
-                                </Tooltip> ,
-                                <Tooltip placement="top" title={<span>更多</span>}>
-                                    <EllipsisOutlined key="ellipsis" />
-                                </Tooltip> 
-                            ]
-                        }
                         >
-                          {/* <Row style={{
+                          <Row style={{
                               boxSizing:'border-box',
-                              padding:"0px 10px"
+                              padding:"0px 10px",
                           }} gutter={16} justify="space-between">
                                 <Col span={12}>
-                                <Statistic title="列数" value={1128}/>
+                                <Statistic   valueStyle={{ color: '#fff' ,textAlign:"left"}} title={<h3 style={{color:"#fff",textAlign:"left"}}>列数</h3>} value={28}/>
                                 </Col>
                                 <Col span={12}>
-                                <Statistic title="行数" value={93} />
+                                <Statistic   valueStyle={{ color: '#fff' ,textAlign:"right"}}  title={<h3 style={{color:"#fff",textAlign:"right"}}>行数</h3>}  value={23} />
                                 </Col>
-                            </Row> */}
+                            </Row>
                         </Card>
                     </List.Item>
                     )}

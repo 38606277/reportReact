@@ -171,7 +171,8 @@ export default (props)=>{
       
     }
     const no=()=>{
-      const id=path  instanceof Array?path[1]:path
+      const myid=module_id[0]==="L"?module_id.split("&"):module_id.slice(1)
+      const id=myid  instanceof Array?myid[1]:myid
       getTableList(1,10,"","",id)
       setPath("")
       setformName("")
@@ -180,7 +181,7 @@ export default (props)=>{
       setTableData2([])
       setType(false)
       setformText('xxx1')
-      // console.log(11)
+      console.log(module_id)
       handleCancel(id)
     }
     const  baocun =()=>{
