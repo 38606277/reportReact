@@ -37,46 +37,48 @@ export default (props) => {
   let [cube_classlist,setcube_classlist]=useState([]);
 
   useEffect(() => {
-    let mylist= async()=>{
-      let param={
-       host_id:props.match.params.host_id,
-       dbType:props.match.params.dbType,
-       table_name:props.match.params.table_name
-     }
-     setLoading(true)
-      await HttpService.post('/reportServer/dbTableColumn/getTableCloumnList', JSON.stringify(param))
-      .then(res=>{
-        setLoading(false)
-         if (res.resultCode == "1000") {
-          let mainFormV=res.data.maintable;
-          let lineFormV=res.data.columnList;
-          mainForm.setFieldsValue(mainFormV);
-          //初始化数据
-          tableRef.current.initData(lineFormV);
-        } else {
-            message.error(res.message);
-        }
-      })
-
-   }
-   mylist()
+   
    loadCubeList()
+   mylist()
+  
   },[]);
-  const loadCubeList = () => {
-        let param = {
-            FLEX_VALUE_SET_ID: 4
-        };
-        HttpService.post('/reportServer/FlexValue/getFlexValuesTree', JSON.stringify(param)).then(res => {
-            if (res.resultCode == "1000") {
-              setcube_classlist(res.data);
-            }
-            else {
-                message.error(res.message);
-            }
+  let mylist= async()=>{
+    let param={
+     host_id:props.match.params.host_id,
+     dbType:props.match.params.dbType,
+     table_name:props.match.params.table_name
+   }
+   setLoading(true)
+    await HttpService.post('/reportServer/dbTableColumn/getTableCloumnList', JSON.stringify(param))
+    .then(res=>{
+      setLoading(false)
+       if (res.resultCode == "1000") {
+        let mainFormV=res.data.maintable;
+        let lineFormV=res.data.columnList;
+        mainForm.setFieldsValue(mainFormV);
+        //初始化数据
+        tableRef.current.initData(lineFormV);
+      } else {
+          message.error(res.message);
+      }
+    })
+
+ }
+  const loadCubeList = async() => {
+      let param = {
+          FLEX_VALUE_SET_ID: 4
+      };
+     await HttpService.post('/reportServer/FlexValue/getFlexValuesTree', JSON.stringify(param)).then(res => {
+          if (res.resultCode == "1000") {
+            setcube_classlist(res.data);
+          }
+          else {
+              message.error(res.message);
+          }
         }, errMsg => {
-            this.setState({
-                list: [], loading: false
-            });
+          this.setState({
+              list: [], loading: false
+          });
         });
     }
   const selectChage = (e) =>{
