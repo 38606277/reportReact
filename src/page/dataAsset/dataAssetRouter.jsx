@@ -5,13 +5,14 @@ import { HashRouter as Router, Switch, Redirect, Route, Link } from 'react-route
 import dataAssetLake from './dataAssetLake.jsx';
 import dataAssetList from './dataAssetList.jsx';
 import dataAssetInfo from './dataAssetInfo.jsx';
-import dataAssetInfonew from './dataAssetInfonew.jsx';
+import dataAssetInfonold from './dataAssetInfonold.jsx';
 import dataadd from './index.jsx';//新建
 import Xy from './Primordial.jsx';
 import modelList from './modelList.jsx';
 import addList from './newlform.jsx';
 import addModule from './addModule.jsx';
 import dataAssetListInfo from './dataAssetListInfo.jsx';
+import dataAssetInfonew from './dataAssetInfonew.jsx';
 
 export default class dataAssetRouter extends React.Component{
     render(){
