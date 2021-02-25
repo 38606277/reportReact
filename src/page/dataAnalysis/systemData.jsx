@@ -134,28 +134,30 @@ export default (props)=>{
                                                                 return (
                                                                     <Menu>
                                                                         <Menu.Item>
-                                                                        <a target="_blank" rel="noopener noreferrer">
-                                                                            具体方法
+                                                                        <a target="_blank" rel="noopener noreferrer"
+                                                                            onClick={()=>{  
+                                                                                props.history.push("/dataAsset/dataAssetListInfo/"+items.host_id+"/"+items.table_name+"/"+items.dbtype_id)
+                                                                            }}
+                                                                        >
+                                                                            打开表
                                                                         </a>
                                                                         </Menu.Item>
                                                                         <Menu.Item>
-                                                                        <a target="_blank" rel="noopener noreferrer">
-                                                                            具体方法
+                                                                        <a target="_blank" rel="noopener noreferrer"
+                                                                            onClick={()=>{  
+                                                                                props.history.push("/dataAsset/dataAssetInfonew/"+items.host_id+"/"+items.dbtype_id+"/"+items.table_name)
+                                                                            }}
+                                                                        >
+                                                                            描述表
                                                                         </a>
                                                                         </Menu.Item>
                                                                         <Menu.Item>
-                                                                        <a target="_blank" rel="noopener noreferrer">
-                                                                            具体方法
-                                                                        </a>
-                                                                        </Menu.Item>
-                                                                        <Menu.Item>
-                                                                        <a target="_blank" rel="noopener noreferrer">
-                                                                            具体方法
-                                                                        </a>
-                                                                        </Menu.Item>
-                                                                        <Menu.Item>
-                                                                        <a target="_blank" rel="noopener noreferrer">
-                                                                            具体方法
+                                                                        <a target="_blank" rel="noopener noreferrer"
+                                                                            onClick={()=>{
+                                                                                props.history.push("/cube/cubeInfo/"+item.cube_id)
+                                                                            }}
+                                                                        >
+                                                                            分析表
                                                                         </a>
                                                                         </Menu.Item>
                                                                     </Menu>

@@ -58,69 +58,132 @@ export default (props)=>{
             <Row
                 justify="space-between"
             >
-              <Col sm={17}>
-                <Card title='本地资源'
+                <Col sm={16}>
+                    <Card
+                        title="数据展示"
+                        bordered={false}
+                        style={{
+                            borderTop:"1px solid #f0f0f0",
+                            borderRight:"1px solid #f0f0f0"
+                        }}
                         headStyle={{
-                            fontSize:"14px",
-                            color:"rgb(205, 127, 50)"
+                            color: 'rgb(205, 127, 50)',
+                            fontSize: '14px',
+                            height:"20px",
+                            border:"none"
+                        }}
+                        bodyStyle={{
+                            paddingTop:"0px"
                         }}
                     >
-                        <Row>
+                        <Row 
+                            justify="space-between"
+                        >
+                           <Col>
+                            <Card
+                                    hoverable
+                                    style={{
+                                        marginRight:"10px",
+                                        background:"#526ecc"
+                                    }}
+                                >
+                                    <Statistic
+                                            title={<div style={{color:"#fff"}}>数据总量</div>}
+                                            value={11}
+                                            precision={2}
+                                            valueStyle={{ color: '#fff' }}
+                                            suffix="（条）"
+                                    />
+                                </Card>
+                           </Col>
                             <Col>
-                               <Card>
+                                <Card
+                                    hoverable
+                                    style={{
+                                        marginRight:"10px",
+                                        background:"#526ecc"
+                                    }}
+                                >
                                     <Statistic
-                                            title="数据库总量"
+                                            title={<div style={{color:"#fff"}}>新增数据</div>}
                                             value={11}
                                             precision={2}
-                                            valueStyle={{ color: '#3f8600' }}
-                                            suffix="（个）"
+                                            valueStyle={{ color: '#fff' }}
+                                            suffix="（条）"
                                     />
-                               </Card>
+                                </Card>
                             </Col>
-                            <Col 
-                                style={{
-                                    marginLeft:"20px"
-                                }}
-                            >   
-                                 <Card>
+                            <Col>
+                                <Card
+                                    hoverable
+                                    style={{
+                                        background:"#526ecc"
+                                    }}
+                                >
                                     <Statistic
-                                            title="数据库总量"
+                                            title={<div style={{color:"#fff"}}>修改数据</div>}
                                             value={11}
                                             precision={2}
-                                            valueStyle={{ color: '#3f8600' }}
-                                            suffix="（个）"
+                                            valueStyle={{ color: '#fff' }}
+                                            suffix="（条）"
                                     />
-                               </Card>
+                                </Card>
                             </Col>
                         </Row>
                     </Card>
-              </Col>
-              <Col sm={6}>
-                  <Card title='本地资源'
-                        headStyle={{
-                            fontSize:"14px",
-                            color:"rgb(205, 127, 50)"
-                        }}>
-                        <Card>
+                </Col>
+                <Col 
+                    sm={8}
+                >   
+                    <Card 
+                    bordered={false}
+                    title="资产内容"
+                    style={{
+                        borderTop:"1px solid #f0f0f0"
+                    }}
+                    headStyle={{
+                        color: 'rgb(205, 127, 50)',
+                        fontSize: '14px',
+                        height:"20px",
+                        border:"none"
+                    }}
+                    bodyStyle={{
+                        paddingTop:"0px"
+                    }}
+                    bodyStyle={{
+                        paddingTop:"0px"
+                    }}
+                    >
+                    <Card
+                        hoverable
+                        style={{
+                            background:"#526ecc"
+                        }}
+                        >
                             <Statistic
-                                title="数据库总量"
+                                title={<div style={{color:"#fff"}}>删除数据</div>}
                                 value={11}
                                 precision={2}
-                                valueStyle={{ color: '#3f8600' }}
-                                suffix="（个）"
+                                valueStyle={{ color: '#fff' }}
+                                suffix="（条）"
                             />
-                        </Card>   
-                  </Card>
-              </Col>
+                        </Card>
+                    </Card>
+                </Col>
+                    {/* </Card> */}
             </Row>
             <Card
-                title='我的数据库'
+                title='数据源'
                 headStyle={{
                     fontSize:"14px",
-                    color:"rgb(205, 127, 50)"
+                    color:"rgb(205, 127, 50)",
+                    height:"20px"
                 }} 
+                bodyStyle={{
+                    paddingTop:"0px"
+                }}
             >
-                         <List
+                <List
                     style={{
                         marginTop:"20px"
                     }}
@@ -141,7 +204,7 @@ export default (props)=>{
                             <Card 
                                 style={
                                     {
-                                        background:'#40a9ff',
+                                        background:'#e9edfa',
                                     }
                                 }
                                 size="small"
@@ -167,22 +230,22 @@ export default (props)=>{
                                             marginLeft:"14px"
                                         }}>
                                             <h3
-                                                style={{textAlign:"center",margin:"0px",color:'#fff'}}
+                                                style={{textAlign:"center",margin:"0px",color:'#252b3a'}}
                                             >{item.desc}
                                             </h3>
                                         </Col>
                                 </Row>
                                 }
                             >
-                            <Row style={{
-                                boxSizing:'border-box',
-                                padding:"0px 10px",
-                            }} gutter={16} justify="space-between">
+                                <Row style={{
+                                    boxSizing:'border-box',
+                                    padding:"0px 10px",
+                                }} gutter={16} justify="space-between">
                                     <Col span={12}>
-                                    <Statistic   valueStyle={{ color: '#fff' ,textAlign:"left"}} title={<h3 style={{color:"#fff",textAlign:"left"}}>行数</h3>} value={28}/>
+                                        <Statistic   valueStyle={{ color: '#fff' ,textAlign:"left"}} title={<h3 style={{color:"#252b3a",textAlign:"left",fontSize:"16px"}}>行数</h3>} value={28}/>
                                     </Col>
                                     <Col span={12}>
-                                    <Statistic   valueStyle={{ color: '#fff' ,textAlign:"right"}}  title={<h3 style={{color:"#fff",textAlign:"right"}}>列数</h3>}  value={23} />
+                                        <Statistic   valueStyle={{ color: '#fff' ,textAlign:"right"}}  title={<h3 style={{color:"#252b3a",textAlign:"right",fontSize:"16px"}}>列数</h3>}  value={23} />
                                     </Col>
                                 </Row>
                             </Card>
