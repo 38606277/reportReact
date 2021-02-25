@@ -104,7 +104,9 @@ export default class dataAssetList extends React.Component {
     };
 
 
-
+    showTotal  = (total) =>  {
+        return `共 ${total} 条`;
+      }
     
     render() {
         return (
@@ -116,6 +118,8 @@ export default class dataAssetList extends React.Component {
                             bordered={true} pagination={false}/>
                         <Pagination current={this.state.startIndex}
                             total={this.state.total}
+                            showTotal={this.showTotal}
+                            size="small"
                             onChange={(startIndex) => this.onPageNumChange(startIndex)} />
                     </Card>
                 </Spin>
