@@ -171,11 +171,27 @@ export default class dataAssetList extends React.Component {
             url = "/reportServer/dataAsset/getTablesByHost";
         } else if (this.state.activeButton == 4) {
             param = { host_id: info.node.dataRef.name,dbType:info.node.dataRef.dbtype };
-            url = "/reportServer/dbTableColumn/getTableList";
+            url = "/reportServer/dbTableColumn/getTableListMap";
         }
         this.setState({loading:true});
         HttpService.post(url, JSON.stringify(param)).then(res => {
             this.setState({ list: res.data,oldlist:res.data,loading:false });
+            if (this.state.activeButton == 4) {
+                let newparam={
+                    list:res.data
+                }
+                HttpService.post("/reportServer/dbTableColumn/getTableListUpdateMap", JSON.stringify(newparam)).then(res => {//默认点击修改数据
+                    this.setState({ list: res.data,oldlist:res.data });
+                    
+                    // 设置高亮
+                    //   this.activeButton(buttontype);
+                }, errMsg => {
+                    this.setState({
+                        list: [],
+                        loading:false
+                    });
+                });
+            }
         }, errMsg => {
             this.setState({
                 list: [],loading:false
@@ -213,7 +229,7 @@ export default class dataAssetList extends React.Component {
                 type:'dbType'
             },
             4:{
-                url:"/reportServer/dbTableColumn/getTableList",
+                url:"/reportServer/dbTableColumn/getTableListMap",
                 id:'host_id',
                 l:'name',
                 type:'dbtype'
@@ -266,6 +282,21 @@ export default class dataAssetList extends React.Component {
                 this.setState({loading:true});
             await HttpService.post(url, JSON.stringify(data)).then(res => {//默认点击修改数据
                 this.setState({ list: res.data,oldlist:res.data,loading:false });
+                let newparam={
+                    list:res.data
+                }
+                    HttpService.post("/reportServer/dbTableColumn/getTableListUpdateMap", JSON.stringify(newparam)).then(res => {//默认点击修改数据
+                        this.setState({ list: res.data,oldlist:res.data });
+                        
+                        // 设置高亮
+                        //   this.activeButton(buttontype);
+                    }, errMsg => {
+                        this.setState({
+                            list: [],
+                            loading:false
+                        });
+                    });
+    
                 // 设置高亮
                 //   this.activeButton(buttontype);
             }, errMsg => {
