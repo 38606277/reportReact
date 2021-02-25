@@ -47,30 +47,32 @@ export default (props)=>{
             >
             <Row justify="space-between">
                 <Col>
-                    <Row>
-                        <Col>
-                            <Statistic
-                                title="Active"
-                                value={11.28}
-                                precision={2}
-                                valueStyle={{ color: '#3f8600' }}
-                                suffix="%"
-                            />
-                        </Col>
-                        <Col 
-                            style={{
-                                marginLeft:"20px"
-                            }}
-                        >   
-                            <Statistic
-                                title="Active"
-                                value={11.28}
-                                precision={2}
-                                valueStyle={{ color: '#3f8600' }}
-                                suffix="%"
-                            />
-                        </Col>
-                    </Row>
+                    <Card>
+                        <Row>
+                            <Col>
+                                <Statistic
+                                    title="Active"
+                                    value={11.28}
+                                    precision={2}
+                                    valueStyle={{ color: '#3f8600' }}
+                                    suffix="%"
+                                />
+                            </Col>
+                            <Col 
+                                style={{
+                                    marginLeft:"20px"
+                                }}
+                            >   
+                                <Statistic
+                                    title="Active"
+                                    value={11.28}
+                                    precision={2}
+                                    valueStyle={{ color: '#3f8600' }}
+                                    suffix="%"
+                                />
+                            </Col>
+                        </Row>
+                    </Card>
                 </Col>
                 <Col>
                     <Card>
@@ -78,6 +80,7 @@ export default (props)=>{
                     </Card>
                 </Col>
             </Row>
+            <div></div>
             <List
                 style={{
                     marginTop:"20px"
