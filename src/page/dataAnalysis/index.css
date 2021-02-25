@@ -1,0 +1,6 @@
+.H_w_x_tabs .ant-tabs-nav .ant-tabs-nav-wrap .ant-tabs-nav-list{
+    float: right;
+}
+.H_w_x_tabs .ant-tabs-nav .ant-tabs-nav-wrap {
+    display: flow-root;
+}

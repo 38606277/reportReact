@@ -17,12 +17,14 @@ import {
     Tree,
     Dropdown,
     Statistic,
+    Typography,
     Card,
     Tabs
 } from 'antd';
 const { TabPane } = Tabs;
 import { EditOutlined, EllipsisOutlined, VerticalAlignBottomOutlined,BranchesOutlined } from '@ant-design/icons';
 import HttpService from '../../util/HttpService.jsx';
+import { idText } from 'typescript';
 const url=window.getServerUrl();
 const mycolor=()=>{
     let mycolr1="#",
@@ -34,12 +36,34 @@ const mycolor=()=>{
     }
     return mycolr1
 }
-
+const data = [
+    {
+      title: 'Title 1',
+    },
+    {
+      title: 'Title 2',
+    },
+    {
+      title: 'Title 3',
+    },
+    {
+      title: 'Title 4',
+    },
+    {
+      title: 'Title 5',
+    },
+    {
+      title: 'Title 6',
+    },
+  ];
 export default (props)=>{
     const [data,setdata]=useState([])//数据源
     const [bdtype,setBdtype]=useState([])
+    const [list,setlist]=useState([])
     useEffect(()=>{
         source()
+        DOS('3')
+        DOS('2')
     },[])
     const pushs=(data)=>{
         props.history.push('/dataAnalysis/SystemData/'+data.name+"/"+data.dbtype)
@@ -47,6 +71,20 @@ export default (props)=>{
     const source=()=>{
         HttpService.post('/reportServer/DBConnection/ListAll',{}).then(res=>{
             setdata(res)
+        })
+    }
+    const DOS=(id)=>{
+        HttpService.post('/reportServer/FlexValue/getFlexValuesTree',JSON.stringify({FLEX_VALUE_SET_ID:id})).then(res=>{
+            if(res.resultCode==="1000"){
+                if(id==='3'){
+                    setBdtype(res.data)
+                }
+               if(id==='2'){
+                   console.log(res.data)
+                    setlist(res.data)
+               }
+            }
+            // setdata(res)
         })
     }
     return (
@@ -60,7 +98,7 @@ export default (props)=>{
             >
                 <Col sm={16}>
                     <Card
-                        title="数据展示"
+                        title="DOS"
                         bordered={false}
                         style={{
                             borderTop:"1px solid #f0f0f0",
@@ -76,7 +114,44 @@ export default (props)=>{
                             paddingTop:"0px"
                         }}
                     >
-                        <Row 
+                          <List
+                                grid={{
+                                gutter: 16,
+                                xs: 1,
+                                sm:1,
+                                md:2,
+                                lg:3,
+                                xl:3
+                                }}
+                                dataSource={bdtype}
+                                renderItem={item => (
+                                <List.Item>
+                                    <Card 
+                                        headStyle={{
+                                            color: '#fff',
+                                            fontSize: '14px',
+                                            height:"20px",
+                                            border:"none"
+                                        }}
+                                        bodyStyle={{
+                                            color: '#fff',
+                                            paddingTop:"0px"
+                                        }}
+                                        hoverable 
+                                        style={{background:"#526ecc"}} title={item.name}>
+                                        <Row justify="space-between">
+                                            <Col>行数</Col>
+                                            <Col>（10）</Col>
+                                        </Row>
+                                        <Row justify="space-between">
+                                            <Col>列数</Col>
+                                            <Col>（10）</Col>
+                                        </Row>
+                                    </Card>
+                                </List.Item>
+                                )}
+                            />
+                        {/* <Row 
                             justify="space-between"
                         >
                            <Col>
@@ -129,46 +204,45 @@ export default (props)=>{
                                     />
                                 </Card>
                             </Col>
-                        </Row>
+                        </Row> */}
                     </Card>
                 </Col>
                 <Col 
                     sm={8}
                 >   
-                    <Card 
-                    bordered={false}
-                    title="资产内容"
-                    style={{
-                        borderTop:"1px solid #f0f0f0"
-                    }}
-                    headStyle={{
-                        color: 'rgb(205, 127, 50)',
-                        fontSize: '14px',
-                        height:"20px",
-                        border:"none"
-                    }}
-                    bodyStyle={{
-                        paddingTop:"0px"
-                    }}
-                    bodyStyle={{
-                        paddingTop:"0px"
-                    }}
-                    >
-                    <Card
-                        hoverable
-                        style={{
-                            background:"#526ecc"
-                        }}
-                        >
-                            <Statistic
-                                title={<div style={{color:"#fff"}}>删除数据</div>}
-                                value={11}
-                                precision={2}
-                                valueStyle={{ color: '#fff' }}
-                                suffix="（条）"
+                        <List
+                            size="small"
+                            header={<Row justify="space-between">
+                                <Col
+                                    style={{
+                                        color: 'rgb(205, 127, 50)',
+                                        fontSize: '14px',
+                                    }}
+                                >DW</Col>
+                                <Col style={{
+                                    color:"#1890ff"
+                                }}>数量</Col>
+                            </Row>}
+                            bordered
+                            dataSource={data}
+                            renderItem={item => (
+                                <List.Item>
+                                    <Row justify="space-between"
+                                    style={{
+                                        width:"100%"
+                                    }}
+                                        >
+                                        <Col>
+                                            <Typography.Text mark>[{item.name}]</Typography.Text>
+                                        </Col>
+                                        <Col style={{
+                                            color:"#1890ff"
+                                        }}>10</Col>
+                                    </Row>
+                                {/* <Typography.Text mark>[ITEM]</Typography.Text>  */}
+                                </List.Item>
+                            )}
                             />
-                        </Card>
-                    </Card>
                 </Col>
                     {/* </Card> */}
             </Row>
@@ -224,7 +298,7 @@ export default (props)=>{
                                 title={
                                     <Row align="middle">
                                         <Col>
-                                            <Avatar  src={url+"/report"+item.icon} alt=""/>
+                                            <Avatar  src={url+"/report/"+item.icon} alt=""/>
                                         </Col>
                                         <Col style={{
                                             marginLeft:"14px"
