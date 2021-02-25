@@ -46,10 +46,12 @@ export default (props)=>{
     const [dbList,setdbList]=useState([])//数据库
     const [Dbname,setDbname]=useState("")//所选中数据库
     const [TypeList,setTypeList]=useState([])//数据库有类型
+    const [ActionList,setActionList]=useState([])//数据库有类型
     const [TypeName,setTypeName]=useState("")//数据库类型
     const [SQ,setSQ]=useState("")
     const [loading,setloading]=useState(false)
     const [Name,setName]=useState("")
+    const [ActionName,setActionName]=useState("")
     const [columns,setcolumns]=useState([])
     const [dataSource,setdataSource]=useState([])
     const [id,setid]=useState("")
@@ -64,8 +66,10 @@ export default (props)=>{
             setdbList(res );
         });
         getTypelist("dbtype")
-        setDbname(ModData.db_type)
-        setTypeName(ModData.db_source)
+        setActionList([{'value_name':'find'},{'value_name':'insert'}])
+        setDbname(ModData.db_source)
+        setTypeName(ModData.db_type)
+        setActionName('find')
     },[TbatchForm])
     const nameList=()=>{
 
@@ -120,7 +124,7 @@ export default (props)=>{
         }
        
         const column=[]
-        HttpService.post("reportServer/selectsql/excueSelectSql", JSON.stringify({selectsql:SQ,fromdb:Dbname}))
+        HttpService.post("reportServer/selectsql/excueBatchSql", JSON.stringify({selectsql:SQ,fromdb:Dbname,dbtype:TypeName,action:ActionName}))
         .then(res=>{
             setloading(false)
             if (res.resultCode == "1000") {
@@ -132,11 +136,12 @@ export default (props)=>{
                         };
                         column.push(json);
                     }
-                    setcolumns([...columns])
+                    setcolumns([...column])
+                    console.log(columns);
                     setdataSource(res.data.data)
                     message.success(`查询成功！`)
                 }else{
-                    message.error(res.data.info);
+                    message.info(res.data.info);
                 }
                
             }
@@ -195,6 +200,13 @@ export default (props)=>{
                             <FormItem label="选择类型" {...formItemLayout} style={{ marginBottom: "8px",marginTop:'-8px' }}>
                                 <Select value={TypeName} style={{ minWidth: '100px' }} onChange={value=>setTypeName(value)}>
                                     {TypeList.map(item => <Option key={item.value_name} value={item.value_name}>{item.value_name}</Option>)}
+                                </Select>
+                            </FormItem>
+                        </Col>
+                        <Col>
+                            <FormItem label="执行操作" {...formItemLayout} style={{ marginBottom: "8px",marginTop:'-8px' }}>
+                                <Select value={ActionName} style={{ minWidth: '100px' }} onChange={value=>setActionName(value)}>
+                                    {ActionList.map(item => <Option key={item.value_name} value={item.value_name}>{item.value_name}</Option>)}
                                 </Select>
                             </FormItem>
                         </Col>
