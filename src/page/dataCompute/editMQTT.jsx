@@ -61,6 +61,7 @@ export default (props)=>{
     const [targetDB,settargetDB]=useState(null)//库的内容
     const [options4,setoptions4]=useState([])//表的list
     const [targetTable,settargetTable]=useState(null)//表的内容
+    const [timeout,settimeout]=useState(1)
     const [state,setstate]=useState("停止")
     const editorsql=useRef()
     useEffect(()=>{
@@ -74,6 +75,7 @@ export default (props)=>{
             setkeepalibe(datal.keepalibe)
             settargetDB(datal.targetDB)
             settargetTable(datal.targetTable)
+            settimeout(datal.timeout)
             const i=state===0?"停止":"启动"
             setstate(i)
         }
@@ -108,7 +110,8 @@ export default (props)=>{
             clientinid,
             username,
             password,
-            keepalibe
+            keepalibe,
+            timeout
         }
         const arr=[host,
             topic,
@@ -119,7 +122,8 @@ export default (props)=>{
             clientinid,
             username,
             password,
-            keepalibe
+            keepalibe,
+            timeout
         ]
         const Tips=[
             "目标服务器不可为空",
@@ -168,6 +172,7 @@ export default (props)=>{
         settargetTable("")
         setstate("")
         setDatal(null)
+        settimeout(1)
     }
     const changeclass =(e)=>{//数据库change事件
         HttpService.post('/reportServer/dbTableColumn/getTableListString', JSON.stringify({fromdb:e})).then(res => {
@@ -233,7 +238,25 @@ export default (props)=>{
                         </Form.Item>
                     </Form>
                 </Col>
-                <Col sm={10} style={{marginLeft:"10px"}}></Col>
+                <Col sm={10} style={{marginLeft:"10px"}}>
+                    <Form
+                        {...layout}
+                    >
+                        <Form.Item
+                                label="超时"
+                                name="timeout"
+                                rules={[{ required: true, message: '请输入超时!' }]}
+                            >
+                                <Input
+                                value={timeout}
+                                    size="middle"
+                                    style={{width:"220px"}}
+                                    placeholder="请输入超时"
+                                    onChange={e=>sethost(e.target.value)}
+                                />
+                            </Form.Item>
+                    </Form>
+                </Col>
             </Row>
             <Row>
                 <Col sm={10}>
