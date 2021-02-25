@@ -3,7 +3,7 @@ import React, { useState, useImperativeHandle, forwardRef, useEffect } from 'rea
 import styles from './style.less';
 import InputEF from './InputEF.jsx';
 import styles2 from '../../../components/EditForm/index.less';
-import SelectEF from '../../../components/EditForm/SelectEF.jsx';
+import SelectEF from './SelectEF.jsx';
 import InputNumberEF from './InputNumberEF.jsx'
 import Check from './Check.jsx'
 const TableForm = forwardRef((props, ref) => {

@@ -19,7 +19,6 @@ const InputNumberEF = (props) => {
             name={`${index}_${name}`}
             rules={rules}
         >
-            {console.log(defaultinner)}
             <InputNumber
                  
                 precision={precision}
