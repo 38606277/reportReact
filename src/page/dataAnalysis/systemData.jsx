@@ -21,7 +21,7 @@ import {
     Card,
     Tabs
 } from 'antd';
-import { InsertRowLeftOutlined } from '@ant-design/icons';
+import { TableOutlined } from '@ant-design/icons';
 import './index.css'
 const { TabPane } = Tabs;
 import HttpService from '../../util/HttpService.jsx';
@@ -29,52 +29,92 @@ export default (props)=>{
     const [tabPosition,settabPosition]=useState('')
     const [mcol,setmcol]=useState([])
     const [list,setlist]=useState([])
+    const [total,settotal]=useState([])
     const [spinning,setspinning]=useState(true)
     const [data,setdata]=useState([])
+    const [TableName,setTableName]=useState('')
     const box=useRef()
     const Bo=useRef()
     useEffect(()=>{
-        const bHeight=document.getElementsByClassName("navbar-side")[0].offsetHeight
-        const sHeight=box.current.offsetTop
-        const mHeight=bHeight-sHeight-70
-        box.current.style.height=mHeight-80+'px'
         const obj =props.match.params
-            HttpService.post('/reportServer/dbTableColumn/getTableList',JSON.stringify(obj)).then(res=>{
-                if(res.resultCode==='1000'){
-                    const arr=[...res.data]
-                    Bo.current.style.mixWidth=box.current.offsetWidth+"px"
-                    const listnum=Math.floor(mHeight/40)//一个col放几个list
-                    const colnum=Math.ceil(arr.length/listnum)//col的个数
-                    box.current.style.width=colnum*(260+15)+'px'
-                    const colarr=[]
-                    const marr=[]
-                    for(let u=0;u<colnum;u+=1){
-                        marr.push([...arr.splice(0,13)])
-                        colarr.push(u)
-                    }
-                    setmcol(colarr)
-                    setlist(marr)
-                    setdata(res.data)
-                }
-            })
+        console.log(obj)
+        if(obj.class==="sourec"){
+            myhttp('/reportServer/dbTableColumn/getTableList',obj,setBOX())
+        }
+        if(obj.class==='dbtype'){
+            myhttp('/reportServer/dataAsset/getTablesByDbType',{dbtype_id:obj.host_id},setBOX())
+        }
+        if(obj.class==="dbsourec"){
+            myhttp('/reportServer/dataAsset/getTablesBySource',{source_id:obj.host_id},setBOX())
+        }
     },[])
     useEffect(()=>{
         if(list.length>0){
             setspinning(false)
         }
     },[list])
+    const setBOX=()=>{
+        const bHeight=document.getElementsByClassName("navbar-side")[0].offsetHeight
+        const sHeight=box.current.offsetTop
+        const mHeight=bHeight-sHeight-70
+        box.current.style.height=mHeight-80+'px'
+        return mHeight
+    }
+    const setarr=(arr,mHeight)=>{
+        Bo.current.style.mixWidth=box.current.offsetWidth+"px"
+        const listnum=Math.floor(mHeight/40)//一个col放几个list
+        const colnum=Math.ceil(arr.length/listnum)//col的个数
+        box.current.style.width=colnum*(260+15)+'px'
+        const colarr=[]
+        const marr=[]
+        for(let u=0;u<colnum;u+=1){
+            marr.push([...arr.splice(0,13)])
+            colarr.push(u)
+        }
+        return {
+            colarr,
+            marr
+        }
+    }
+    const myhttp=(src,obj,mHeight)=>{
+        HttpService.post(src,JSON.stringify(obj)).then(res=>{
+            if(res.resultCode==='1000'){
+                const arr=[...res.data]
+                const {colarr,marr}=setarr(arr,mHeight)
+                setmcol(colarr)
+                setlist(marr)
+                setdata(res.data)
+                settotal(res.data)
+            }
+        })
+    }
     const changeTabPosition=(e)=>{
         settabPosition(e)
     }
-    const     showModal = (record) => {
+    const  showModal = (record) => {
         window.open("#/dataAsset/dataAssetListInfo/"+record.host_id+"/"+record.table_name+"/"+record.dbtype_id);
+    }
+    const TableNameOnChange=e=>{
+        setTableName(e)
+        let arrs=JSON.parse(JSON.stringify(total))
+        const arr =arrs.filter(item=>{
+            if(item.table_name){
+                if(item.table_name.search(e)!==-1){
+                    return item
+                }
+            }
+         })
+         const {colarr,marr}=setarr(arr,setBOX())
+         setmcol(colarr)
+         setlist(marr)
+         setdata(arr)
     }
     const columns = [{
         title: '数据名称',
         dataIndex: 'table_name',
         key: 'table_name',
         className: 'headerRow',
-        sorter: (a, b) => a.table_name - b.table_name,
+        // sorter: (a, b) => a.table_name - b.table_name,
         // sortOrder: sortedInfo.columnKey === 'table_name' && sortedInfo.order,
     }, {
         title: '数据描述',
@@ -120,6 +160,7 @@ export default (props)=>{
                     padding:"0px"
                 }
             }
+            extra={<Button type="primary" href="/#/dataAsset/totalAssets" size="small">返回</Button>}
         >
             <Row>
                 <Col sm={24}>
@@ -135,6 +176,9 @@ export default (props)=>{
                                 // centered
                                 className="H_w_x_tabs"
                                 animated
+                                tabBarStyle={{
+                                    marginBottom:'0px'
+                                }}
                                 tabBarExtraContent={{
                                 left:<Row 
                                 >
@@ -157,7 +201,9 @@ export default (props)=>{
                                     }}
                                 >
                                     <Form.Item name="FName" label="表名">
-                                        <Input />
+                                        <Input value={TableName} onChange={e=>{
+                                            TableNameOnChange(e.target.value)
+                                        }}/>
                                     </Form.Item>
                                     <Form.Item>
                                         <Button type="primary" htmlType="submit">
@@ -224,7 +270,7 @@ export default (props)=>{
                                                                                     </Menu>
                                                                                 )
                                                                             }} placement="bottomLeft">
-                                                                                <Button type="text" icon={<InsertRowLeftOutlined style={{color:"#096dd9"}}/>} style={{display:"block",margin:"10px 0",width:"260px",border: 'none',textAlign:"left"}}>{items.table_name}</Button>
+                                                                                <Button type="text" icon={<TableOutlined style={{color:"#096dd9"}}/>} style={{display:"block",margin:"10px 0",width:"260px",border: 'none',textAlign:"left"}}>{items.table_name}</Button>
                                                                     </Dropdown>
                                                                 )
                                                             }):null

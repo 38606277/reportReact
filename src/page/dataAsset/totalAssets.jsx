@@ -1,61 +1,17 @@
 import React,{useState,useEffect,useRef} from 'react'
 import {
-    Form,
-    Divider,
-    Button,
-    Checkbox,
-    Radio,
-    Space,
-    Input,
     Row,
     Col,
     Avatar ,
-    Tooltip,
     List,
-    Empty,
-    Drawer,
-    Tree,
-    Dropdown,
     Statistic,
     Typography,
     Card,
     Tabs
 } from 'antd';
-const { TabPane } = Tabs;
-import { EditOutlined, EllipsisOutlined, VerticalAlignBottomOutlined,BranchesOutlined } from '@ant-design/icons';
 import HttpService from '../../util/HttpService.jsx';
-import { idText } from 'typescript';
+import STYLE from './totalAssets.less'
 const url=window.getServerUrl();
-const mycolor=()=>{
-    let mycolr1="#",
-        m=0
-    const clr=[0,1,2,3,4,5,6,7,8,9,"a","b","c","d","e","f"]
-    while(m<6){
-        m+=1
-        mycolr1+=clr[Math.floor(Math.random()*clr.length)]
-    }
-    return mycolr1
-}
-const data = [
-    {
-      title: 'Title 1',
-    },
-    {
-      title: 'Title 2',
-    },
-    {
-      title: 'Title 3',
-    },
-    {
-      title: 'Title 4',
-    },
-    {
-      title: 'Title 5',
-    },
-    {
-      title: 'Title 6',
-    },
-  ];
 export default (props)=>{
     const [data,setdata]=useState([])//数据源
     const [bdtype,setBdtype]=useState([])
@@ -65,8 +21,8 @@ export default (props)=>{
         DOS('3')
         DOS('2')
     },[])
-    const pushs=(data)=>{
-        props.history.push('/dataAnalysis/SystemData/'+data.name+"/"+data.dbtype)
+    const pushs=(data,mClass)=>{
+        props.history.push('/dataAnalysis/SystemData/'+data.name+"/"+data.dbtype+'/'+mClass)
     }
     const source=()=>{
         HttpService.post('/reportServer/DBConnection/ListAll',{}).then(res=>{
@@ -80,7 +36,6 @@ export default (props)=>{
                     setBdtype(res.data)
                 }
                if(id==='2'){
-                   console.log(res.data)
                     setlist(res.data)
                }
             }
@@ -127,6 +82,10 @@ export default (props)=>{
                                 renderItem={item => (
                                 <List.Item>
                                     <Card 
+                                        className={STYLE.odsbackground}
+                                        onClick={()=>{
+                                            pushs(item,"dbsourec")
+                                        }}
                                         headStyle={{
                                             color: '#fff',
                                             fontSize: '14px',
@@ -138,7 +97,7 @@ export default (props)=>{
                                             paddingTop:"0px"
                                         }}
                                         hoverable 
-                                        style={{background:"#526ecc"}} title={item.name}>
+                                         title={item.name}>
                                         <Row justify="space-between">
                                             <Col>行数</Col>
                                             <Col>（10）</Col>
@@ -151,60 +110,6 @@ export default (props)=>{
                                 </List.Item>
                                 )}
                             />
-                        {/* <Row 
-                            justify="space-between"
-                        >
-                           <Col>
-                            <Card
-                                    hoverable
-                                    style={{
-                                        marginRight:"10px",
-                                        background:"#526ecc"
-                                    }}
-                                >
-                                    <Statistic
-                                            title={<div style={{color:"#fff"}}>数据总量</div>}
-                                            value={11}
-                                            precision={2}
-                                            valueStyle={{ color: '#fff' }}
-                                            suffix="（条）"
-                                    />
-                                </Card>
-                           </Col>
-                            <Col>
-                                <Card
-                                    hoverable
-                                    style={{
-                                        marginRight:"10px",
-                                        background:"#526ecc"
-                                    }}
-                                >
-                                    <Statistic
-                                            title={<div style={{color:"#fff"}}>新增数据</div>}
-                                            value={11}
-                                            precision={2}
-                                            valueStyle={{ color: '#fff' }}
-                                            suffix="（条）"
-                                    />
-                                </Card>
-                            </Col>
-                            <Col>
-                                <Card
-                                    hoverable
-                                    style={{
-                                        background:"#526ecc"
-                                    }}
-                                >
-                                    <Statistic
-                                            title={<div style={{color:"#fff"}}>修改数据</div>}
-                                            value={11}
-                                            precision={2}
-                                            valueStyle={{ color: '#fff' }}
-                                            suffix="（条）"
-                                    />
-                                </Card>
-                            </Col>
-                        </Row> */}
                     </Card>
                 </Col>
                 <Col 
@@ -224,22 +129,22 @@ export default (props)=>{
                                 }}>数量</Col>
                             </Row>}
                             bordered
-                            dataSource={data}
+                            dataSource={list}
                             renderItem={item => (
-                                <List.Item>
+                                <List.Item    className={[STYLE.row].join('')}>
                                     <Row justify="space-between"
+                                        onClick={()=>{
+                                            pushs(item,"dbtype")
+                                        }}
                                     style={{
                                         width:"100%"
                                     }}
                                         >
-                                        <Col>
-                                            <Typography.Text mark>[{item.name}]</Typography.Text>
+                                        <Col className={STYLE.col1}>
+                                            {item.name}
                                         </Col>
-                                        <Col style={{
-                                            color:"#1890ff"
-                                        }}>10</Col>
+                                        <Col   className={STYLE.col2}>10</Col>
                                     </Row>
-                                {/* <Typography.Text mark>[ITEM]</Typography.Text>  */}
                                 </List.Item>
                             )}
                             />
@@ -276,14 +181,10 @@ export default (props)=>{
                             position:"relative",
                         }}>
                             <Card 
-                                style={
-                                    {
-                                        background:'#e9edfa',
-                                    }
-                                }
+                                className={STYLE.source}
                                 size="small"
                                 onClick={()=>{
-                                    pushs(item)
+                                    pushs(item,'sourec')
                                 }}
                                 headStyle={{
                                     height:"20px",
@@ -298,13 +199,14 @@ export default (props)=>{
                                 title={
                                     <Row align="middle">
                                         <Col>
-                                            <Avatar  src={url+"/report/"+item.icon} alt=""/>
+                                            {/* <Avatar  src={url+"/report/"+item.icon} alt=""/> */}
+                                            <Avatar  src={require('./img/tx.jpg')} alt=""/>
                                         </Col>
                                         <Col style={{
                                             marginLeft:"14px"
                                         }}>
                                             <h3
-                                                style={{textAlign:"center",margin:"0px",color:'#252b3a'}}
+                                                style={{textAlign:"center",margin:"0px",color:'#fff'}}
                                             >{item.desc}
                                             </h3>
                                         </Col>
@@ -316,10 +218,10 @@ export default (props)=>{
                                     padding:"0px 10px",
                                 }} gutter={16} justify="space-between">
                                     <Col span={12}>
-                                        <Statistic   valueStyle={{ color: '#fff' ,textAlign:"left"}} title={<h3 style={{color:"#252b3a",textAlign:"left",fontSize:"16px"}}>行数</h3>} value={28}/>
+                                        <Statistic   valueStyle={{ color: '#fff' ,textAlign:"left"}} title={<h3 style={{color:"#fff",textAlign:"left",fontSize:"16px"}}>行数</h3>} value={28}/>
                                     </Col>
                                     <Col span={12}>
-                                        <Statistic   valueStyle={{ color: '#fff' ,textAlign:"right"}}  title={<h3 style={{color:"#252b3a",textAlign:"right",fontSize:"16px"}}>列数</h3>}  value={23} />
+                                        <Statistic   valueStyle={{ color: '#fff' ,textAlign:"right"}}  title={<h3 style={{color:"#fff",textAlign:"right",fontSize:"16px"}}>列数</h3>}  value={23} />
                                     </Col>
                                 </Row>
                             </Card>

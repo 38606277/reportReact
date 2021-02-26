@@ -18,7 +18,7 @@ export default class dataAnalysisRouter extends React.Component{
                  <Route path="/dataAnalysis/ElectronicFormList" component={ElectronicFormList} />
                  <Route path="/dataAnalysis/algorithm" component={algorithm} />
                  <Route path="/dataAnalysis/moduleList" component={moduleList} />
-                 <Route path="/dataAnalysis/SystemData/:host_id/:dbType" component={SystemData} />
+                 <Route path="/dataAnalysis/SystemData/:host_id/:dbType/:class" component={SystemData} />
             </Switch>
         )
     }
