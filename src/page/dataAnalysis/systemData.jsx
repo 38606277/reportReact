@@ -39,7 +39,7 @@ export default (props)=>{
         const obj =props.match.params
         console.log(obj)
         if(obj.class==="sourec"){
-            myhttp('/reportServer/dbTableColumn/getTableList',obj,setBOX())
+            myhttp('/reportServer/dbTableColumn/getTableListMap',obj,setBOX())
         }
         if(obj.class==='dbtype'){
             myhttp('/reportServer/dataAsset/getTablesByDbType',{dbtype_id:obj.host_id},setBOX())
