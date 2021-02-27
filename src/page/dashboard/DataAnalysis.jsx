@@ -480,6 +480,9 @@ class DataAnalysis extends React.Component {
         });
         return (
             <div>
+                {
+                    console.log(this.state.data)
+                }
                 <Card bordered={false} title={this.state.cube_name} extra={ <div>
                             <a onClick={()=>this.execSelect()}>查询 </a>
                             <Divider type="vertical" />

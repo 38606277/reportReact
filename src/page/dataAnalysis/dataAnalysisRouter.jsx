@@ -8,7 +8,6 @@ import ElectronicFormList from './ElectronicFormList.jsx'//电子表格列表
 import addMouldForm from './addMouldForm.jsx'//创建电子表格模板
 import algorithm from './algorithm.jsx'//模型算法
 import moduleList from './moduleList.jsx'//模型管理 
-import SystemData from './systemData.jsx'//系统数据表
 export default class dataAnalysisRouter extends React.Component{
     render(){
         return (
@@ -18,7 +17,7 @@ export default class dataAnalysisRouter extends React.Component{
                  <Route path="/dataAnalysis/ElectronicFormList" component={ElectronicFormList} />
                  <Route path="/dataAnalysis/algorithm" component={algorithm} />
                  <Route path="/dataAnalysis/moduleList" component={moduleList} />
-                 <Route path="/dataAnalysis/SystemData/:host_id/:dbType/:class" component={SystemData} />
+
             </Switch>
         )
     }

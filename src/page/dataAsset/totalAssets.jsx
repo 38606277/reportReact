@@ -22,7 +22,7 @@ export default (props)=>{
         DOS('2')
     },[])
     const pushs=(data,mClass)=>{
-        props.history.push('/dataAnalysis/SystemData/'+data.name+"/"+data.dbtype+'/'+mClass)
+        props.history.push('/dataAsset/SystemData/'+data.name+"/"+data.dbtype+'/'+mClass)
     }
     const source=()=>{
         HttpService.post('/reportServer/DBConnection/ListAll',{}).then(res=>{

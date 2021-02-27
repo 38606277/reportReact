@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Form, Input, Table, Button, Modal, Card, Row, Col, Select, message, Tabs, Divider, Spin } from 'antd';
+import { Form, Input, Table, Button, Modal, Card, Row, Col, Select, message, Tabs, Drawer, Spin } from 'antd';
 import { PageContainer } from '@ant-design/pro-layout';
 import ProCard from '@ant-design/pro-card';
 import TableForm from './TableForm.jsx';
@@ -7,27 +7,9 @@ import HttpService from '../../util/HttpService.jsx';
 import { PlusOutlined,MinusOutlined } from '@ant-design/icons';
 const { Option } = Select;
 const { TabPane } = Tabs;
-const classlist=[
-  {
-    value:'全部',
-    text:'全部'
-  }
-  ,
-  {
-    value:'目录视图',
-    text:'目录视图'
-  },
-  {
-    value:'主机视图',
-    text:'主机视图'
-  },
-  {
-    value:'存储类型视图',
-    text:'存储类型视图'
-  }
-]
-export default (props) => {
 
+export default (props) => {
+  const {infvisi,dataObj}=props
   const [tableForm] = Form.useForm();
   const [mainForm] = Form.useForm();
   const tableRef = useRef();
@@ -35,18 +17,27 @@ export default (props) => {
   const [loading,setLoading]=useState(false);
   let [Asset_location,setAsset_location]=useState('')//资产位置
   let [cube_classlist,setcube_classlist]=useState([]);
-
+  const [height,setheight]=useState(0)
+  const [width,setwith]=useState(0)
+  const [mw,setmw]=useState(0)
   useEffect(() => {
-   
+    const bHeight=document.getElementsByClassName("navbar-side")[0].offsetHeight
+    const bWidth=document.getElementsByClassName("navbar-side")[0].offsetWidth
+    const bodyw= document.body.clientWidth
+    const width=bodyw-bWidth
+    setheight(bHeight)
+    setwith(width)
+    setmw(bWidth)
    loadCubeList()
    mylist()
   
-  },[]);
+  },[dataObj]);
   let mylist= async()=>{
+    const {host_id,dbType,table_name}=dataObj
     let param={
-     host_id:props.match.params.host_id,
-     dbType:props.match.params.dbType,
-     table_name:props.match.params.table_name
+     host_id,
+     dbType,
+     table_name
    }
    setLoading(true)
     await HttpService.post('/reportServer/dbTableColumn/getTableCloumnList', JSON.stringify(param))
@@ -57,7 +48,9 @@ export default (props) => {
         let lineFormV=res.data.columnList;
         mainForm.setFieldsValue(mainFormV);
         //初始化数据
-        tableRef.current.initData(lineFormV);
+        if(lineFormV[0]){
+          tableRef.current.initData(lineFormV);
+        }
       } else {
           message.error(res.message);
       }
@@ -88,7 +81,32 @@ export default (props) => {
   const callback = (key) => {
     console.log(key);
   }
+  const back=()=>{
+    const {setdescribeObj,setdescribe}=props.back
+    setdescribeObj({})
+    setdescribe(false)
+  }
   return (
+    <Drawer
+      placement="bottom"
+      closable={false}
+      destroyOnClose
+      visible={infvisi}
+      // onClose={infnone}
+      style={
+          {
+              // height:height+'px',
+              width:width+"px",
+              marginLeft:mw+'px',
+        
+          }
+      }
+      bodyStyle={{
+          padding:"0px"
+      }}
+      height={height/1}
+      width={width/1}
+    >
     <PageContainer
     style={{padding:"15px"}}
       header={
@@ -98,7 +116,9 @@ export default (props) => {
               console.log('mainForm', mainForm)
               mainForm.submit()
             }}>提交</Button>,
-            <Button key="back" onClick={()=>window.location = '#/dataAsset/dataAssetList'}>返回</Button>,
+            <Button key="back" onClick={()=>{
+              back()
+            }}>返回</Button>,
           ]
         }
       }
@@ -122,7 +142,8 @@ export default (props) => {
                   if (res.resultCode == "1000") {
                       //刷新
                       message.success('提交成功');
-                      window.location.href="#/dataAsset/dataAssetList";
+                      back()
+                      // window.location.href="#/dataAsset/dataAssetList";
                   } else {
                       message.error(res.message);
                   }
@@ -197,5 +218,7 @@ export default (props) => {
         </Tabs>
       </Form>
       </Spin>
-    </PageContainer>);
+    </PageContainer>
+    </Drawer>
+    );
 };
