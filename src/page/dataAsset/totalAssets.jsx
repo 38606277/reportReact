@@ -22,7 +22,11 @@ export default (props)=>{
         DOS('2')
     },[])
     const pushs=(data,mClass)=>{
-        props.history.push('/dataAsset/SystemData/'+data.name+"/"+data.dbtype+'/'+mClass)
+        if(mClass=='sourec'){
+            props.history.push('/dataAsset/SystemData/'+data.name+"/"+data.dbtype+'/'+mClass+'/'+data.desc)
+            return
+        }
+        props.history.push('/dataAsset/SystemData/'+data.name+"/"+data.dbtype+'/'+mClass+'/'+data.name)
     }
     const source=()=>{
         HttpService.post('/reportServer/DBConnection/ListAll',{}).then(res=>{

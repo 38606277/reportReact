@@ -91,7 +91,7 @@ export default class DataAssetRouter extends React.Component{
                  <Route path='/dataAsset/dataAssetListInfo/:temphost_id/:temptable_name/:tempdbtype_id' component={DataAssetListInfo}/>
                  <Route path='/dataAsset/addmodule' component={AddModule}/>
                  <Route path='/dataAsset/totalAssets' component={TatalAssets}/>
-                 <Route path="/dataAsset/SystemData/:host_id/:dbType/:class" component={SystemData} />
+                 <Route path="/dataAsset/SystemData/:host_id/:dbType/:class/:name" component={SystemData} />
                  {/* <Redirect exact from="/dataAsset" to="/dataAsset/dataAssetList"/>  */}
             </Switch>
         )

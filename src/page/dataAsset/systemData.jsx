@@ -11,7 +11,7 @@ import {
     Row,
     Col,
     List,
-    Empty,
+    Descriptions ,
     Tooltip,
     Spin ,
     Dropdown,
@@ -69,13 +69,15 @@ export default (props)=>{
     const [algorithm,setalgorithm]=useState(false)//算法
     const [char,setchar]=useState(false)//图表
     const [sql,setsql]=useState(false)//sql
+    const [mName,setmName]=useState(0)
     const box=useRef()
     const Bo=useRef()
     useEffect( ()=>{
         const obj =props.match.params
+        const {dbType,host_id}=obj
         console.log(obj)
         if(obj.class==="sourec"){
-            myhttp('/reportServer/dbTableColumn/getTableListMap',obj,setBOX())
+            myhttp('/reportServer/dataAsset/getTablesByHost',{dbType,host_id},setBOX())
         }
         if(obj.class==='dbtype'){
              myhttp('/reportServer/dataAsset/getTablesByDbType',{dbtype_id:obj.host_id},setBOX())
@@ -121,6 +123,7 @@ export default (props)=>{
                 setlist(marr)
                 setdata(res.data)
                 settotal(res.data)
+                setmName(res.data.length)
                 console.log(res.data[0])
                 let obj={
                     temphost_id:res.data[0].host_id,
@@ -277,7 +280,19 @@ export default (props)=>{
         ),
     }];
     return (
-        <Card title="系统数据表"
+        <Card title={
+            <div style={{display:'flex'}}>
+               <div style={{marginRight:"30px"}}>
+                   <span style={{fontWeight:600}}>资产名称：</span>
+                   <span >{props.match.params.name}</span>
+               </div>
+                <div>
+                    <span style={{fontWeight:600}}>资产数量：</span>
+                    <span >{mName}</span><span >(条)</span>
+                </div>
+                {/* {props.match.params.name}资产,共{mName}条 */}
+            </div>
+        }
             bodyStyle={
                 {
                     padding:"0px"
@@ -463,7 +478,7 @@ export default (props)=>{
             <DataAssetInfonew  infvisi={describe} dataObj={describeObj} back={{setdescribeObj,setdescribe}}/>
             <Electronicwatch infvisi={Ewatch1} dataObj={dataObj} back={{setEwatch,setDataObj}} />
             <Dimension1  infvisi={Dimension} dataObj={describeObj} back={{setDimension,setdescribeObj}}/>
-            <Algorithm infvisi={algorithm} dataObj={{}} back={{setalgorithm,setdescribeObj}}/>Chart
+            <Algorithm infvisi={algorithm} dataObj={{}} back={{setalgorithm,setdescribeObj}}/>
             <Chart infvisi={char} dataObj={{}} back={{setchar,setdescribeObj}}/>
             <Sql infvisi={sql} dataObj={{}} back={{setsql,setdescribeObj}}/>
             {/* infvisi={Dimension} dataObj={dataObj} back={{setDimension,setDataObj}} */}

@@ -28,6 +28,7 @@ export default (props)=>{
     const [height,setheight]=useState(0)
     const [width,setwith]=useState(0)
     const [mw,setmw]=useState(0)
+    const [x,setx]=useState(0)
     const [loading,setloading]=useState(false)
     useEffect(()=>{
         const bHeight=document.getElementsByClassName("navbar-side")[0].offsetHeight
@@ -92,6 +93,8 @@ export default (props)=>{
                     }
     
                 }
+                let myx=cols.length*200
+                setx(myx)
                 settableColumnModel(cols)
                 settableDataModel(res.data.list)
                 settotal(res.data.total)
@@ -133,7 +136,7 @@ export default (props)=>{
                     }} size="small">返回</Button>}
                 >
                 <Table dataSource={tableDataModel} columns={tableColumnModel}
-                        scroll={{ x: 1300 ,y:450}}
+                        scroll={{ x: x ,y:450}}
                         bordered={true} pagination={false}/>
                     <Pagination current={startIndex}
                         total={total}
