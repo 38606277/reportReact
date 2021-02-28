@@ -65,26 +65,38 @@ export default (props)=>{
     
    const loadHostTable = () => {
         //查询表格数据 
-        let url = "/reportServer/dbTableColumn/getTableCloumnList";
-        const {host_id,dbType,table_name}=dataObj
-        let param={
-         host_id,
-         dbType,
-         table_name
-       }
+        let url = "/reportServer/dataAsset/getValueByHostAndTable";
+        const {temphost_id,temptable_name,tempdbtype_id}=props.dataObj
+        let param = {
+            host_id:temphost_id,
+            table_name: temptable_name,
+            dbtype_id:tempdbtype_id,
+            startIndex:startIndex,
+            perPage:100
+        };
         HttpService.post(url, JSON.stringify(param)).then(res => {
-            let cols = [["列名","说明","数据类型"]];
-     
-            if(res.data.columnList){
-
-                let columns = res.data.columnList;
-                columns.forEach((item,index)=>{
-                    cols.push([item.column_name,item.column_title,item.column_type])
+            if(!res.data.list){
+                return 
+            }
+            let cols = [];
+            const arr=res.data.list
+            const TitleArr=[]
+            for (let key in arr[0]){
+                cols.push(key)
+            }
+            const Myarr=[cols]
+            if(arr){
+                arr.forEach((item,index)=>{
+                    let m=[]
+                    for (let i in item){
+                        m.push(item[i])
+                    }
+                    Myarr.push(m)
 
                 })
             }
-            console.log(cols)
-            setData(cols)
+            // console.log(Myarr)
+            setData(Myarr)
         })
     };
 

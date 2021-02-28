@@ -100,13 +100,13 @@ export default (props)=>{
     }
     const setarr=(arr,mHeight)=>{
         Bo.current.style.mixWidth=box.current.offsetWidth+"px"
-        const listnum=Math.floor(mHeight/40)//一个col放几个list
+        const listnum=Math.ceil(mHeight/52)//一个col放几个list
         const colnum=Math.ceil(arr.length/listnum)//col的个数
         box.current.style.width=colnum*(260+15)+'px'
         const colarr=[]
         const marr=[]
         for(let u=0;u<colnum;u+=1){
-            marr.push([...arr.splice(0,13)])
+            marr.push([...arr.splice(0,listnum)])
             colarr.push(u)
         }
         return {
@@ -177,10 +177,10 @@ export default (props)=>{
         }
         if(name==='维表分析'){
             let obj={
-                host_id:items.host_id,
-                dbType:items.dbtype_id,
-                table_name:items.table_name
-                }
+                temphost_id:items.host_id,
+                temptable_name:items.table_name,
+                tempdbtype_id:items.dbtype_id
+            }
             setdescribeObj(obj)
             setDimension(true)
         }
@@ -191,7 +191,9 @@ export default (props)=>{
             setchar(true)
         }
         if(name==='sql分析'){
-            setsql(true)
+            props.history.push('/dataCompute/sqlDataCompute')
+          
+            // setsql(true)
         }
       
         
@@ -468,7 +470,7 @@ export default (props)=>{
                                 </div>
                                 </TabPane>
                                 <TabPane tab="详情信息" key="2">
-                                      <Table dataSource={data} columns={columns} bordered={true} size="small"/>
+                                      <Table dataSource={data} columns={columns} size="small"/>
                                 </TabPane>
                             </Tabs>
                     </Card>

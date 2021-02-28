@@ -76,7 +76,7 @@ export default (props)=>{
             table_name: temptable_name,
             dbtype_id:tempdbtype_id,
             startIndex:startIndex,
-            perPage:30
+            perPage:100
         };
         HttpService.post(url, JSON.stringify(param)).then(res => {
             if(res.resultCode==="1000"){
