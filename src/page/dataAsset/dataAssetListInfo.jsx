@@ -3,6 +3,7 @@ import React,{useState,useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from 'antd/lib/pagination';
 import '@ant-design/compatible/assets/index.css';
+import ReactJson from 'react-json-view'
 import {
     Table,
     Divider,
@@ -13,7 +14,7 @@ import {
     Spin,
     Row,
     Col,
-    Tooltip,
+    Popover,
     Drawer,
     Modal,
 } from 'antd';
@@ -40,7 +41,7 @@ export default (props)=>{
         setwith(width)
         setmw(bWidth)
          loadHostTable();
-    },[dataObj])
+    },[infvisi])
     const back =()=>{
         const {setinfvisi,setDataObj}=props.back
         setDataObj({})
@@ -69,14 +70,12 @@ export default (props)=>{
             
             //生成列信息
             let cols = [];
-     
             if(res.data.list){
                 let columns = res.data.list[0];
                 let obj={
                     overflow: 'hidden',
                     display: 'block',
                     width: '200px',
-                    height:'40px'
                 }
                 for (var key in columns) {
     
@@ -84,12 +83,13 @@ export default (props)=>{
                         cols.push({
                             title: key,
                             dataIndex: key,
-                            render: text => <a style={{...obj}}>{text}</a>,
+                            render: text => <a style={{...obj}}>{TypeIsJSON(text)}</a>,
                         })
                     }else{
                         cols.push({
                             title: key,
-                            dataIndex: key
+                            dataIndex: key,
+                            render: text => <a style={{...obj}}>{TypeIsJSON(text)}</a>,
                         })
                     }
     
@@ -105,7 +105,34 @@ export default (props)=>{
             
         });
     };
-
+    const TypeIsJSON=(json)=>{
+        try
+        {
+            let Json = JSON.parse(json);
+            if(Json instanceof Object || Json instanceof Array){
+              return     <Popover 
+                            destroyTooltipOnHide={true}
+                            content={
+                                <div style={{
+                                    minWidth:height/2+"px",
+                                    maxHeight:height/2+'px',
+                                    overflowY:"auto"
+                                }}>
+                                      <ReactJson displayDataTypes={false} displayObjectSize={false} name={false} src={Json}></ReactJson>
+                                </div>
+                             } title="数据" trigger="hover">
+                            <div>浏览（<span style={{color:'red',fontWeight:600}}>JSON</span>）数据</div>
+                        </Popover>
+            }else{
+                return json
+            }
+            
+        }
+        catch (e)
+        {
+            return json
+        }
+    }
     return(
         <Drawer
         placement="right"
@@ -128,7 +155,7 @@ export default (props)=>{
                     }} size="small">返回</Button>}
                 >
                 <Table dataSource={tableDataModel} columns={tableColumnModel}
-                        scroll={{ x: x ,y:height-100}}
+                        scroll={{ x: x,y:height-140}}
                         bordered={true} pagination={false}/>
                     <Pagination current={startIndex}
                         total={total}
