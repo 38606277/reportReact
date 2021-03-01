@@ -29,7 +29,7 @@ import Electronicwatch from './Electronicwatch.jsx'//电子表分析
 import Dimension1 from './Dimension.jsx'// 维表分析
 import Algorithm from './algorithm.jsx'//算法分析
 import Chart from './Chart.jsx'//图表
-import Sql from './Sql.jsx'
+// import Sql from './Sql.jsx'
 const analysis=[//分析list
     {
         name:"电子表格分析",
@@ -68,7 +68,7 @@ export default (props)=>{
     const [Dimension,setDimension]=useState(false)//维表
     const [algorithm,setalgorithm]=useState(false)//算法
     const [char,setchar]=useState(false)//图表
-    const [sql,setsql]=useState(false)//sql
+    // const [sql,setsql]=useState(false)//sql
     const [mName,setmName]=useState(0)
     const box=useRef()
     const Bo=useRef()
@@ -159,10 +159,12 @@ export default (props)=>{
                 }
             }
          })
+         let m=JSON.parse(JSON.stringify(arr))
+         setdata(m)
          const {colarr,marr}=setarr(arr,setBOX())
          setmcol(colarr)
          setlist(marr)
-         setdata(arr)
+      
     }
     const analysisClick=(obj,items)=>{//分析点击事件
         const {name}=obj
@@ -469,6 +471,7 @@ export default (props)=>{
                                     </Spin>
                                 </div>
                                 </TabPane>
+                                {console.log(data)}
                                 <TabPane tab="详情信息" key="2">
                                       <Table dataSource={data} columns={columns} size="small"/>
                                 </TabPane>
@@ -482,7 +485,7 @@ export default (props)=>{
             <Dimension1  infvisi={Dimension} dataObj={describeObj} back={{setDimension,setdescribeObj}}/>
             <Algorithm infvisi={algorithm} dataObj={{}} back={{setalgorithm,setdescribeObj}}/>
             <Chart infvisi={char} dataObj={{}} back={{setchar,setdescribeObj}}/>
-            <Sql infvisi={sql} dataObj={{}} back={{setsql,setdescribeObj}}/>
+            {/* <Sql infvisi={sql} dataObj={{}} back={{setsql,setdescribeObj}}/> */}
             {/* infvisi={Dimension} dataObj={dataObj} back={{setDimension,setDataObj}} */}
         </Card>
     )
