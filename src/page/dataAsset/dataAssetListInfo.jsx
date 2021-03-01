@@ -40,7 +40,7 @@ export default (props)=>{
         setheight(bHeight)
         setwith(width)
         setmw(bWidth)
-         loadHostTable();
+         loadHostTable(startIndex,perPage);
     },[infvisi])
     const back =()=>{
         const {setinfvisi,setDataObj}=props.back
@@ -49,13 +49,14 @@ export default (props)=>{
     }
     const onPageNumChange=(startIndex)=>{
         setstartIndex(startIndex)
+        loadHostTable(startIndex,perPage) 
     }
 
     const showTotal  = (total) =>  {
         return `共 ${total} 条`;
       }
     
-   const loadHostTable = () => {
+   const loadHostTable = (startIndex,perPage) => {
         //查询表格数据 
         const {temphost_id,temptable_name,tempdbtype_id}=props.dataObj
         let param = {
