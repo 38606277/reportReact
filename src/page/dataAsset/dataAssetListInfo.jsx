@@ -128,7 +128,7 @@ export default (props)=>{
                     }} size="small">返回</Button>}
                 >
                 <Table dataSource={tableDataModel} columns={tableColumnModel}
-                        scroll={{ x: x ,y:height-60}}
+                        scroll={{ x: x ,y:height-100}}
                         bordered={true} pagination={false}/>
                     <Pagination current={startIndex}
                         total={total}

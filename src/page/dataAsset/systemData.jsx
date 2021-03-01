@@ -99,6 +99,9 @@ export default (props)=>{
         return mHeight
     }
     const setarr=(arr,mHeight)=>{
+        let m=JSON.parse(JSON.stringify(arr))
+        setdata(m)
+        setmName(m.length)
         Bo.current.style.mixWidth=box.current.offsetWidth+"px"
         const listnum=Math.ceil(mHeight/52)//一个col放几个list
         const colnum=Math.ceil(arr.length/listnum)//col的个数
@@ -121,7 +124,6 @@ export default (props)=>{
                 const {colarr,marr}=setarr(arr,mHeight)
                 setmcol(colarr)
                 setlist(marr)
-                setdata(res.data)
                 settotal(res.data)
                 setmName(res.data.length)
                 console.log(res.data[0])
@@ -159,8 +161,6 @@ export default (props)=>{
                 }
             }
          })
-         let m=JSON.parse(JSON.stringify(arr))
-         setdata(m)
          const {colarr,marr}=setarr(arr,setBOX())
          setmcol(colarr)
          setlist(marr)
