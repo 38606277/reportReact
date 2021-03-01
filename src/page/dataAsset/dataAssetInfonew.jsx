@@ -88,24 +88,15 @@ export default (props) => {
   }
   return (
     <Drawer
-      placement="bottom"
-      closable={false}
-      destroyOnClose
-      visible={infvisi}
-      // onClose={infnone}
-      style={
-          {
-              // height:height+'px',
-              width:width+"px",
-              marginLeft:mw+'px',
-        
-          }
-      }
-      bodyStyle={{
-          padding:"0px"
-      }}
-      height={height/1}
-      width={width/1}
+    placement="right"
+    closable={false}
+    destroyOnClose
+    visible={infvisi}
+    onClose={back}
+    bodyStyle={{
+        padding:"0px"
+    }}
+    width={width/1}
     >
     <PageContainer
     style={{padding:"15px"}}

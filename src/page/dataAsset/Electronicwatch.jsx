@@ -28,6 +28,7 @@ const luckyCss = {
 }
 export default (props)=>{
     const {infvisi,dataObj}=props
+    const {temptable_name}=dataObj
     const [startIndex,setstartIndex]=useState(1)
     const [perPage,setperPage]=useState(10)
     const [tableColumnModel,settableColumnModel]=useState([])
@@ -143,27 +144,17 @@ export default (props)=>{
 
     return(
         <Drawer
-        placement="bottom"
         closable={false}
-        // destroyOnClose
+        destroyOnClose
         visible={infvisi}
-        // onClose={infnone}
-        style={
-            {
-                // height:height+'px',
-                width:width+"px",
-                marginLeft:mw+'px',
-          
-            }
-        }
+        onClose={back}
         bodyStyle={{
             padding:"0px"
         }}
-        height={height/1}
         width={width/1}
         >
             <Spin spinning={false} delay={100}>
-                <Card title="电子表格分析"
+                <Card title={temptable_name}
                     style={{
                         height:"100%"
                     }}
