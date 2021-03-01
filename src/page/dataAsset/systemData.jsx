@@ -11,7 +11,7 @@ import {
     Row,
     Col,
     List,
-    Descriptions ,
+    ConfigProvider,
     Tooltip,
     Spin ,
     Dropdown,
@@ -471,7 +471,6 @@ export default (props)=>{
                                     </Spin>
                                 </div>
                                 </TabPane>
-                                {console.log(data)}
                                 <TabPane tab="详情信息" key="2">
                                       <Table dataSource={data} columns={columns} size="small"/>
                                 </TabPane>
