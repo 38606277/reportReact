@@ -51,6 +51,7 @@ export default (props)=>{
             
     },[infvisi])
     const back =()=>{
+        setattt(null)
         const {setDimension,setdescribeObj}=props.back
         setdescribeObj({})
         setDimension(false)
@@ -118,7 +119,9 @@ export default (props)=>{
                         height:"100%"
                     }}
                     bodyStyle={{
-                        height:height-60+'px'
+                        height:height-60+'px',
+                        overflowY:'auto'
+                        
                     }}
                     extra={<Button onClick={()=>{
                         back()

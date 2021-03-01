@@ -137,7 +137,7 @@ export default (props)=>{
                     }
                     ]
                 })
-            en.setHorizontalFrozen(false)
+            // en.setHorizontalFrozen(false)
             }
         })
     };
