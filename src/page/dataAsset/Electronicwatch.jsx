@@ -121,7 +121,7 @@ export default (props)=>{
                 },
                     showinfobar:false,
                     lang: 'zh',
-                    // plugins:['chart'],
+                    plugins:['chart'],
                     data:[
                     {
                         "name": "name",

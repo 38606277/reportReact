@@ -75,7 +75,6 @@ export default (props)=>{
     useEffect( ()=>{
         const obj =props.match.params
         const {dbType,host_id}=obj
-        console.log(obj)
         if(obj.class==="sourec"){
             myhttp('/reportServer/dbTableColumn/getTableListMap',{dbType,host_id},setBOX())
         }
@@ -126,13 +125,15 @@ export default (props)=>{
                 setlist(marr)
                 settotal(res.data)
                 setmName(res.data.length)
-                console.log(res.data[0])
-                let obj={
-                    temphost_id:res.data[0].host_id,
-                    temptable_name:res.data[0].table_name,
-                    tempdbtype_id:res.data[0].dbtype_id
+                if(res.data[0]){
+                    let obj={
+                        temphost_id:res.data[0].host_id,
+                        temptable_name:res.data[0].table_name,
+                        tempdbtype_id:res.data[0].dbtype_id
+                    }
+                    setDataObj(obj)
                 }
-                setDataObj(obj)
+               
             }
         })
     }
@@ -302,7 +303,9 @@ export default (props)=>{
                     padding:"0px"
                 }
             }
-            extra={<Button type="primary" href="/#/dataAsset/totalAssets" size="small">返回</Button>}
+            extra={<Button type="primary" size="small" onClick={()=>{
+                props.history.push('/dataAsset/totalAssets')
+            }}>返回</Button>}
         >
             <Row>
                 <Col sm={24}>

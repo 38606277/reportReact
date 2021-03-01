@@ -45,7 +45,6 @@ export default (props)=>{
         setheight(bHeight)
         setwith(width)
         setmw(bWidth)
-        console.log(infvisi)
             loadHostTable();
     
      

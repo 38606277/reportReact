@@ -44,7 +44,6 @@ export default (props)=>{
         setheight(bHeight)
         setwith(width)
         setmw(bWidth)
-        console.log(infvisi)
             // loadHostTable();
     
      
@@ -83,7 +82,6 @@ export default (props)=>{
 
                 })
             }
-            console.log(cols)
             setData(cols)
         })
     };
