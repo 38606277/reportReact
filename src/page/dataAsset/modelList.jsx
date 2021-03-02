@@ -168,6 +168,11 @@ export default ()=>{
             console.log(res)
             //生成列信息
             let cols = [];
+            if(!res.data[0]){
+                settableData([])
+                settableColumn([])
+                return 
+            }
             let columns = res.data[0];
             let obj={
                 overflow: 'hidden',
