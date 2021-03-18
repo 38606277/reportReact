@@ -123,6 +123,22 @@ export default (props)=>{
                 const {colarr,marr}=setarr(arr,mHeight)
                 setmcol(colarr)
                 setlist(marr)
+                let newparam={
+                    list:res.data
+                }
+                HttpService.post("/reportServer/dbTableColumn/getTableListUpdateMap", JSON.stringify(newparam)).then(res => {//默认点击修改数据
+                    const arr=[...res.data]
+                    const {colarr,marr}=setarr(arr,mHeight)
+                    setmcol(colarr)
+                    setlist(marr)
+                    // 设置高亮
+                    //   this.activeButton(buttontype);
+                }, errMsg => {
+                    this.setState({
+                        list: [],
+                        loading:false
+                    });
+                }); 
                 settotal(res.data)
                 setmName(res.data.length)
                 if(res.data[0]){
